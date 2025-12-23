@@ -14,6 +14,8 @@ export interface NewsItem {
   };
   blindspot?: 'left' | 'right' | 'none';
   timeAgo: string;
+  category?: string;
+  location?: string;
 }
 
 interface NewsCardProps {
