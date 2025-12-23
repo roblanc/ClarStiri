@@ -33,6 +33,12 @@ const Index = () => {
     sourcesCount: story.sourcesCount,
     timeAgo: story.timeAgo,
     description: story.description,
+    // Adaugă sursele pentru afișarea logourilor
+    sources: story.sources.map(s => ({
+      name: s.source.name,
+      url: s.source.url,
+      bias: s.source.bias,
+    })),
   })) || [];
 
   const featuredStory = convertedStories[0];
