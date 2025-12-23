@@ -4,7 +4,9 @@ import { NewsListItem } from "@/components/NewsListItem";
 import { TopStoriesList } from "@/components/TopStoriesList";
 import { DailyBriefing } from "@/components/DailyBriefing";
 import { BlindspotCard } from "@/components/BlindspotCard";
+import { SourceFavicon } from "@/components/SourceFavicon";
 import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
+import { NEWS_SOURCES } from "@/types/news";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Eye, User, Loader2, RefreshCw, AlertCircle, Wifi } from "lucide-react";
@@ -248,17 +250,25 @@ const Index = () => {
               <div className="bg-muted/50 rounded-lg p-4 text-sm">
                 <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
                 <p className="text-muted-foreground text-xs mb-3">
-                  thesite.ro agregă știri din surse multiple pentru a oferi o perspectivă echilibrată:
+                  thesite.ro agregă știri din {NEWS_SOURCES.length} surse pentru o perspectivă echilibrată:
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {['Digi24', 'HotNews', 'G4Media', 'Mediafax', 'Agerpres', 'Libertatea', 'Observator', 'România Liberă'].map(source => (
-                    <span
-                      key={source}
-                      className="px-2 py-1 bg-background rounded text-xs text-muted-foreground"
+                  {NEWS_SOURCES.slice(0, 12).map(source => (
+                    <div
+                      key={source.id}
+                      className="flex items-center gap-1.5 px-2 py-1 bg-background rounded"
                     >
-                      {source}
-                    </span>
+                      <SourceFavicon source={source} size="xs" showRing={false} />
+                      <span className="text-xs text-muted-foreground">
+                        {source.name}
+                      </span>
+                    </div>
                   ))}
+                  {NEWS_SOURCES.length > 12 && (
+                    <span className="px-2 py-1 text-xs text-muted-foreground">
+                      +{NEWS_SOURCES.length - 12} more
+                    </span>
+                  )}
                 </div>
               </div>
             </aside>
