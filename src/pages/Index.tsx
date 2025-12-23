@@ -161,6 +161,7 @@ const Index = () => {
                       category: news.category,
                       location: news.location,
                       sourcesCount: news.sourcesCount,
+                      sources: news.sources,
                     }}
                   />
                 ))}
