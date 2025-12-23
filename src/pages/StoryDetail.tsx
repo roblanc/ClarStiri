@@ -161,8 +161,8 @@ const StoryDetail = () => {
                 <button
                   onClick={() => setActiveFilter('left')}
                   className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'left'
-                      ? 'bg-blue-100 text-blue-700 border-blue-300'
-                      : 'bg-card text-muted-foreground border-border hover:bg-secondary'
+                    ? 'bg-blue-100 text-blue-700 border-blue-300'
+                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
                 >
                   Stânga
@@ -170,8 +170,8 @@ const StoryDetail = () => {
                 <button
                   onClick={() => setActiveFilter('center')}
                   className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'center'
-                      ? 'bg-purple-100 text-purple-700 border-purple-300'
-                      : 'bg-card text-muted-foreground border-border hover:bg-secondary'
+                    ? 'bg-purple-100 text-purple-700 border-purple-300'
+                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
                 >
                   Centru
@@ -179,8 +179,8 @@ const StoryDetail = () => {
                 <button
                   onClick={() => setActiveFilter('right')}
                   className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'right'
-                      ? 'bg-red-100 text-red-700 border-red-300'
-                      : 'bg-card text-muted-foreground border-border hover:bg-secondary'
+                    ? 'bg-red-100 text-red-700 border-red-300'
+                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
                 >
                   Dreapta
@@ -188,8 +188,8 @@ const StoryDetail = () => {
                 <button
                   onClick={() => setActiveFilter('all')}
                   className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'all'
-                      ? 'bg-primary text-primary-foreground border-primary'
-                      : 'bg-card text-muted-foreground border-border hover:bg-secondary'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
                 >
                   Comparație Bias
@@ -220,7 +220,7 @@ const StoryDetail = () => {
                 </ul>
 
                 <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-                  <span className="text-xs text-muted-foreground">📊 Analiză ClarȘtiri</span>
+                  <span className="text-xs text-muted-foreground">📊 Analiză thesite.ro</span>
                   <button className="text-xs text-primary hover:underline">
                     Pare această analiză incorectă?
                   </button>
@@ -423,7 +423,7 @@ const StoryDetail = () => {
                     <div
                       key={source.id}
                       className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${getBiasColor(source.source.bias)} ring-2 ring-offset-2 ring-offset-background ${source.source.bias.includes('left') ? 'ring-blue-500/30' :
-                          source.source.bias.includes('right') ? 'ring-red-500/30' : 'ring-purple-500/30'
+                        source.source.bias.includes('right') ? 'ring-red-500/30' : 'ring-purple-500/30'
                         }`}
                       title={source.source.name}
                     >
@@ -453,7 +453,7 @@ const StoryDetail = () => {
             <div className="bg-muted/50 rounded-lg p-4 text-sm">
               <h4 className="font-semibold text-foreground mb-2">ℹ️ Despre Analiza Bias</h4>
               <p className="text-muted-foreground text-xs">
-                ClarȘtiri analizează automat știrile din multiple surse românești și calculează
+                thesite.ro analizează automat știrile din multiple surse românești și calculează
                 distribuția bias-ului politic bazat pe categoria editorială a fiecărei publicații.
               </p>
             </div>
@@ -466,7 +466,7 @@ const StoryDetail = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground">CLARȘTIRI</span>
+              <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link to="/despre" className="hover:text-foreground transition-colors">Despre</Link>
@@ -474,7 +474,7 @@ const StoryDetail = () => {
               <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2025 ClarStiri.ro
+              © 2025 thesite.ro
             </p>
           </div>
         </div>

@@ -241,7 +241,7 @@ const Index = () => {
               <div className="bg-muted/50 rounded-lg p-4 text-sm">
                 <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
                 <p className="text-muted-foreground text-xs mb-3">
-                  ClarȘtiri agregă știri din surse multiple pentru a oferi o perspectivă echilibrată:
+                  thesite.ro agregă știri din surse multiple pentru a oferi o perspectivă echilibrată:
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {['Digi24', 'HotNews', 'G4Media', 'Mediafax', 'Agerpres', 'Libertatea', 'Observator', 'România Liberă'].map(source => (
@@ -265,7 +265,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground">CLARȘTIRI</span>
+              <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link to="/despre" className="hover:text-foreground transition-colors">Despre</Link>
@@ -274,7 +274,7 @@ const Index = () => {
               <Link to="/confidentialitate" className="hover:text-foreground transition-colors">Confidențialitate</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2025 ClarStiri.ro
+              © 2025 thesite.ro
             </p>
           </div>
         </div>

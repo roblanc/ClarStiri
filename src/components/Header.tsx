@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import { Search, Menu, User } from "lucide-react";
+import { Search, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 const categories = [
   "Politică",
-  "Economie", 
+  "Economie",
   "Sănătate",
   "Tehnologie",
   "Mediu",
@@ -17,70 +17,89 @@ const categories = [
 
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Main Header */}
-      <div className="bg-primary text-primary-foreground">
+      {/* Main Header - Clean minimal style inspired by Snoop.ro */}
+      <div className="bg-white border-b border-border">
         <div className="container mx-auto">
-          <div className="flex items-center justify-between h-14 px-4">
+          <div className="flex items-center justify-between h-16 px-4">
             {/* Left: Menu + Logo */}
             <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10">
-                <Menu className="w-5 h-5" />
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-9 w-9 text-foreground hover:bg-secondary md:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
-              <Link to="/" className="flex items-center">
-                <span className="font-bold text-xl tracking-tight">
-                  CLARSTIRI
+
+              <Link to="/" className="flex items-center gap-2">
+                {/* Logo mark - gold accent */}
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-lg">T</span>
+                </div>
+                <span className="font-bold text-xl text-foreground tracking-tight">
+                  thesite<span className="text-primary">.ro</span>
                 </span>
               </Link>
             </div>
 
             {/* Center: Navigation */}
-            <nav className="hidden md:flex items-center gap-6">
-              <Link to="/" className="text-sm font-medium text-primary-foreground hover:text-primary-foreground/80 transition-colors">
+            <nav className="hidden md:flex items-center gap-8">
+              <Link to="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">
                 Acasă
               </Link>
-              <Link to="/pentru-tine" className="text-sm font-medium text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+              <Link to="/pentru-tine" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Pentru Tine
               </Link>
-              <Link to="/local" className="text-sm font-medium text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-                Local
+              <Link to="/surse" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Surse
               </Link>
-              <Link to="/punct-orbit" className="text-sm font-medium text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-                Punct Orbit
+              <Link to="/despre" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Despre
               </Link>
             </nav>
 
             {/* Right: Search + Auth */}
             <div className="flex items-center gap-3">
               {searchOpen ? (
-                <div className="relative">
-                  <Input 
-                    type="search" 
-                    placeholder="Caută..." 
-                    className="w-48 md:w-56 h-9 bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground placeholder:text-primary-foreground/50"
+                <div className="relative flex items-center gap-2">
+                  <Input
+                    type="search"
+                    placeholder="Caută știri..."
+                    className="w-48 md:w-64 h-9 bg-secondary border-border"
                     autoFocus
-                    onBlur={() => setSearchOpen(false)}
                   />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => setSearchOpen(false)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
                 </div>
               ) : (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-9 w-9 text-primary-foreground hover:bg-primary-foreground/10"
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-secondary"
                   onClick={() => setSearchOpen(true)}
                 >
                   <Search className="w-4 h-4" />
                 </Button>
               )}
-              
-              <Button variant="secondary" size="sm" className="hidden md:inline-flex">
+
+              <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90">
                 Abonează-te
               </Button>
 
-              <Button variant="outline" size="sm" className="hidden md:inline-flex border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
-                Conectare
+              <Button variant="outline" size="sm" className="hidden md:inline-flex">
+                <User className="w-4 h-4 mr-2" />
+                Cont
               </Button>
             </div>
           </div>
@@ -88,22 +107,62 @@ export function Header() {
       </div>
 
       {/* Categories Bar */}
-      <div className="bg-card border-b border-border overflow-x-auto">
+      <div className="bg-secondary/50 border-b border-border overflow-x-auto">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-1 py-2">
             {categories.map((category) => (
               <Link
                 key={category}
                 to={`/categorie/${category.toLowerCase()}`}
-                className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-secondary rounded-full transition-colors whitespace-nowrap"
+                className="px-4 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-white rounded-full transition-colors whitespace-nowrap"
               >
                 {category}
-                <span className="text-xs opacity-60">+</span>
               </Link>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-b border-border animate-fade-in">
+          <nav className="container mx-auto px-4 py-4 space-y-2">
+            <Link
+              to="/"
+              className="block px-4 py-2 text-foreground font-medium rounded-lg bg-primary/10"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Acasă
+            </Link>
+            <Link
+              to="/pentru-tine"
+              className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Pentru Tine
+            </Link>
+            <Link
+              to="/surse"
+              className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Surse
+            </Link>
+            <Link
+              to="/despre"
+              className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Despre
+            </Link>
+            <div className="pt-4 border-t border-border mt-4">
+              <Button className="w-full bg-primary text-primary-foreground">
+                Abonează-te
+              </Button>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }

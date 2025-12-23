@@ -9,109 +9,117 @@
 
 @layer base {
   :root {
-    /* ClarStiri Design System - Neutral, Data-Focused */
-    --background: 40 33% 94%;
-    --foreground: 20 10% 15%;
+    /* thesite.ro Design System - Inspired by Snoop.ro */
+    /* Clean, minimal, professional news platform */
+    
+    --background: 0 0% 98%;          /* #FAFAFA - Very light gray */
+    --foreground: 0 0% 13%;           /* #222222 - Dark text */
 
-    --card: 0 0% 100%;
-    --card-foreground: 20 10% 15%;
+    --card: 0 0% 100%;                /* #FFFFFF - White cards */
+    --card-foreground: 0 0% 13%;      /* #222222 */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 20 10% 15%;
+    --popover-foreground: 0 0% 13%;
 
-    --primary: 20 10% 15%;
-    --primary-foreground: 40 33% 96%;
+    /* Primary - Gold/Orange accent like Snoop */
+    --primary: 38 87% 65%;            /* #F0B55B - Gold accent */
+    --primary-foreground: 0 0% 0%;    /* #000000 - Black text on gold */
 
-    --secondary: 40 20% 90%;
-    --secondary-foreground: 20 10% 20%;
+    --secondary: 0 0% 96%;            /* #F5F5F5 - Light gray */
+    --secondary-foreground: 0 0% 20%; /* #333333 */
 
-    --muted: 40 15% 88%;
-    --muted-foreground: 20 5% 45%;
+    --muted: 0 0% 94%;                /* #EFEFEF */
+    --muted-foreground: 0 0% 46%;     /* #757575 - Gray text */
 
-    --accent: 40 25% 85%;
-    --accent-foreground: 20 10% 15%;
+    --accent: 210 68% 43%;            /* #1E73BE - Blue accent */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 15% 85%;
-    --input: 40 15% 85%;
-    --ring: 20 10% 25%;
+    --border: 0 0% 90%;               /* #E5E5E5 */
+    --input: 0 0% 90%;
+    --ring: 38 87% 65%;               /* Gold ring */
 
     --radius: 0.5rem;
 
-    /* Bias colors - Critical for the news platform */
-    --bias-left: 210 75% 45%;
-    --bias-center: 270 15% 50%;
-    --bias-right: 0 70% 50%;
+    /* Bias colors - For news platform */
+    --bias-left: 210 75% 45%;         /* Blue for left */
+    --bias-center: 0 0% 50%;          /* Gray for center */
+    --bias-right: 0 70% 50%;          /* Red for right */
 
     /* Badges */
     --badge-left: 210 70% 92%;
     --badge-left-foreground: 210 75% 35%;
-    --badge-center: 270 10% 92%;
-    --badge-center-foreground: 270 15% 40%;
+    --badge-center: 0 0% 92%;
+    --badge-center-foreground: 0 0% 40%;
     --badge-right: 0 65% 92%;
     --badge-right-foreground: 0 70% 40%;
 
     /* Sidebar */
-    --sidebar-background: 40 20% 97%;
-    --sidebar-foreground: 20 10% 25%;
-    --sidebar-primary: 20 10% 15%;
-    --sidebar-primary-foreground: 40 33% 96%;
-    --sidebar-accent: 40 20% 92%;
-    --sidebar-accent-foreground: 20 10% 20%;
-    --sidebar-border: 40 15% 88%;
-    --sidebar-ring: 20 10% 25%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 38 87% 65%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 20%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 38 87% 65%;
+    
+    /* Additional thesite.ro colors */
+    --gold: 38 87% 65%;               /* #F0B55B */
+    --green: 120 100% 25%;            /* #008000 */
+    --blue-link: 210 68% 43%;         /* #1E73BE */
   }
 
   .dark {
-    --background: 20 15% 10%;
-    --foreground: 40 20% 95%;
+    --background: 0 0% 7%;            /* #121212 */
+    --foreground: 0 0% 95%;           /* #F2F2F2 */
 
-    --card: 20 12% 14%;
-    --card-foreground: 40 20% 95%;
+    --card: 0 0% 10%;                 /* #1A1A1A */
+    --card-foreground: 0 0% 95%;
 
-    --popover: 20 12% 14%;
-    --popover-foreground: 40 20% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 40 20% 95%;
-    --primary-foreground: 20 15% 10%;
+    --primary: 38 87% 60%;            /* Slightly darker gold in dark mode */
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 20 10% 20%;
-    --secondary-foreground: 40 20% 90%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 20 10% 22%;
-    --muted-foreground: 40 10% 60%;
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 20 12% 25%;
-    --accent-foreground: 40 20% 95%;
+    --accent: 210 68% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 45%;
+    --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 10% 22%;
-    --input: 20 10% 22%;
-    --ring: 40 15% 70%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 38 87% 60%;
 
     --bias-left: 210 70% 55%;
-    --bias-center: 270 15% 60%;
+    --bias-center: 0 0% 55%;
     --bias-right: 0 65% 55%;
 
     --badge-left: 210 50% 20%;
     --badge-left-foreground: 210 70% 70%;
-    --badge-center: 270 10% 20%;
-    --badge-center-foreground: 270 15% 70%;
+    --badge-center: 0 0% 20%;
+    --badge-center-foreground: 0 0% 70%;
     --badge-right: 0 45% 20%;
     --badge-right-foreground: 0 65% 70%;
 
-    --sidebar-background: 20 12% 12%;
-    --sidebar-foreground: 40 20% 90%;
-    --sidebar-primary: 40 20% 95%;
-    --sidebar-primary-foreground: 20 15% 10%;
-    --sidebar-accent: 20 10% 18%;
-    --sidebar-accent-foreground: 40 20% 90%;
-    --sidebar-border: 20 10% 20%;
-    --sidebar-ring: 40 15% 70%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 38 87% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 38 87% 60%;
   }
 }
 
@@ -127,6 +135,11 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold tracking-tight;
+  }
+  
+  /* Links use blue accent */
+  a {
+    @apply transition-colors;
   }
 }
 
@@ -148,16 +161,35 @@
   }
 
   .news-card {
-    @apply bg-card rounded-lg overflow-hidden shadow-sm border border-border/50 transition-all duration-200;
+    @apply bg-card rounded-lg overflow-hidden shadow-sm border border-border transition-all duration-200;
   }
 
   .news-card:hover {
-    @apply shadow-md border-border;
+    @apply shadow-md;
+  }
+  
+  /* Gold highlight effect */
+  .gold-highlight {
+    background: linear-gradient(to right, hsl(var(--gold) / 0.2), transparent);
+  }
+  
+  /* Premium button style */
+  .btn-gold {
+    @apply bg-primary text-primary-foreground hover:opacity-90 transition-opacity;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Text link color */
+  .text-link {
+    color: hsl(var(--blue-link));
+  }
+  
+  .text-link:hover {
+    text-decoration: underline;
   }
 }
