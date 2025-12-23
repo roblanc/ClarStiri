@@ -1,160 +1,130 @@
 import { Header } from "@/components/Header";
-import { NewsCard } from "@/components/NewsCard";
-import { BiasBar } from "@/components/BiasBar";
-import { mockNews, topStories } from "@/data/mockNews";
+import { FeaturedStory } from "@/components/FeaturedStory";
+import { NewsListItem } from "@/components/NewsListItem";
+import { TopStoriesList } from "@/components/TopStoriesList";
+import { DailyBriefing } from "@/components/DailyBriefing";
+import { BlindspotCard } from "@/components/BlindspotCard";
+import { mockNews, topStories, blindspotStories, dailyBriefingData } from "@/data/mockNews";
 import { Link } from "react-router-dom";
-import { ArrowRight, TrendingUp, Newspaper, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Eye, HelpCircle, User } from "lucide-react";
 
 const Index = () => {
+  const featuredStory = {
+    id: mockNews[0].id,
+    title: mockNews[0].title,
+    image: mockNews[0].image,
+    bias: mockNews[0].bias,
+    category: mockNews[0].category,
+    location: mockNews[0].location,
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      
-      {/* Hero Section */}
-      <section className="bg-card border-b border-border">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fade-in">
-              Vezi fiecare parte a fiecărei știri.
-            </h1>
-            <p className="text-muted-foreground text-lg mb-6 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              Citește știrile din perspective multiple. Treci dincolo de părtinirea media cu surse locale și internaționale de încredere.
-            </p>
-            <div className="flex items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <Link 
-                to="/incepe" 
-                className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity"
-              >
-                Începe acum
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Bias Legend */}
-      <section className="bg-secondary/50 border-b border-border">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-center gap-8 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-bias-left"></div>
-              <span className="text-muted-foreground">Stânga</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-bias-center"></div>
-              <span className="text-muted-foreground">Centru</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-bias-right"></div>
-              <span className="text-muted-foreground">Dreapta</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <main className="container mx-auto px-4 py-8">
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Feed */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
-                <Newspaper className="w-5 h-5" />
-                Știri Principale
-              </h2>
-              <span className="text-sm text-muted-foreground">23 decembrie 2025</span>
-            </div>
-
-            {/* Featured Story */}
-            <div className="mb-6">
-              <NewsCard news={mockNews[0]} variant="featured" />
-            </div>
-
-            {/* News Grid */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              {mockNews.slice(1, 7).map((news, index) => (
-                <div 
-                  key={news.id} 
-                  className="animate-fade-in"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <NewsCard news={news} />
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-8 text-center">
-              <button className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Încarcă mai multe știri
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <aside className="space-y-6">
-            {/* Top Stories */}
-            <div className="bg-card rounded-lg border border-border p-5">
-              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" />
-                Cele Mai Citite
-              </h3>
-              <div className="space-y-4">
-                {topStories.map((story, index) => (
-                  <Link 
-                    key={index} 
-                    to={`/stire/${index + 1}`}
-                    className="block group"
-                  >
-                    <div className="border-b border-border pb-4 last:border-b-0 last:pb-0">
-                      <h4 className="text-sm font-medium text-card-foreground group-hover:text-muted-foreground transition-colors line-clamp-2 mb-2">
-                        {story.title}
-                      </h4>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span className="text-bias-center">{story.centerCoverage}% Centru</span>
-                        <span>·</span>
-                        <span>{story.sourcesCount} surse</span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* How It Works */}
-            <div className="bg-card rounded-lg border border-border p-5">
-              <h3 className="font-semibold text-foreground mb-4">Cum funcționează?</h3>
-              <div className="space-y-4 text-sm text-muted-foreground">
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-medium text-secondary-foreground">1</span>
-                  </div>
-                  <p>Agregăm știri din sute de surse din România și din lume.</p>
-                </div>
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-medium text-secondary-foreground">2</span>
-                  </div>
-                  <p>Analizăm și clasificăm fiecare sursă pe spectrul politic.</p>
-                </div>
-                <div className="flex gap-3">
-                  <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                    <span className="text-xs font-medium text-secondary-foreground">3</span>
-                  </div>
-                  <p>Afișăm acoperirea din toate perspectivele într-un singur loc.</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Sample Bias Bar */}
-            <div className="bg-card rounded-lg border border-border p-5">
-              <h3 className="font-semibold text-foreground mb-4">Bara de Bias</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Fiecare poveste arată distribuția acoperirii media:
-              </p>
-              <BiasBar left={35} center={45} right={20} showLabels size="lg" />
+      <main className="container mx-auto px-4 py-6">
+        <div className="grid lg:grid-cols-12 gap-6">
+          
+          {/* Left Sidebar - Daily Briefing & Top Stories */}
+          <aside className="lg:col-span-3 space-y-6">
+            <DailyBriefing briefing={dailyBriefingData} />
+            
+            <div className="bg-card rounded-lg border border-border p-4">
+              <h2 className="font-bold text-lg text-foreground mb-3">Știri Principale</h2>
+              <TopStoriesList stories={topStories} />
             </div>
           </aside>
+
+          {/* Center - Main Feed */}
+          <div className="lg:col-span-5">
+            {/* Featured Story */}
+            <div className="mb-6">
+              <FeaturedStory story={featuredStory} />
+            </div>
+
+            {/* News List */}
+            <div className="bg-card rounded-lg border border-border">
+              {mockNews.slice(1).map((news) => (
+                <NewsListItem 
+                  key={news.id} 
+                  story={{
+                    id: news.id,
+                    title: news.title,
+                    image: news.image,
+                    bias: news.bias,
+                    category: news.category,
+                    location: news.location,
+                    sourcesCount: news.sourcesCount,
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Right Sidebar - Blindspot */}
+          <aside className="lg:col-span-4 space-y-6">
+            {/* Blindspot Section */}
+            <div className="bg-card rounded-lg border border-border p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Eye className="w-5 h-5" />
+                <h2 className="font-bold text-lg text-foreground">PUNCT ORBIT</h2>
+                <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">TM</span>
+              </div>
+              
+              <p className="text-sm text-muted-foreground mb-4">
+                Știri acoperite disproporționat de o parte a spectrului politic.{" "}
+                <Link to="/despre-punct-orbit" className="underline hover:text-foreground">
+                  Află mai multe despre bias-ul politic în știri.
+                </Link>
+              </p>
+
+              <div className="space-y-4">
+                {blindspotStories.map((story) => (
+                  <BlindspotCard key={story.id} story={story} />
+                ))}
+              </div>
+
+              <Button variant="outline" className="w-full mt-4">
+                Vezi Feed Punct Orbit
+              </Button>
+            </div>
+
+            {/* My News Bias Section */}
+            <div className="bg-card rounded-lg border border-border p-4">
+              <h3 className="font-bold text-foreground mb-4">Bias-ul Meu</h3>
+              
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                  <User className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm text-foreground">Utilizator Demo</p>
+                  <p className="text-xs text-muted-foreground">0 Știri · 0 Articole</p>
+                </div>
+              </div>
+
+              <div className="flex h-6 rounded overflow-hidden text-xs font-medium mb-4">
+                <div className="bg-bias-left flex-1 flex items-center justify-center text-white">?</div>
+                <div className="bg-bias-center flex-1 flex items-center justify-center text-white">?</div>
+                <div className="bg-bias-right flex-1 flex items-center justify-center text-white">?</div>
+              </div>
+
+              <Button variant="outline" className="w-full">
+                Vezi Demo
+              </Button>
+            </div>
+
+            {/* Promo Banner */}
+            <div className="bg-primary rounded-lg p-4 text-primary-foreground">
+              <p className="text-sm font-medium mb-2">Oferă darul perspectivei</p>
+              <p className="text-xs opacity-80 mb-3">Reducere de sărbători: 40% reducere la abonamentul Premium</p>
+              <Button variant="secondary" size="sm">
+                Abonează-te acum
+              </Button>
+            </div>
+          </aside>
+
         </div>
       </main>
 
@@ -163,10 +133,7 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">C</span>
-              </div>
-              <span className="font-semibold text-foreground">ClarStiri.ro</span>
+              <span className="font-bold text-foreground">CLARSTIRI</span>
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link to="/despre" className="hover:text-foreground transition-colors">Despre</Link>
