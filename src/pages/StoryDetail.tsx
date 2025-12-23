@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
+import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -396,43 +397,11 @@ const StoryDetail = () => {
               </div>
             </div>
 
-            {/* Bias Distribution Chart */}
-            <div className="bg-card rounded-lg border border-border p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-foreground">Distribuție Bias</h3>
-                <ExternalLink className="w-4 h-4 text-muted-foreground" />
-              </div>
-
-              <p className="text-sm text-muted-foreground mb-4">
-                {currentStory.bias.center}% din surse sunt de Centru
-              </p>
-
-              {/* Bias Bar */}
-              <BiasBar
-                left={currentStory.bias.left}
-                center={currentStory.bias.center}
-                right={currentStory.bias.right}
-                showLabels
-                size="lg"
-              />
-
-              {/* Source Icons Grid */}
-              <div className="mt-4 pt-4 border-t border-border">
-                <div className="flex flex-wrap gap-2">
-                  {currentStory.sources.map((source, index) => (
-                    <div
-                      key={source.id}
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold text-white ${getBiasColor(source.source.bias)} ring-2 ring-offset-2 ring-offset-background ${source.source.bias.includes('left') ? 'ring-blue-500/30' :
-                        source.source.bias.includes('right') ? 'ring-red-500/30' : 'ring-purple-500/30'
-                        }`}
-                      title={source.source.name}
-                    >
-                      {source.source.name.substring(0, 2).toUpperCase()}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            {/* Bias Distribution Card - Similar to Ground News */}
+            <BiasDistribution
+              sources={currentStory.sources}
+              bias={currentStory.bias}
+            />
 
             {/* Share Actions */}
             <div className="bg-card rounded-lg border border-border p-4">
