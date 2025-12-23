@@ -7,13 +7,19 @@ import { BlindspotCard } from "@/components/BlindspotCard";
 import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Eye, User, Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { Eye, User, Loader2, RefreshCw, AlertCircle, Wifi } from "lucide-react";
+import {
+  MainFeedSkeleton,
+  SidebarSkeleton,
+  FeaturedStorySkeleton,
+  NewsListItemSkeleton
+} from "@/components/Skeleton";
 
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(20);
+  const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(20);
   const { data: topStories, isLoading: isLoadingTop } = useTopStories(5);
 
   // Convertește datele agregate în formatul necesar pentru componente
@@ -61,20 +67,38 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
+      {/* Background Refresh Indicator */}
+      {isRefreshing && (
+        <div className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-primary text-primary-foreground px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm animate-fade-in">
+          <Loader2 className="w-4 h-4 animate-spin" />
+          Se actualizează știrile...
+        </div>
+      )}
+
       <main className="container mx-auto px-4 py-6">
-        {/* Loading State */}
+        {/* Skeleton Loading State - arată structura paginii */}
         {isLoading && (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-            <p className="text-muted-foreground">Se încarcă știrile din surse multiple...</p>
-            <p className="text-xs text-muted-foreground mt-2">
-              Agregăm date de la Digi24, HotNews, G4Media și alte surse...
-            </p>
+          <div className="grid lg:grid-cols-12 gap-6">
+            <aside className="lg:col-span-3">
+              <SidebarSkeleton />
+            </aside>
+            <div className="lg:col-span-5">
+              <MainFeedSkeleton />
+            </div>
+            <aside className="lg:col-span-4 space-y-6">
+              <div className="bg-card rounded-lg border border-border p-4">
+                <div className="animate-pulse">
+                  <div className="h-6 bg-muted rounded w-32 mb-4"></div>
+                  <div className="h-24 bg-muted rounded mb-4"></div>
+                  <div className="h-24 bg-muted rounded"></div>
+                </div>
+              </div>
+            </aside>
           </div>
         )}
 
         {/* Error State */}
-        {error && !isLoading && (
+        {error && !isLoading && !stories && (
           <div className="flex flex-col items-center justify-center py-20">
             <AlertCircle className="w-12 h-12 text-destructive mb-4" />
             <p className="text-foreground font-medium mb-2">Nu am putut încărca știrile</p>
@@ -86,8 +110,8 @@ const Index = () => {
           </div>
         )}
 
-        {/* Content */}
-        {!isLoading && !error && stories && (
+        {/* Content - se afișează și cu date din cache */}
+        {stories && (
           <div className="grid lg:grid-cols-12 gap-6">
 
             {/* Left Sidebar - Daily Briefing & Top Stories */}

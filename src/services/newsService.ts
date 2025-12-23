@@ -1,7 +1,76 @@
 import { RSSNewsItem, AggregatedStory, NEWS_SOURCES, BIAS_WEIGHT_MAP, NewsSource } from '@/types/news';
 
-// CORS proxy pentru a accesa RSS feeds din browser
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+// CORS proxies - folosim mai multe pentru redundanță și viteză
+const CORS_PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?',
+];
+
+// Cache key pentru localStorage
+const CACHE_KEY = 'clarstiri_news_cache';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
+
+// Timeout pentru fetch (în milisecunde)
+const FETCH_TIMEOUT = 5000; // 5 secunde - dacă nu răspunde, trecem mai departe
+
+interface CachedNews {
+    timestamp: number;
+    news: RSSNewsItem[];
+}
+
+/**
+ * Salvează știrile în cache local
+ */
+function saveToCache(news: RSSNewsItem[]): void {
+    try {
+        const cacheData: CachedNews = {
+            timestamp: Date.now(),
+            news,
+        };
+        localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+    } catch (e) {
+        console.warn('Failed to save news to cache:', e);
+    }
+}
+
+/**
+ * Încarcă știrile din cache local
+ */
+function loadFromCache(): RSSNewsItem[] | null {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return null;
+
+        const cacheData: CachedNews = JSON.parse(cached);
+        const age = Date.now() - cacheData.timestamp;
+
+        // Returnează cache-ul chiar dacă e expirat (pentru încărcare instant)
+        // dar marchează-l ca "stale" pentru refresh în background
+        if (cacheData.news && cacheData.news.length > 0) {
+            return cacheData.news;
+        }
+
+        return null;
+    } catch (e) {
+        console.warn('Failed to load news from cache:', e);
+        return null;
+    }
+}
+
+/**
+ * Verifică dacă cache-ul e proaspăt
+ */
+function isCacheFresh(): boolean {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return false;
+
+        const cacheData: CachedNews = JSON.parse(cached);
+        return Date.now() - cacheData.timestamp < CACHE_DURATION;
+    } catch {
+        return false;
+    }
+}
 
 /**
  * Parsează un XML RSS feed în obiecte JavaScript
@@ -65,17 +134,44 @@ function stripHtml(html: string): string {
 }
 
 /**
- * Fetch RSS feed de la o sursă
+ * Fetch cu timeout - returnează [] dacă durează prea mult
  */
-async function fetchRSSFeed(source: NewsSource): Promise<RSSNewsItem[]> {
+async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
     try {
-        const response = await fetch(`${CORS_PROXY}${encodeURIComponent(source.rssUrl)}`, {
+        const response = await fetch(url, {
+            signal: controller.signal,
             headers: {
                 'Accept': 'application/rss+xml, application/xml, text/xml',
             },
         });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
+}
+
+/**
+ * Fetch RSS feed de la o sursă cu timeout
+ */
+async function fetchRSSFeed(source: NewsSource, proxyIndex = 0): Promise<RSSNewsItem[]> {
+    const proxy = CORS_PROXIES[proxyIndex % CORS_PROXIES.length];
+
+    try {
+        const response = await fetchWithTimeout(
+            `${proxy}${encodeURIComponent(source.rssUrl)}`,
+            FETCH_TIMEOUT
+        );
 
         if (!response.ok) {
+            // Încearcă alt proxy
+            if (proxyIndex < CORS_PROXIES.length - 1) {
+                return fetchRSSFeed(source, proxyIndex + 1);
+            }
             console.warn(`Failed to fetch RSS from ${source.name}: ${response.status}`);
             return [];
         }
@@ -83,25 +179,56 @@ async function fetchRSSFeed(source: NewsSource): Promise<RSSNewsItem[]> {
         const xmlText = await response.text();
         return parseRSSXML(xmlText, source);
     } catch (error) {
-        console.error(`Error fetching RSS from ${source.name}:`, error);
+        // Dacă e timeout, încearcă alt proxy
+        if (proxyIndex < CORS_PROXIES.length - 1) {
+            return fetchRSSFeed(source, proxyIndex + 1);
+        }
+        console.warn(`Timeout/Error fetching RSS from ${source.name}`);
         return [];
     }
 }
 
 /**
- * Fetch toate știrile de la toate sursele
+ * Fetch toate știrile de la toate sursele în paralel
+ * Returnează rezultate pe măsură ce vin, nu așteaptă toate sursele
  */
 export async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    const allPromises = NEWS_SOURCES.map(source => fetchRSSFeed(source));
-    const results = await Promise.allSettled(allPromises);
+    // Prioritizează sursele cele mai rapide/fiabile
+    const prioritySources = NEWS_SOURCES.filter(s =>
+        ['digi24', 'hotnews', 'g4media', 'mediafax'].includes(s.id)
+    );
+    const otherSources = NEWS_SOURCES.filter(s =>
+        !['digi24', 'hotnews', 'g4media', 'mediafax'].includes(s.id)
+    );
 
-    const allNews: RSSNewsItem[] = [];
+    // Fetch sursele prioritare mai întâi
+    const priorityPromises = prioritySources.map(source => fetchRSSFeed(source));
+    const priorityResults = await Promise.allSettled(priorityPromises);
 
-    results.forEach((result) => {
+    let allNews: RSSNewsItem[] = [];
+
+    priorityResults.forEach((result) => {
         if (result.status === 'fulfilled') {
             allNews.push(...result.value);
         }
     });
+
+    // Apoi fetch-uiește restul surselor în background (fără a bloca)
+    Promise.allSettled(otherSources.map(source => fetchRSSFeed(source)))
+        .then(results => {
+            results.forEach((result) => {
+                if (result.status === 'fulfilled' && result.value.length > 0) {
+                    // Adaugă la cache dar nu bloca UI-ul
+                    const currentCache = loadFromCache() || [];
+                    const newNews = result.value.filter(
+                        n => !currentCache.some(c => c.link === n.link)
+                    );
+                    if (newNews.length > 0) {
+                        saveToCache([...currentCache, ...newNews]);
+                    }
+                }
+            });
+        });
 
     // Sortează după data publicării (cele mai recente primele)
     allNews.sort((a, b) => {
@@ -110,7 +237,46 @@ export async function fetchAllNews(): Promise<RSSNewsItem[]> {
         return dateB - dateA;
     });
 
+    // Salvează în cache
+    if (allNews.length > 0) {
+        saveToCache(allNews);
+    }
+
     return allNews;
+}
+
+/**
+ * Fetch rapid - returnează cache-ul instant, apoi actualizează în background
+ */
+export async function fetchNewsWithCache(): Promise<{
+    news: RSSNewsItem[];
+    fromCache: boolean;
+    isStale: boolean;
+}> {
+    const cachedNews = loadFromCache();
+    const isFresh = isCacheFresh();
+
+    // Dacă avem cache, returnează-l instant
+    if (cachedNews && cachedNews.length > 0) {
+        // Dacă cache-ul e stale, actualizează în background
+        if (!isFresh) {
+            fetchAllNews().catch(console.error);
+        }
+
+        return {
+            news: cachedNews,
+            fromCache: true,
+            isStale: !isFresh,
+        };
+    }
+
+    // Dacă nu avem cache, fetch normal
+    const news = await fetchAllNews();
+    return {
+        news,
+        fromCache: false,
+        isStale: false,
+    };
 }
 
 /**
@@ -314,10 +480,21 @@ export async function fetchNewsFromSource(sourceId: string, limit = 10): Promise
 }
 
 /**
- * Obține știrile grupate și agregate
+ * Obține știrile grupate și agregate - cu cache pentru încărcare instant
  */
 export async function getAggregatedNews(limit = 20): Promise<AggregatedStory[]> {
-    const allNews = await fetchAllNews();
-    const aggregated = aggregateNews(allNews);
+    const { news } = await fetchNewsWithCache();
+    const aggregated = aggregateNews(news);
+    return aggregated.slice(0, limit);
+}
+
+/**
+ * Obține știri din cache sincron (pentru SSR/instant display)
+ */
+export function getCachedAggregatedNews(limit = 20): AggregatedStory[] | null {
+    const cachedNews = loadFromCache();
+    if (!cachedNews || cachedNews.length === 0) return null;
+
+    const aggregated = aggregateNews(cachedNews);
     return aggregated.slice(0, limit);
 }

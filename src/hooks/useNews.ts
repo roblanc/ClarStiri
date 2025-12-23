@@ -1,19 +1,40 @@
-import { useQuery } from '@tanstack/react-query';
-import { getAggregatedNews, fetchAllNews } from '@/services/newsService';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews } from '@/services/newsService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
+import { useEffect, useState } from 'react';
 
 /**
- * Hook pentru a obține știrile agregate
+ * Hook pentru a obține știrile agregate cu încărcare rapidă din cache
  */
 export function useAggregatedNews(limit = 20) {
-    return useQuery<AggregatedStory[], Error>({
+    const [initialData, setInitialData] = useState<AggregatedStory[] | undefined>(undefined);
+
+    // Încarcă din cache sincron la mount
+    useEffect(() => {
+        const cached = getCachedAggregatedNews(limit);
+        if (cached) {
+            setInitialData(cached);
+        }
+    }, [limit]);
+
+    const query = useQuery<AggregatedStory[], Error>({
         queryKey: ['aggregatedNews', limit],
         queryFn: () => getAggregatedNews(limit),
-        staleTime: 5 * 60 * 1000, // 5 minute - consideră datele fresh
-        gcTime: 30 * 60 * 1000, // 30 minute - păstrează în cache
+        staleTime: 2 * 60 * 1000, // 2 minute
+        gcTime: 30 * 60 * 1000, // 30 minute
         refetchOnWindowFocus: false,
-        retry: 2,
+        retry: 1,
+        // Folosește datele din cache ca placeholder
+        placeholderData: initialData,
     });
+
+    return {
+        ...query,
+        // Dacă avem date din cache, nu suntem în "loading" propriu-zis
+        isLoading: query.isLoading && !initialData,
+        // Indica dacă datele sunt din cache și se actualizează în background
+        isRefreshing: query.isFetching && !!initialData,
+    };
 }
 
 /**
@@ -23,10 +44,10 @@ export function useAllNews() {
     return useQuery<RSSNewsItem[], Error>({
         queryKey: ['allNews'],
         queryFn: fetchAllNews,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 2 * 60 * 1000,
         gcTime: 30 * 60 * 1000,
         refetchOnWindowFocus: false,
-        retry: 2,
+        retry: 1,
     });
 }
 
@@ -64,5 +85,17 @@ export function useStoryDetail(storyId: string) {
     return {
         data: story,
         ...rest,
+    };
+}
+
+/**
+ * Hook pentru a forța refresh-ul știrilor
+ */
+export function useRefreshNews() {
+    const queryClient = useQueryClient();
+
+    return () => {
+        queryClient.invalidateQueries({ queryKey: ['aggregatedNews'] });
+        queryClient.invalidateQueries({ queryKey: ['allNews'] });
     };
 }
