@@ -1,52 +1,68 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @import '@fontsource/ibm-plex-sans/400.css';
 @import '@fontsource/ibm-plex-sans/500.css';
 @import '@fontsource/ibm-plex-sans/600.css';
 @import '@fontsource/ibm-plex-sans/700.css';
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer base {
   :root {
     /* thesite.ro Design System - Inspired by Snoop.ro */
     /* Clean, minimal, professional news platform */
-    
-    --background: 0 0% 98%;          /* #FAFAFA - Very light gray */
-    --foreground: 0 0% 13%;           /* #222222 - Dark text */
 
-    --card: 0 0% 100%;                /* #FFFFFF - White cards */
-    --card-foreground: 0 0% 13%;      /* #222222 */
+    --background: 0 0% 98%;
+    /* #FAFAFA - Very light gray */
+    --foreground: 0 0% 13%;
+    /* #222222 - Dark text */
+
+    --card: 0 0% 100%;
+    /* #FFFFFF - White cards */
+    --card-foreground: 0 0% 13%;
+    /* #222222 */
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
 
     /* Primary - Gold/Orange accent like Snoop */
-    --primary: 38 87% 65%;            /* #F0B55B - Gold accent */
-    --primary-foreground: 0 0% 0%;    /* #000000 - Black text on gold */
+    --primary: 38 87% 65%;
+    /* #F0B55B - Gold accent */
+    --primary-foreground: 0 0% 0%;
+    /* #000000 - Black text on gold */
 
-    --secondary: 0 0% 96%;            /* #F5F5F5 - Light gray */
-    --secondary-foreground: 0 0% 20%; /* #333333 */
+    --secondary: 0 0% 96%;
+    /* #F5F5F5 - Light gray */
+    --secondary-foreground: 0 0% 20%;
+    /* #333333 */
 
-    --muted: 0 0% 94%;                /* #EFEFEF */
-    --muted-foreground: 0 0% 46%;     /* #757575 - Gray text */
+    --muted: 0 0% 94%;
+    /* #EFEFEF */
+    --muted-foreground: 0 0% 46%;
+    /* #757575 - Gray text */
 
-    --accent: 210 68% 43%;            /* #1E73BE - Blue accent */
+    --accent: 210 68% 43%;
+    /* #1E73BE - Blue accent */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;               /* #E5E5E5 */
+    --border: 0 0% 90%;
+    /* #E5E5E5 */
     --input: 0 0% 90%;
-    --ring: 38 87% 65%;               /* Gold ring */
+    --ring: 38 87% 65%;
+    /* Gold ring */
 
     --radius: 0.5rem;
 
     /* Bias colors - For news platform */
-    --bias-left: 210 75% 45%;         /* Blue for left */
-    --bias-center: 0 0% 50%;          /* Gray for center */
-    --bias-right: 0 70% 50%;          /* Red for right */
+    --bias-left: 210 75% 45%;
+    /* Blue for left */
+    --bias-center: 0 0% 50%;
+    /* Gray for center */
+    --bias-right: 0 70% 50%;
+    /* Red for right */
 
     /* Badges */
     --badge-left: 210 70% 92%;
@@ -65,24 +81,31 @@
     --sidebar-accent-foreground: 0 0% 20%;
     --sidebar-border: 0 0% 90%;
     --sidebar-ring: 38 87% 65%;
-    
+
     /* Additional thesite.ro colors */
-    --gold: 38 87% 65%;               /* #F0B55B */
-    --green: 120 100% 25%;            /* #008000 */
-    --blue-link: 210 68% 43%;         /* #1E73BE */
+    --gold: 38 87% 65%;
+    /* #F0B55B */
+    --green: 120 100% 25%;
+    /* #008000 */
+    --blue-link: 210 68% 43%;
+    /* #1E73BE */
   }
 
   .dark {
-    --background: 0 0% 7%;            /* #121212 */
-    --foreground: 0 0% 95%;           /* #F2F2F2 */
+    --background: 0 0% 7%;
+    /* #121212 */
+    --foreground: 0 0% 95%;
+    /* #F2F2F2 */
 
-    --card: 0 0% 10%;                 /* #1A1A1A */
+    --card: 0 0% 10%;
+    /* #1A1A1A */
     --card-foreground: 0 0% 95%;
 
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 38 87% 60%;            /* Slightly darker gold in dark mode */
+    --primary: 38 87% 60%;
+    /* Slightly darker gold in dark mode */
     --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 15%;
@@ -133,10 +156,15 @@
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-semibold tracking-tight;
   }
-  
+
   /* Links use blue accent */
   a {
     @apply transition-colors;
@@ -167,12 +195,12 @@
   .news-card:hover {
     @apply shadow-md;
   }
-  
+
   /* Gold highlight effect */
   .gold-highlight {
     background: linear-gradient(to right, hsl(var(--gold) / 0.2), transparent);
   }
-  
+
   /* Premium button style */
   .btn-gold {
     @apply bg-primary text-primary-foreground hover:opacity-90 transition-opacity;
@@ -183,12 +211,12 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   /* Text link color */
   .text-link {
     color: hsl(var(--blue-link));
   }
-  
+
   .text-link:hover {
     text-decoration: underline;
   }
