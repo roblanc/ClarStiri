@@ -118,34 +118,33 @@ export function BiasDistribution({ sources, bias }: BiasDistributionProps) {
                     bias.left > bias.right ? 'Stânga' : 'Dreapta'}
             </p>
 
-            {/* Bias Bar cu labels */}
+            {/* Bias Bar cu labels direct pe bară */}
             <div className="mb-6">
-                <div className="h-3 rounded-full overflow-hidden flex bg-muted">
+                <div className="h-7 rounded overflow-hidden flex text-xs font-medium">
                     {bias.left > 0 && (
                         <div
-                            className="bg-blue-500 transition-all duration-300 relative"
+                            className="bg-bias-left flex items-center justify-center text-white transition-all duration-300"
                             style={{ width: `${bias.left}%` }}
-                        />
+                        >
+                            {bias.left >= 15 && `S ${bias.left}%`}
+                        </div>
                     )}
                     {bias.center > 0 && (
                         <div
-                            className="bg-gray-400 transition-all duration-300"
+                            className="bg-bias-center flex items-center justify-center text-white transition-all duration-300"
                             style={{ width: `${bias.center}%` }}
-                        />
+                        >
+                            {bias.center >= 15 && `C ${bias.center}%`}
+                        </div>
                     )}
                     {bias.right > 0 && (
                         <div
-                            className="bg-red-500 transition-all duration-300"
+                            className="bg-bias-right flex items-center justify-center text-white transition-all duration-300"
                             style={{ width: `${bias.right}%` }}
-                        />
+                        >
+                            {bias.right >= 15 && `D ${bias.right}%`}
+                        </div>
                     )}
-                </div>
-
-                {/* Labels sub bara */}
-                <div className="flex justify-between mt-2 text-xs">
-                    <span className="text-blue-600 font-medium">S {bias.left}%</span>
-                    <span className="text-gray-500 font-medium">C {bias.center}%</span>
-                    <span className="text-red-600 font-medium">D {bias.right}%</span>
                 </div>
             </div>
 

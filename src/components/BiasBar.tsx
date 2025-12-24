@@ -3,34 +3,85 @@ interface BiasBarProps {
   center: number;
   right: number;
   showLabels?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'simple' | 'labeled';  // labeled = procente direct pe bara
 }
 
-export function BiasBar({ left, center, right, showLabels = false, size = 'md' }: BiasBarProps) {
+export function BiasBar({
+  left,
+  center,
+  right,
+  showLabels = false,
+  size = 'md',
+  variant = 'simple'
+}: BiasBarProps) {
   const heights = {
-    sm: 'h-1.5',
-    md: 'h-2',
-    lg: 'h-3',
+    sm: 'h-2',
+    md: 'h-5',
+    lg: 'h-6',
+    xl: 'h-7',
   };
 
+  const textSizes = {
+    sm: 'text-[8px]',
+    md: 'text-[10px]',
+    lg: 'text-xs',
+    xl: 'text-sm',
+  };
+
+  // Varianta cu procente direct pe bară
+  if (variant === 'labeled') {
+    return (
+      <div className="w-full">
+        <div className={`flex ${heights[size]} rounded overflow-hidden ${textSizes[size]} font-medium`}>
+          {left > 0 && (
+            <div
+              className="bg-bias-left flex items-center justify-center text-white transition-all duration-300"
+              style={{ width: `${left}%` }}
+            >
+              {left >= 15 && `S ${left}%`}
+            </div>
+          )}
+          {center > 0 && (
+            <div
+              className="bg-bias-center flex items-center justify-center text-white transition-all duration-300"
+              style={{ width: `${center}%` }}
+            >
+              {center >= 15 && `C ${center}%`}
+            </div>
+          )}
+          {right > 0 && (
+            <div
+              className="bg-bias-right flex items-center justify-center text-white transition-all duration-300"
+              style={{ width: `${right}%` }}
+            >
+              {right >= 15 && `D ${right}%`}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Varianta simplă (fără text pe bară)
   return (
     <div className="w-full">
       <div className={`bias-bar ${heights[size]}`}>
         {left > 0 && (
-          <div 
-            className="bias-segment-left transition-all duration-300" 
+          <div
+            className="bias-segment-left transition-all duration-300"
             style={{ width: `${left}%` }}
           />
         )}
         {center > 0 && (
-          <div 
-            className="bias-segment-center transition-all duration-300" 
+          <div
+            className="bias-segment-center transition-all duration-300"
             style={{ width: `${center}%` }}
           />
         )}
         {right > 0 && (
-          <div 
-            className="bias-segment-right transition-all duration-300" 
+          <div
+            className="bias-segment-right transition-all duration-300"
             style={{ width: `${right}%` }}
           />
         )}

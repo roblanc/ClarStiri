@@ -14,21 +14,9 @@ export function TopStoriesList({ stories }: TopStoriesListProps) {
   return (
     <div className="space-y-0">
       {stories.map((story) => {
-        const dominantBias = story.bias.left > story.bias.center && story.bias.left > story.bias.right 
-          ? 'left' 
-          : story.bias.right > story.bias.center 
-            ? 'right' 
-            : 'center';
-        
-        const coverageText = dominantBias === 'left' 
-          ? `${story.bias.left}% Stânga` 
-          : dominantBias === 'right' 
-            ? `${story.bias.right}% Dreapta`
-            : `${story.bias.center}% Centru`;
-
         return (
-          <Link 
-            key={story.id} 
+          <Link
+            key={story.id}
             to={`/stire/${story.id}`}
             className="block py-3 border-b border-border last:border-b-0 group"
           >
@@ -36,19 +24,17 @@ export function TopStoriesList({ stories }: TopStoriesListProps) {
               {story.title}
             </h4>
             <div className="flex items-center gap-2">
-              <div className="flex h-1.5 w-16 rounded-sm overflow-hidden">
-                {story.bias.left > 0 && (
-                  <div className="bg-bias-left" style={{ width: `${story.bias.left}%` }} />
-                )}
-                {story.bias.center > 0 && (
-                  <div className="bg-bias-center" style={{ width: `${story.bias.center}%` }} />
-                )}
-                {story.bias.right > 0 && (
-                  <div className="bg-bias-right" style={{ width: `${story.bias.right}%` }} />
-                )}
+              <div className="flex-1">
+                <BiasBar
+                  left={story.bias.left}
+                  center={story.bias.center}
+                  right={story.bias.right}
+                  size="sm"
+                  variant="labeled"
+                />
               </div>
-              <span className="text-xs text-muted-foreground">
-                {coverageText}: {story.sourcesCount} surse
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                {story.sourcesCount} surse
               </span>
             </div>
           </Link>

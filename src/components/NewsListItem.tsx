@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
+import { BiasBar } from "./BiasBar";
 
 interface NewsListItemProps {
   story: {
@@ -16,18 +17,6 @@ interface NewsListItemProps {
 }
 
 export function NewsListItem({ story }: NewsListItemProps) {
-  const dominantBias = story.bias.left > story.bias.center && story.bias.left > story.bias.right
-    ? 'left'
-    : story.bias.right > story.bias.center
-      ? 'right'
-      : 'center';
-
-  const coverageText = dominantBias === 'left'
-    ? `${story.bias.left}% Stânga`
-    : dominantBias === 'right'
-      ? `${story.bias.right}% Dreapta`
-      : `${story.bias.center}% Centru`;
-
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="py-4 px-4 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors">
@@ -42,7 +31,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
               {story.title}
             </h3>
 
-            {/* Bias Info Row with Source Logos */}
+            {/* Bias Info Row with Source Logos and Labeled Bar */}
             <div className="flex items-center gap-3">
               {/* Source Logos */}
               {story.sources && story.sources.length > 0 && (
@@ -53,23 +42,20 @@ export function NewsListItem({ story }: NewsListItemProps) {
                 />
               )}
 
-              {/* Inline Bias Bar */}
-              <div className="flex items-center gap-2">
-                <div className="flex h-2 w-20 rounded-sm overflow-hidden">
-                  {story.bias.left > 0 && (
-                    <div className="bg-bias-left" style={{ width: `${story.bias.left}%` }} />
-                  )}
-                  {story.bias.center > 0 && (
-                    <div className="bg-bias-center" style={{ width: `${story.bias.center}%` }} />
-                  )}
-                  {story.bias.right > 0 && (
-                    <div className="bg-bias-right" style={{ width: `${story.bias.right}%` }} />
-                  )}
-                </div>
-                <span className="text-xs text-muted-foreground whitespace-nowrap">
-                  {story.sourcesCount} surse
-                </span>
+              {/* Labeled Bias Bar */}
+              <div className="flex-1 max-w-[180px]">
+                <BiasBar
+                  left={story.bias.left}
+                  center={story.bias.center}
+                  right={story.bias.right}
+                  size="md"
+                  variant="labeled"
+                />
               </div>
+
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                {story.sourcesCount} surse
+              </span>
             </div>
           </div>
 

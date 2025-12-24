@@ -48,13 +48,13 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
               )}
 
               {/* Bias Bar with labels on bar */}
-              <div className="flex-1 flex h-6 rounded overflow-hidden text-xs font-medium">
+              <div className="flex-1 flex h-7 rounded overflow-hidden text-xs font-medium">
                 {story.bias.left > 0 && (
                   <div
                     className="bg-bias-left flex items-center justify-center text-white"
                     style={{ width: `${story.bias.left}%` }}
                   >
-                    {story.bias.left >= 20 && `S ${story.bias.left}%`}
+                    {story.bias.left >= 15 && `S ${story.bias.left}%`}
                   </div>
                 )}
                 {story.bias.center > 0 && (
@@ -62,7 +62,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
                     className="bg-bias-center flex items-center justify-center text-white"
                     style={{ width: `${story.bias.center}%` }}
                   >
-                    {story.bias.center >= 20 && `C ${story.bias.center}%`}
+                    {story.bias.center >= 15 && `C ${story.bias.center}%`}
                   </div>
                 )}
                 {story.bias.right > 0 && (
@@ -70,7 +70,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
                     className="bg-bias-right flex items-center justify-center text-white"
                     style={{ width: `${story.bias.right}%` }}
                   >
-                    {story.bias.right >= 20 && `D ${story.bias.right}%`}
+                    {story.bias.right >= 15 && `D ${story.bias.right}%`}
                   </div>
                 )}
               </div>
