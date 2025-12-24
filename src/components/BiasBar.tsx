@@ -29,6 +29,9 @@ export function BiasBar({
     xl: 'text-sm',
   };
 
+  // Prag minim pentru a afișa text (procentul trebuie să fie suficient de mare)
+  const minPercentForText = 22;
+
   // Varianta cu procente direct pe bară
   if (variant === 'labeled') {
     return (
@@ -36,26 +39,26 @@ export function BiasBar({
         <div className={`flex ${heights[size]} rounded overflow-hidden ${textSizes[size]} font-medium`}>
           {left > 0 && (
             <div
-              className="bg-bias-left flex items-center justify-center text-white transition-all duration-300"
+              className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${left}%` }}
             >
-              {left >= 15 && `S ${left}%`}
+              {left >= minPercentForText && <span className="px-0.5">S {left}%</span>}
             </div>
           )}
           {center > 0 && (
             <div
-              className="bg-bias-center flex items-center justify-center text-white transition-all duration-300"
+              className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${center}%` }}
             >
-              {center >= 15 && `C ${center}%`}
+              {center >= minPercentForText && <span className="px-0.5">C {center}%</span>}
             </div>
           )}
           {right > 0 && (
             <div
-              className="bg-bias-right flex items-center justify-center text-white transition-all duration-300"
+              className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${right}%` }}
             >
-              {right >= 15 && `D ${right}%`}
+              {right >= minPercentForText && <span className="px-0.5">D {right}%</span>}
             </div>
           )}
         </div>
