@@ -106,15 +106,15 @@ export function Header() {
         </div>
       </div>
 
-      {/* Categories Bar */}
-      <div className="bg-secondary/50 border-b border-border overflow-x-auto">
+      {/* Categories Bar - Solid Yellow */}
+      <div className="bg-primary border-b border-primary overflow-x-auto">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-1 py-2">
             {categories.map((category) => (
               <Link
                 key={category}
                 to={`/categorie/${category.toLowerCase()}`}
-                className="px-4 py-1.5 text-sm text-muted-foreground hover:text-foreground hover:bg-white rounded-full transition-colors whitespace-nowrap"
+                className="px-4 py-1.5 text-sm text-primary-foreground/80 hover:text-primary-foreground hover:bg-primary-foreground/10 rounded-full transition-colors whitespace-nowrap font-medium"
               >
                 {category}
               </Link>
