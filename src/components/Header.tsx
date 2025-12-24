@@ -37,10 +37,13 @@ export function Header() {
               </Button>
 
               <Link to="/" className="flex items-center gap-2">
-                {/* Logo mark - gold accent */}
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-lg">T</span>
-                </div>
+                {/* Logo mark - Ethics Icon */}
+                <img
+                  src="/ethics-logo.png"
+                  alt="ClarȘtiri Logo"
+                  className="w-9 h-9 object-contain"
+                  style={{ imageRendering: 'pixelated' }}
+                />
                 <span className="font-bold text-xl text-foreground tracking-tight">
                   thesite<span className="text-primary">.ro</span>
                 </span>
