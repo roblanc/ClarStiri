@@ -1,5 +1,42 @@
 # Changelog - ClarStiri / thesite.ro
 
+## 2024-12-25
+
+### 🎄 Update Major de Crăciun
+
+#### 📰 Surse de Știri
+- **+7 surse noi:** Snoop.ro, Vice România, Spotmedia, Biziday, Pagina de Media, EuropaFM, Scena9
+- **Total surse:** 35 publicații românești
+- **Scor Factualitate:** Adăugat pentru toate sursele (high/mixed/low)
+
+#### 🤖 Comparație Bias AI (Gemini)
+- Integrare cu Google Gemini API pentru analiză automată de bias
+- Se generează automat când userul deschide o știre
+- Analizează cum surse de stânga/centru/dreapta prezintă aceeași știre
+- **Fișiere noi:**
+  - `src/services/geminiService.ts`
+  - `src/hooks/useBiasComparison.ts`
+  - `.env.local` (VITE_GEMINI_API_KEY)
+
+#### 📖 Pagina Metodologie
+- **Rută nouă:** `/metodologie`
+- Explică cum funcționează clasificarea bias-ului în context românesc
+- Include lista completă a surselor cu clasificări și factualitate
+- Explică ce sunt "Punctele Orbite" și bara de bias
+
+#### ⚡ Optimizări Performanță
+- Timeout fetch redus: 5s → 3s
+- Surse prioritare extinse: 4 → 10 publicații
+- Lazy loading pentru imagini în FeaturedStory, NewsListItem, BlindspotCard
+
+#### 🎨 Îmbunătățiri UI
+- Bara de bias afișează ÎNTOTDEAUNA procentul (pentru segmente <18% doar numărul)
+- Eliminată secțiunea "Pentru Tine" din header
+- Footer actualizat cu link-uri către Metodologie
+- Branding consistent "thesite.ro"
+
+---
+
 ## 2023-12-23
 
 ### 🚀 Deployment Vercel
