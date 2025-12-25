@@ -7,6 +7,7 @@ export interface NewsSource {
   rssUrl: string;
   logo?: string;
   bias: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
+  factuality: 'high' | 'mixed' | 'low';
   category: 'mainstream' | 'independent' | 'tabloid' | 'public';
 }
 
@@ -49,6 +50,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.digi24.ro/rss',
     logo: 'https://www.digi24.ro/static/theme/digi24/images/digi24-logo.svg',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -58,6 +60,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.mediafax.ro/rss',
     logo: 'https://logo.clearbit.com/mediafax.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -67,6 +70,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://adevarul.ro/rss',
     logo: 'https://logo.clearbit.com/adevarul.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -76,6 +80,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://stirileprotv.ro/rss',
     logo: 'https://logo.clearbit.com/stirileprotv.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -85,6 +90,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.agerpres.ro/rss/actualitate',
     logo: 'https://logo.clearbit.com/agerpres.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'public',
   },
   {
@@ -94,6 +100,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://observatornews.ro/rss',
     logo: 'https://logo.clearbit.com/observatornews.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -103,6 +110,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.zf.ro/rss',
     logo: 'https://logo.clearbit.com/zf.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -112,6 +120,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.gandul.ro/rss',
     logo: 'https://logo.clearbit.com/gandul.ro',
     bias: 'center',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -121,6 +130,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.bursa.ro/rss',
     logo: 'https://logo.clearbit.com/bursa.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -130,6 +140,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.news.ro/rss',
     logo: 'https://logo.clearbit.com/news.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
 
@@ -141,6 +152,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://hotnews.ro/feed',
     logo: 'https://logo.clearbit.com/hotnews.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -150,6 +162,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.g4media.ro/feed',
     logo: 'https://logo.clearbit.com/g4media.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -159,6 +172,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.libertatea.ro/feed',
     logo: 'https://logo.clearbit.com/libertatea.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -168,6 +182,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://recorder.ro/feed',
     logo: 'https://logo.clearbit.com/recorder.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -177,6 +192,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://pressone.ro/feed',
     logo: 'https://logo.clearbit.com/pressone.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -186,6 +202,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://republica.ro/feed',
     logo: 'https://logo.clearbit.com/republica.ro',
     bias: 'left',
+    factuality: 'mixed',
     category: 'independent',
   },
   {
@@ -195,6 +212,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://romania.europalibera.org/api/feed',
     logo: 'https://logo.clearbit.com/europalibera.org',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -204,6 +222,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://snoop.ro/feed',
     logo: 'https://logo.clearbit.com/snoop.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -213,6 +232,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.vice.com/ro/feed',
     logo: 'https://logo.clearbit.com/vice.com',
     bias: 'center-left',
+    factuality: 'mixed',
     category: 'independent',
   },
   {
@@ -222,6 +242,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://spotmedia.ro/feed',
     logo: 'https://logo.clearbit.com/spotmedia.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -231,6 +252,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://biziday.ro/feed',
     logo: 'https://logo.clearbit.com/biziday.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -240,6 +262,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.paginademedia.ro/feed',
     logo: 'https://logo.clearbit.com/paginademedia.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'independent',
   },
   {
@@ -249,6 +272,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.europafm.ro/feed',
     logo: 'https://logo.clearbit.com/europafm.ro',
     bias: 'center',
+    factuality: 'high',
     category: 'mainstream',
   },
   {
@@ -258,6 +282,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.scena9.ro/feed',
     logo: 'https://logo.clearbit.com/scena9.ro',
     bias: 'center-left',
+    factuality: 'high',
     category: 'independent',
   },
 
@@ -269,6 +294,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://romanialibera.ro/feed',
     logo: 'https://logo.clearbit.com/romanialibera.ro',
     bias: 'center-right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -278,6 +304,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.realitatea.net/rss',
     logo: 'https://logo.clearbit.com/realitatea.net',
     bias: 'center-right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -287,6 +314,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.romaniatv.net/rss',
     logo: 'https://logo.clearbit.com/romaniatv.net',
     bias: 'right',
+    factuality: 'low',
     category: 'mainstream',
   },
   {
@@ -296,6 +324,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.b1tv.ro/rss',
     logo: 'https://logo.clearbit.com/b1tv.ro',
     bias: 'right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -305,6 +334,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.antena3.ro/rss',
     logo: 'https://logo.clearbit.com/antena3.ro',
     bias: 'center-right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -314,6 +344,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.dcnews.ro/rss',
     logo: 'https://logo.clearbit.com/dcnews.ro',
     bias: 'right',
+    factuality: 'low',
     category: 'independent',
   },
   {
@@ -323,6 +354,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.activenews.ro/rss',
     logo: 'https://logo.clearbit.com/activenews.ro',
     bias: 'right',
+    factuality: 'low',
     category: 'independent',
   },
   {
@@ -332,6 +364,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://epochtimes-romania.com/feed',
     logo: 'https://logo.clearbit.com/epochtimes-romania.com',
     bias: 'right',
+    factuality: 'low',
     category: 'independent',
   },
   {
@@ -341,6 +374,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://evz.ro/feed',
     logo: 'https://logo.clearbit.com/evz.ro',
     bias: 'center-right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -350,6 +384,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.cotidianul.ro/feed',
     logo: 'https://logo.clearbit.com/cotidianul.ro',
     bias: 'center-right',
+    factuality: 'mixed',
     category: 'mainstream',
   },
 ];

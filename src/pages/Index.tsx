@@ -257,16 +257,14 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
+              <span className="font-bold text-foreground">Clar<span className="text-primary">Știri</span></span>
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link to="/despre" className="hover:text-foreground transition-colors">Despre</Link>
-              <Link to="/surse" className="hover:text-foreground transition-colors">Surse</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-              <Link to="/confidentialitate" className="hover:text-foreground transition-colors">Confidențialitate</Link>
+              <Link to="/metodologie" className="hover:text-foreground transition-colors">Metodologie</Link>
+              <Link to="/metodologie" className="hover:text-foreground transition-colors">Surse</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2025 thesite.ro
+              © 2025 ClarȘtiri
             </p>
           </div>
         </div>
