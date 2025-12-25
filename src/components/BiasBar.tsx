@@ -29,10 +29,10 @@ export function BiasBar({
     xl: 'text-sm',
   };
 
-  // Prag minim pentru a afișa text (procentul trebuie să fie suficient de mare)
-  const minPercentForText = 22;
+  // Prag pentru a afișa text complet (literă + procent) vs doar procent
+  const minPercentForFullText = 18;
 
-  // Varianta cu procente direct pe bară
+  // Varianta cu procente direct pe bară - afișează ÎNTOTDEAUNA procentul
   if (variant === 'labeled') {
     return (
       <div className="w-full">
@@ -42,7 +42,9 @@ export function BiasBar({
               className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${left}%` }}
             >
-              {left >= minPercentForText && <span className="px-0.5">S {left}%</span>}
+              <span className="px-0.5">
+                {left >= minPercentForFullText ? `S ${left}%` : `${left}%`}
+              </span>
             </div>
           )}
           {center > 0 && (
@@ -50,7 +52,9 @@ export function BiasBar({
               className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${center}%` }}
             >
-              {center >= minPercentForText && <span className="px-0.5">C {center}%</span>}
+              <span className="px-0.5">
+                {center >= minPercentForFullText ? `C ${center}%` : `${center}%`}
+              </span>
             </div>
           )}
           {right > 0 && (
@@ -58,7 +62,9 @@ export function BiasBar({
               className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
               style={{ width: `${right}%` }}
             >
-              {right >= minPercentForText && <span className="px-0.5">D {right}%</span>}
+              <span className="px-0.5">
+                {right >= minPercentForFullText ? `D ${right}%` : `${right}%`}
+              </span>
             </div>
           )}
         </div>

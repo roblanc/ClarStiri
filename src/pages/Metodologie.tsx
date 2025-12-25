@@ -63,7 +63,7 @@ export default function Metodologie() {
                 </Link>
 
                 <h1 className="text-3xl font-bold text-foreground mb-2">
-                    Cum Funcționează ClarȘtiri
+                    Cum Funcționează thesite.ro
                 </h1>
                 <p className="text-lg text-muted-foreground mb-8">
                     Metodologia noastră pentru agregarea și clasificarea știrilor din România
@@ -73,11 +73,11 @@ export default function Metodologie() {
                 <section className="mb-12">
                     <div className="flex items-center gap-2 mb-4">
                         <Info className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Ce este ClarȘtiri?</h2>
+                        <h2 className="text-xl font-bold text-foreground">Ce este thesite.ro?</h2>
                     </div>
                     <div className="bg-card rounded-lg border border-border p-6">
                         <p className="text-foreground mb-4">
-                            ClarȘtiri este un agregator de știri care colectează articole de la <strong>{NEWS_SOURCES.length} surse media românești</strong> și le grupează pe subiecte, oferindu-ți o perspectivă completă asupra modului în care diferite publicații acoperă aceleași evenimente.
+                            thesite.ro este un agregator de știri care colectează articole de la <strong>{NEWS_SOURCES.length} surse media românești</strong> și le grupează pe subiecte, oferindu-ți o perspectivă completă asupra modului în care diferite publicații acoperă aceleași evenimente.
                         </p>
                         <p className="text-muted-foreground">
                             Inspirat de platforme precum Ground News, scopul nostru este să te ajutăm să înțelegi ce povești sunt acoperite - și de cine - pentru a-ți forma o opinie mai informată.
@@ -292,10 +292,10 @@ export default function Metodologie() {
                 <div className="container mx-auto px-4 py-8">
                     <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
-                            <span className="font-bold text-foreground">Clar<span className="text-primary">Știri</span></span>
+                            <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            © 2025 ClarȘtiri
+                            © 2025 thesite.ro
                         </p>
                     </div>
                 </div>

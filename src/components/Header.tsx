@@ -40,7 +40,7 @@ export function Header() {
                 {/* Logo mark - Ethics Icon */}
                 <img
                   src="/ethics-logo.png"
-                  alt="ClarȘtiri Logo"
+                  alt="thesite.ro Logo"
                   className="w-9 h-9 object-contain"
                   style={{ imageRendering: 'pixelated' }}
                 />
@@ -55,14 +55,11 @@ export function Header() {
               <Link to="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">
                 Acasă
               </Link>
-              <Link to="/pentru-tine" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Pentru Tine
-              </Link>
-              <Link to="/surse" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/metodologie" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Surse
               </Link>
-              <Link to="/despre" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Despre
+              <Link to="/metodologie" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Metodologie
               </Link>
             </nav>
 
@@ -138,25 +135,18 @@ export function Header() {
               Acasă
             </Link>
             <Link
-              to="/pentru-tine"
-              className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Pentru Tine
-            </Link>
-            <Link
-              to="/surse"
+              to="/metodologie"
               className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
               Surse
             </Link>
             <Link
-              to="/despre"
+              to="/metodologie"
               className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Despre
+              Metodologie
             </Link>
             <div className="pt-4 border-t border-border mt-4">
               <Button className="w-full bg-primary text-primary-foreground">

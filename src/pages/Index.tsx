@@ -257,14 +257,14 @@ const Index = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground">Clar<span className="text-primary">Știri</span></span>
+              <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link to="/metodologie" className="hover:text-foreground transition-colors">Metodologie</Link>
               <Link to="/metodologie" className="hover:text-foreground transition-colors">Surse</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2025 ClarȘtiri
+              © 2025 thesite.ro
             </p>
           </div>
         </div>
