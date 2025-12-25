@@ -221,31 +221,6 @@ const Index = () => {
                 </Button>
               </div>
 
-              {/* My News Bias Section */}
-              <div className="bg-card rounded-lg border border-border p-4">
-                <h3 className="font-bold text-foreground mb-4">Bias-ul Meu</h3>
-
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                    <User className="w-5 h-5 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-sm text-foreground">Utilizator Demo</p>
-                    <p className="text-xs text-muted-foreground">0 Știri · 0 Articole</p>
-                  </div>
-                </div>
-
-                <div className="flex h-6 rounded overflow-hidden text-xs font-medium mb-4">
-                  <div className="bg-bias-left flex-1 flex items-center justify-center text-white">?</div>
-                  <div className="bg-bias-center flex-1 flex items-center justify-center text-white">?</div>
-                  <div className="bg-bias-right flex-1 flex items-center justify-center text-white">?</div>
-                </div>
-
-                <Button variant="outline" className="w-full">
-                  Vezi Demo
-                </Button>
-              </div>
-
               {/* Sources Info */}
               <div className="bg-muted/50 rounded-lg p-4 text-sm">
                 <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
