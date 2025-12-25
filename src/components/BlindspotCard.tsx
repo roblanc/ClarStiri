@@ -20,6 +20,7 @@ export function BlindspotCard({ story }: BlindspotCardProps) {
           <img
             src={story.image}
             alt=""
+            loading="lazy"
             className="w-full h-36 object-cover"
           />
           <div className="absolute top-2 left-2">

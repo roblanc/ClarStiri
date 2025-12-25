@@ -62,6 +62,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
           <img
             src={story.image}
             alt=""
+            loading="lazy"
             className="w-24 h-20 object-cover rounded flex-shrink-0"
           />
         </div>

@@ -11,7 +11,7 @@ const CACHE_KEY = 'clarstiri_news_cache';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
 
 // Timeout pentru fetch (în milisecunde)
-const FETCH_TIMEOUT = 5000; // 5 secunde - dacă nu răspunde, trecem mai departe
+const FETCH_TIMEOUT = 3000; // 3 secunde - reducere pentru încărcare mai rapidă
 
 interface CachedNews {
     timestamp: number;
@@ -193,13 +193,13 @@ async function fetchRSSFeed(source: NewsSource, proxyIndex = 0): Promise<RSSNews
  * Returnează rezultate pe măsură ce vin, nu așteaptă toate sursele
  */
 export async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Prioritizează sursele cele mai rapide/fiabile
-    const prioritySources = NEWS_SOURCES.filter(s =>
-        ['digi24', 'hotnews', 'g4media', 'mediafax'].includes(s.id)
-    );
-    const otherSources = NEWS_SOURCES.filter(s =>
-        !['digi24', 'hotnews', 'g4media', 'mediafax'].includes(s.id)
-    );
+    // Prioritizează sursele cele mai rapide/fiabile - extinse pentru încărcare mai rapidă
+    const priorityIds = [
+        'digi24', 'hotnews', 'g4media', 'mediafax', 'agerpres',
+        'libertatea', 'protv', 'adevarul', 'recorder', 'observator'
+    ];
+    const prioritySources = NEWS_SOURCES.filter(s => priorityIds.includes(s.id));
+    const otherSources = NEWS_SOURCES.filter(s => !priorityIds.includes(s.id));
 
     // Fetch sursele prioritare mai întâi
     const priorityPromises = prioritySources.map(source => fetchRSSFeed(source));

@@ -251,6 +251,15 @@ export const NEWS_SOURCES: NewsSource[] = [
     bias: 'center',
     category: 'mainstream',
   },
+  {
+    id: 'scena9',
+    name: 'Scena9',
+    url: 'https://www.scena9.ro',
+    rssUrl: 'https://www.scena9.ro/feed',
+    logo: 'https://logo.clearbit.com/scena9.ro',
+    bias: 'center-left',
+    category: 'independent',
+  },
 
   // === DREAPTA / CENTRU-DREAPTA ===
   {
