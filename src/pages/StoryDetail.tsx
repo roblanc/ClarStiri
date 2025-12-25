@@ -3,7 +3,8 @@ import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
-import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown } from "lucide-react";
+import { useBiasComparison } from "@/hooks/useBiasComparison";
+import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { NEWS_SOURCES } from "@/types/news";
@@ -55,6 +56,12 @@ const StoryDetail = () => {
   // Dacă nu găsim story-ul exact, încercăm să căutăm după o parte din ID
   const alternativeStory = !story && stories ? stories.find(s => s.id.includes(id?.split('-').slice(0, 2).join('-') || '')) : null;
   const currentStory = story || alternativeStory;
+
+  // Hook pentru bias comparison cu AI
+  const biasComparison = useBiasComparison(
+    currentStory?.title || '',
+    currentStory?.sources || []
+  );
 
   // Grupează sursele după bias
   const groupedSources = currentStory?.sources.reduce((acc, source) => {
@@ -416,6 +423,45 @@ const StoryDetail = () => {
                   Salvează pentru mai târziu
                 </Button>
               </div>
+            </div>
+
+            {/* AI Bias Comparison Card */}
+            <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg border border-purple-200 dark:border-purple-800 p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-5 h-5 text-purple-600" />
+                <h3 className="font-semibold text-foreground">Comparație Bias AI</h3>
+              </div>
+
+              {biasComparison.isLoading && (
+                <div className="flex flex-col items-center py-6">
+                  <Loader2 className="w-8 h-8 animate-spin text-purple-600 mb-3" />
+                  <p className="text-sm text-muted-foreground">Se analizează perspectivele...</p>
+                </div>
+              )}
+
+              {biasComparison.error && (
+                <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-800">
+                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-700 dark:text-red-300">{biasComparison.error}</p>
+                </div>
+              )}
+
+              {biasComparison.comparison && (
+                <div className="prose prose-sm dark:prose-invert max-w-none">
+                  <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
+                    {biasComparison.comparison}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-4 pt-3 border-t border-purple-200 dark:border-purple-700">
+                    ✨ Generat de AI • Poate conține erori
+                  </p>
+                </div>
+              )}
+
+              {!biasComparison.isLoading && !biasComparison.error && !biasComparison.comparison && (
+                <p className="text-sm text-muted-foreground">
+                  Se pregătește analiza...
+                </p>
+              )}
             </div>
 
             {/* Info Box */}
