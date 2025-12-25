@@ -425,7 +425,8 @@ const StoryDetail = () => {
               </div>
             </div>
 
-            {/* AI Bias Comparison Card */}
+            {/* AI Bias Comparison Card - Temporar dezactivat până la configurarea API-ului Gemini */}
+            {/* TODO: Reactivează când VITE_GEMINI_API_KEY are quota disponibilă
             <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg border border-purple-200 dark:border-purple-800 p-4">
               <div className="flex items-center gap-2 mb-3">
                 <Sparkles className="w-5 h-5 text-purple-600" />
@@ -463,6 +464,7 @@ const StoryDetail = () => {
                 </p>
               )}
             </div>
+            */}
 
             {/* Info Box */}
             <div className="bg-muted/50 rounded-lg p-4 text-sm">
