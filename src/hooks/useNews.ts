@@ -1,7 +1,24 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews } from '@/services/newsService';
+import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
 import { useEffect, useState } from 'react';
+
+/**
+ * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch
+ */
+async function fetchNewsWithFallback(limit: number): Promise<AggregatedStory[]> {
+    try {
+        // Încearcă API-ul serverless (rapid, ~100ms)
+        const stories = await fetchAggregatedNewsFromAPI(limit);
+        console.log('✅ Fetched from API (fast path)');
+        return stories;
+    } catch (apiError) {
+        console.warn('⚠️ API unavailable, falling back to client-side fetch');
+        // Fallback la metoda veche (lentă, ~5s)
+        return getAggregatedNews(limit);
+    }
+}
 
 /**
  * Hook pentru a obține știrile agregate cu încărcare rapidă din cache
@@ -19,7 +36,7 @@ export function useAggregatedNews(limit = 20) {
 
     const query = useQuery<AggregatedStory[], Error>({
         queryKey: ['aggregatedNews', limit],
-        queryFn: () => getAggregatedNews(limit),
+        queryFn: () => fetchNewsWithFallback(limit),
         staleTime: 2 * 60 * 1000, // 2 minute
         gcTime: 30 * 60 * 1000, // 30 minute
         refetchOnWindowFocus: false,
