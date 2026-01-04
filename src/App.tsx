@@ -13,6 +13,8 @@ const Index = lazy(() => import("./pages/Index"));
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const Metodologie = lazy(() => import("./pages/Metodologie"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
+const VoicesPage = lazy(() => import("./pages/VoicesPage"));
+const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -41,6 +43,8 @@ const App = () => (
                 <Route path="/stire/:id" element={<StoryDetail />} />
                 <Route path="/metodologie" element={<Metodologie />} />
                 <Route path="/categorie/:slug" element={<CategoryPage />} />
+                <Route path="/voci" element={<VoicesPage />} />
+                <Route path="/voce/:slug" element={<VoiceProfile />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

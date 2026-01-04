@@ -8,13 +8,12 @@ import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
 import { NEWS_SOURCES } from "@/types/news";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Eye, User, Loader2, RefreshCw, AlertCircle, Wifi } from "lucide-react";
+import { Eye, Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import {
   MainFeedSkeleton,
-  SidebarSkeleton,
-  FeaturedStorySkeleton,
-  NewsListItemSkeleton
+  SidebarSkeleton
 } from "@/components/Skeleton";
+import { VoicesSection } from "@/components/VoicesSection";
 
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
@@ -34,7 +33,6 @@ const Index = () => {
     sourcesCount: story.sourcesCount,
     timeAgo: story.timeAgo,
     description: story.description,
-    // Adaugă sursele pentru afișarea logourilor
     sources: story.sources.map(s => ({
       name: s.source.name,
       url: s.source.url,
@@ -71,7 +69,7 @@ const Index = () => {
       )}
 
       <main className="container mx-auto px-4 py-6">
-        {/* Skeleton Loading State - arată structura paginii */}
+        {/* Skeleton Loading State */}
         {isLoading && (
           <div className="grid lg:grid-cols-12 gap-6">
             <aside className="lg:col-span-3">
@@ -105,135 +103,138 @@ const Index = () => {
           </div>
         )}
 
-        {/* Content - se afișează și cu date din cache */}
+        {/* Content */}
         {stories && (
-          <div className="grid lg:grid-cols-12 gap-6">
+          <>
+            {/* Voices Barometer Section */}
+            <VoicesSection />
 
-            {/* Left Sidebar - Top Stories */}
-            <aside className="lg:col-span-3 space-y-6">
-              <div className="bg-card rounded-lg border border-border p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="font-bold text-lg text-foreground">Știri Principale</h2>
-                  {isFetching && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
-                </div>
-                {isLoadingTop ? (
-                  <div className="flex justify-center py-4">
-                    <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            <div className="grid lg:grid-cols-12 gap-6">
+              {/* Left Sidebar - Top Stories */}
+              <aside className="lg:col-span-3 space-y-6">
+                <div className="bg-card rounded-lg border border-border p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="font-bold text-lg text-foreground">Știri Principale</h2>
+                    {isFetching && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
                   </div>
-                ) : (
-                  <TopStoriesList stories={topStories || []} />
-                )}
-              </div>
-            </aside>
-
-            {/* Center - Main Feed */}
-            <div className="lg:col-span-5">
-              {/* Featured Story */}
-              {featuredStory && (
-                <div className="mb-6">
-                  <FeaturedStory story={featuredStory} />
-                </div>
-              )}
-
-              {/* News List */}
-              <div className="bg-card rounded-lg border border-border">
-                {otherStories.map((news) => (
-                  <NewsListItem
-                    key={news.id}
-                    story={{
-                      id: news.id,
-                      title: news.title,
-                      image: news.image,
-                      bias: news.bias,
-                      category: news.category,
-                      location: news.location,
-                      sourcesCount: news.sourcesCount,
-                      sources: news.sources,
-                    }}
-                  />
-                ))}
-              </div>
-
-              {/* Refresh Button */}
-              <div className="mt-4 text-center">
-                <Button
-                  onClick={() => refetch()}
-                  variant="outline"
-                  disabled={isFetching}
-                  className="gap-2"
-                >
-                  {isFetching ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <RefreshCw className="w-4 h-4" />
-                  )}
-                  Actualizează știrile
-                </Button>
-              </div>
-            </div>
-
-            {/* Right Sidebar - Blindspot */}
-            <aside className="lg:col-span-4 space-y-6">
-              {/* Blindspot Section */}
-              <div className="bg-card rounded-lg border border-border p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Eye className="w-5 h-5" />
-                  <h2 className="font-bold text-lg text-foreground">PUNCT ORBIT</h2>
-                  <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">TM</span>
-                </div>
-
-                <p className="text-sm text-muted-foreground mb-4">
-                  Știri acoperite disproporționat de o parte a spectrului politic.{" "}
-                  <Link to="/despre-punct-orbit" className="underline hover:text-foreground">
-                    Află mai multe despre bias-ul politic în știri.
-                  </Link>
-                </p>
-
-                {blindspotStories.length > 0 ? (
-                  <div className="space-y-4">
-                    {blindspotStories.map((story) => (
-                      <BlindspotCard key={story.id} story={story} />
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground text-center py-4">
-                    Momentan nu există știri cu bias pronunțat.
-                  </p>
-                )}
-
-                <Button variant="outline" className="w-full mt-4">
-                  Vezi Feed Punct Orbit
-                </Button>
-              </div>
-
-              {/* Sources Info */}
-              <div className="bg-muted/50 rounded-lg p-4 text-sm">
-                <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
-                <p className="text-muted-foreground text-xs mb-3">
-                  thesite.ro agregă știri din {NEWS_SOURCES.length} surse pentru o perspectivă echilibrată:
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {NEWS_SOURCES.slice(0, 12).map(source => (
-                    <div
-                      key={source.id}
-                      className="flex items-center gap-1.5 px-2 py-1 bg-background rounded"
-                    >
-                      <SourceFavicon source={source} size="xs" showRing={false} />
-                      <span className="text-xs text-muted-foreground">
-                        {source.name}
-                      </span>
+                  {isLoadingTop ? (
+                    <div className="flex justify-center py-4">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
                     </div>
-                  ))}
-                  {NEWS_SOURCES.length > 12 && (
-                    <span className="px-2 py-1 text-xs text-muted-foreground">
-                      +{NEWS_SOURCES.length - 12} more
-                    </span>
+                  ) : (
+                    <TopStoriesList stories={topStories || []} />
                   )}
                 </div>
-              </div>
-            </aside>
+              </aside>
 
-          </div>
+              {/* Center - Main Feed */}
+              <div className="lg:col-span-5">
+                {/* Featured Story */}
+                {featuredStory && (
+                  <div className="mb-6">
+                    <FeaturedStory story={featuredStory} />
+                  </div>
+                )}
+
+                {/* News List */}
+                <div className="bg-card rounded-lg border border-border">
+                  {otherStories.map((news) => (
+                    <NewsListItem
+                      key={news.id}
+                      story={{
+                        id: news.id,
+                        title: news.title,
+                        image: news.image,
+                        bias: news.bias,
+                        category: news.category,
+                        location: news.location,
+                        sourcesCount: news.sourcesCount,
+                        sources: news.sources,
+                      }}
+                    />
+                  ))}
+                </div>
+
+                {/* Refresh Button */}
+                <div className="mt-4 text-center">
+                  <Button
+                    onClick={() => refetch()}
+                    variant="outline"
+                    disabled={isFetching}
+                    className="gap-2"
+                  >
+                    {isFetching ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-4 h-4" />
+                    )}
+                    Actualizează știrile
+                  </Button>
+                </div>
+              </div>
+
+              {/* Right Sidebar - Blindspot */}
+              <aside className="lg:col-span-4 space-y-6">
+                {/* Blindspot Section */}
+                <div className="bg-card rounded-lg border border-border p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Eye className="w-5 h-5" />
+                    <h2 className="font-bold text-lg text-foreground">PUNCT ORBIT</h2>
+                    <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">TM</span>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Știri acoperite disproporționat de o parte a spectrului politic.{" "}
+                    <Link to="/despre-punct-orbit" className="underline hover:text-foreground">
+                      Află mai multe despre bias-ul politic în știri.
+                    </Link>
+                  </p>
+
+                  {blindspotStories.length > 0 ? (
+                    <div className="space-y-4">
+                      {blindspotStories.map((story) => (
+                        <BlindspotCard key={story.id} story={story} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground text-center py-4">
+                      Momentan nu există știri cu bias pronunțat.
+                    </p>
+                  )}
+
+                  <Button variant="outline" className="w-full mt-4">
+                    Vezi Feed Punct Orbit
+                  </Button>
+                </div>
+
+                {/* Sources Info */}
+                <div className="bg-muted/50 rounded-lg p-4 text-sm">
+                  <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
+                  <p className="text-muted-foreground text-xs mb-3">
+                    thesite.ro agregă știri din {NEWS_SOURCES.length} surse pentru o perspectivă echilibrată:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {NEWS_SOURCES.slice(0, 12).map(source => (
+                      <div
+                        key={source.id}
+                        className="flex items-center gap-1.5 px-2 py-1 bg-background rounded"
+                      >
+                        <SourceFavicon source={source} size="xs" showRing={false} />
+                        <span className="text-xs text-muted-foreground">
+                          {source.name}
+                        </span>
+                      </div>
+                    ))}
+                    {NEWS_SOURCES.length > 12 && (
+                      <span className="px-2 py-1 text-xs text-muted-foreground">
+                        +{NEWS_SOURCES.length - 12} more
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </>
         )}
       </main>
 
