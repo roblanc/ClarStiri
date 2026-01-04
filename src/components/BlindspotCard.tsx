@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
+import { getSmallImageUrl } from "@/utils/imageOptimizer";
 
 interface BlindspotCardProps {
   story: {
@@ -18,7 +19,7 @@ export function BlindspotCard({ story }: BlindspotCardProps) {
       <article className="rounded-lg border border-border overflow-hidden bg-card">
         <div className="relative">
           <img
-            src={story.image}
+            src={getSmallImageUrl(story.image)}
             alt=""
             loading="lazy"
             className="w-full h-36 object-cover"

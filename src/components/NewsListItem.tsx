@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
 import { BiasBar } from "./BiasBar";
+import { getThumbnailUrl } from "@/utils/imageOptimizer";
 
 interface NewsListItemProps {
   story: {
@@ -60,7 +61,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
           </div>
 
           <img
-            src={story.image}
+            src={getThumbnailUrl(story.image)}
             alt=""
             loading="lazy"
             className="w-24 h-20 object-cover rounded flex-shrink-0"

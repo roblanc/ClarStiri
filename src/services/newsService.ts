@@ -83,8 +83,8 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     const newsItems: RSSNewsItem[] = [];
 
     items.forEach((item, index) => {
-        const title = item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
-        const description = item.querySelector('description')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
+        const rawTitle = item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
+        const rawDescription = item.querySelector('description')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const link = item.querySelector('link')?.textContent?.trim() || '';
         const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
         const author = item.querySelector('creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
@@ -101,16 +101,20 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
             imageUrl = mediaContent?.getAttribute('url') || '';
         }
         // Fallback: caută în description pentru taguri img
-        if (!imageUrl && description) {
-            const imgMatch = description.match(/<img[^>]+src=["']([^"']+)["']/i);
+        if (!imageUrl && rawDescription) {
+            const imgMatch = rawDescription.match(/<img[^>]+src=["']([^"']+)["']/i);
             imageUrl = imgMatch?.[1] || '';
         }
+
+        // Decode HTML entities din titlu și descriere
+        const title = decodeHtmlEntities(rawTitle);
+        const description = decodeHtmlEntities(stripHtml(rawDescription));
 
         if (title && link) {
             newsItems.push({
                 id: `${source.id}-${index}-${Date.now()}`,
                 title,
-                description: stripHtml(description),
+                description,
                 link,
                 pubDate,
                 imageUrl,
@@ -122,6 +126,16 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     });
 
     return newsItems;
+}
+
+/**
+ * Decodează HTML entities (&quot;, &amp;, &icirc;, etc.)
+ */
+function decodeHtmlEntities(text: string): string {
+    if (!text) return '';
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
 }
 
 /**

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
+import { getFeaturedImageUrl } from "@/utils/imageOptimizer";
 
 interface FeaturedStoryProps {
   story: {
@@ -20,9 +21,11 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
       <article className="relative rounded-lg overflow-hidden">
         <div className="aspect-[4/3] relative">
           <img
-            src={story.image}
+            src={getFeaturedImageUrl(story.image)}
             alt=""
-            loading="lazy"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />

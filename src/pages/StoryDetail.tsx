@@ -6,6 +6,7 @@ import { useAggregatedNews } from "@/hooks/useNews";
 import { useBiasComparison } from "@/hooks/useBiasComparison";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ShareButton } from "@/components/ShareButton";
 import { useState } from "react";
 import { NEWS_SOURCES } from "@/types/news";
 
@@ -138,7 +139,7 @@ const StoryDetail = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 py-6">
+      <main className="container mx-auto px-4 py-6 overflow-x-hidden">
         {/* Back Link */}
         <Link
           to="/"
@@ -165,10 +166,10 @@ const StoryDetail = () => {
               </h1>
 
               {/* Bias Tabs */}
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 <button
                   onClick={() => setActiveFilter('left')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'left'
+                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'left'
                     ? 'bg-blue-100 text-blue-700 border-blue-300'
                     : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
@@ -177,7 +178,7 @@ const StoryDetail = () => {
                 </button>
                 <button
                   onClick={() => setActiveFilter('center')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'center'
+                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'center'
                     ? 'bg-purple-100 text-purple-700 border-purple-300'
                     : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
@@ -186,7 +187,7 @@ const StoryDetail = () => {
                 </button>
                 <button
                   onClick={() => setActiveFilter('right')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'right'
+                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'right'
                     ? 'bg-red-100 text-red-700 border-red-300'
                     : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
@@ -195,12 +196,12 @@ const StoryDetail = () => {
                 </button>
                 <button
                   onClick={() => setActiveFilter('all')}
-                  className={`px-4 py-2 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'all'
+                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'all'
                     ? 'bg-primary text-primary-foreground border-primary'
                     : 'bg-card text-muted-foreground border-border hover:bg-secondary'
                     }`}
                 >
-                  Comparație Bias
+                  Comparație
                 </button>
               </div>
 
@@ -238,12 +239,12 @@ const StoryDetail = () => {
 
             {/* Articles Section */}
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                   <h2 className="text-lg font-bold text-foreground">
                     {filteredArticles.length} Articole
                   </h2>
-                  <div className="flex items-center gap-2 text-sm">
+                  <div className="flex flex-wrap items-center gap-2 text-sm">
                     <button
                       onClick={() => setActiveFilter('all')}
                       className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'all' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'
@@ -256,37 +257,37 @@ const StoryDetail = () => {
                       className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'left' ? 'bg-blue-500 text-white' : 'text-muted-foreground hover:bg-secondary'
                         }`}
                     >
-                      Stânga {leftCount}
+                      S {leftCount}
                     </button>
                     <button
                       onClick={() => setActiveFilter('center')}
                       className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'center' ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:bg-secondary'
                         }`}
                     >
-                      Centru {centerCount}
+                      C {centerCount}
                     </button>
                     <button
                       onClick={() => setActiveFilter('right')}
                       className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'right' ? 'bg-red-500 text-white' : 'text-muted-foreground hover:bg-secondary'
                         }`}
                     >
-                      Dreapta {rightCount}
+                      D {rightCount}
                     </button>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <div className="relative">
+                  <div className="relative flex-1 md:flex-none">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input
                       type="text"
                       placeholder="Caută..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full md:w-auto pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
                     />
                   </div>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="flex-shrink-0">
                     <Filter className="w-4 h-4" />
                   </Button>
                 </div>
@@ -414,10 +415,13 @@ const StoryDetail = () => {
             <div className="bg-card rounded-lg border border-border p-4">
               <h3 className="font-semibold text-foreground mb-4">Acțiuni</h3>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Distribuie această analiză
-                </Button>
+                <ShareButton
+                  title={currentStory.title}
+                  description={`${currentStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
+                  variant="outline"
+                  className="w-full justify-start"
+                  showLabel={true}
+                />
                 <Button variant="outline" className="w-full justify-start">
                   <Bookmark className="w-4 h-4 mr-2" />
                   Salvează pentru mai târziu

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BiasBar } from "./BiasBar";
 import { BiasBadge } from "./BiasBadge";
+import { getThumbnailUrl } from "@/utils/imageOptimizer";
 
 export interface NewsItem {
   id: string;
@@ -37,9 +38,11 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
       <Link to={`/stire/${news.id}`} className="block">
         <article className="news-card p-4">
           <div className="flex gap-3">
-            <img 
-              src={news.image} 
-              alt="" 
+            <img
+              src={getThumbnailUrl(news.image)}
+              alt=""
+              loading="lazy"
+              decoding="async"
               className="w-20 h-20 object-cover rounded-md flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
@@ -61,15 +64,17 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
       <Link to={`/stire/${news.id}`} className="block">
         <article className="news-card overflow-hidden">
           <div className="relative">
-            <img 
-              src={news.image} 
-              alt="" 
+            <img
+              src={getThumbnailUrl(news.image)}
+              alt=""
+              loading="lazy"
+              decoding="async"
               className="w-full h-56 object-cover"
             />
             {blindspotLabel && (
               <div className="absolute top-3 left-3">
-                <BiasBadge 
-                  type={news.blindspot as 'left' | 'right'} 
+                <BiasBadge
+                  type={news.blindspot as 'left' | 'right'}
                   label={blindspotLabel}
                 />
               </div>
@@ -79,9 +84,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <h2 className="font-semibold text-lg leading-tight text-card-foreground mb-3">
               {news.title}
             </h2>
-            <BiasBar 
-              left={news.bias.left} 
-              center={news.bias.center} 
+            <BiasBar
+              left={news.bias.left}
+              center={news.bias.center}
               right={news.bias.right}
               showLabels
             />
@@ -98,15 +103,17 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     <Link to={`/stire/${news.id}`} className="block">
       <article className="news-card overflow-hidden">
         <div className="relative">
-          <img 
-            src={news.image} 
-            alt="" 
+          <img
+            src={getThumbnailUrl(news.image)}
+            alt=""
+            loading="lazy"
+            decoding="async"
             className="w-full h-44 object-cover grayscale hover:grayscale-0 transition-all duration-300"
           />
           {blindspotLabel && (
             <div className="absolute top-3 left-3">
-              <BiasBadge 
-                type={news.blindspot as 'left' | 'right'} 
+              <BiasBadge
+                type={news.blindspot as 'left' | 'right'}
                 label={blindspotLabel}
               />
             </div>
@@ -121,9 +128,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           <h3 className="font-medium text-sm leading-tight line-clamp-3 text-card-foreground mb-3">
             {news.title}
           </h3>
-          <BiasBar 
-            left={news.bias.left} 
-            center={news.bias.center} 
+          <BiasBar
+            left={news.bias.left}
+            center={news.bias.center}
             right={news.bias.right}
             size="sm"
           />
