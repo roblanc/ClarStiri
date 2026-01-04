@@ -2,13 +2,12 @@ import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsListItem } from "@/components/NewsListItem";
 import { TopStoriesList } from "@/components/TopStoriesList";
-import { BlindspotCard } from "@/components/BlindspotCard";
 import { SourceFavicon } from "@/components/SourceFavicon";
 import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
 import { NEWS_SOURCES } from "@/types/news";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Eye, Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import {
   MainFeedSkeleton,
   SidebarSkeleton
@@ -42,19 +41,6 @@ const Index = () => {
 
   const featuredStory = convertedStories[0];
   const otherStories = convertedStories.slice(1);
-
-  // Găsește povești "blindspot" (acoperite disproporționat de o parte)
-  const blindspotStories = stories?.filter(story => {
-    const maxBias = Math.max(story.bias.left, story.bias.right);
-    return maxBias >= 60; // Consideră blindspot dacă o parte are >60%
-  }).slice(0, 2).map(story => ({
-    id: story.id,
-    title: story.title,
-    image: story.image || PLACEHOLDER_IMAGE,
-    bias: story.bias,
-    blindspot: story.bias.left > story.bias.right ? 'left' as const : 'right' as const,
-    sourcesCount: story.sourcesCount,
-  })) || [];
 
   return (
     <div className="min-h-screen bg-background">
@@ -173,39 +159,8 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Right Sidebar - Blindspot */}
+              {/* Right Sidebar */}
               <aside className="lg:col-span-4 space-y-6">
-                {/* Blindspot Section */}
-                <div className="bg-card rounded-lg border border-border p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Eye className="w-5 h-5" />
-                    <h2 className="font-bold text-lg text-foreground">PUNCT ORBIT</h2>
-                    <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">TM</span>
-                  </div>
-
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Știri acoperite disproporționat de o parte a spectrului politic.{" "}
-                    <Link to="/despre-punct-orbit" className="underline hover:text-foreground">
-                      Află mai multe despre bias-ul politic în știri.
-                    </Link>
-                  </p>
-
-                  {blindspotStories.length > 0 ? (
-                    <div className="space-y-4">
-                      {blindspotStories.map((story) => (
-                        <BlindspotCard key={story.id} story={story} />
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground text-center py-4">
-                      Momentan nu există știri cu bias pronunțat.
-                    </p>
-                  )}
-
-                  <Button variant="outline" className="w-full mt-4">
-                    Vezi Feed Punct Orbit
-                  </Button>
-                </div>
 
                 {/* Sources Info */}
                 <div className="bg-muted/50 rounded-lg p-4 text-sm">
