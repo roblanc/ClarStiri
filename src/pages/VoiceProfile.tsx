@@ -1,13 +1,29 @@
 import { Header } from "@/components/Header";
-import { PUBLIC_FIGURES } from "@/data/publicFigures";
+import { PUBLIC_FIGURES, Statement } from "@/data/publicFigures";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Twitter } from "lucide-react";
+import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
+import { useQuery } from "@tanstack/react-query";
 
 const VoiceProfile = () => {
     const { slug } = useParams();
     const figure = PUBLIC_FIGURES.find(f => f.slug === slug);
+
+    const { data: dynamicData, isLoading: isLoadingDynamic } = useQuery({
+        queryKey: ['voice-analysis', figure?.name],
+        queryFn: async () => {
+            if (!figure) return null;
+            const res = await fetch(`/api/analyze-voice?name=${encodeURIComponent(figure.name)}`);
+            if (!res.ok) {
+                console.error('API Error');
+                return null;
+            }
+            return res.json() as Promise<{ statements: Statement[] }>;
+        },
+        enabled: !!figure,
+        staleTime: 1000 * 60 * 60 * 24, // 24 hours cache
+    });
 
     if (!figure) {
         return (
@@ -22,6 +38,11 @@ const VoiceProfile = () => {
             </div>
         );
     }
+
+    // Determine statements to show (Dynamic > Static)
+    const displayStatements = dynamicData?.statements && dynamicData.statements.length > 0
+        ? dynamicData.statements
+        : figure.statements;
 
     // Calculate bias percentage for the bar
     const score = figure.bias.score; // -100 to 100
@@ -42,10 +63,14 @@ const VoiceProfile = () => {
             </Helmet>
 
             <main className="container mx-auto px-4 py-8 max-w-4xl">
+                <Link to="/voci" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
+                    <ArrowLeft className="w-4 h-4 mr-1" /> Înapoi la listă
+                </Link>
+
                 <div className="flex flex-col md:flex-row gap-8 mb-12">
                     {/* Profile Card */}
                     <div className="w-full md:w-1/3 flex flex-col items-center">
-                        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-card shadow-lg mb-6">
+                        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-card shadow-lg mb-6 bg-muted">
                             <img
                                 src={figure.image}
                                 alt={figure.name}
@@ -74,7 +99,6 @@ const VoiceProfile = () => {
                             )}
                             {figure.socialLinks.tiktok && (
                                 <a href={figure.socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
-                                    {/* Lucide doesn't have tiktok yet, use Twitter icon as placeholder or generic link */}
                                     <ExternalLink className="w-6 h-6" />
                                 </a>
                             )}
@@ -125,31 +149,48 @@ const VoiceProfile = () => {
 
                         {/* Recent Statements */}
                         <div>
-                            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                <Quote className="w-5 h-5 text-primary" />
-                                Declarații Recente & Derapaje
-                            </h2>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-bold flex items-center gap-2">
+                                    <Quote className="w-5 h-5 text-primary" />
+                                    Declarații Recente & Derapaje
+                                </h2>
+                                {isLoadingDynamic && (
+                                    <span className="text-xs text-muted-foreground flex items-center gap-1 animate-pulse">
+                                        <Loader2 className="w-3 h-3 animate-spin" /> Actualizare AI...
+                                    </span>
+                                )}
+                                {!isLoadingDynamic && dynamicData?.statements?.length > 0 && (
+                                    <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs rounded-full flex items-center gap-1 border border-blue-200 dark:border-blue-800">
+                                        <Sparkles className="w-3 h-3" /> AI Updated
+                                    </span>
+                                )}
+                            </div>
 
                             <div className="space-y-4">
-                                {figure.statements.length > 0 ? (
-                                    figure.statements.map(statement => (
-                                        <div key={statement.id} className="bg-card border border-border rounded-lg p-5 hover:border-primary/30 transition-colors">
+                                {displayStatements.length > 0 ? (
+                                    displayStatements.map((statement, idx) => (
+                                        <div key={statement.id || idx} className="bg-card border border-border rounded-lg p-5 hover:border-primary/30 transition-colors">
                                             <div className="flex items-start gap-4">
-                                                <Quote className="w-8 h-8 text-muted-foreground/20 flex-shrink-0" />
+                                                <Quote className="w-8 h-8 text-muted-foreground/20 flex-shrink-0 mt-1" />
                                                 <div className="flex-1">
                                                     <p className="italic text-lg mb-3">"{statement.text}"</p>
-                                                    <div className="flex items-center justify-between text-sm">
+                                                    <div className="flex flex-wrap items-center justify-between text-sm gap-2">
                                                         <div className="flex items-center gap-3">
                                                             <span className="text-muted-foreground">{statement.date}</span>
                                                             <span className="px-2 py-0.5 bg-muted rounded text-xs font-medium">
                                                                 {statement.topic}
                                                             </span>
+                                                            {statement.impact === 'high' && (
+                                                                <span className="px-2 py-0.5 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 text-xs rounded-full">
+                                                                    Viral
+                                                                </span>
+                                                            )}
                                                         </div>
                                                         <a
                                                             href={statement.sourceUrl}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="flex items-center gap-1 text-primary hover:underline"
+                                                            className="flex items-center gap-1 text-primary hover:underline ml-auto"
                                                         >
                                                             Sursa <ExternalLink className="w-3 h-3" />
                                                         </a>
