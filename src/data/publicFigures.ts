@@ -36,7 +36,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'dana-budeanu',
         name: 'Dana Budeanu',
         role: 'Influencer / Critic de modă',
-        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop', // Placeholder
+        image: 'https://media.hotnews.ro/media_server1/image-2020-05-25-24028383-46-dana-budeanu.jpg',
         bias: {
             leaning: 'right', // De obicei asociată cu valori conservatoare/anti-sistem
             score: 65,
@@ -50,10 +50,10 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 's1',
-                text: 'Declarație despre fătălăi și mafioți în context politic...',
+                text: 'Toate fătălăile care votează USR...',
                 date: '2024-03-15',
                 sourceUrl: '#',
-                topic: 'Social',
+                topic: 'Politică',
                 impact: 'high'
             }
         ]
@@ -63,7 +63,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'mircea-badea',
         name: 'Mircea Badea',
         role: 'Realizator TV',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop', // Placeholder
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Mircea_Badea.jpg/640px-Mircea_Badea.jpg',
         bias: {
             leaning: 'center-left', // Tradițional anti-Băsescu/Iohannis, pro-PSD history
             score: -40,
@@ -80,7 +80,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'victor-ciutacu',
         name: 'Victor Ciutacu',
         role: 'Jurnalist TV',
-        image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop', // Placeholder
+        image: 'https://media.dcnews.ro/image/202102/w640/victor-ciutacu_36222800.jpg',
         bias: {
             leaning: 'center-left',
             score: -35,
@@ -97,7 +97,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'ctp',
         name: 'C.T. Popescu',
         role: 'Gazetar / Scriitor',
-        image: 'https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?w=400&h=400&fit=crop', // Placeholder
+        image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Cristian_Tudor_Popescu_2011.jpg',
         bias: {
             leaning: 'center-right',
             score: 30,
