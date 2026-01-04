@@ -1,4 +1,5 @@
 // Tipuri pentru știri reale din RSS feeds
+import type { BiasAnalysis } from '@/utils/biasDetection';
 
 export interface NewsSource {
   id: string;
@@ -21,6 +22,7 @@ export interface RSSNewsItem {
   source: NewsSource;
   category?: string;
   author?: string;
+  biasAnalysis?: BiasAnalysis; // Content-based bias detection
 }
 
 export interface AggregatedStory {
@@ -35,6 +37,7 @@ export interface AggregatedStory {
     center: number;
     right: number;
   };
+  contentBias?: BiasAnalysis; // Content-based bias analysis
   mainCategory: string;
   publishedAt: Date;
   timeAgo: string;

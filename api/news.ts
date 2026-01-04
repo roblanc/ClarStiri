@@ -23,6 +23,15 @@ interface NewsSource {
     category: 'mainstream' | 'independent' | 'tabloid' | 'public';
 }
 
+interface BiasAnalysis {
+    detectedEntities: Array<{ entity: string; count: number }>;
+    keywordScore: number;
+    entityScore: number;
+    overallBias: number;
+    confidence: number;
+    indicators: string[];
+}
+
 interface RSSNewsItem {
     id: string;
     title: string;
@@ -33,6 +42,7 @@ interface RSSNewsItem {
     source: NewsSource;
     category?: string;
     author?: string;
+    biasAnalysis?: BiasAnalysis;
 }
 
 interface AggregatedStory {
@@ -43,6 +53,7 @@ interface AggregatedStory {
     sources: RSSNewsItem[];
     sourcesCount: number;
     bias: { left: number; center: number; right: number };
+    contentBias?: BiasAnalysis;
     mainCategory: string;
     publishedAt: string;
     timeAgo: string;
@@ -102,6 +113,58 @@ const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; right: num
 // Fetch timeout
 const FETCH_TIMEOUT = 3000;
 
+// Simplified bias detection (lightweight version for serverless)
+const POLITICAL_KEYWORDS = {
+    left: ['USR', 'REPER', 'progresist', 'anticorupție', 'transparență', 'pro-european', 'reforme'],
+    right: ['AUR', 'SOS', 'Georgescu', 'tradițional', 'suveranist', 'patriot', 'anti-UE', 'ortodox'],
+    entities: ['USR', 'PSD', 'PNL', 'AUR', 'SOS', 'REPER', 'Simion', 'Ciolacu', 'Ciucă', 'Georgescu']
+};
+
+function quickBiasAnalysis(title: string, description: string = ''): BiasAnalysis {
+    const text = `${title} ${description}`.toLowerCase();
+    const detectedEntities: Array<{ entity: string; count: number }> = [];
+    let keywordScore = 0;
+    let entityCount = 0;
+    const indicators: string[] = [];
+
+    // Detect entities
+    POLITICAL_KEYWORDS.entities.forEach(entity => {
+        const regex = new RegExp(`\\b${entity.toLowerCase()}\\b`, 'gi');
+        const matches = text.match(regex);
+        if (matches) {
+            detectedEntities.push({ entity, count: matches.length });
+            entityCount += matches.length;
+        }
+    });
+
+    // Score keywords
+    POLITICAL_KEYWORDS.left.forEach(keyword => {
+        if (text.includes(keyword.toLowerCase())) {
+            keywordScore -= 20;
+            indicators.push(`left: ${keyword}`);
+        }
+    });
+
+    POLITICAL_KEYWORDS.right.forEach(keyword => {
+        if (text.includes(keyword.toLowerCase())) {
+            keywordScore += 20;
+            indicators.push(`right: ${keyword}`);
+        }
+    });
+
+    const overallBias = keywordScore;
+    const confidence = Math.min(1, (entityCount + indicators.length) / 5);
+
+    return {
+        detectedEntities,
+        keywordScore,
+        entityScore: 0,
+        overallBias,
+        confidence,
+        indicators: indicators.slice(0, 3)
+    };
+}
+
 async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -148,6 +211,9 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         }
 
         if (title && link) {
+            // Perform bias analysis on article content
+            const biasAnalysis = quickBiasAnalysis(title, description);
+
             items.push({
                 id: `${source.id}-${index}-${Date.now()}`,
                 title,
@@ -157,6 +223,7 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
                 imageUrl,
                 source,
                 category: getTagContent('category') || undefined,
+                biasAnalysis: biasAnalysis.confidence > 0.1 ? biasAnalysis : undefined, // Only include if confident enough
             });
             index++;
         }
@@ -308,6 +375,41 @@ function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
 
         const imageSource = sources.find(s => s.imageUrl) || primary;
 
+        // Aggregate content bias from all sources
+        const sourcesWithBias = sources.filter(s => s.biasAnalysis);
+        let contentBias: BiasAnalysis | undefined;
+
+        if (sourcesWithBias.length > 0) {
+            // Merge all bias analyses
+            const allEntities = new Map<string, number>();
+            let totalKeywordScore = 0;
+            let totalConfidence = 0;
+            const allIndicators: string[] = [];
+
+            sourcesWithBias.forEach(source => {
+                if (source.biasAnalysis) {
+                    source.biasAnalysis.detectedEntities.forEach(e => {
+                        allEntities.set(e.entity, (allEntities.get(e.entity) || 0) + e.count);
+                    });
+                    totalKeywordScore += source.biasAnalysis.keywordScore;
+                    totalConfidence += source.biasAnalysis.confidence;
+                    allIndicators.push(...source.biasAnalysis.indicators);
+                }
+            });
+
+            const avgKeywordScore = totalKeywordScore / sourcesWithBias.length;
+            const avgConfidence = totalConfidence / sourcesWithBias.length;
+
+            contentBias = {
+                detectedEntities: Array.from(allEntities.entries()).map(([entity, count]) => ({ entity, count })),
+                keywordScore: avgKeywordScore,
+                entityScore: 0,
+                overallBias: avgKeywordScore,
+                confidence: avgConfidence,
+                indicators: Array.from(new Set(allIndicators)).slice(0, 5)
+            };
+        }
+
         aggregatedStories.push({
             id: groupId,
             title: primary.title,
@@ -316,6 +418,7 @@ function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
             sources,
             sourcesCount: sources.length,
             bias: calculateBiasDistribution(sources),
+            contentBias,
             mainCategory: primary.category || 'Actualitate',
             publishedAt: primary.pubDate,
             timeAgo: getTimeAgo(primary.pubDate),
