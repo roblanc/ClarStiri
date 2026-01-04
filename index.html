@@ -56,11 +56,86 @@
   <meta name="twitter:title" content="thesite.ro | Știri din toate perspectivele" />
   <meta name="twitter:description"
     content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." />
-  <meta name="twitter:image" content="/og-image.png" />
+  <!-- Critical CSS - Inline for faster FCP -->
+  <style>
+    /* Critical CSS for above-the-fold content */
+    :root {
+      --background: 0 0% 98%;
+      --foreground: 0 0% 13%;
+      --primary: 38 87% 65%;
+      --primary-foreground: 0 0% 0%;
+      --card: 0 0% 100%;
+      --border: 0 0% 90%;
+      --muted-foreground: 0 0% 46%;
+    }
+
+    .dark {
+      --background: 220 20% 10%;
+      --foreground: 0 0% 95%;
+      --card: 220 20% 13%;
+      --border: 220 15% 20%;
+      --muted-foreground: 0 0% 60%;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      min-height: 100vh;
+    }
+
+    /* Loading state styles */
+    #root:empty::before {
+      content: '';
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border: 3px solid hsl(var(--border));
+      border-top-color: hsl(var(--primary));
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    /* Header skeleton */
+    .header-skeleton {
+      height: 64px;
+      background: hsl(var(--card));
+      border-bottom: 1px solid hsl(var(--border));
+    }
+
+    .category-skeleton {
+      height: 44px;
+      background: hsl(var(--primary));
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
+  <!-- Initial loading skeleton (replaced by React) -->
+  <div id="root">
+    <div class="header-skeleton"></div>
+    <div class="category-skeleton"></div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
