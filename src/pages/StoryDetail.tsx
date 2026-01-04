@@ -6,6 +6,7 @@ import { useAggregatedNews } from "@/hooks/useNews";
 import { useBiasComparison } from "@/hooks/useBiasComparison";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ShareButton } from "@/components/ShareButton";
 import { useState } from "react";
 import { NEWS_SOURCES } from "@/types/news";
 
@@ -414,10 +415,13 @@ const StoryDetail = () => {
             <div className="bg-card rounded-lg border border-border p-4">
               <h3 className="font-semibold text-foreground mb-4">Acțiuni</h3>
               <div className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Distribuie această analiză
-                </Button>
+                <ShareButton
+                  title={currentStory.title}
+                  description={`${currentStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
+                  variant="outline"
+                  className="w-full justify-start"
+                  showLabel={true}
+                />
                 <Button variant="outline" className="w-full justify-start">
                   <Bookmark className="w-4 h-4 mr-2" />
                   Salvează pentru mai târziu

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Search, Menu, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
 const categories = [
@@ -22,7 +23,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50">
       {/* Main Header - Clean minimal style inspired by Snoop.ro */}
-      <div className="bg-white border-b border-border">
+      <div className="bg-card border-b border-border">
         <div className="container mx-auto">
           <div className="flex items-center justify-between h-16 px-4">
             {/* Left: Menu + Logo */}
@@ -93,6 +94,8 @@ export function Header() {
                 </Button>
               )}
 
+              <ThemeToggle />
+
               <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90">
                 Abonează-te
               </Button>
@@ -125,7 +128,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-border animate-fade-in">
+        <div className="md:hidden bg-card border-b border-border animate-fade-in">
           <nav className="container mx-auto px-4 py-4 space-y-2">
             <Link
               to="/"
