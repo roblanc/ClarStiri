@@ -2,7 +2,6 @@ import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsListItem } from "@/components/NewsListItem";
 import { TopStoriesList } from "@/components/TopStoriesList";
-import { DailyBriefing } from "@/components/DailyBriefing";
 import { BlindspotCard } from "@/components/BlindspotCard";
 import { SourceFavicon } from "@/components/SourceFavicon";
 import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
@@ -45,18 +44,6 @@ const Index = () => {
 
   const featuredStory = convertedStories[0];
   const otherStories = convertedStories.slice(1);
-
-  // Calculează statistici pentru Daily Briefing
-  const dailyBriefingData = {
-    storiesCount: stories?.length || 0,
-    articlesCount: stories?.reduce((acc, s) => acc + s.sourcesCount, 0) || 0,
-    readTime: `${Math.max(1, Math.ceil((stories?.length || 0) / 2))}m`,
-    stories: convertedStories.slice(0, 2).map(s => ({
-      title: s.title,
-      image: s.image,
-    })),
-    moreStories: convertedStories.slice(2, 5).map(s => s.title.substring(0, 40) + "..."),
-  };
 
   // Găsește povești "blindspot" (acoperite disproporționat de o parte)
   const blindspotStories = stories?.filter(story => {
@@ -122,10 +109,8 @@ const Index = () => {
         {stories && (
           <div className="grid lg:grid-cols-12 gap-6">
 
-            {/* Left Sidebar - Daily Briefing & Top Stories */}
+            {/* Left Sidebar - Top Stories */}
             <aside className="lg:col-span-3 space-y-6">
-              <DailyBriefing briefing={dailyBriefingData} />
-
               <div className="bg-card rounded-lg border border-border p-4">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="font-bold text-lg text-foreground">Știri Principale</h2>
