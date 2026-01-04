@@ -36,7 +36,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'dana-budeanu',
         name: 'Dana Budeanu',
         role: 'Influencer / Critic de modă',
-        image: 'https://media.hotnews.ro/media_server1/image-2020-05-25-24028383-46-dana-budeanu.jpg',
+        image: '/images/voices/dana-budeanu.svg',
         bias: {
             leaning: 'right', // De obicei asociată cu valori conservatoare/anti-sistem
             score: 65,
@@ -63,7 +63,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'mircea-badea',
         name: 'Mircea Badea',
         role: 'Realizator TV',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Mircea_Badea.jpg/640px-Mircea_Badea.jpg',
+        image: '/images/voices/mircea-badea.svg',
         bias: {
             leaning: 'center-left', // Tradițional anti-Băsescu/Iohannis, pro-PSD history
             score: -40,
@@ -80,7 +80,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'victor-ciutacu',
         name: 'Victor Ciutacu',
         role: 'Jurnalist TV',
-        image: 'https://media.dcnews.ro/image/202102/w640/victor-ciutacu_36222800.jpg',
+        image: '/images/voices/victor-ciutacu.svg',
         bias: {
             leaning: 'center-left',
             score: -35,
@@ -97,7 +97,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'ctp',
         name: 'C.T. Popescu',
         role: 'Gazetar / Scriitor',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Cristian_Tudor_Popescu_2011.jpg',
+        image: '/images/voices/ctp.svg',
         bias: {
             leaning: 'center-right',
             score: 30,
