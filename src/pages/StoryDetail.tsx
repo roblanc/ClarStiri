@@ -1,3 +1,4 @@
+import { NewsSchema } from "@/components/NewsSchema";
 import { useParams, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
@@ -98,7 +99,7 @@ const StoryDetail = () => {
         <Header />
         <div className="flex flex-col items-center justify-center py-32">
           <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-          <p className="text-muted-foreground">Se încarcă detaliile știrii...</p>
+          <p className="text-muted-foreground">Se încarcă știrea...</p>
         </div>
       </div>
     );
@@ -108,15 +109,9 @@ const StoryDetail = () => {
     return (
       <div className="min-h-screen bg-background">
         <Header />
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Știrea nu a fost găsită</h1>
-          <p className="text-muted-foreground mb-6">Este posibil ca această știre să nu mai fie disponibilă.</p>
-          <Link to="/">
-            <Button>
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Înapoi la pagina principală
-            </Button>
-          </Link>
+        <div className="container mx-auto px-4 py-8 text-center">
+          <h1 className="text-2xl font-bold mb-4 text-foreground">Știrea nu a fost găsită</h1>
+          <Link to="/" className="text-primary hover:underline">Înapoi la prima pagină</Link>
         </div>
       </div>
     );
@@ -138,6 +133,19 @@ const StoryDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+
+      {/* SEO Schema */}
+      <NewsSchema story={{
+        title: currentStory.title,
+        description: currentStory.description || '',
+        image: currentStory.image || PLACEHOLDER_IMAGE,
+        datePublished: currentStory.publishedAt.toISOString(),
+        dateModified: currentStory.publishedAt.toISOString(),
+        authorName: 'thesite.ro',
+        publisherName: 'thesite.ro',
+        publisherLogo: 'https://thesite.ro/ethics-logo.png',
+        url: `https://thesite.ro/stire/${currentStory.id}`
+      }} />
 
       <main className="container mx-auto px-4 py-6 overflow-x-hidden">
         {/* Back Link */}
