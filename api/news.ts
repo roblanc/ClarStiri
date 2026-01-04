@@ -100,6 +100,10 @@ const NEWS_SOURCES: NewsSource[] = [
     { id: 'flux24', name: 'Flux24', url: 'https://flux24.ro', rssUrl: 'https://flux24.ro/feed/', bias: 'right', factuality: 'mixed', category: 'independent' },
     { id: 'activenews', name: 'ActiveNews', url: 'https://www.activenews.ro', rssUrl: 'https://www.activenews.ro/rss', bias: 'right', factuality: 'low', category: 'independent' },
     { id: 'epochtimes', name: 'Epoch Times România', url: 'https://epochtimes-romania.com', rssUrl: 'https://epochtimes-romania.com/feed/', bias: 'right', factuality: 'low', category: 'independent' },
+    // === SURSE NOI (Satiră & Investigații) ===
+    { id: 'defapt', name: 'Defapt.ro', url: 'https://defapt.ro', rssUrl: 'https://defapt.ro/feed/', bias: 'center-right', factuality: 'high', category: 'independent' },
+    { id: 'catavencii', name: 'Cațavencii', url: 'https://www.catavencii.ro', rssUrl: 'https://www.catavencii.ro/feed/', bias: 'center', factuality: 'mixed', category: 'independent' }, // Satiră
+    { id: 'academiacatavencu', name: 'Academia Cațavencu', url: 'https://academiacatavencu.com', rssUrl: 'https://academiacatavencu.com/feed/', bias: 'center', factuality: 'mixed', category: 'independent' }, // Satiră
 ];
 
 const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; right: number }> = {

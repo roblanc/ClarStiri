@@ -390,6 +390,37 @@ export const NEWS_SOURCES: NewsSource[] = [
     factuality: 'mixed',
     category: 'mainstream',
   },
+  // === SURSE NOI (Satiră & Investigații) ===
+  {
+    id: 'defapt',
+    name: 'Defapt.ro',
+    url: 'https://defapt.ro',
+    rssUrl: 'https://defapt.ro/feed/',
+    logo: 'https://logo.clearbit.com/defapt.ro',
+    bias: 'center-right',
+    factuality: 'high',
+    category: 'independent',
+  },
+  {
+    id: 'catavencii',
+    name: 'Cațavencii',
+    url: 'https://www.catavencii.ro',
+    rssUrl: 'https://www.catavencii.ro/feed/',
+    logo: 'https://logo.clearbit.com/catavencii.ro',
+    bias: 'center',
+    factuality: 'mixed',
+    category: 'independent',
+  },
+  {
+    id: 'academiacatavencu',
+    name: 'Academia Cațavencu',
+    url: 'https://academiacatavencu.com',
+    rssUrl: 'https://academiacatavencu.com/feed/',
+    logo: 'https://logo.clearbit.com/academiacatavencu.com',
+    bias: 'center',
+    factuality: 'mixed',
+    category: 'independent',
+  },
 ];
 
 // Mapare bias la procente pentru calculul distribuției
