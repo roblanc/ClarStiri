@@ -22,6 +22,21 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
 
+  <!-- Preconnect to external domains (reduces DNS+TLS time) -->
+  <link rel="preconnect" href="https://wsrv.nl" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
+  <!-- Preload critical font (IBM Plex Sans) -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/ibmplexsans/v19/zYXgKVElMYYaJe8bpLHnCwDKhdHeFQ.woff2" as="font"
+    type="font/woff2" crossorigin />
+
+  <!-- Preload hints for faster image discovery -->
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="preconnect" href="https://media.hotnews.ro" />
+  <link rel="preconnect" href="https://static.digi24.ro" />
+  <link rel="preconnect" href="https://s.iw.ro" />
+
   <!-- Theme color for mobile browsers -->
   <meta name="theme-color" content="#F0B55B" />
 
