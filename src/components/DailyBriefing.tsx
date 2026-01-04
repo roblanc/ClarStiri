@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
+import { getSmallImageUrl } from "@/utils/imageOptimizer";
 
 interface DailyBriefingProps {
   briefing: {
@@ -31,7 +32,7 @@ export function DailyBriefing({ briefing }: DailyBriefingProps) {
         {briefing.stories.map((story, index) => (
           <div key={index} className="flex items-start gap-3">
             <img
-              src={story.image}
+              src={getSmallImageUrl(story.image)}
               alt=""
               loading="lazy"
               decoding="async"

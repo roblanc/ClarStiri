@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
+import { getFeaturedImageUrl } from "@/utils/imageOptimizer";
 
 interface FeaturedStoryProps {
   story: {
@@ -20,7 +21,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
       <article className="relative rounded-lg overflow-hidden">
         <div className="aspect-[4/3] relative">
           <img
-            src={story.image}
+            src={getFeaturedImageUrl(story.image)}
             alt=""
             loading="eager"
             fetchPriority="high"

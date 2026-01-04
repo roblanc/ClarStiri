@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BiasBar } from "./BiasBar";
 import { BiasBadge } from "./BiasBadge";
+import { getThumbnailUrl } from "@/utils/imageOptimizer";
 
 export interface NewsItem {
   id: string;
@@ -38,7 +39,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         <article className="news-card p-4">
           <div className="flex gap-3">
             <img
-              src={news.image}
+              src={getThumbnailUrl(news.image)}
               alt=""
               loading="lazy"
               decoding="async"
@@ -64,7 +65,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         <article className="news-card overflow-hidden">
           <div className="relative">
             <img
-              src={news.image}
+              src={getThumbnailUrl(news.image)}
               alt=""
               loading="lazy"
               decoding="async"
@@ -103,7 +104,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
       <article className="news-card overflow-hidden">
         <div className="relative">
           <img
-            src={news.image}
+            src={getThumbnailUrl(news.image)}
             alt=""
             loading="lazy"
             decoding="async"
