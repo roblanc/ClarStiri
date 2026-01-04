@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Search, Menu, User, X } from "lucide-react";
+import { Search, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -95,15 +95,6 @@ export function Header() {
               )}
 
               <ThemeToggle />
-
-              <Button className="hidden md:inline-flex bg-primary text-primary-foreground hover:bg-primary/90">
-                Abonează-te
-              </Button>
-
-              <Button variant="outline" size="sm" className="hidden md:inline-flex">
-                <User className="w-4 h-4 mr-2" />
-                Cont
-              </Button>
             </div>
           </div>
         </div>
@@ -151,11 +142,6 @@ export function Header() {
             >
               Metodologie
             </Link>
-            <div className="pt-4 border-t border-border mt-4">
-              <Button className="w-full bg-primary text-primary-foreground">
-                Abonează-te
-              </Button>
-            </div>
           </nav>
         </div>
       )}
