@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
-import { BiasBar } from "./BiasBar";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 
 interface NewsListItemProps {
@@ -21,43 +20,17 @@ export function NewsListItem({ story }: NewsListItemProps) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="py-4 px-4 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors">
-        <div className="flex gap-4">
+        {/* Top row: Category, Title, Image */}
+        <div className="flex gap-4 mb-3">
           <div className="flex-1 min-w-0">
             {story.category && (
               <p className="text-xs text-muted-foreground mb-1.5">
                 {story.category} {story.location && `· ${story.location}`}
               </p>
             )}
-            <h3 className="font-semibold text-foreground leading-snug mb-2 group-hover:underline line-clamp-3">
+            <h3 className="font-semibold text-foreground leading-snug group-hover:underline line-clamp-3">
               {story.title}
             </h3>
-
-            {/* Bias Info Row with Source Logos and Labeled Bar */}
-            <div className="flex items-center gap-3">
-              {/* Source Logos */}
-              {story.sources && story.sources.length > 0 && (
-                <SourceFaviconGroup
-                  sources={story.sources}
-                  maxVisible={4}
-                  size="sm"
-                />
-              )}
-
-              {/* Labeled Bias Bar */}
-              <div className="flex-1 max-w-[180px]">
-                <BiasBar
-                  left={story.bias.left}
-                  center={story.bias.center}
-                  right={story.bias.right}
-                  size="md"
-                  variant="labeled"
-                />
-              </div>
-
-              <span className="text-xs text-muted-foreground whitespace-nowrap">
-                {story.sourcesCount} surse
-              </span>
-            </div>
           </div>
 
           {/* Stacked Card Image Effect */}
@@ -89,6 +62,59 @@ export function NewsListItem({ story }: NewsListItemProps) {
               }}
             />
           </div>
+        </div>
+
+        {/* Bottom row: Source Logos + Full-width Bias Bar + Sources count */}
+        <div className="flex items-center gap-3">
+          {/* Source Logos */}
+          {story.sources && story.sources.length > 0 && (
+            <SourceFaviconGroup
+              sources={story.sources}
+              maxVisible={3}
+              size="sm"
+            />
+          )}
+
+          {/* Full-width Bias Bar with labels */}
+          <div className="flex-1 flex h-6 rounded overflow-hidden text-xs font-semibold">
+            {story.bias.left > 0 && (
+              <div
+                className="bg-bias-left flex items-center justify-center text-white overflow-hidden"
+                style={{ width: `${story.bias.left}%` }}
+              >
+                <span className="truncate px-1">
+                  {story.bias.left >= 20 ? `STÂNGA ${story.bias.left}%` :
+                    story.bias.left >= 12 ? `S ${story.bias.left}%` : `${story.bias.left}%`}
+                </span>
+              </div>
+            )}
+            {story.bias.center > 0 && (
+              <div
+                className="bg-bias-center flex items-center justify-center text-white overflow-hidden"
+                style={{ width: `${story.bias.center}%` }}
+              >
+                <span className="truncate px-1">
+                  {story.bias.center >= 20 ? `CENTRU ${story.bias.center}%` :
+                    story.bias.center >= 12 ? `C ${story.bias.center}%` : `${story.bias.center}%`}
+                </span>
+              </div>
+            )}
+            {story.bias.right > 0 && (
+              <div
+                className="bg-bias-right flex items-center justify-center text-white overflow-hidden"
+                style={{ width: `${story.bias.right}%` }}
+              >
+                <span className="truncate px-1">
+                  {story.bias.right >= 20 ? `DREAPTA ${story.bias.right}%` :
+                    story.bias.right >= 12 ? `D ${story.bias.right}%` : `${story.bias.right}%`}
+                </span>
+              </div>
+            )}
+          </div>
+
+          <span className="text-xs text-muted-foreground whitespace-nowrap">
+            {story.sourcesCount} surse
+          </span>
         </div>
       </article>
     </Link>
