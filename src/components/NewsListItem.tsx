@@ -76,38 +76,32 @@ export function NewsListItem({ story }: NewsListItemProps) {
           )}
 
           {/* Full-width Bias Bar with labels */}
-          <div className="flex-1 flex h-6 rounded overflow-hidden text-xs font-semibold">
+          <div className="flex-1 flex h-10 rounded overflow-hidden text-xs font-semibold">
             {story.bias.left > 0 && (
               <div
-                className="bg-bias-left flex items-center justify-center text-white overflow-hidden"
+                className="bg-bias-left flex flex-col items-center justify-center text-white overflow-hidden py-1"
                 style={{ width: `${story.bias.left}%` }}
               >
-                <span className="truncate px-1">
-                  {story.bias.left >= 20 ? `STÂNGA ${story.bias.left}%` :
-                    story.bias.left >= 12 ? `S ${story.bias.left}%` : `${story.bias.left}%`}
-                </span>
+                <span className="text-sm font-bold">{story.bias.left}%</span>
+                {story.bias.left >= 15 && <span className="text-[10px] opacity-90">Stânga</span>}
               </div>
             )}
             {story.bias.center > 0 && (
               <div
-                className="bg-bias-center flex items-center justify-center text-white overflow-hidden"
+                className="bg-bias-center flex flex-col items-center justify-center text-white overflow-hidden py-1"
                 style={{ width: `${story.bias.center}%` }}
               >
-                <span className="truncate px-1">
-                  {story.bias.center >= 20 ? `CENTRU ${story.bias.center}%` :
-                    story.bias.center >= 12 ? `C ${story.bias.center}%` : `${story.bias.center}%`}
-                </span>
+                <span className="text-sm font-bold">{story.bias.center}%</span>
+                {story.bias.center >= 15 && <span className="text-[10px] opacity-90">Centru</span>}
               </div>
             )}
             {story.bias.right > 0 && (
               <div
-                className="bg-bias-right flex items-center justify-center text-white overflow-hidden"
+                className="bg-bias-right flex flex-col items-center justify-center text-white overflow-hidden py-1"
                 style={{ width: `${story.bias.right}%` }}
               >
-                <span className="truncate px-1">
-                  {story.bias.right >= 20 ? `DREAPTA ${story.bias.right}%` :
-                    story.bias.right >= 12 ? `D ${story.bias.right}%` : `${story.bias.right}%`}
-                </span>
+                <span className="text-sm font-bold">{story.bias.right}%</span>
+                {story.bias.right >= 15 && <span className="text-[10px] opacity-90">Dreapta</span>}
               </div>
             )}
           </div>
