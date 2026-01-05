@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Parser from 'rss-parser';
+import { NEWS_SOURCES, fetchRSSFeed } from './shared';
 
 const parser = new Parser();
 
@@ -24,28 +25,66 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
+        console.log(`Starting analysis for: ${name}`);
+
         // 1. Fetch Google News RSS for the person (last 7 days)
         const encodedName = encodeURIComponent(name);
-        const feedUrl = `https://news.google.com/rss/search?q=${encodedName}+when:7d&hl=ro&gl=RO&ceid=RO:ro`;
+        const googleFeedUrl = `https://news.google.com/rss/search?q=${encodedName}+when:7d&hl=ro&gl=RO&ceid=RO:ro`;
 
-        console.log(`Fetching RSS for ${name}: ${feedUrl}`);
-        const feed = await parser.parseURL(feedUrl);
+        const googlePromise = parser.parseURL(googleFeedUrl).then(feed =>
+            feed.items.map(item => ({
+                title: item.title || '',
+                link: item.link || '',
+                snippet: item.contentSnippet || item.content || '',
+                date: item.pubDate || '',
+                source: item.creator || 'Google News'
+            }))
+        ).catch(err => {
+            console.error('Google News fetch failed:', err);
+            return [];
+        });
 
-        // Take top 10 articles
-        const articles = feed.items.slice(0, 10).map(item => ({
-            title: item.title || '',
-            link: item.link || '',
-            snippet: item.contentSnippet || item.content || '',
-            date: item.pubDate || '',
-            source: item.creator || 'Google News'
-        }));
+        // 2. Fetch specific Romanian sources that might not be in Google News immediately
+        // We fetch all sources and filter by name - parallel execution
+        const internalSourcesPromise = Promise.all(
+            NEWS_SOURCES.map(source => fetchRSSFeed(source))
+        ).then(results => {
+            const allItems = results.flat();
+            const lowerName = name.toLowerCase();
+            // Filter items that mention the name in title or description
+            return allItems.filter(item =>
+                item.title.toLowerCase().includes(lowerName) ||
+                item.description.toLowerCase().includes(lowerName)
+            ).map(item => ({
+                title: item.title,
+                link: item.link,
+                snippet: item.description,
+                date: item.pubDate,
+                source: item.source.name
+            }));
+        }).catch(err => {
+            console.error('Internal sources fetch failed:', err);
+            return [];
+        });
+
+        // Wait for both
+        const [googleArticles, internalArticles] = await Promise.all([googlePromise, internalSourcesPromise]);
+
+        // Combine and deduplicate by link
+        const allArticles = [...internalArticles, ...googleArticles];
+        const uniqueArticles = Array.from(new Map(allArticles.map(item => [item.link, item])).values());
+
+        // Take top 15 most relevant/recent
+        const articles = uniqueArticles.slice(0, 15);
+
+        console.log(`Found ${articles.length} articles for ${name}`);
 
         if (articles.length === 0) {
             return res.status(200).json({ statements: [] });
         }
 
-        // 2. Prepare prompt for Gemini
-        const articlesText = articles.map((a, i) => `[${i + 1}] Titlu: ${a.title}\nSnippet: ${a.snippet}`).join('\n\n');
+        // 3. Prepare prompt for Gemini
+        const articlesText = articles.map((a, i) => `[${i + 1}] Sursa: ${a.source}\nTitlu: ${a.title}\nSnippet: ${a.snippet}`).join('\n\n');
 
         const prompt = `
         Analizează următoarele articole de știri recente despre ${name}.
@@ -72,7 +111,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return res.status(500).json({ error: 'Server configuration error' });
         }
 
-        // 3. Call Gemini
+        // 4. Call Gemini
         const geminiResponse = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -98,15 +137,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             throw new Error('Empty response from AI');
         }
 
-        // Clean markdown if present (though response_mime_type should prevent it)
+        // Clean markdown if present
         jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
 
         const result = JSON.parse(jsonText);
-
-        // Map back source URLs if AI used textual references? Gemini might return the link if prompted correctly.
-        // We will trust Gemini to pick the link from the input text if we provided it.
-        // To be safe, we can try to match the sourceUrl returned by Gemini with our articles list if strictly needed,
-        // but for now let's trust it returns one of the provided links or a generic placeholder if confused.
 
         // Enrich with fallback URLs if missing
         const statements = (result.statements || []).map((s: any) => {
