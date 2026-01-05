@@ -60,12 +60,35 @@ export function NewsListItem({ story }: NewsListItemProps) {
             </div>
           </div>
 
-          <img
-            src={getThumbnailUrl(story.image)}
-            alt=""
-            loading="lazy"
-            className="w-24 h-20 object-cover rounded flex-shrink-0"
-          />
+          {/* Stacked Card Image Effect */}
+          <div className="relative w-28 h-20 flex-shrink-0" style={{ perspective: '600px' }}>
+            {/* Back cards (decorative layers) */}
+            <div
+              className="absolute inset-0 bg-muted rounded-lg border border-border/50"
+              style={{
+                transform: 'rotateY(-8deg) translateX(-6px) translateZ(-20px)',
+                transformOrigin: 'right center'
+              }}
+            />
+            <div
+              className="absolute inset-0 bg-muted/80 rounded-lg border border-border/30"
+              style={{
+                transform: 'rotateY(-4deg) translateX(-3px) translateZ(-10px)',
+                transformOrigin: 'right center'
+              }}
+            />
+            {/* Main image */}
+            <img
+              src={getThumbnailUrl(story.image)}
+              alt=""
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md"
+              style={{
+                transform: 'rotateY(0deg)',
+                transformOrigin: 'right center'
+              }}
+            />
+          </div>
         </div>
       </article>
     </Link>

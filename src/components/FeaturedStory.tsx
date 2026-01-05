@@ -55,26 +55,38 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
               <div className="flex-1 flex h-7 rounded overflow-hidden text-xs font-medium">
                 {story.bias.left > 0 && (
                   <div
-                    className="bg-bias-left flex items-center justify-center text-white"
+                    className="bg-bias-left flex items-center justify-center text-white overflow-hidden"
                     style={{ width: `${story.bias.left}%` }}
                   >
-                    {story.bias.left >= 15 && `S ${story.bias.left}%`}
+                    {story.bias.left >= 13 && (
+                      <span className="truncate px-0.5">
+                        {story.bias.left >= 15 ? `S ${story.bias.left}%` : `${story.bias.left}%`}
+                      </span>
+                    )}
                   </div>
                 )}
                 {story.bias.center > 0 && (
                   <div
-                    className="bg-bias-center flex items-center justify-center text-white"
+                    className="bg-bias-center flex items-center justify-center text-white overflow-hidden"
                     style={{ width: `${story.bias.center}%` }}
                   >
-                    {story.bias.center >= 15 && `C ${story.bias.center}%`}
+                    {story.bias.center >= 13 && (
+                      <span className="truncate px-0.5">
+                        {story.bias.center >= 15 ? `C ${story.bias.center}%` : `${story.bias.center}%`}
+                      </span>
+                    )}
                   </div>
                 )}
                 {story.bias.right > 0 && (
                   <div
-                    className="bg-bias-right flex items-center justify-center text-white"
+                    className="bg-bias-right flex items-center justify-center text-white overflow-hidden"
                     style={{ width: `${story.bias.right}%` }}
                   >
-                    {story.bias.right >= 15 && `D ${story.bias.right}%`}
+                    {story.bias.right >= 13 && (
+                      <span className="truncate px-0.5">
+                        {story.bias.right >= 15 ? `D ${story.bias.right}%` : `${story.bias.right}%`}
+                      </span>
+                    )}
                   </div>
                 )}
               </div>

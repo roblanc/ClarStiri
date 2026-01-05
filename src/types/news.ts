@@ -421,6 +421,36 @@ export const NEWS_SOURCES: NewsSource[] = [
     factuality: 'mixed',
     category: 'independent',
   },
+  {
+    id: 'dailybusiness',
+    name: 'Daily Business',
+    url: 'https://www.dailybusiness.ro',
+    rssUrl: 'https://www.dailybusiness.ro/feed/',
+    logo: 'https://logo.clearbit.com/dailybusiness.ro',
+    bias: 'center-right',
+    factuality: 'high',
+    category: 'mainstream',
+  },
+  {
+    id: 'wowbiz',
+    name: 'WOWbiz',
+    url: 'https://www.wowbiz.ro',
+    rssUrl: 'https://www.wowbiz.ro/feed/',
+    logo: 'https://logo.clearbit.com/wowbiz.ro',
+    bias: 'center',
+    factuality: 'mixed',
+    category: 'tabloid',
+  },
+  {
+    id: 'actualitate',
+    name: 'Actualitate.net',
+    url: 'https://actualitate.net',
+    rssUrl: 'https://actualitate.net/feed/',
+    logo: 'https://logo.clearbit.com/actualitate.net',
+    bias: 'center',
+    factuality: 'mixed',
+    category: 'independent',
+  },
 ];
 
 // Mapare bias la procente pentru calculul distribuției

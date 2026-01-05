@@ -1,9 +1,8 @@
 import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsListItem } from "@/components/NewsListItem";
-import { TopStoriesList } from "@/components/TopStoriesList";
 import { SourceFavicon } from "@/components/SourceFavicon";
-import { useAggregatedNews, useTopStories } from "@/hooks/useNews";
+import { useAggregatedNews } from "@/hooks/useNews";
 import { NEWS_SOURCES } from "@/types/news";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,6 @@ const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e3388
 
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(20);
-  const { data: topStories, isLoading: isLoadingTop } = useTopStories(5);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = stories?.map(story => ({
@@ -96,25 +94,8 @@ const Index = () => {
             <VoicesSection />
 
             <div className="grid lg:grid-cols-12 gap-6">
-              {/* Left Sidebar - Top Stories */}
-              <aside className="lg:col-span-3 space-y-6">
-                <div className="bg-card rounded-lg border border-border p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h2 className="font-bold text-lg text-foreground">Știri Principale</h2>
-                    {isFetching && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
-                  </div>
-                  {isLoadingTop ? (
-                    <div className="flex justify-center py-4">
-                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                    </div>
-                  ) : (
-                    <TopStoriesList stories={topStories || []} />
-                  )}
-                </div>
-              </aside>
-
-              {/* Center - Main Feed */}
-              <div className="lg:col-span-5">
+              {/* Main Feed */}
+              <div className="lg:col-span-8">
                 {/* Featured Story */}
                 {featuredStory && (
                   <div className="mb-6">

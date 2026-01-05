@@ -31,40 +31,48 @@ export function BiasBar({
 
   // Prag pentru a afișa text complet (literă + procent) vs doar procent
   const minPercentForFullText = 18;
+  // Prag minim pentru a afișa orice text (sub această valoare, textul nu încape)
+  const minPercentForAnyText = 13;
 
-  // Varianta cu procente direct pe bară - afișează ÎNTOTDEAUNA procentul
+  // Varianta cu procente direct pe bară - afișează procentul doar dacă încape
   if (variant === 'labeled') {
     return (
       <div className="w-full">
         <div className={`flex ${heights[size]} rounded overflow-hidden ${textSizes[size]} font-medium`}>
           {left > 0 && (
             <div
-              className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
+              className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
               style={{ width: `${left}%` }}
             >
-              <span className="px-0.5">
-                {left >= minPercentForFullText ? `S ${left}%` : `${left}%`}
-              </span>
+              {left >= minPercentForAnyText && (
+                <span className="truncate px-0.5">
+                  {left >= minPercentForFullText ? `S ${left}%` : `${left}%`}
+                </span>
+              )}
             </div>
           )}
           {center > 0 && (
             <div
-              className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
+              className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
               style={{ width: `${center}%` }}
             >
-              <span className="px-0.5">
-                {center >= minPercentForFullText ? `C ${center}%` : `${center}%`}
-              </span>
+              {center >= minPercentForAnyText && (
+                <span className="truncate px-0.5">
+                  {center >= minPercentForFullText ? `C ${center}%` : `${center}%`}
+                </span>
+              )}
             </div>
           )}
           {right > 0 && (
             <div
-              className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden whitespace-nowrap"
+              className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
               style={{ width: `${right}%` }}
             >
-              <span className="px-0.5">
-                {right >= minPercentForFullText ? `D ${right}%` : `${right}%`}
-              </span>
+              {right >= minPercentForAnyText && (
+                <span className="truncate px-0.5">
+                  {right >= minPercentForFullText ? `D ${right}%` : `${right}%`}
+                </span>
+              )}
             </div>
           )}
         </div>

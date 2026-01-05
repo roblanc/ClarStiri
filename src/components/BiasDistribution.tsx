@@ -123,26 +123,38 @@ export function BiasDistribution({ sources, bias }: BiasDistributionProps) {
                 <div className="h-7 rounded overflow-hidden flex text-xs font-medium">
                     {bias.left > 0 && (
                         <div
-                            className="bg-bias-left flex items-center justify-center text-white transition-all duration-300"
+                            className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
                             style={{ width: `${bias.left}%` }}
                         >
-                            {bias.left >= 15 && `S ${bias.left}%`}
+                            {bias.left >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.left >= 15 ? `S ${bias.left}%` : `${bias.left}%`}
+                                </span>
+                            )}
                         </div>
                     )}
                     {bias.center > 0 && (
                         <div
-                            className="bg-bias-center flex items-center justify-center text-white transition-all duration-300"
+                            className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
                             style={{ width: `${bias.center}%` }}
                         >
-                            {bias.center >= 15 && `C ${bias.center}%`}
+                            {bias.center >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.center >= 15 ? `C ${bias.center}%` : `${bias.center}%`}
+                                </span>
+                            )}
                         </div>
                     )}
                     {bias.right > 0 && (
                         <div
-                            className="bg-bias-right flex items-center justify-center text-white transition-all duration-300"
+                            className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
                             style={{ width: `${bias.right}%` }}
                         >
-                            {bias.right >= 15 && `D ${bias.right}%`}
+                            {bias.right >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.right >= 15 ? `D ${bias.right}%` : `${bias.right}%`}
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>

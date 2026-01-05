@@ -36,7 +36,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'dana-budeanu',
         name: 'Dana Budeanu',
         role: 'Influencer / Critic de modă',
-        image: '/images/voices/dana-budeanu.svg',
+        image: '/images/voices/dana-budeanu.jpg',
         bias: {
             leaning: 'right', // De obicei asociată cu valori conservatoare/anti-sistem
             score: 65,

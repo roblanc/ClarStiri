@@ -79,6 +79,9 @@ export const NEWS_SOURCES: NewsSource[] = [
     { id: 'defapt', name: 'Defapt.ro', url: 'https://defapt.ro', rssUrl: 'https://defapt.ro/feed/', bias: 'center-right', factuality: 'high', category: 'independent' },
     { id: 'catavencii', name: 'Cațavencii', url: 'https://www.catavencii.ro', rssUrl: 'https://www.catavencii.ro/feed/', bias: 'center', factuality: 'mixed', category: 'independent' }, // Satiră
     { id: 'academiacatavencu', name: 'Academia Cațavencu', url: 'https://academiacatavencu.com', rssUrl: 'https://academiacatavencu.com/feed/', bias: 'center', factuality: 'mixed', category: 'independent' }, // Satiră
+    { id: 'dailybusiness', name: 'Daily Business', url: 'https://www.dailybusiness.ro', rssUrl: 'https://www.dailybusiness.ro/feed/', bias: 'center-right', factuality: 'high', category: 'mainstream' },
+    { id: 'wowbiz', name: 'WOWbiz', url: 'https://www.wowbiz.ro', rssUrl: 'https://www.wowbiz.ro/feed/', bias: 'center', factuality: 'mixed', category: 'tabloid' },
+    { id: 'actualitate', name: 'Actualitate.net', url: 'https://actualitate.net', rssUrl: 'https://actualitate.net/feed/', bias: 'center', factuality: 'mixed', category: 'independent' },
 ];
 
 export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; right: number }> = {

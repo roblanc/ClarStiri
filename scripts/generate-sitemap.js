@@ -32,6 +32,12 @@ function generateSitemap() {
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
 
+    // Write to public folder
+    const publicDir = path.join(__dirname, '../public');
+    if (!fs.existsSync(publicDir)) {
+        fs.mkdirSync(publicDir);
+    }
+
     // Add static routes
     STATIC_ROUTES.forEach(route => {
         xml += `
@@ -54,14 +60,35 @@ function generateSitemap() {
   </url>`;
     });
 
+    // Add Voices section
+    xml += `
+  <url>
+    <loc>${BASE_URL}/voci</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>`;
+
+    // Public Figures (Manual list until we can import TS in JS script easily)
+    const VOICES = [
+        'dana-budeanu',
+        'mircea-badea',
+        'victor-ciutacu',
+        'ctp'
+    ];
+
+    VOICES.forEach(slug => {
+        xml += `
+  <url>
+    <loc>${BASE_URL}/voce/${slug}</loc>
+    <lastmod>${currentDate}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+    });
+
     xml += `
 </urlset>`;
-
-    // Write to public folder
-    const publicDir = path.join(__dirname, '../public');
-    if (!fs.existsSync(publicDir)) {
-        fs.mkdirSync(publicDir);
-    }
 
     fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), xml);
     console.log('✅ Sitemap generated successfully at public/sitemap.xml');

@@ -37,7 +37,7 @@ export function Header() {
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
 
-              <Link to="/" className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2 cursor-pointer">
                 {/* Logo mark - Ethics Icon */}
                 <img
                   src="/ethics-logo.png"
