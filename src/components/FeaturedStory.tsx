@@ -19,7 +19,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="relative rounded-lg overflow-hidden">
-        <div className="aspect-[4/3] relative">
+        <div className="aspect-[16/9] relative">
           <img
             src={getFeaturedImageUrl(story.image)}
             alt=""

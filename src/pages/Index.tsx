@@ -96,7 +96,7 @@ const Index = () => {
             <div className="grid lg:grid-cols-12 gap-6">
               {/* Main Feed */}
               <div className="lg:col-span-8">
-                {/* Featured Story */}
+                {/* Featured Story - Smaller size */}
                 {featuredStory && (
                   <div className="mb-6">
                     <FeaturedStory story={featuredStory} />
