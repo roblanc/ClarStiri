@@ -80,7 +80,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'victor-ciutacu',
         name: 'Victor Ciutacu',
         role: 'Jurnalist TV',
-        image: '/images/voices/victor-ciutacu.svg',
+        image: '/images/voices/victor-ciutacu.jpg',
         bias: {
             leaning: 'center-left',
             score: -35,
