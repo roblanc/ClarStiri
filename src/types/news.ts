@@ -451,6 +451,26 @@ export const NEWS_SOURCES: NewsSource[] = [
     factuality: 'mixed',
     category: 'independent',
   },
+  {
+    id: 'factual',
+    name: 'Factual.ro',
+    url: 'https://www.factual.ro',
+    rssUrl: 'https://www.factual.ro/feed/',
+    logo: 'https://logo.clearbit.com/factual.ro',
+    bias: 'center',
+    factuality: 'high',
+    category: 'independent',
+  },
+  {
+    id: 'jurnalul',
+    name: 'Jurnalul.ro',
+    url: 'https://jurnalul.ro',
+    rssUrl: 'https://jurnalul.ro/feed/',
+    logo: 'https://logo.clearbit.com/jurnalul.ro',
+    bias: 'center',
+    factuality: 'mixed',
+    category: 'mainstream',
+  },
 ];
 
 // Mapare bias la procente pentru calculul distribuției

@@ -63,7 +63,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'mircea-badea',
         name: 'Mircea Badea',
         role: 'Realizator TV',
-        image: '/images/voices/mircea-badea.svg',
+        image: '/images/voices/Mircea_Badea.jpg',
         bias: {
             leaning: 'center-left', // Tradițional anti-Băsescu/Iohannis, pro-PSD history
             score: -40,
@@ -106,6 +106,109 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         description: 'Unul dintre cei mai longevivi și respectați gazetari din România, CTP analizează actualitatea cu un spirit critic incisiv.',
         socialLinks: {
             facebook: 'https://facebook.com/ctp'
+        },
+        statements: []
+    },
+    {
+        id: 'catalin-tolontan',
+        slug: 'catalin-tolontan',
+        name: 'Cătălin Tolontan',
+        role: 'Jurnalist investigativ',
+        image: '/images/voices/catalin-tolontan.png',
+        bias: {
+            leaning: 'center',
+            score: 5,
+            description: 'Jurnalism de investigație obiectiv, concentrat pe corupție și abuzuri, fără afiliații politice explicite.'
+        },
+        description: 'Jurnalist de investigație la Libertatea, cunoscut pentru investigațiile despre Colectiv și sistemul de sănătate. Premiat internațional pentru jurnalismul său.',
+        socialLinks: {
+            facebook: 'https://facebook.com/catalin.tolontan'
+        },
+        statements: []
+    },
+    {
+        id: 'rares-bogdan',
+        slug: 'rares-bogdan',
+        name: 'Rareș Bogdan',
+        role: 'Politician / Europarlamentar',
+        image: '/images/voices/rares-bogdan.png',
+        bias: {
+            leaning: 'center-right',
+            score: 45,
+            description: 'Fost jurnalist, acum europarlamentar PNL, poziții conservatoare și pro-europene.'
+        },
+        description: 'Fost realizator TV la Realitatea, actualmente europarlamentar PNL și una dintre cele mai vocale voci ale dreptei politice.',
+        socialLinks: {
+            facebook: 'https://facebook.com/RaresBogdan'
+        },
+        statements: []
+    },
+    {
+        id: 'lucian-mandruta',
+        slug: 'lucian-mandruta',
+        name: 'Lucian Mândruță',
+        role: 'Jurnalist / Blogger',
+        image: '/images/voices/lucian-mandruta.png',
+        bias: {
+            leaning: 'center-left',
+            score: -25,
+            description: 'Abordare liberală, critică față de naționalismul excesiv și deschis spre teme progresiste.'
+        },
+        description: 'Jurnalist cu experiență la Antena 1 și ProTV, cunoscut pentru blogul său și comentariile pe teme sociale.',
+        socialLinks: {
+            facebook: 'https://facebook.com/LucianMandruta'
+        },
+        statements: []
+    },
+    {
+        id: 'moise-guran',
+        slug: 'moise-guran',
+        name: 'Moise Guran',
+        role: 'Jurnalist / Analist',
+        image: '/images/voices/moise-guran.png',
+        bias: {
+            leaning: 'center-right',
+            score: 20,
+            description: 'Pro-reformist, pro-UE, fost candidat politic. Critică corupția și lipsa reformelor.'
+        },
+        description: 'Fost jurnalist la Europa FM și analist economic, cunoscut pentru pozițiile sale pro-reformiste și analizele economice.',
+        socialLinks: {
+            facebook: 'https://facebook.com/MoiseGuran'
+        },
+        statements: []
+    },
+    {
+        id: 'andreea-esca',
+        slug: 'andreea-esca',
+        name: 'Andreea Esca',
+        role: 'Prezentatoare TV',
+        image: '/images/voices/andreea-esca.png',
+        bias: {
+            leaning: 'center',
+            score: 0,
+            description: 'Abordare neutră și profesionistă, simbol al jurnalismului TV din România.'
+        },
+        description: 'Cea mai longevivă și cunoscută prezentatoare de știri din România, la ProTV din 1995.',
+        socialLinks: {
+            instagram: 'https://instagram.com/andreeaesca'
+        },
+        statements: []
+    },
+    {
+        id: 'selly',
+        slug: 'selly',
+        name: 'Selly',
+        role: 'Influencer / Content Creator',
+        image: '/images/voices/selly.png',
+        bias: {
+            leaning: 'center',
+            score: 0,
+            description: 'Comentează ocazional politica din perspectiva generației tinere, fără afilieri clare.'
+        },
+        description: 'Cel mai urmărit YouTuber din România, cu influență semnificativă asupra tinerilor. Implicat ocazional în dezbateri publice.',
+        socialLinks: {
+            youtube: 'https://youtube.com/selly',
+            instagram: 'https://instagram.com/sfrfrfr'
         },
         statements: []
     }
