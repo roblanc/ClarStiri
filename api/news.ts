@@ -234,7 +234,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const limit = parseInt(req.query.limit as string) || 50;
 
-        // Check cache first
+        // Always serve from cache - cron job keeps it fresh
         const cached = await redis.get<AggregatedStory[]>(CACHE_KEY);
 
         if (cached) {
@@ -247,20 +247,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
         }
 
-        // Cache miss - fetch fresh data
-        console.log('Cache miss, fetching fresh news...');
-        const news = await fetchAllNews();
-        const aggregated = aggregateNews(news);
+        // Cache is empty - this should only happen on first deploy
+        // Instead of waiting for slow RSS fetch, return empty with message
+        // The cron job will populate the cache within 2 minutes
+        console.log('Cache empty, waiting for cron to populate...');
 
-        // Save to cache
-        await redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL });
+        // Try a quick fetch of just priority sources as fallback
+        const priorityIds = ['digi24', 'hotnews', 'g4media', 'mediafax', 'agerpres'];
+        const prioritySources = NEWS_SOURCES.filter(s => priorityIds.includes(s.id));
+
+        // Quick fetch with shorter timeout
+        const results = await Promise.allSettled(
+            prioritySources.map(s => fetchRSSFeed(s))
+        );
+
+        let quickNews: RSSNewsItem[] = [];
+        results.forEach(result => {
+            if (result.status === 'fulfilled') {
+                quickNews.push(...result.value);
+            }
+        });
+
+        if (quickNews.length > 0) {
+            const aggregated = aggregateNews(quickNews);
+            // Cache for 2 min until cron runs
+            await redis.set(CACHE_KEY, aggregated, { ex: 120 });
+
+            return res.status(200).json({
+                success: true,
+                data: aggregated.slice(0, limit),
+                fromCache: false,
+                isPartial: true,
+                message: 'Partial data - full refresh coming soon',
+                fetchedAt: new Date().toISOString(),
+            });
+        }
 
         return res.status(200).json({
             success: true,
-            data: aggregated.slice(0, limit),
+            data: [],
             fromCache: false,
-            fetchedAt: new Date().toISOString(),
-            totalStories: aggregated.length,
+            message: 'Cache warming up, please refresh in 1-2 minutes',
         });
     } catch (error) {
         console.error('Error in news API:', error);
@@ -271,3 +298,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
     }
 }
+
