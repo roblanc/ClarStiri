@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsListItem } from "@/components/NewsListItem";
@@ -12,12 +13,38 @@ import {
   SidebarSkeleton
 } from "@/components/Skeleton";
 import { VoicesSection } from "@/components/VoicesSection";
+import { SplashPage } from "@/components/SplashPage";
 
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
 
+// Check if splash was shown recently (within 12 hours)
+const SPLASH_STORAGE_KEY = 'clarstiri_splash_shown';
+const SPLASH_EXPIRY_HOURS = 12;
+
+function shouldShowSplash(): boolean {
+  const stored = localStorage.getItem(SPLASH_STORAGE_KEY);
+  if (!stored) return true;
+
+  const timestamp = parseInt(stored, 10);
+  const now = Date.now();
+  const hoursElapsed = (now - timestamp) / (1000 * 60 * 60);
+
+  return hoursElapsed >= SPLASH_EXPIRY_HOURS;
+}
+
+function markSplashShown(): void {
+  localStorage.setItem(SPLASH_STORAGE_KEY, Date.now().toString());
+}
+
 const Index = () => {
+  const [showSplash, setShowSplash] = useState(() => shouldShowSplash());
   const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(20);
+
+  const handleContinue = useCallback(() => {
+    markSplashShown();
+    setShowSplash(false);
+  }, []);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = stories?.map(story => ({
@@ -39,6 +66,14 @@ const Index = () => {
 
   const featuredStory = convertedStories[0];
   const otherStories = convertedStories.slice(1);
+
+  // Data is ready when we have stories loaded
+  const isDataReady = !isLoading && convertedStories.length > 0;
+
+  // Show splash page if needed
+  if (showSplash) {
+    return <SplashPage onContinue={handleContinue} isDataReady={isDataReady} />;
+  }
 
   return (
     <div className="min-h-screen bg-background">
