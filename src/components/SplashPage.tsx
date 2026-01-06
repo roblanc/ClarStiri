@@ -11,9 +11,10 @@ interface SplashPageProps {
 export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
     const [progress, setProgress] = useState(0);
     const [canSkip, setCanSkip] = useState(false);
+    const [hasMinTimeElapsed, setHasMinTimeElapsed] = useState(false);
 
     useEffect(() => {
-        // Progress bar animation
+        // Progress bar animation (takes ~2.5 seconds to complete)
         const interval = setInterval(() => {
             setProgress((prev) => {
                 if (prev >= 100) {
@@ -24,30 +25,26 @@ export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
             });
         }, 50);
 
-        // Allow skip after 1 second
-        const skipTimer = setTimeout(() => setCanSkip(true), 1000);
+        // Allow skip after 2 seconds
+        const skipTimer = setTimeout(() => setCanSkip(true), 2000);
 
-        // Auto-continue after 4 seconds if data is ready
-        const autoTimer = setTimeout(() => {
-            if (isDataReady) {
-                onContinue();
-            }
-        }, 4000);
+        // Minimum time splash should be visible (8 seconds)
+        const minTimer = setTimeout(() => setHasMinTimeElapsed(true), 8000);
 
         return () => {
             clearInterval(interval);
             clearTimeout(skipTimer);
-            clearTimeout(autoTimer);
+            clearTimeout(minTimer);
         };
-    }, [isDataReady, onContinue]);
+    }, []);
 
-    // Auto-continue when data is ready and progress is complete
+    // Auto-continue only after minimum time AND data is ready
     useEffect(() => {
-        if (isDataReady && progress >= 100) {
+        if (hasMinTimeElapsed && isDataReady) {
             const timer = setTimeout(onContinue, 500);
             return () => clearTimeout(timer);
         }
-    }, [isDataReady, progress, onContinue]);
+    }, [hasMinTimeElapsed, isDataReady, onContinue]);
 
     return (
         <AnimatePresence>
