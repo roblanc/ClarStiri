@@ -18,31 +18,12 @@ import { SplashPage } from "@/components/SplashPage";
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
 
-// Check if splash was shown recently (within 12 hours)
-const SPLASH_STORAGE_KEY = 'clarstiri_splash_shown';
-const SPLASH_EXPIRY_HOURS = 12;
-
-function shouldShowSplash(): boolean {
-  const stored = localStorage.getItem(SPLASH_STORAGE_KEY);
-  if (!stored) return true;
-
-  const timestamp = parseInt(stored, 10);
-  const now = Date.now();
-  const hoursElapsed = (now - timestamp) / (1000 * 60 * 60);
-
-  return hoursElapsed >= SPLASH_EXPIRY_HOURS;
-}
-
-function markSplashShown(): void {
-  localStorage.setItem(SPLASH_STORAGE_KEY, Date.now().toString());
-}
-
+// Splash always shows on every visit
 const Index = () => {
-  const [showSplash, setShowSplash] = useState(() => shouldShowSplash());
+  const [showSplash, setShowSplash] = useState(true);
   const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(20);
 
   const handleContinue = useCallback(() => {
-    markSplashShown();
     setShowSplash(false);
   }, []);
 
