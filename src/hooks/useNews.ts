@@ -5,17 +5,20 @@ import { AggregatedStory, RSSNewsItem } from '@/types/news';
 import { useEffect, useState } from 'react';
 
 /**
- * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch
+ * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch.
+ * Tratează un array gol ca eșec (cache Redis gol / cron încă nu a rulat).
  */
 async function fetchNewsWithFallback(limit: number): Promise<AggregatedStory[]> {
     try {
-        // Încearcă API-ul serverless (rapid, ~100ms)
         const stories = await fetchAggregatedNewsFromAPI(limit);
-        console.log('✅ Fetched from API (fast path)');
-        return stories;
+        if (stories.length > 0) {
+            console.log('✅ Fetched from API (fast path)');
+            return stories;
+        }
+        // API a returnat [] — Redis gol sau cron-ul încă nu a rulat
+        throw new Error('API returned empty list');
     } catch (apiError) {
-        console.warn('⚠️ API unavailable, falling back to client-side fetch');
-        // Fallback la metoda veche (lentă, ~5s)
+        console.warn('⚠️ API unavailable or empty, falling back to client-side fetch');
         return getAggregatedNews(limit);
     }
 }

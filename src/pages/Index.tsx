@@ -90,12 +90,14 @@ const Index = () => {
           </div>
         )}
 
-        {/* Error State */}
-        {error && !isLoading && !stories && (
+        {/* Error / Empty State — shows when fetch finished but no stories arrived */}
+        {!isLoading && !isFetching && !stories?.length && (
           <div className="flex flex-col items-center justify-center py-20">
             <AlertCircle className="w-12 h-12 text-destructive mb-4" />
             <p className="text-foreground font-medium mb-2">Nu am putut încărca știrile</p>
-            <p className="text-sm text-muted-foreground mb-4">{error.message}</p>
+            <p className="text-sm text-muted-foreground mb-4">
+              {error?.message ?? 'Sursele RSS nu răspund în acest moment. Încearcă din nou.'}
+            </p>
             <Button onClick={() => refetch()} variant="outline">
               <RefreshCw className="w-4 h-4 mr-2" />
               Încearcă din nou
@@ -103,8 +105,8 @@ const Index = () => {
           </div>
         )}
 
-        {/* Content */}
-        {stories && (
+        {/* Content — only render when we actually have stories */}
+        {!!stories?.length && (
           <>
             {/* Voices Barometer Section */}
             <VoicesSection />
