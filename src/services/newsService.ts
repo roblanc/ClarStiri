@@ -6,8 +6,9 @@ const CORS_PROXIES = [
     'https://corsproxy.io/?',
 ];
 
-// Cache key pentru localStorage
+// Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
+const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
 
 // Timeout pentru fetch (în milisecunde)
@@ -18,18 +19,53 @@ interface CachedNews {
     news: RSSNewsItem[];
 }
 
+interface CachedAggregated {
+    timestamp: number;
+    stories: AggregatedStory[];
+}
+
 /**
- * Salvează știrile în cache local
+ * Salvează știrile brute în cache local
  */
 function saveToCache(news: RSSNewsItem[]): void {
     try {
-        const cacheData: CachedNews = {
-            timestamp: Date.now(),
-            news,
-        };
+        const cacheData: CachedNews = { timestamp: Date.now(), news };
         localStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
     } catch (e) {
         console.warn('Failed to save news to cache:', e);
+    }
+}
+
+/**
+ * Salvează știrile agregate direct în cache local pentru redare instant
+ */
+function saveAggregatedToCache(stories: AggregatedStory[]): void {
+    try {
+        // Store serialisable form (Date → string)
+        const serialisable = stories.map(s => ({
+            ...s,
+            publishedAt: s.publishedAt instanceof Date ? s.publishedAt.toISOString() : s.publishedAt,
+        }));
+        const cacheData: CachedAggregated = { timestamp: Date.now(), stories: serialisable as unknown as AggregatedStory[] };
+        localStorage.setItem(AGGREGATED_CACHE_KEY, JSON.stringify(cacheData));
+    } catch (e) {
+        console.warn('Failed to save aggregated news to cache:', e);
+    }
+}
+
+/**
+ * Încarcă știrile agregate direct din cache
+ */
+function loadAggregatedFromCache(): AggregatedStory[] | null {
+    try {
+        const cached = localStorage.getItem(AGGREGATED_CACHE_KEY);
+        if (!cached) return null;
+        const cacheData: CachedAggregated = JSON.parse(cached);
+        if (!cacheData.stories?.length) return null;
+        return cacheData.stories.map(s => ({ ...s, publishedAt: new Date(s.publishedAt) }));
+    } catch (e) {
+        console.warn('Failed to load aggregated news from cache:', e);
+        return null;
     }
 }
 
@@ -42,10 +78,6 @@ function loadFromCache(): RSSNewsItem[] | null {
         if (!cached) return null;
 
         const cacheData: CachedNews = JSON.parse(cached);
-        const age = Date.now() - cacheData.timestamp;
-
-        // Returnează cache-ul chiar dacă e expirat (pentru încărcare instant)
-        // dar marchează-l ca "stale" pentru refresh în background
         if (cacheData.news && cacheData.news.length > 0) {
             return cacheData.news;
         }
@@ -64,7 +96,6 @@ function isCacheFresh(): boolean {
     try {
         const cached = localStorage.getItem(CACHE_KEY);
         if (!cached) return false;
-
         const cacheData: CachedNews = JSON.parse(cached);
         return Date.now() - cacheData.timestamp < CACHE_DURATION;
     } catch {
@@ -128,14 +159,23 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     return newsItems;
 }
 
+// Mapare statică a celor mai frecvente HTML entities — fără DOM overhead
+const HTML_ENTITIES: Record<string, string> = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'",
+    '&apos;': "'", '&nbsp;': ' ', '&mdash;': '—', '&ndash;': '–',
+    '&laquo;': '«', '&raquo;': '»', '&icirc;': 'î', '&Icirc;': 'Î',
+    '&acirc;': 'â', '&Acirc;': 'Â', '&scedil;': 'ș', '&Scedil;': 'Ș',
+    '&tcedil;': 'ț', '&Tcedil;': 'Ț', '&atilde;': 'ã', '&Atilde;': 'Ã',
+    '&hellip;': '…', '&rsquo;': ''', '&lsquo;': ''', '&rdquo;': '"', '&ldquo;': '"',
+};
+const ENTITY_RE = /&[a-zA-Z#][a-zA-Z0-9]{1,6};/g;
+
 /**
- * Decodează HTML entities (&quot;, &amp;, &icirc;, etc.)
+ * Decodează HTML entities (&quot;, &amp;, &icirc;, etc.) fără overhead DOM
  */
 function decodeHtmlEntities(text: string): string {
     if (!text) return '';
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = text;
-    return textarea.value;
+    return text.replace(ENTITY_RE, match => HTML_ENTITIES[match] ?? match);
 }
 
 /**
@@ -365,36 +405,62 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
 }
 
 /**
- * Grupează știrile similare într-o poveste agregată
- * Folosește similaritatea titlurilor pentru a detecta aceeași știre de la surse diferite
+ * Grupează știrile similare folosind un index inversat de tokeni.
+ * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
  */
 function findSimilarStories(news: RSSNewsItem[], threshold = 0.4): Map<string, RSSNewsItem[]> {
+    const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
+
+    // Precomputăm tokenii și seturile pentru fiecare item
+    const itemTokens: Array<{ item: RSSNewsItem; tokens: Set<string> }> = news.map(item => ({
+        item,
+        tokens: new Set(
+            normalizeTitle(item.title)
+                .split(/\s+/)
+                .filter(w => w.length > 2 && !stopwords.has(w))
+        ),
+    }));
+
+    // Index inversat: token → indecșii itemilor care îl conțin
+    const invertedIndex = new Map<string, number[]>();
+    itemTokens.forEach(({ tokens }, idx) => {
+        tokens.forEach(token => {
+            const list = invertedIndex.get(token);
+            if (list) list.push(idx);
+            else invertedIndex.set(token, [idx]);
+        });
+    });
+
     const storyGroups = new Map<string, RSSNewsItem[]>();
     const processed = new Set<string>();
 
-    news.forEach((item) => {
+    itemTokens.forEach(({ item, tokens }, i) => {
         if (processed.has(item.id)) return;
 
-        // Creează un grup pentru această știre
         const group: RSSNewsItem[] = [item];
         processed.add(item.id);
 
-        // Caută știri similare
-        news.forEach((other) => {
+        // Conta câți tokeni comuni are fiecare candidat
+        const candidateOverlap = new Map<number, number>();
+        tokens.forEach(token => {
+            invertedIndex.get(token)?.forEach(j => {
+                if (j !== i) candidateOverlap.set(j, (candidateOverlap.get(j) || 0) + 1);
+            });
+        });
+
+        candidateOverlap.forEach((overlap, j) => {
+            const { item: other, tokens: otherTokens } = itemTokens[j];
             if (processed.has(other.id)) return;
-            if (item.source.id === other.source.id) return; // Nu grupa de la aceeași sursă
+            if (item.source.id === other.source.id) return;
 
-            const similarity = calculateTitleSimilarity(item.title, other.title);
-
-            if (similarity >= threshold) {
+            const union = tokens.size + otherTokens.size - overlap;
+            if (union > 0 && overlap / union >= threshold) {
                 group.push(other);
                 processed.add(other.id);
             }
         });
 
-        // Generează un ID pentru grup bazat pe primul titlu
-        const groupId = `story-${item.id}`;
-        storyGroups.set(groupId, group);
+        storyGroups.set(`story-${item.id}`, group);
     });
 
     return storyGroups;
@@ -499,16 +565,25 @@ export async function fetchNewsFromSource(sourceId: string, limit = 10): Promise
 export async function getAggregatedNews(limit = 20): Promise<AggregatedStory[]> {
     const { news } = await fetchNewsWithCache();
     const aggregated = aggregateNews(news);
+    // Salvează rezultatul agregat pentru acces instant la următoarea vizită
+    saveAggregatedToCache(aggregated);
     return aggregated.slice(0, limit);
 }
 
 /**
- * Obține știri din cache sincron (pentru SSR/instant display)
+ * Obține știri din cache sincron (pentru SSR/instant display).
+ * Folosește cache-ul de știri agregate direct, fără a re-rula agregarea.
  */
 export function getCachedAggregatedNews(limit = 20): AggregatedStory[] | null {
+    // Încearcă mai întâi cache-ul de știri agregate (mult mai rapid)
+    const aggregatedCache = loadAggregatedFromCache();
+    if (aggregatedCache && aggregatedCache.length > 0) {
+        return aggregatedCache.slice(0, limit);
+    }
+
+    // Fallback: re-agregare din cache-ul brut
     const cachedNews = loadFromCache();
     if (!cachedNews || cachedNews.length === 0) return null;
-
     const aggregated = aggregateNews(cachedNews);
     return aggregated.slice(0, limit);
 }
