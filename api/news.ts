@@ -222,12 +222,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const limit = parseInt(req.query.limit as string) || 50;
 
-        // Always serve from cache - cron job keeps it fresh
+        // Serve from Redis when fresh (TTL hasn't expired)
         const cached = await redis.get<AggregatedStory[]>(CACHE_KEY);
 
-        if (cached) {
+        if (cached && cached.length > 0) {
             console.log('Returning cached news');
-            // Allow CDN/browser to cache for 60 s; treat as stale for up to 5 min while revalidating
             res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
             return res.status(200).json({
                 success: true,
@@ -237,47 +236,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
         }
 
-        // Cache is empty - this should only happen on first deploy
-        // Instead of waiting for slow RSS fetch, return empty with message
-        // The cron job will populate the cache within 2 minutes
-        console.log('Cache empty, waiting for cron to populate...');
+        // Cache empty or expired — fetch all sources and repopulate
+        // This happens at most once per CACHE_TTL window (5 min), so it's fine to be synchronous
+        console.log('Cache miss — fetching fresh news from all sources');
+        const allNews = await fetchAllNews();
+        const aggregated = aggregateNews(allNews);
 
-        // Try a quick fetch of just priority sources as fallback
-        const priorityIds = ['digi24', 'hotnews', 'g4media', 'mediafax', 'agerpres'];
-        const prioritySources = NEWS_SOURCES.filter(s => priorityIds.includes(s.id));
-
-        // Quick fetch with shorter timeout
-        const results = await Promise.allSettled(
-            prioritySources.map(s => fetchRSSFeed(s))
-        );
-
-        let quickNews: RSSNewsItem[] = [];
-        results.forEach(result => {
-            if (result.status === 'fulfilled') {
-                quickNews.push(...result.value);
-            }
-        });
-
-        if (quickNews.length > 0) {
-            const aggregated = aggregateNews(quickNews);
-            // Cache for 2 min until cron runs
-            await redis.set(CACHE_KEY, aggregated, { ex: 120 });
-
-            return res.status(200).json({
-                success: true,
-                data: aggregated.slice(0, limit),
-                fromCache: false,
-                isPartial: true,
-                message: 'Partial data - full refresh coming soon',
-                fetchedAt: new Date().toISOString(),
-            });
+        if (aggregated.length > 0) {
+            await redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL });
         }
 
         return res.status(200).json({
             success: true,
-            data: [],
+            data: aggregated.slice(0, limit),
             fromCache: false,
-            message: 'Cache warming up, please refresh in 1-2 minutes',
+            fetchedAt: new Date().toISOString(),
         });
     } catch (error) {
         console.error('Error in news API:', error);
