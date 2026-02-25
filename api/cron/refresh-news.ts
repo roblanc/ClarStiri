@@ -30,23 +30,11 @@ interface AggregatedStory {
 }
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    const priorityIds = ['digi24', 'hotnews', 'g4media', 'mediafax', 'agerpres', 'libertatea', 'protv', 'adevarul', 'recorder', 'observator'];
-    const prioritySources = NEWS_SOURCES.filter(s => priorityIds.includes(s.id));
-    const otherSources = NEWS_SOURCES.filter(s => !priorityIds.includes(s.id));
+    // Fetch all sources in parallel — no reason to wait for "priority" batch first in the cron
+    const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
+    const allNews: RSSNewsItem[] = [];
 
-    // Fetch priority sources first
-    const priorityResults = await Promise.allSettled(prioritySources.map(s => fetchRSSFeed(s)));
-    let allNews: RSSNewsItem[] = [];
-
-    priorityResults.forEach(result => {
-        if (result.status === 'fulfilled') {
-            allNews.push(...result.value);
-        }
-    });
-
-    // Then fetch other sources
-    const otherResults = await Promise.allSettled(otherSources.map(s => fetchRSSFeed(s)));
-    otherResults.forEach(result => {
+    results.forEach(result => {
         if (result.status === 'fulfilled') {
             allNews.push(...result.value);
         }

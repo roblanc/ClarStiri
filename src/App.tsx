@@ -17,7 +17,16 @@ const VoicesPage = lazy(() => import("./pages/VoicesPage"));
 const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 2 * 60 * 1000,   // 2 minute — matches per-query staleTime
+      gcTime: 30 * 60 * 1000,     // 30 minute
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // Loading fallback component
 const PageLoader = () => (
