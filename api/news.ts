@@ -119,7 +119,7 @@ function calculateTitleSimilarity(title1: string, title2: string): number {
 function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = new Map<string, RSSNewsItem[]>();
     const processed = new Set<string>();
-    const threshold = 0.4;
+    const threshold = 0.3;
 
     news.forEach(item => {
         if (processed.has(item.id)) return;

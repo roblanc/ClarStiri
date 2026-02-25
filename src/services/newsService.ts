@@ -408,7 +408,7 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un index inversat de tokeni.
  * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.4): Map<string, RSSNewsItem[]> {
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.3): Map<string, RSSNewsItem[]> {
     const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
 
     // Precomputăm tokenii și seturile pentru fiecare item

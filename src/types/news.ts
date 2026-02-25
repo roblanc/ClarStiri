@@ -474,10 +474,11 @@ export const NEWS_SOURCES: NewsSource[] = [
 ];
 
 // Mapare bias la procente pentru calculul distribuției
+// Fiecare sursă contribuie 100% la categoria ei — fără "spread" artificial
 export const BIAS_WEIGHT_MAP: Record<NewsSource['bias'], { left: number; center: number; right: number }> = {
-  'left': { left: 80, center: 15, right: 5 },
-  'center-left': { left: 55, center: 35, right: 10 },
-  'center': { left: 20, center: 60, right: 20 },
-  'center-right': { left: 10, center: 35, right: 55 },
-  'right': { left: 5, center: 15, right: 80 },
+  'left': { left: 100, center: 0, right: 0 },
+  'center-left': { left: 60, center: 40, right: 0 },
+  'center': { left: 0, center: 100, right: 0 },
+  'center-right': { left: 0, center: 40, right: 60 },
+  'right': { left: 0, center: 0, right: 100 },
 };

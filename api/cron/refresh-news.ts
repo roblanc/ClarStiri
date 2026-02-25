@@ -100,7 +100,7 @@ function aggregateNews(newsItems: RSSNewsItem[], limit: number = 20): Aggregated
         const normalizedTitle = normalizeTitle(item.title);
         const existingKey = Array.from(groups.keys()).find(key => {
             const similarity = calculateSimilarity(key, normalizedTitle);
-            return similarity > 0.6;
+            return similarity > 0.3;
         });
 
         if (existingKey) {
