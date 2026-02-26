@@ -69,7 +69,7 @@ const Index = () => {
 
         {/* Editorial Hero Greeting */}
         <section className="mb-16 md:mb-24 flex flex-row items-center justify-between gap-6 md:gap-16">
-          <div className="flex-1 min-w-0 max-w-xl">
+          <div className="flex-1 min-w-0 max-w-xl pr-4">
             <p className="text-foreground font-serif text-xl sm:text-2xl md:text-3xl leading-snug md:leading-relaxed">
               Am compilat cele mai relevante subiecte de presă perspectivizate pentru tine.
               <span className="text-muted-foreground text-[12px] sm:text-lg md:text-xl block mt-3 md:mt-4 leading-snug">
@@ -77,11 +77,11 @@ const Index = () => {
               </span>
             </p>
           </div>
-          <div className="w-2/5 md:w-auto md:flex-1 max-w-[160px] md:max-w-none flex justify-end shrink-0">
+          <div className="w-1/3 md:w-auto md:flex-1 max-w-[140px] md:max-w-[400px] flex justify-end shrink-0">
             <img
-              src="/hero-illustration-mind.png"
+              src="/hero-illustration.png"
               alt="Editorial Spotlight Illustration"
-              className="w-full h-auto md:max-w-[400px] object-contain"
+              className="w-full h-auto object-contain mix-blend-multiply"
             />
           </div>
         </section>
