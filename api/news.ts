@@ -2,77 +2,85 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
 import {
     RSSNewsItem,
-    BiasAnalysis,
     NEWS_SOURCES,
-    BIAS_WEIGHT_MAP,
     fetchRSSFeed
 } from './shared.js';
-import { createStoryId } from './storyId.js';
-import { aggregateNewsBuildTopics, AggregatedStory } from './aggregation.js';
-
-// Inițializare Redis
-const redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo } from './aggregation.js';
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news';
-const CACHE_KEY_TS = 'aggregated_news_ts'; // timestamp fetch
-const CACHE_TTL = 6 * 60 * 60; // 6 ore — suficient între rulările cronului (la fiecare 4h)
-const STALE_AFTER = 10 * 60; // după 10 min → refresh în background, dar servim stale imediat
-const MIN_SOURCES_THRESHOLD = 2; // Minimum sources required for a story to be displayed
-
-// Removed local Aggregation functions, imported from aggregation.js
+const CACHE_KEY_TS = 'aggregated_news_ts';
+const CACHE_TTL = 6 * 60 * 60;
+const STALE_AFTER = 10 * 60;
+const MIN_SOURCES_THRESHOLD = 2;
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Toate sursele în paralel — se termină în max 3s (timeout per sursă în shared.ts)
-    // Batch-urile secvențiale de 10 × 3s = 12s depășeau timeout-ul Vercel de 10s
     const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
     const allNews: RSSNewsItem[] = [];
-
     results.forEach(result => {
-        if (result.status === 'fulfilled') {
-            allNews.push(...result.value);
-        }
+        if (result.status === 'fulfilled') allNews.push(...result.value);
     });
-
-    // Sort by date
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
-
     return allNews;
 }
 
+/** Fallback: when aggregation produces 0 groups, return top articles as individual stories */
+function buildFallbackStories(allNews: RSSNewsItem[], limit: number): AggregatedStory[] {
+    return allNews.slice(0, limit).map(item => ({
+        id: `single-${item.id}`,
+        title: item.title,
+        description: item.description,
+        image: item.imageUrl,
+        sources: [item],
+        sourcesCount: 1,
+        bias: calculateBiasDistribution([item]),
+        mainCategory: item.category || 'Actualitate',
+        publishedAt: item.pubDate,
+        timeAgo: getTimeAgo(item.pubDate),
+    }));
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+    if (req.method === 'OPTIONS') return res.status(200).end();
+
+    // Redis init inside handler — prevents module-level crash if env vars are missing
+    let redis: Redis | null = null;
+    try {
+        if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+            redis = new Redis({
+                url: process.env.UPSTASH_REDIS_REST_URL,
+                token: process.env.UPSTASH_REDIS_REST_TOKEN,
+            });
+        }
+    } catch (e) {
+        console.error('Redis init failed:', e);
     }
 
     try {
         const limit = parseInt(req.query.limit as string) || 50;
 
-        // Fetch cache + timestamp în paralel — Redis eșuează graceful
+        // Redis read — graceful if unavailable
         let cached: AggregatedStory[] | null = null;
         let tsRaw: number | null = null;
-        try {
-            [cached, tsRaw] = await Promise.all([
-                redis.get<AggregatedStory[]>(CACHE_KEY),
-                redis.get<number>(CACHE_KEY_TS),
-            ]);
-        } catch (redisReadErr) {
-            console.error('Redis read failed, proceeding without cache:', redisReadErr);
+        if (redis) {
+            try {
+                [cached, tsRaw] = await Promise.all([
+                    redis.get<AggregatedStory[]>(CACHE_KEY),
+                    redis.get<number>(CACHE_KEY_TS),
+                ]);
+            } catch (e) {
+                console.error('Redis read failed:', e);
+            }
         }
 
         const cacheAge = tsRaw ? (Date.now() - tsRaw) / 1000 : Infinity;
         const isStale = cacheAge > STALE_AFTER;
 
         if (cached && cached.length > 0) {
-            // Servim cache-ul imediat — utilizatorul nu așteaptă
             res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=600');
             res.status(200).json({
                 success: true,
@@ -82,40 +90,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 cacheAgeSeconds: Math.round(cacheAge),
             });
 
-            // Dacă e stale, refresh în background (fără a bloca răspunsul)
-            if (isStale) {
-                console.log(`Cache stale (${Math.round(cacheAge)}s) — refreshing in background`);
+            if (isStale && redis) {
                 fetchAllNews().then(async news => {
-                    const aggregated = await aggregateNewsBuildTopics(news, MIN_SOURCES_THRESHOLD);
-                    if (aggregated.length > 0) {
+                    const agg = await aggregateNewsBuildTopics(news, MIN_SOURCES_THRESHOLD);
+                    const toStore = agg.length > 0 ? agg : buildFallbackStories(news, 50);
+                    if (toStore.length > 0 && redis) {
                         try {
                             await Promise.all([
-                                redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
+                                redis.set(CACHE_KEY, toStore, { ex: CACHE_TTL }),
                                 redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
                             ]);
                         } catch (e) { console.error('Background Redis write failed:', e); }
-                        console.log('Background cache refresh complete');
                     }
                 }).catch(err => console.error('Background refresh failed:', err));
             }
             return;
         }
 
-        // Cache complet gol — fetch sincron (prima rulare sau după expirare)
-        console.log('Cache miss — fetching fresh news from all sources');
+        // Cache miss — fetch fresh
+        console.log('Cache miss — fetching fresh news');
         const allNews = await fetchAllNews();
-        console.log(`Fetched ${allNews.length} news items from RSS`);
-        const aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
-        console.log(`Aggregated into ${aggregated.length} stories`);
+        console.log(`RSS fetched: ${allNews.length} items`);
 
-        if (aggregated.length > 0) {
+        let aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
+        console.log(`Aggregated: ${aggregated.length} stories`);
+
+        // Fallback: if aggregation produced nothing but we have articles, show them individually
+        if (aggregated.length === 0 && allNews.length > 0) {
+            console.log('Aggregation returned 0, using individual article fallback');
+            aggregated = buildFallbackStories(allNews, limit);
+        }
+
+        if (aggregated.length > 0 && redis) {
             try {
                 await Promise.all([
                     redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
                     redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
                 ]);
-            } catch (redisWriteErr) {
-                console.error('Redis write failed (returning data anyway):', redisWriteErr);
+            } catch (e) {
+                console.error('Redis write failed (returning data anyway):', e);
             }
         }
 
