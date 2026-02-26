@@ -79,10 +79,9 @@ const Index = () => {
           </div>
           <div className="w-2/5 md:w-auto md:flex-1 max-w-[160px] md:max-w-none flex justify-end shrink-0">
             <img
-              src="/hero-illustration.png"
+              src="/hero-illustration-mind.png"
               alt="Editorial Spotlight Illustration"
-              className="w-full h-auto md:max-w-[400px] object-contain mix-blend-multiply"
-              style={{ filter: "brightness(1.05) contrast(1.1)" }}
+              className="w-full h-auto md:max-w-[400px] object-contain"
             />
           </div>
         </section>
