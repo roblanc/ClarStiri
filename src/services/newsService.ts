@@ -410,7 +410,7 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un index inversat de tokeni.
  * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.3): Map<string, RSSNewsItem[]> {
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.35): Map<string, RSSNewsItem[]> {
     const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
 
     // Precomputăm tokenii și seturile pentru fiecare item
@@ -516,11 +516,14 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
+const MIN_SOURCES_THRESHOLD = 3;
+
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));
     const aggregatedStories: AggregatedStory[] = [];
 
     storyGroups.forEach((sources) => {
+        if (sources.length < MIN_SOURCES_THRESHOLD) return;
         // Ia prima știre ca reprezentativă (cea cu cea mai devreme publicare)
         const primary = sources.reduce((earliest, current) => {
             const earliestDate = new Date(earliest.pubDate).getTime();
@@ -551,8 +554,8 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     aggregatedStories.sort((a, b) => {
         const hoursA = (now - a.publishedAt.getTime()) / 3_600_000;
         const hoursB = (now - b.publishedAt.getTime()) / 3_600_000;
-        const scoreA = a.sourcesCount * Math.exp(-hoursA / 18);
-        const scoreB = b.sourcesCount * Math.exp(-hoursB / 18);
+        const scoreA = Math.pow(a.sourcesCount, 1.5) * Math.exp(-hoursA / 18);
+        const scoreB = Math.pow(b.sourcesCount, 1.5) * Math.exp(-hoursB / 18);
         return scoreB - scoreA;
     });
 
