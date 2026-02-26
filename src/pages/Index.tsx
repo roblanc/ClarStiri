@@ -77,14 +77,7 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[70%] xl:max-w-[60%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-8 md:mb-12 flex flex-row items-center gap-6 md:gap-12">
-          <div className="shrink-0 w-36 md:w-64">
-            <img
-              src="/hero-illustration.png"
-              alt="Editorial Spotlight Illustration"
-              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:invert dark:hue-rotate-180"
-            />
-          </div>
+        <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-6 md:gap-12">
           <div className="flex-1 min-w-0">
             <p className="text-foreground font-serif text-lg sm:text-xl md:text-2xl leading-snug">
               Citești. Compari. Decizi.
@@ -92,6 +85,13 @@ const Index = () => {
                 Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
               </span>
             </p>
+          </div>
+          <div className="shrink-0 w-36 md:w-64 flex justify-end">
+            <img
+              src="/hero-illustration.png"
+              alt="Editorial Spotlight Illustration"
+              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:invert dark:hue-rotate-180"
+            />
           </div>
         </section>
 

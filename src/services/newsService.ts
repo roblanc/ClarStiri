@@ -410,7 +410,7 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un index inversat de tokeni.
  * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.25): Map<string, RSSNewsItem[]> {
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.35): Map<string, RSSNewsItem[]> {
     const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
 
     // Precomputăm tokenii și seturile pentru fiecare item
@@ -516,10 +516,10 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-// Client-side fallback: no minimum threshold — CORS proxies fetch far fewer
-// sources than the server, so we show whatever is available rather than nothing.
-// The server API already enforces MIN_SOURCES=3 on the fast path.
-const MIN_SOURCES_THRESHOLD = 1;
+// Client-side fallback uses a lower threshold (2) because CORS proxies
+// fetch fewer sources than the server — show something rather than nothing.
+// The server API already enforces 3 sources on the fast path.
+const MIN_SOURCES_THRESHOLD = 2;
 
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));
