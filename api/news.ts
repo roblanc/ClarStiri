@@ -21,7 +21,7 @@ const CACHE_KEY = 'aggregated_news';
 const CACHE_KEY_TS = 'aggregated_news_ts'; // timestamp fetch
 const CACHE_TTL = 6 * 60 * 60; // 6 ore — suficient între rulările cronului (la fiecare 4h)
 const STALE_AFTER = 10 * 60; // după 10 min → refresh în background, dar servim stale imediat
-const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
+const MIN_SOURCES_THRESHOLD = 2; // Minimum sources required for a story to be displayed
 
 // Removed local Aggregation functions, imported from aggregation.js
 
