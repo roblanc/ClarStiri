@@ -516,7 +516,10 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-const MIN_SOURCES_THRESHOLD = 3;
+// Client-side fallback uses a lower threshold (2) because CORS proxies
+// fetch fewer sources than the server — show something rather than nothing.
+// The server API already enforces 3 sources on the fast path.
+const MIN_SOURCES_THRESHOLD = 2;
 
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));
