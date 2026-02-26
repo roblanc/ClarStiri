@@ -93,7 +93,7 @@ export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; rig
     'right': { left: 0, center: 12, right: 88 },
 };
 
-const FETCH_TIMEOUT = 3000;
+const FETCH_TIMEOUT = 6000;
 
 const POLITICAL_KEYWORDS = {
     left: ['USR', 'REPER', 'progresist', 'anticorupție', 'transparență', 'pro-european', 'reforme'],
@@ -147,15 +147,16 @@ export function quickBiasAnalysis(title: string, description: string = ''): Bias
 }
 
 export async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeout);
-
     try {
-        const response = await fetch(url, { signal: controller.signal });
-        clearTimeout(timeoutId);
+        const response = await fetch(url, {
+            signal: AbortSignal.timeout(timeout),
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'application/rss+xml, application/xml, text/xml',
+            }
+        });
         return response;
     } catch (error) {
-        clearTimeout(timeoutId);
         throw error;
     }
 }
@@ -212,15 +213,33 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
     return items;
 }
 
-export async function fetchRSSFeed(source: NewsSource): Promise<RSSNewsItem[]> {
+const CORS_PROXIES = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?url=',
+];
+
+export async function fetchRSSFeed(source: NewsSource, proxyIndex = -1): Promise<RSSNewsItem[]> {
     try {
-        const response = await fetchWithTimeout(source.rssUrl, FETCH_TIMEOUT);
-        if (!response.ok) return [];
+        const urlToFetch = proxyIndex >= 0
+            ? `${CORS_PROXIES[proxyIndex]}${encodeURIComponent(source.rssUrl)}`
+            : source.rssUrl;
+
+        const response = await fetchWithTimeout(urlToFetch, FETCH_TIMEOUT);
+        if (!response.ok) throw new Error(`HTTP error ${response.status}`);
 
         const xmlText = await response.text();
-        return parseRSSXML(xmlText, source);
+        const items = parseRSSXML(xmlText, source);
+
+        if (items.length === 0 && xmlText.toLowerCase().includes('<html')) {
+            throw new Error('Returned HTML instead of XML');
+        }
+
+        return items;
     } catch (error) {
-        console.warn(`Failed to fetch ${source.name}:`, error);
+        if (proxyIndex < CORS_PROXIES.length - 1) {
+            return fetchRSSFeed(source, proxyIndex + 1);
+        }
+        console.warn(`Failed to fetch ${source.name} after proxies:`, error instanceof Error ? error.message : error);
         return [];
     }
 }
