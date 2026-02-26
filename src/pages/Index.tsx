@@ -81,7 +81,7 @@ const Index = () => {
             <img
               src="/hero-illustration.png"
               alt="Editorial Spotlight Illustration"
-              className="w-full h-auto object-contain mix-blend-multiply"
+              className="w-full h-auto object-contain"
             />
           </div>
         </section>

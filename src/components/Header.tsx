@@ -22,37 +22,28 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Top Bar - Brand and Action */}
+      {/* Single unified bar */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center">
-            {/* Elegant Serif Logo */}
-            <span className="font-serif italic text-3xl font-semibold text-foreground">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-4">
+          {/* Logo */}
+          <Link to="/" className="shrink-0 mr-4">
+            <span className="font-serif italic text-2xl font-semibold text-foreground">
               thesite.ro
             </span>
           </Link>
 
-          <div className="flex items-center gap-6">
-            <ThemeToggle />
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navigation - Categories & Pages */}
-      <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           {/* Mobile Toggle */}
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden h-8 w-8 text-foreground"
+            className="md:hidden h-8 w-8 text-foreground ml-auto"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
 
           {/* Desktop Categories */}
-          <div className="hidden md:flex flex-wrap items-center gap-6 lg:gap-8">
+          <nav className="hidden md:flex flex-1 items-center gap-5 lg:gap-7">
             {categories.map((category) => (
               <Link
                 key={category}
@@ -62,17 +53,18 @@ export function Header() {
                 {category}
               </Link>
             ))}
-            <div className="w-px h-4 bg-border mx-2"></div>
+            <div className="w-px h-4 bg-border mx-1"></div>
             <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
               Surse
             </Link>
             <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
               Barometru
             </Link>
-          </div>
+          </nav>
 
-          {/* User / Search Actions */}
-          <div className="flex items-center gap-4 border-l border-border pl-4">
+          {/* Actions */}
+          <div className="hidden md:flex items-center gap-3 border-l border-border pl-4 ml-auto shrink-0">
+            <ThemeToggle />
             {searchOpen ? (
               <div className="relative flex items-center gap-2">
                 <Input

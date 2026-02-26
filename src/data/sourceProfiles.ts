@@ -19,9 +19,7 @@
  *       aici folosind template-ul NEW_SOURCE_TEMPLATE de la sfârșitul fișierului.
  * TODO: Actualizează scorurile numerice din api/shared.ts pentru a reflecta biasScore-ul
  *       din profiluri (în prezent shared.ts folosește doar categorii, nu scoruri numerice).
- * TODO: Linkează SourceProfile cu NewsSource prin câmpul opțional `profile?: SourceProfile`
- *       în interfața NewsSource din src/types/news.ts.
- * TODO: Creează o pagină /surse sau un modal care să afișeze profilul detaliat al fiecărei surse.
+ *TODO: Creează o pagină /surse sau un modal care să afișeze profilul detaliat al fiecărei surse.
  */
 
 export interface SourceProfile {
