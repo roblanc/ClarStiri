@@ -65,7 +65,7 @@ export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
                         <img
                             src="/ethics-logo.png"
                             alt="ClarȘtiri"
-                            className="w-20 h-20 mx-auto mb-4"
+                            className="w-36 h-36 sm:w-24 sm:h-24 mx-auto mb-4"
                         />
                         <h1 className="text-4xl font-bold text-foreground">
                             Clar<span className="text-primary">Știri</span>
@@ -79,7 +79,7 @@ export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
                         transition={{ delay: 0.2 }}
                         className="text-xl text-muted-foreground mb-8"
                     >
-                        Vezi toate perspectivele pe orice știre
+                        Aceleași fapte. Perspectivele tuturor.
                     </motion.p>
 
                     {/* Features */}
