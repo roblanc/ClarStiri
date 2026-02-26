@@ -86,11 +86,11 @@ export const NEWS_SOURCES: NewsSource[] = [
 ];
 
 export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; right: number }> = {
-    'left': { left: 1.0, center: 0, right: 0 },
-    'center-left': { left: 0.6, center: 0.4, right: 0 },
-    'center': { left: 0, center: 1.0, right: 0 },
-    'center-right': { left: 0, center: 0.4, right: 0.6 },
-    'right': { left: 0, center: 0, right: 1.0 },
+    'left': { left: 91, center: 9, right: 0 },
+    'center-left': { left: 58, center: 42, right: 0 },
+    'center': { left: 2, center: 96, right: 2 },
+    'center-right': { left: 0, center: 38, right: 62 },
+    'right': { left: 0, center: 12, right: 88 },
 };
 
 const FETCH_TIMEOUT = 3000;
@@ -165,8 +165,9 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
     const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
     let match;
     let index = 0;
+    const MAX_ITEMS_PER_SOURCE = 15; // Limită pentru a reduce load-ul de procesare (N^2 în agreagare)
 
-    while ((match = itemRegex.exec(xmlString)) !== null) {
+    while ((match = itemRegex.exec(xmlString)) !== null && index < MAX_ITEMS_PER_SOURCE) {
         const itemXml = match[1];
 
         const getTagContent = (tag: string): string => {

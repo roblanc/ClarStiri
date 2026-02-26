@@ -31,15 +31,20 @@ interface AggregatedStory {
 }
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Fetch all sources in parallel — no reason to wait for "priority" batch first in the cron
-    const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
+    // Fetch în batch-uri de 10 pentru stabilitatea conexiunii de ieșire a serverless funcțiilor
+    const BATCH_SIZE = 10;
     const allNews: RSSNewsItem[] = [];
 
-    results.forEach(result => {
-        if (result.status === 'fulfilled') {
-            allNews.push(...result.value);
-        }
-    });
+    for (let i = 0; i < NEWS_SOURCES.length; i += BATCH_SIZE) {
+        const batch = NEWS_SOURCES.slice(i, i + BATCH_SIZE);
+        const results = await Promise.allSettled(batch.map(s => fetchRSSFeed(s)));
+
+        results.forEach(result => {
+            if (result.status === 'fulfilled') {
+                allNews.push(...result.value);
+            }
+        });
+    }
 
     // Sort by date
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
@@ -76,11 +81,22 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
     });
 
     const total = leftSum + centerSum + rightSum;
-    return {
-        left: Math.round((leftSum / total) * 100),
-        center: Math.round((centerSum / total) * 100),
-        right: Math.round((rightSum / total) * 100)
-    };
+
+    // Calculate raw percentages
+    const rawLeft = (leftSum / total) * 100;
+    const rawCenter = (centerSum / total) * 100;
+    const rawRight = (rightSum / total) * 100;
+
+    // Base rounding
+    const left = Math.floor(rawLeft);
+    let center = Math.floor(rawCenter);
+    const right = Math.floor(rawRight);
+
+    // Ensure sum is 100 exactly
+    const remainder = 100 - (left + center + right);
+    center += remainder;
+
+    return { left, center, right };
 }
 
 function normalizeTitle(title: string): string {

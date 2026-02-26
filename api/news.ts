@@ -36,15 +36,20 @@ interface AggregatedStory {
 }
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Fetch all sources in parallel
-    const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
+    // Împarțim în batch-uri de 10 pentru a evita time-out-urile și limitele rețelei pe Vercel
+    const BATCH_SIZE = 10;
     const allNews: RSSNewsItem[] = [];
 
-    results.forEach(result => {
-        if (result.status === 'fulfilled') {
-            allNews.push(...result.value);
-        }
-    });
+    for (let i = 0; i < NEWS_SOURCES.length; i += BATCH_SIZE) {
+        const batch = NEWS_SOURCES.slice(i, i + BATCH_SIZE);
+        const results = await Promise.allSettled(batch.map(s => fetchRSSFeed(s)));
+
+        results.forEach(result => {
+            if (result.status === 'fulfilled') {
+                allNews.push(...result.value);
+            }
+        });
+    }
 
     // Sort by date
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
