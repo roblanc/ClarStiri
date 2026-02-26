@@ -16,26 +16,23 @@ const redis = new Redis({
 });
 
 const CACHE_KEY = 'aggregated_news';
-const CACHE_TTL = 10 * 60; // 10 minutes (cron runs every 2 min, so always fresh)
+const CACHE_KEY_TS = 'aggregated_news_ts';
+const CACHE_TTL = 6 * 60 * 60; // 6 ore — supraviețuiește între rulările cronului
 const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
 
 // Removed local Aggregation functions, imported from aggregation.js
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Fetch în batch-uri de 10 pentru stabilitatea conexiunii de ieșire a serverless funcțiilor
-    const BATCH_SIZE = 10;
+    // Toate sursele în paralel — se termină în max 3s (timeout per sursă)
+    // în loc de 4 batch-uri secvențiale × 3s = 12s care depășea timeout-ul Vercel
+    const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
     const allNews: RSSNewsItem[] = [];
 
-    for (let i = 0; i < NEWS_SOURCES.length; i += BATCH_SIZE) {
-        const batch = NEWS_SOURCES.slice(i, i + BATCH_SIZE);
-        const results = await Promise.allSettled(batch.map(s => fetchRSSFeed(s)));
-
-        results.forEach(result => {
-            if (result.status === 'fulfilled') {
-                allNews.push(...result.value);
-            }
-        });
-    }
+    results.forEach(result => {
+        if (result.status === 'fulfilled') {
+            allNews.push(...result.value);
+        }
+    });
 
     // Sort by date
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
@@ -65,8 +62,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const aggregatedStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD)).slice(0, 30);
         console.log(`[CRON] Aggregated into ${aggregatedStories.length} stories`);
 
-        // Store in Redis cache
-        await redis.set(CACHE_KEY, JSON.stringify(aggregatedStories), { ex: CACHE_TTL });
+        // Store in Redis cache + timestamp (necesar pentru logica stale din api/news.ts)
+        await Promise.all([
+            redis.set(CACHE_KEY, aggregatedStories, { ex: CACHE_TTL }),
+            redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+        ]);
 
         const duration = Date.now() - startTime;
         console.log(`[CRON] Cache refreshed in ${duration}ms`);

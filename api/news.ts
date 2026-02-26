@@ -19,27 +19,23 @@ const redis = new Redis({
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news';
 const CACHE_KEY_TS = 'aggregated_news_ts'; // timestamp fetch
-const CACHE_TTL = 60 * 60; // 1 oră — cache lung, refresh în background
+const CACHE_TTL = 6 * 60 * 60; // 6 ore — suficient între rulările cronului (la fiecare 4h)
 const STALE_AFTER = 10 * 60; // după 10 min → refresh în background, dar servim stale imediat
 const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
 
 // Removed local Aggregation functions, imported from aggregation.js
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
-    // Împarțim în batch-uri de 10 pentru a evita time-out-urile și limitele rețelei pe Vercel
-    const BATCH_SIZE = 10;
+    // Toate sursele în paralel — se termină în max 3s (timeout per sursă în shared.ts)
+    // Batch-urile secvențiale de 10 × 3s = 12s depășeau timeout-ul Vercel de 10s
+    const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
     const allNews: RSSNewsItem[] = [];
 
-    for (let i = 0; i < NEWS_SOURCES.length; i += BATCH_SIZE) {
-        const batch = NEWS_SOURCES.slice(i, i + BATCH_SIZE);
-        const results = await Promise.allSettled(batch.map(s => fetchRSSFeed(s)));
-
-        results.forEach(result => {
-            if (result.status === 'fulfilled') {
-                allNews.push(...result.value);
-            }
-        });
-    }
+    results.forEach(result => {
+        if (result.status === 'fulfilled') {
+            allNews.push(...result.value);
+        }
+    });
 
     // Sort by date
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
