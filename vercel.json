@@ -1,4 +1,12 @@
 {
+    "functions": {
+        "api/news.ts": {
+            "maxDuration": 30
+        },
+        "api/cron/refresh-news.ts": {
+            "maxDuration": 60
+        }
+    },
     "crons": [
         {
             "path": "/api/cron/refresh-news",
