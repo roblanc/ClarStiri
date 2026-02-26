@@ -77,7 +77,7 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
 }
 
 // Clusterizare Ground News style
-export function findSimilarStories(news: RSSNewsItem[], threshold = 0.25, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
+export function findSimilarStories(news: RSSNewsItem[], threshold = 0.35, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
     const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa', 'este', 'sunt', 'din', 'spre']);
 
     // Sort cronologic descrescator (cel mai nou primul)

@@ -4,8 +4,8 @@ import { createStoryIdFromSources } from '@/utils/storyId';
 // CORS proxies - folosim mai multe pentru redundanță și viteză
 // Format: ${proxy}${encodeURIComponent(url)} — toți trebuie să accepte ?url=<encoded>
 const CORS_PROXIES = [
-    'https://corsproxy.io/?url=',
     'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?url=',
 ];
 
 // Cache keys pentru localStorage
@@ -14,7 +14,7 @@ const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v2';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
 
 // Timeout pentru fetch (în milisecunde)
-const FETCH_TIMEOUT = 6000; // 6 secunde per sursă
+const FETCH_TIMEOUT = 3000; // 3 secunde - reducere pentru încărcare mai rapidă
 
 interface CachedNews {
     timestamp: number;
