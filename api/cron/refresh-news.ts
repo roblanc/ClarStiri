@@ -16,8 +16,8 @@ const redis = new Redis({
 });
 
 const CACHE_KEY = 'aggregated_news';
-const CACHE_TTL = 10 * 60; // 10 minutes (cron runs every 2 min, so always fresh)
-const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
+const CACHE_TTL = 2 * 60 * 60; // 2 ore — suprapunere cu cron-ul orar
+const MIN_SOURCES_THRESHOLD = 1; // Arată toate știrile; scoring-ul sortează natural
 
 // Removed local Aggregation functions, imported from aggregation.js
 

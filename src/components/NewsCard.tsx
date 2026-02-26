@@ -26,6 +26,34 @@ interface NewsCardProps {
   variant?: 'default' | 'featured' | 'compact';
 }
 
+function CoverageBar({ bias, sourcesCount }: { bias: NewsItem['bias']; sourcesCount: number }) {
+  const entries = [
+    { key: 'left',   pct: bias.left,   color: 'bg-[#3b82f6]', label: 'STÂNGA',  textColor: 'text-[#3b82f6]' },
+    { key: 'center', pct: bias.center, color: 'bg-muted',      label: 'CENTRU',  textColor: 'text-muted-foreground' },
+    { key: 'right',  pct: bias.right,  color: 'bg-[#ef4444]', label: 'DREAPTA', textColor: 'text-[#ef4444]' },
+  ] as const;
+
+  const dominant = entries.reduce((a, b) => (a.pct >= b.pct ? a : b));
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      {/* Proportional bar */}
+      <div className="h-2 flex w-full overflow-hidden rounded-sm">
+        {entries.map(({ key, pct, color }) =>
+          pct > 0 ? (
+            <div key={key} className={`${color} transition-all`} style={{ width: `${pct}%` }} />
+          ) : null
+        )}
+      </div>
+      {/* Coverage label */}
+      <p className="text-[10px] font-bold uppercase tracking-wider">
+        <span className={dominant.textColor}>{dominant.pct}% {dominant.label}</span>
+        <span className="text-muted-foreground"> · {sourcesCount} {sourcesCount === 1 ? 'sursă' : 'surse'}</span>
+      </p>
+    </div>
+  );
+}
+
 export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   const getBlindspotLabel = (blindspot: string | undefined) => {
     if (blindspot === 'left') return 'Punct Orbit Stânga';
@@ -97,12 +125,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <span>{news.timeAgo || "ACUM"}</span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-wider">
-              <span className="text-[#3b82f6]">{news.bias.left}% <span className="hidden sm:inline">STÂNGA</span><span className="sm:hidden">S</span></span>
-              <span className="text-foreground">{news.bias.center}% <span className="hidden sm:inline">CENTRU</span><span className="sm:hidden">C</span></span>
-              <span className="text-[#ef4444]">{news.bias.right}% <span className="hidden sm:inline">DREAPTA</span><span className="sm:hidden">D</span></span>
-            </div>
-            <BiasBar left={news.bias.left} center={news.bias.center} right={news.bias.right} size="sm" />
+            <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
           </div>
         </div>
       </article>
