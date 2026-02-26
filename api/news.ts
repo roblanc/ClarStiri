@@ -56,11 +56,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const limit = parseInt(req.query.limit as string) || 50;
 
-        // Fetch cache + timestamp în paralel
-        const [cached, tsRaw] = await Promise.all([
-            redis.get<AggregatedStory[]>(CACHE_KEY),
-            redis.get<number>(CACHE_KEY_TS),
-        ]);
+        // Fetch cache + timestamp în paralel — Redis eșuează graceful
+        let cached: AggregatedStory[] | null = null;
+        let tsRaw: number | null = null;
+        try {
+            [cached, tsRaw] = await Promise.all([
+                redis.get<AggregatedStory[]>(CACHE_KEY),
+                redis.get<number>(CACHE_KEY_TS),
+            ]);
+        } catch (redisReadErr) {
+            console.error('Redis read failed, proceeding without cache:', redisReadErr);
+        }
 
         const cacheAge = tsRaw ? (Date.now() - tsRaw) / 1000 : Infinity;
         const isStale = cacheAge > STALE_AFTER;
@@ -82,10 +88,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 fetchAllNews().then(async news => {
                     const aggregated = await aggregateNewsBuildTopics(news, MIN_SOURCES_THRESHOLD);
                     if (aggregated.length > 0) {
-                        await Promise.all([
-                            redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
-                            redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
-                        ]);
+                        try {
+                            await Promise.all([
+                                redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
+                                redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+                            ]);
+                        } catch (e) { console.error('Background Redis write failed:', e); }
                         console.log('Background cache refresh complete');
                     }
                 }).catch(err => console.error('Background refresh failed:', err));
@@ -96,13 +104,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Cache complet gol — fetch sincron (prima rulare sau după expirare)
         console.log('Cache miss — fetching fresh news from all sources');
         const allNews = await fetchAllNews();
+        console.log(`Fetched ${allNews.length} news items from RSS`);
         const aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
+        console.log(`Aggregated into ${aggregated.length} stories`);
 
         if (aggregated.length > 0) {
-            await Promise.all([
-                redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
-                redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
-            ]);
+            try {
+                await Promise.all([
+                    redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
+                    redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+                ]);
+            } catch (redisWriteErr) {
+                console.error('Redis write failed (returning data anyway):', redisWriteErr);
+            }
         }
 
         return res.status(200).json({
