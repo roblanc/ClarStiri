@@ -37,17 +37,15 @@ export interface RSSNewsItem {
 // Configurația surselor de știri românești
 export const NEWS_SOURCES: NewsSource[] = [
     // === CENTRU ===
-    { id: 'digi24', name: 'Digi24', url: 'https://www.digi24.ro', rssUrl: 'https://www.digi24.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
     { id: 'agerpres', name: 'Agerpres', url: 'https://www.agerpres.ro', rssUrl: 'https://www.agerpres.ro/rss', bias: 'center', factuality: 'high', category: 'public' },
     { id: 'mediafax', name: 'Mediafax', url: 'https://www.mediafax.ro', rssUrl: 'https://www.mediafax.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
-    { id: 'hotnews', name: 'HotNews', url: 'https://www.hotnews.ro', rssUrl: 'https://www.hotnews.ro/rss/actualitate', bias: 'center', factuality: 'high', category: 'mainstream' },
     { id: 'protv', name: 'ProTV', url: 'https://stirileprotv.ro', rssUrl: 'https://rss.stirileprotv.ro/', bias: 'center', factuality: 'high', category: 'mainstream' },
-    { id: 'observator', name: 'Observator', url: 'https://observatornews.ro', rssUrl: 'https://observatornews.ro/rss', bias: 'center', factuality: 'mixed', category: 'mainstream' },
     { id: 'tvr', name: 'TVR', url: 'https://stiri.tvr.ro', rssUrl: 'https://stiri.tvr.ro/rss.xml', bias: 'center', factuality: 'high', category: 'public' },
     { id: 'bursa', name: 'Bursa', url: 'https://www.bursa.ro', rssUrl: 'https://www.bursa.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
     { id: 'biziday', name: 'Biziday', url: 'https://www.biziday.ro', rssUrl: 'https://www.biziday.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
     // === CENTRU-STÂNGA ===
-    { id: 'g4media', name: 'G4Media', url: 'https://www.g4media.ro', rssUrl: 'https://www.g4media.ro/feed', bias: 'center-left', factuality: 'high', category: 'independent' },
+    { id: 'digi24', name: 'Digi24', url: 'https://www.digi24.ro', rssUrl: 'https://www.digi24.ro/rss', bias: 'center-left', factuality: 'high', category: 'mainstream' },
+    { id: 'hotnews', name: 'HotNews', url: 'https://www.hotnews.ro', rssUrl: 'https://www.hotnews.ro/rss/actualitate', bias: 'center-left', factuality: 'high', category: 'mainstream' },
     { id: 'recorder', name: 'Recorder', url: 'https://recorder.ro', rssUrl: 'https://recorder.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
     { id: 'libertatea', name: 'Libertatea', url: 'https://www.libertatea.ro', rssUrl: 'https://www.libertatea.ro/rss', bias: 'center-left', factuality: 'mixed', category: 'mainstream' },
     { id: 'adevarul', name: 'Adevărul', url: 'https://adevarul.ro', rssUrl: 'https://adevarul.ro/rss/', bias: 'center-left', factuality: 'mixed', category: 'mainstream' },
@@ -58,6 +56,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     { id: 'vice', name: 'Vice România', url: 'https://www.vice.com/ro', rssUrl: 'https://www.vice.com/ro/rss', bias: 'center-left', factuality: 'mixed', category: 'independent' },
     { id: 'scena9', name: 'Scena9', url: 'https://www.scena9.ro', rssUrl: 'https://www.scena9.ro/feed', bias: 'center-left', factuality: 'high', category: 'independent' },
     // === STÂNGA ===
+    { id: 'g4media', name: 'G4Media', url: 'https://www.g4media.ro', rssUrl: 'https://www.g4media.ro/feed', bias: 'left', factuality: 'high', category: 'independent' },
     { id: 'criticatac', name: 'CriticAtac', url: 'https://www.criticatac.ro', rssUrl: 'https://www.criticatac.ro/feed/', bias: 'left', factuality: 'mixed', category: 'independent' },
     // === CENTRU-DREAPTA ===
     { id: 'ziare', name: 'Ziare.com', url: 'https://www.ziare.com', rssUrl: 'https://www.ziare.com/rss/news.xml', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
@@ -66,8 +65,8 @@ export const NEWS_SOURCES: NewsSource[] = [
     { id: 'europafm', name: 'Europa FM', url: 'https://www.europafm.ro', rssUrl: 'https://www.europafm.ro/feed/', bias: 'center-right', factuality: 'high', category: 'mainstream' },
     { id: 'profit', name: 'Profit.ro', url: 'https://www.profit.ro', rssUrl: 'https://www.profit.ro/rss', bias: 'center-right', factuality: 'high', category: 'mainstream' },
     { id: 'zf', name: 'Ziarul Financiar', url: 'https://www.zf.ro', rssUrl: 'https://www.zf.ro/rss', bias: 'center-right', factuality: 'high', category: 'mainstream' },
-    { id: 'evz', name: 'Evenimentul Zilei', url: 'https://evz.ro', rssUrl: 'https://evz.ro/feed', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
     { id: 'romanialibera', name: 'România Liberă', url: 'https://romanialibera.ro', rssUrl: 'https://romanialibera.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
+    { id: 'observator', name: 'Observator', url: 'https://observatornews.ro', rssUrl: 'https://observatornews.ro/rss', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
     // === DREAPTA ===
     { id: 'antena3', name: 'Antena 3', url: 'https://www.antena3.ro', rssUrl: 'https://www.antena3.ro/rss', bias: 'right', factuality: 'mixed', category: 'mainstream' },
     { id: 'romaniatv', name: 'România TV', url: 'https://www.romaniatv.net', rssUrl: 'https://www.romaniatv.net/rss', bias: 'right', factuality: 'low', category: 'mainstream' },

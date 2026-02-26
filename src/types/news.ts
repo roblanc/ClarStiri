@@ -52,7 +52,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.digi24.ro',
     rssUrl: 'https://www.digi24.ro/rss',
     logo: 'https://www.digi24.ro/static/theme/digi24/images/digi24-logo.svg',
-    bias: 'center',
+    bias: 'center-left', // Pro-european, critic PSD/AUR constant
     factuality: 'high',
     category: 'mainstream',
   },
@@ -72,7 +72,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://adevarul.ro',
     rssUrl: 'https://adevarul.ro/rss',
     logo: 'https://logo.clearbit.com/adevarul.ro',
-    bias: 'center',
+    bias: 'center-left', // Linie editorială progresistă
     factuality: 'high',
     category: 'mainstream',
   },
@@ -102,8 +102,8 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://observatornews.ro',
     rssUrl: 'https://observatornews.ro/rss',
     logo: 'https://logo.clearbit.com/observatornews.ro',
-    bias: 'center',
-    factuality: 'high',
+    bias: 'center-right', // Intact Group (Dan Voiculescu), același holding ca Antena 3
+    factuality: 'mixed',
     category: 'mainstream',
   },
   {
@@ -112,7 +112,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.zf.ro',
     rssUrl: 'https://www.zf.ro/rss',
     logo: 'https://logo.clearbit.com/zf.ro',
-    bias: 'center',
+    bias: 'center-right', // Perspectivă business/fiscală conservatoare
     factuality: 'high',
     category: 'mainstream',
   },
@@ -122,7 +122,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.gandul.ro',
     rssUrl: 'https://www.gandul.ro/rss',
     logo: 'https://logo.clearbit.com/gandul.ro',
-    bias: 'center',
+    bias: 'center-right', // Linie editorială dreapta de lungă durată
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -164,7 +164,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.g4media.ro',
     rssUrl: 'https://www.g4media.ro/feed',
     logo: 'https://logo.clearbit.com/g4media.ro',
-    bias: 'center-left',
+    bias: 'left', // Partizanat puternic anti-PSD/naționalism, pro-USR
     factuality: 'high',
     category: 'independent',
   },
@@ -306,7 +306,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.realitatea.net',
     rssUrl: 'https://www.realitatea.net/rss',
     logo: 'https://logo.clearbit.com/realitatea.net',
-    bias: 'center-right',
+    bias: 'right', // A virat spre naționalism/suveranism
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -326,7 +326,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.b1tv.ro',
     rssUrl: 'https://www.b1tv.ro/rss',
     logo: 'https://logo.clearbit.com/b1tv.ro',
-    bias: 'right',
+    bias: 'center-right', // Mai moderat față de RoTV/DCNews
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -336,7 +336,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.antena3.ro',
     rssUrl: 'https://www.antena3.ro/rss',
     logo: 'https://logo.clearbit.com/antena3.ro',
-    bias: 'center-right',
+    bias: 'right', // Pro-PSD, pro-Georgescu puternic; Intact Group
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -376,7 +376,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://evz.ro',
     rssUrl: 'https://evz.ro/feed',
     logo: 'https://logo.clearbit.com/evz.ro',
-    bias: 'center-right',
+    bias: 'right', // Intact Group, a virat puternic spre dreapta
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -386,7 +386,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     url: 'https://www.cotidianul.ro',
     rssUrl: 'https://www.cotidianul.ro/feed',
     logo: 'https://logo.clearbit.com/cotidianul.ro',
-    bias: 'center-right',
+    bias: 'right', // A virat semnificativ spre dreapta naționalistă
     factuality: 'mixed',
     category: 'mainstream',
   },
@@ -474,10 +474,11 @@ export const NEWS_SOURCES: NewsSource[] = [
 ];
 
 // Mapare bias la procente pentru calculul distribuției
+// Fiecare sursă contribuie 100% la categoria ei — fără "spread" artificial
 export const BIAS_WEIGHT_MAP: Record<NewsSource['bias'], { left: number; center: number; right: number }> = {
-  'left': { left: 80, center: 15, right: 5 },
-  'center-left': { left: 55, center: 35, right: 10 },
-  'center': { left: 20, center: 60, right: 20 },
-  'center-right': { left: 10, center: 35, right: 55 },
-  'right': { left: 5, center: 15, right: 80 },
+  'left': { left: 100, center: 0, right: 0 },
+  'center-left': { left: 60, center: 40, right: 0 },
+  'center': { left: 0, center: 100, right: 0 },
+  'center-right': { left: 0, center: 40, right: 60 },
+  'right': { left: 0, center: 0, right: 100 },
 };

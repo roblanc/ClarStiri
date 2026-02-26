@@ -408,7 +408,7 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un index inversat de tokeni.
  * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.4): Map<string, RSSNewsItem[]> {
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.3): Map<string, RSSNewsItem[]> {
     const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
 
     // Precomputăm tokenii și seturile pentru fiecare item
@@ -506,8 +506,16 @@ function normalizeTitle(title: string): string {
 /**
  * Agregă știrile într-o listă de povești
  */
+function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
+    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 zile
+    return news.filter(item => {
+        const date = new Date(item.pubDate).getTime();
+        return isNaN(date) || date > cutoff;
+    });
+}
+
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
-    const storyGroups = findSimilarStories(news);
+    const storyGroups = findSimilarStories(filterRecentNews(news));
     const aggregatedStories: AggregatedStory[] = [];
 
     storyGroups.forEach((sources, groupId) => {
@@ -535,14 +543,12 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
         });
     });
 
-    // Sortează după numărul de surse (cele mai populare primele)
+    // Sort: data prima (freshnessul > popularitatea),
+    // source count ca tie-breaker in aceeasi fereastra de 6h
     aggregatedStories.sort((a, b) => {
-        // Prioritizează știrile cu mai multe surse
-        if (b.sourcesCount !== a.sourcesCount) {
-            return b.sourcesCount - a.sourcesCount;
-        }
-        // La număr egal de surse, sortează după dată
-        return b.publishedAt.getTime() - a.publishedAt.getTime();
+        const dateDiff = b.publishedAt.getTime() - a.publishedAt.getTime();
+        if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
+        return b.sourcesCount - a.sourcesCount;
     });
 
     return aggregatedStories;
