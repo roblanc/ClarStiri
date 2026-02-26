@@ -20,6 +20,7 @@ const CACHE_KEY = 'aggregated_news';
 const CACHE_KEY_TS = 'aggregated_news_ts'; // timestamp fetch
 const CACHE_TTL = 60 * 60; // 1 oră — cache lung, refresh în background
 const STALE_AFTER = 10 * 60; // după 10 min → refresh în background, dar servim stale imediat
+const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
 
 interface AggregatedStory {
     id: string;
@@ -264,15 +265,17 @@ function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
 
     // Sort: data prima (freshnessul > popularitatea),
     // source count ca tie-breaker in aceeasi fereastra de 6h
-    aggregatedStories.sort((a, b) => {
-        const dateA = new Date(a.publishedAt).getTime();
-        const dateB = new Date(b.publishedAt).getTime();
-        const dateDiff = dateB - dateA;
-        if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
-        return b.sourcesCount - a.sourcesCount;
-    });
+    const filteredAndSortedStories = aggregatedStories
+        .filter(story => story.sourcesCount >= MIN_SOURCES_THRESHOLD)
+        .sort((a, b) => {
+            const dateA = new Date(a.publishedAt).getTime();
+            const dateB = new Date(b.publishedAt).getTime();
+            const dateDiff = dateB - dateA;
+            if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
+            return b.sourcesCount - a.sourcesCount;
+        });
 
-    return aggregatedStories;
+    return filteredAndSortedStories;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

@@ -16,6 +16,7 @@ const redis = new Redis({
 
 const CACHE_KEY = 'aggregated_news';
 const CACHE_TTL = 10 * 60; // 10 minutes (cron runs every 2 min, so always fresh)
+const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
 
 interface AggregatedStory {
     id: string;
@@ -156,6 +157,7 @@ function aggregateNews(newsItems: RSSNewsItem[], limit: number = 20): Aggregated
     });
 
     return aggregated
+        .filter(story => story.sourcesCount >= MIN_SOURCES_THRESHOLD)
         .sort((a, b) => {
             const dateA = new Date(a.publishedAt).getTime();
             const dateB = new Date(b.publishedAt).getTime();
