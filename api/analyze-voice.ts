@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Parser from 'rss-parser';
-import { NEWS_SOURCES, fetchRSSFeed } from './shared';
+import { NEWS_SOURCES, fetchRSSFeed } from './shared.js';
 
 const parser = new Parser();
 

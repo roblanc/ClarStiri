@@ -5,7 +5,7 @@ import {
     NEWS_SOURCES,
     BIAS_WEIGHT_MAP,
     fetchRSSFeed
-} from '../shared';
+} from '../shared.js';
 
 // Initialize Redis
 const redis = new Redis({
