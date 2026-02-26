@@ -4,36 +4,35 @@ import { ChevronRight } from 'lucide-react';
 
 export function VoicesSection() {
     return (
-        <section className="bg-card border-y border-border py-8 mb-8">
+        <section className="py-12 mb-12 border-b border-border">
             <div className="container mx-auto px-4">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between border-b border-border pb-4 mb-8">
                     <div>
-                        <h2 className="text-xl font-bold flex items-center gap-2">
-                            <span className="w-2 h-6 bg-primary rounded-full"></span>
+                        <h2 className="text-3xl font-serif text-foreground">
                             Barometru Opinie
                         </h2>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mt-2">
                             Analiza poziționării figurilor publice din România
                         </p>
                     </div>
                     <Link
                         to="/voci"
-                        className="text-sm font-medium text-primary hover:text-primary/80 flex items-center gap-1"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:opacity-50 transition-colors flex items-center gap-1"
                     >
                         Vezi toți
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3 h-3" />
                     </Link>
                 </div>
 
-                <div className="flex gap-6 overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                <div className="flex flex-wrap items-start gap-8 lg:gap-10">
                     {PUBLIC_FIGURES.map((figure) => (
                         <Link
                             key={figure.id}
                             to={`/voce/${figure.slug}`}
                             className="flex flex-col items-center min-w-[120px] group transition-transform hover:-translate-y-1"
                         >
-                            <div className="relative mb-3">
-                                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-border group-hover:border-primary transition-colors">
+                            <div className="relative mb-4">
+                                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border border-border group-hover:border-foreground transition-colors bg-secondary">
                                     <img
                                         src={figure.image}
                                         alt={figure.name}
@@ -42,18 +41,18 @@ export function VoicesSection() {
                                     />
                                 </div>
                                 {/* Bias Indicator Badge */}
-                                <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white
-                  ${getScoreColor(figure.bias.score)}`}
+                                <div className={`absolute bottom-1 right-1 w-6 h-6 md:w-8 md:h-8 rounded-full border border-background flex items-center justify-center text-[10px] md:text-xs font-bold text-white
+                                  ${getScoreColor(figure.bias.score)}`}
                                     title={`Bias: ${figure.bias.leaning}`}
                                 >
                                     {getScoreLabel(figure.bias.score)}
                                 </div>
                             </div>
 
-                            <h3 className="font-bold text-sm text-center line-clamp-1 group-hover:text-primary transition-colors">
+                            <h3 className="font-title font-bold text-lg text-center leading-tight group-hover:opacity-70 transition-opacity text-foreground">
                                 {figure.name}
                             </h3>
-                            <p className="text-xs text-muted-foreground text-center">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center mt-2 max-w-[120px]">
                                 {figure.role}
                             </p>
                         </Link>
