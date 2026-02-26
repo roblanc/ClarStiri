@@ -33,9 +33,6 @@ export function Header() {
           </Link>
 
           <div className="flex items-center gap-6">
-            <Link to="/onboarding" className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:opacity-70 transition-opacity hidden md:block">
-              ONBOARDING
-            </Link>
             <ThemeToggle />
           </div>
         </div>
@@ -55,7 +52,7 @@ export function Header() {
           </Button>
 
           {/* Desktop Categories */}
-          <div className="hidden md:flex items-center gap-8 overflow-x-auto no-scrollbar">
+          <div className="hidden md:flex flex-wrap items-center gap-6 lg:gap-8">
             {categories.map((category) => (
               <Link
                 key={category}
@@ -66,10 +63,10 @@ export function Header() {
               </Link>
             ))}
             <div className="w-px h-4 bg-border mx-2"></div>
-            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
               Surse
             </Link>
-            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
               Barometru
             </Link>
           </div>
@@ -93,17 +90,9 @@ export function Header() {
                 className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground flex items-center gap-2 hover:opacity-50 transition-opacity"
                 onClick={() => setSearchOpen(true)}
               >
-                <Search className="w-3 h-3" />
+                <Search className="w-4 h-4" />
               </button>
             )}
-            <Link to="/login" className="flex items-center gap-3 group">
-              <div className="w-6 h-6 rounded-full bg-foreground text-background flex items-center justify-center text-xs font-serif italic overflow-hidden">
-                U
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground group-hover:opacity-50 transition-opacity hidden sm:block">
-                CONT
-              </span>
-            </Link>
           </div>
         </div>
       </div>
