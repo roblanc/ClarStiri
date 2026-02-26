@@ -24,7 +24,7 @@ export function Header() {
     <header className="sticky top-0 z-50">
       {/* Single unified bar */}
       <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex items-center gap-4">
+        <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
           {/* Logo */}
           <Link to="/" className="shrink-0 mr-4">
             <span className="font-serif italic text-2xl font-semibold text-foreground">
@@ -43,7 +43,7 @@ export function Header() {
           </Button>
 
           {/* Desktop Categories */}
-          <nav className="hidden md:flex flex-1 items-center gap-5 lg:gap-7">
+          <nav className="hidden md:flex flex-1 items-center gap-x-5 gap-y-2 lg:gap-x-7 flex-wrap justify-center">
             {categories.map((category) => (
               <Link
                 key={category}
