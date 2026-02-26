@@ -235,8 +235,8 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     aggregatedStories.sort((a, b) => {
         const hoursA = (now - new Date(a.publishedAt).getTime()) / 3_600_000;
         const hoursB = (now - new Date(b.publishedAt).getTime()) / 3_600_000;
-        const scoreA = a.sourcesCount * Math.exp(-hoursA / 18);
-        const scoreB = b.sourcesCount * Math.exp(-hoursB / 18);
+        const scoreA = Math.pow(a.sourcesCount, 1.5) * Math.exp(-hoursA / 18);
+        const scoreB = Math.pow(b.sourcesCount, 1.5) * Math.exp(-hoursB / 18);
         return scoreB - scoreA;
     });
 
