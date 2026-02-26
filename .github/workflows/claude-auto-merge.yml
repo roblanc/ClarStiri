@@ -1,0 +1,45 @@
+name: Auto-merge Claude agent branches
+
+# Rulează automat când Claude push-uiește pe un branch claude/*
+on:
+  push:
+    branches:
+      - 'claude/**'
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create PR if it doesn't exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+
+          EXISTING=$(gh pr list --head "$BRANCH" --base main --state open --json number -q '.[0].number')
+
+          if [ -z "$EXISTING" ]; then
+            gh pr create \
+              --title "auto: $BRANCH" \
+              --body "Merge automat din branch-ul Claude Code \`$BRANCH\`." \
+              --head "$BRANCH" \
+              --base main
+          fi
+
+      - name: Merge PR to main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr merge "$GITHUB_REF_NAME" \
+            --merge \
+            --delete-branch \
+            --subject "auto-merge: $GITHUB_REF_NAME"
