@@ -16,6 +16,7 @@ const redis = new Redis({
 });
 
 const CACHE_KEY = 'aggregated_news';
+const CACHE_KEY_TS = 'aggregated_news_ts';
 const CACHE_TTL = 2 * 60 * 60; // 2 ore — suprapunere cu cron-ul orar
 const MIN_SOURCES_THRESHOLD = 1; // Arată toate știrile; scoring-ul sortează natural
 
@@ -65,8 +66,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const aggregatedStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD)).slice(0, 30);
         console.log(`[CRON] Aggregated into ${aggregatedStories.length} stories`);
 
-        // Store in Redis cache
-        await redis.set(CACHE_KEY, JSON.stringify(aggregatedStories), { ex: CACHE_TTL });
+        // Store in Redis cache (no JSON.stringify — Upstash client handles serialization)
+        await Promise.all([
+            redis.set(CACHE_KEY, aggregatedStories, { ex: CACHE_TTL }),
+            redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+        ]);
 
         const duration = Date.now() - startTime;
         console.log(`[CRON] Cache refreshed in ${duration}ms`);
