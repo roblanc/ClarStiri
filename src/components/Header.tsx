@@ -104,9 +104,9 @@ export function Header() {
       </div>
 
       {/* Categories Bar - Solid Yellow */}
-      <div className="bg-primary border-b border-primary overflow-x-auto">
+      <div className="bg-primary border-b border-primary">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 py-2">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 py-3">
             {categories.map((category) => (
               <Link
                 key={category}
