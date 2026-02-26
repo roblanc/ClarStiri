@@ -2,6 +2,11 @@
 @import '@fontsource/ibm-plex-sans/500.css';
 @import '@fontsource/ibm-plex-sans/600.css';
 @import '@fontsource/ibm-plex-sans/700.css';
+@import '@fontsource/playfair-display/400.css';
+@import '@fontsource/playfair-display/500.css';
+@import '@fontsource/playfair-display/600.css';
+@import '@fontsource/playfair-display/700.css';
+@import '@fontsource/playfair-display/400-italic.css';
 
 @tailwind base;
 @tailwind components;
@@ -9,103 +14,88 @@
 
 @layer base {
   :root {
-    /* thesite.ro Design System - Inspired by Snoop.ro */
-    /* Clean, minimal, professional news platform */
+    /* thesite.ro Editorial System */
+    /* Beige background, sharp borders, elegant serif */
 
-    --background: 240 20% 97%;
-    /* #F6F6F8 - Very light gray from mockup */
-    --foreground: 222 47% 11%;
-    /* #101622 - Slate 900 */
+    --background: 42 33% 94%;
+    /* #F4F1EA - Editorial beige */
+    --foreground: 0 0% 10%;
+    /* Nearly black */
 
     --card: 0 0% 100%;
-    /* #FFFFFF - White cards */
-    --card-foreground: 222 47% 11%;
-    /* Slate 900 */
+    /* #FFFFFF - Solid white for contrast */
+    --card-foreground: 0 0% 10%;
+    /* Nearly black text */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 0 0% 10%;
 
-    /* Primary - Vibrant Blue from mockup */
-    --primary: 220 87% 50%;
-    /* #135BEC - Blue accent */
+    /* Primary - Subtle but dark accent */
+    --primary: 0 0% 15%;
     --primary-foreground: 0 0% 100%;
-    /* #FFFFFF - White text on blue */
 
-    --secondary: 0 0% 96%;
-    /* #F5F5F5 - Light gray */
+    --secondary: 40 20% 90%;
+    /* Slightly darker beige for hover */
     --secondary-foreground: 0 0% 20%;
-    /* #333333 */
 
-    --muted: 0 0% 94%;
-    /* #EFEFEF */
-    --muted-foreground: 0 0% 46%;
-    /* #757575 - Gray text */
+    --muted: 40 10% 85%;
+    --muted-foreground: 0 0% 40%;
+    /* #666666 suitable for meta */
 
-    --accent: 210 68% 43%;
-    /* #1E73BE - Blue accent */
-    --accent-foreground: 0 0% 100%;
+    --accent: 40 20% 90%;
+    --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    /* #E5E5E5 */
-    --input: 0 0% 90%;
-    --ring: 38 87% 65%;
-    /* Gold ring */
+    --border: 0 0% 5%;
+    /* Solid almost black lines */
+    --input: 0 0% 5%;
+    --ring: 0 0% 10%;
 
-    --radius: 0.5rem;
+    /* NO ROUNDED CORNERS */
+    --radius: 0rem;
 
-    /* Bias colors - For news platform */
-    --bias-left: 221 83% 53%;
-    /* #1d4ed8 - Blue for left */
-    --bias-center: 215 16% 47%;
-    /* #64748b - Gray for center */
-    --bias-right: 0 72% 51%;
-    /* #dc2626 - Red for right */
+    /* Bias colors - muted editorial variants */
+    --bias-left: 195 60% 50%;
+    /* Muted teal/blue */
+    --bias-center: 0 0% 60%;
+    /* Flat gray */
+    --bias-right: 0 60% 60%;
+    /* Muted brick red */
 
     /* Badges */
-    --badge-left: 210 70% 92%;
-    --badge-left-foreground: 210 75% 35%;
-    --badge-center: 0 0% 92%;
-    --badge-center-foreground: 0 0% 40%;
-    --badge-right: 0 65% 92%;
-    --badge-right-foreground: 0 70% 40%;
+    --badge-left: 0 0% 100%;
+    --badge-left-foreground: 0 0% 10%;
+    --badge-center: 0 0% 100%;
+    --badge-center-foreground: 0 0% 10%;
+    --badge-right: 0 0% 100%;
+    --badge-right-foreground: 0 0% 10%;
 
     /* Sidebar */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 0 0% 20%;
-    --sidebar-primary: 38 87% 65%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 96%;
-    --sidebar-accent-foreground: 0 0% 20%;
-    --sidebar-border: 0 0% 90%;
-    --sidebar-ring: 38 87% 65%;
-
-    /* Additional thesite.ro colors */
-    --gold: 38 87% 65%;
-    /* #F0B55B */
-    --green: 120 100% 25%;
-    /* #008000 */
-    --blue-link: 210 68% 43%;
-    /* #1E73BE */
+    --sidebar-background: 42 33% 94%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 90%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 10%;
+    --sidebar-ring: 0 0% 10%;
   }
 
+  /* Force dark mode to still retain the editorial stark contrast or a dark charcoal approach */
   .dark {
     --background: 0 0% 7%;
-    /* #121212 */
-    --foreground: 0 0% 95%;
-    /* #F2F2F2 */
+    --foreground: 42 33% 94%;
+    /* Beige text */
 
     --card: 0 0% 10%;
-    /* #1A1A1A */
-    --card-foreground: 0 0% 95%;
+    --card-foreground: 42 33% 94%;
 
     --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 95%;
+    --popover-foreground: 42 33% 94%;
 
-    --primary: 38 87% 60%;
-    /* Slightly darker gold in dark mode */
+    --primary: 0 0% 90%;
     --primary-foreground: 0 0% 0%;
 
     --secondary: 0 0% 15%;
@@ -114,35 +104,36 @@
     --muted: 0 0% 18%;
     --muted-foreground: 0 0% 60%;
 
-    --accent: 210 68% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 42 33% 94%;
 
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 18%;
+    --border: 0 0% 30%;
+    /* Lighter border for visibility in dark mode */
     --input: 0 0% 18%;
-    --ring: 38 87% 60%;
+    --ring: 0 0% 60%;
 
-    --bias-left: 210 70% 55%;
+    --bias-left: 195 50% 60%;
     --bias-center: 0 0% 55%;
-    --bias-right: 0 65% 55%;
+    --bias-right: 0 50% 65%;
 
-    --badge-left: 210 50% 20%;
-    --badge-left-foreground: 210 70% 70%;
-    --badge-center: 0 0% 20%;
-    --badge-center-foreground: 0 0% 70%;
-    --badge-right: 0 45% 20%;
-    --badge-right-foreground: 0 65% 70%;
+    --badge-left: 0 0% 10%;
+    --badge-left-foreground: 0 0% 90%;
+    --badge-center: 0 0% 10%;
+    --badge-center-foreground: 0 0% 90%;
+    --badge-right: 0 0% 10%;
+    --badge-right-foreground: 0 0% 90%;
 
     --sidebar-background: 0 0% 8%;
     --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 38 87% 60%;
+    --sidebar-primary: 0 0% 90%;
     --sidebar-primary-foreground: 0 0% 0%;
     --sidebar-accent: 0 0% 15%;
     --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 18%;
-    --sidebar-ring: 38 87% 60%;
+    --sidebar-border: 0 0% 30%;
+    --sidebar-ring: 0 0% 60%;
   }
 }
 
@@ -195,11 +186,11 @@
   }
 
   .news-card {
-    @apply bg-card rounded-lg overflow-hidden shadow-sm border border-border transition-all duration-200;
+    @apply bg-card overflow-hidden transition-all duration-200 border border-border;
   }
 
   .news-card:hover {
-    @apply shadow-md;
+    @apply bg-secondary/50;
   }
 
   /* Gold highlight effect */
