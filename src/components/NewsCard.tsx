@@ -29,7 +29,7 @@ interface NewsCardProps {
 function CoverageBar({ bias, sourcesCount }: { bias: NewsItem['bias']; sourcesCount: number }) {
   const entries = [
     { key: 'left',   pct: bias.left,   color: 'bg-[#3b82f6]', label: 'STÂNGA',  textColor: 'text-[#3b82f6]' },
-    { key: 'center', pct: bias.center, color: 'bg-border',     label: 'CENTRU',  textColor: 'text-muted-foreground' },
+    { key: 'center', pct: bias.center, color: 'bg-muted',      label: 'CENTRU',  textColor: 'text-muted-foreground' },
     { key: 'right',  pct: bias.right,  color: 'bg-[#ef4444]', label: 'DREAPTA', textColor: 'text-[#ef4444]' },
   ] as const;
 
@@ -38,7 +38,7 @@ function CoverageBar({ bias, sourcesCount }: { bias: NewsItem['bias']; sourcesCo
   return (
     <div className="flex flex-col gap-1.5">
       {/* Proportional bar */}
-      <div className="h-1 flex w-full overflow-hidden">
+      <div className="h-2 flex w-full overflow-hidden rounded-sm">
         {entries.map(({ key, pct, color }) =>
           pct > 0 ? (
             <div key={key} className={`${color} transition-all`} style={{ width: `${pct}%` }} />
