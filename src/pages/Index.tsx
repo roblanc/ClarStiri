@@ -80,7 +80,7 @@ const Index = () => {
         <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-4 md:gap-10">
           <div className="flex-1 min-w-0 max-w-lg">
             <p className="text-foreground font-serif text-lg sm:text-xl md:text-2xl leading-snug">
-              O știre. Toate perspectivele. Tu decizi.
+              Citești. Compari. Decizi.
               <span className="text-muted-foreground text-xs sm:text-sm md:text-base block mt-2 md:mt-3 leading-relaxed font-sans">
                 Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
               </span>

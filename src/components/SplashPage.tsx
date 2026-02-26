@@ -79,7 +79,7 @@ export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
                         transition={{ delay: 0.2 }}
                         className="text-xl text-muted-foreground mb-8"
                     >
-                        Aceleași fapte. Perspectivele tuturor.
+                        Citești. Compari. Decizi.
                     </motion.p>
 
                     {/* Features */}
