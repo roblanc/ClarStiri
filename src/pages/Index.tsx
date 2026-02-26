@@ -68,14 +68,23 @@ const Index = () => {
       <main className="container mx-auto px-4 py-12 md:py-20 lg:max-w-[70%] xl:max-w-[60%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-20">
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground leading-[1.1] mb-6 tracking-tight">
-            Bun venit pe <br />
-            <span className="italic">thesite.ro</span>
-          </h1>
-          <p className="text-muted-foreground font-serif text-lg md:text-xl max-w-2xl leading-relaxed">
-            Am compilat cele mai relevante subiecte de presă perpectivizate pentru tine. Dacă vrei să revii la rezultatele personalizate, caută prin secțiunile grupate de mai jos.
-          </p>
+        <section className="mb-16 md:mb-24 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
+          <div className="flex-1 max-w-xl">
+            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.05] mb-6 tracking-tight">
+              Bun venit pe <br />
+              <span className="italic">thesite.ro</span>
+            </h1>
+            <p className="text-muted-foreground font-serif text-lg md:text-xl max-w-lg leading-relaxed">
+              Am compilat cele mai relevante subiecte de presă perspectivizate pentru tine. Dacă vrei să revii la rezultatele personalizate, caută prin secțiunile grupate de mai jos.
+            </p>
+          </div>
+          <div className="flex-1 w-full max-w-md md:max-w-none flex justify-center md:justify-end">
+            <img
+              src="/hero-illustration-mind.png"
+              alt="Editorial Spotlight Illustration"
+              className="w-full h-auto max-w-[400px] object-contain mix-blend-multiply opacity-90"
+            />
+          </div>
         </section>
 
         {/* Skeleton Loading State */}
