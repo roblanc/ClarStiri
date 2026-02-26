@@ -9,6 +9,9 @@
         },
         "api/rss.ts": {
             "maxDuration": 10
+        },
+        "api/status.ts": {
+            "maxDuration": 15
         }
     },
     "crons": [
