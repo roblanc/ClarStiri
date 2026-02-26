@@ -79,9 +79,9 @@ const Index = () => {
         {/* Editorial Hero Greeting */}
         <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-6 md:gap-12">
           <div className="flex-1 min-w-0">
-            <p className="text-foreground font-serif text-lg sm:text-xl md:text-2xl leading-snug">
+            <p className="text-foreground font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-snug">
               Citești. Compari. Decizi.
-              <span className="text-muted-foreground text-xs sm:text-sm md:text-base block mt-2 md:mt-3 leading-relaxed font-sans">
+              <span className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-2 md:mt-3 leading-relaxed font-sans">
                 Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
               </span>
             </p>
