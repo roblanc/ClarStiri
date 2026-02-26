@@ -36,6 +36,9 @@ const Index = () => {
     })) || [];
   }, [stories]);
 
+  // Ordinea fixă a categoriilor — aceeași pe desktop și mobil
+  const CATEGORY_ORDER = ["Politică", "Actualitate", "Economie", "Sănătate", "Tehnologie", "Mediu", "Sport", "Cultură", "Internațional"];
+
   // Group stories by category for the editorial layout
   const groupedStories = useMemo(() => {
     const groups: Record<string, typeof convertedStories> = {};
@@ -46,10 +49,16 @@ const Index = () => {
       groups[story.category].push(story);
     });
 
-    // Sort categories by number of stories (largest first)
+    // Sort by fixed order; categories not in list go last sorted by count
     return Object.entries(groups)
-      .sort((a, b) => b[1].length - a[1].length)
-      // Only keep categories with at least 1 story, take top 6 categories
+      .sort((a, b) => {
+        const aIdx = CATEGORY_ORDER.indexOf(a[0]);
+        const bIdx = CATEGORY_ORDER.indexOf(b[0]);
+        if (aIdx === -1 && bIdx === -1) return b[1].length - a[1].length;
+        if (aIdx === -1) return 1;
+        if (bIdx === -1) return -1;
+        return aIdx - bIdx;
+      })
       .slice(0, 6);
   }, [convertedStories]);
 
@@ -65,19 +74,19 @@ const Index = () => {
         </div>
       )}
 
-      <main className="container mx-auto px-4 py-12 md:py-20 lg:max-w-[70%] xl:max-w-[60%]">
+      <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[70%] xl:max-w-[60%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-16 md:mb-24 flex flex-row items-center justify-between gap-6 md:gap-16">
-          <div className="flex-1 min-w-0 max-w-xl pr-4">
-            <p className="text-foreground font-serif text-xl sm:text-2xl md:text-3xl leading-snug md:leading-relaxed">
-              Am compilat cele mai relevante subiecte de presă perspectivizate pentru tine.
-              <span className="text-muted-foreground text-[12px] sm:text-lg md:text-xl block mt-3 md:mt-4 leading-snug">
-                Dacă vrei să revii la rezultatele personalizate, caută prin secțiunile grupate de mai jos.
+        <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-4 md:gap-10">
+          <div className="flex-1 min-w-0 max-w-lg">
+            <p className="text-foreground font-serif text-lg sm:text-xl md:text-2xl leading-snug">
+              O știre. Toate perspectivele. Tu decizi.
+              <span className="text-muted-foreground text-xs sm:text-sm md:text-base block mt-2 md:mt-3 leading-relaxed font-sans">
+                Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
               </span>
             </p>
           </div>
-          <div className="w-1/3 md:w-auto md:flex-1 max-w-[140px] md:max-w-[400px] flex justify-end shrink-0">
+          <div className="shrink-0 w-28 md:w-44">
             <img
               src="/hero-illustration.png"
               alt="Editorial Spotlight Illustration"
