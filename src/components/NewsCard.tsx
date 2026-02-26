@@ -48,7 +48,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               className="w-24 h-24 object-cover flex-shrink-0 border border-border"
             />
             <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <h3 className="font-serif font-semibold text-lg leading-tight line-clamp-3 text-foreground">
+              <h3 className="font-title font-bold text-[22px] leading-[28px] line-clamp-3 text-foreground">
                 {news.title}
               </h3>
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground mt-3">
@@ -86,7 +86,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
         {/* Bottom Content Box */}
         <div className="p-5 flex-1 flex flex-col relative z-10">
-          <h3 className="text-xl font-serif font-medium leading-snug mb-6 text-foreground">
+          <h3 className="font-title font-bold text-[22px] leading-[28px] mb-6 text-foreground">
             {news.title}
           </h3>
 

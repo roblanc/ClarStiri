@@ -21,6 +21,7 @@ export default {
       fontFamily: {
         sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
         serif: ["Playfair Display", "Georgia", "serif"],
+        title: ["VICE Grotesk", "Helvetica", "Arial", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
