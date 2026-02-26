@@ -37,9 +37,6 @@ const Index = () => {
     })),
   })) || [];
 
-  const featuredStory = convertedStories[0];
-  const otherStories = convertedStories.slice(1);
-
 
   return (
     <div className="min-h-screen bg-background">
@@ -96,14 +93,9 @@ const Index = () => {
             <div className="flex flex-col gap-6">
               {/* Main Feed */}
               <div className="w-full">
-                {/* Featured Story - Smaller size */}
-                {featuredStory && (
-                  <FeaturedStory story={featuredStory} />
-                )}
-
                 {/* News Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {otherStories.map((news) => (
+                  {convertedStories.map((news) => (
                     <NewsCard
                       key={news.id}
                       news={{

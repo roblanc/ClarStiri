@@ -86,9 +86,13 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
     });
 
     const total = totalLeft + totalCenter + totalRight;
-    const left = Math.floor((totalLeft / total) * 100);
-    let center = Math.floor((totalCenter / total) * 100);
-    const right = Math.floor((totalRight / total) * 100);
+    const rawLeft = (totalLeft / total) * 100;
+    const rawCenter = (totalCenter / total) * 100;
+    const rawRight = (totalRight / total) * 100;
+
+    const left = Math.floor(rawLeft);
+    let center = Math.floor(rawCenter);
+    const right = Math.floor(rawRight);
 
     // Ensure sum is 100
     const remainder = 100 - (left + center + right);
