@@ -18,7 +18,7 @@ const redis = new Redis({
 const CACHE_KEY = 'aggregated_news';
 const CACHE_KEY_TS = 'aggregated_news_ts';
 const CACHE_TTL = 6 * 60 * 60; // 6 ore — supraviețuiește între rulările cronului
-const MIN_SOURCES_THRESHOLD = 3; // Minimum sources required for a story to be displayed
+const MIN_SOURCES_THRESHOLD = 2; // Minimum sources required for a story to be displayed
 
 // Removed local Aggregation functions, imported from aggregation.js
 

@@ -93,7 +93,7 @@ export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; rig
     'right': { left: 0, center: 12, right: 88 },
 };
 
-const FETCH_TIMEOUT = 6000;
+const FETCH_TIMEOUT = 4000;
 
 const POLITICAL_KEYWORDS = {
     left: ['USR', 'REPER', 'progresist', 'anticorupție', 'transparență', 'pro-european', 'reforme'],
