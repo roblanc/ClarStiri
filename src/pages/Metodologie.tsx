@@ -1,10 +1,19 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { NEWS_SOURCES } from "@/types/news";
 import { SourceFavicon } from "@/components/SourceFavicon";
 import { ChevronLeft, Info, Eye, BarChart3, Shield, AlertTriangle } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Metodologie() {
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.hash === '#surse') {
+            document.getElementById('surse')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }, [location.hash]);
+
     // Grupează sursele pe bias
     const sourcesByBias = {
         left: NEWS_SOURCES.filter(s => s.bias === 'left'),
@@ -233,7 +242,7 @@ export default function Metodologie() {
                 </section>
 
                 {/* Lista Surselor */}
-                <section className="mb-12">
+                <section className="mb-12" id="surse">
                     <h2 className="text-xl font-bold text-foreground mb-4">
                         Toate Sursele Noastre ({NEWS_SOURCES.length})
                     </h2>

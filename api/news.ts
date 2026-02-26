@@ -7,6 +7,7 @@ import {
     BIAS_WEIGHT_MAP,
     fetchRSSFeed
 } from './shared.js';
+import { createStoryId } from './storyId.js';
 
 // Inițializare Redis
 const redis = new Redis({
@@ -80,9 +81,9 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
     });
 
     const total = totalLeft + totalCenter + totalRight;
-    let left = Math.floor((totalLeft / total) * 100);
+    const left = Math.floor((totalLeft / total) * 100);
     let center = Math.floor((totalCenter / total) * 100);
-    let right = Math.floor((totalRight / total) * 100);
+    const right = Math.floor((totalRight / total) * 100);
 
     // Ensure sum is 100
     const remainder = 100 - (left + center + right);
@@ -126,35 +127,71 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
-    const recent = filterRecentNews(news);
-    const storyGroups = new Map<string, RSSNewsItem[]>();
-    const processed = new Set<string>();
-    const threshold = 0.3;
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.3): RSSNewsItem[][] {
+    const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
 
-    recent.forEach(item => {
-        if (processed.has(item.id)) return;
+    const itemTokens: Array<{ item: RSSNewsItem; tokens: Set<string> }> = news.map(item => ({
+        item,
+        tokens: new Set(
+            normalizeTitle(item.title)
+                .split(/\s+/)
+                .filter(w => w.length > 2 && !stopwords.has(w))
+        ),
+    }));
+
+    // Inverted index: token → indices of items that contain it
+    const invertedIndex = new Map<string, number[]>();
+    itemTokens.forEach(({ tokens }, idx) => {
+        tokens.forEach(token => {
+            const list = invertedIndex.get(token);
+            if (list) list.push(idx);
+            else invertedIndex.set(token, [idx]);
+        });
+    });
+
+    const groups: RSSNewsItem[][] = [];
+    const processed = new Set<number>();
+
+    itemTokens.forEach(({ item, tokens }, i) => {
+        if (processed.has(i)) return;
 
         const group: RSSNewsItem[] = [item];
-        processed.add(item.id);
+        processed.add(i);
 
-        recent.forEach(other => {
-            if (processed.has(other.id)) return;
+        // Candidate overlap: how many shared tokens each candidate has
+        const candidateOverlap = new Map<number, number>();
+        tokens.forEach(token => {
+            invertedIndex.get(token)?.forEach(j => {
+                if (j !== i) candidateOverlap.set(j, (candidateOverlap.get(j) || 0) + 1);
+            });
+        });
+
+        candidateOverlap.forEach((overlap, j) => {
+            if (processed.has(j)) return;
+            const { item: other, tokens: otherTokens } = itemTokens[j];
             if (item.source.id === other.source.id) return;
 
-            const similarity = calculateTitleSimilarity(item.title, other.title);
-            if (similarity >= threshold) {
+            const union = tokens.size + otherTokens.size - overlap;
+            if (union > 0 && overlap / union >= threshold) {
                 group.push(other);
-                processed.add(other.id);
+                processed.add(j);
             }
         });
 
-        storyGroups.set(`story-${item.id}`, group);
+        groups.push(group);
     });
 
-    const aggregatedStories: AggregatedStory[] = [];
+    return groups;
+}
 
-    storyGroups.forEach((sources, groupId) => {
+function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
+    const recent = filterRecentNews(news);
+    const storyGroups = findSimilarStories(recent);
+
+    const aggregatedStories: AggregatedStory[] = [];
+    const idCounts = new Map<string, number>();
+
+    storyGroups.forEach((sources) => {
         const primary = sources.reduce((earliest, current) => {
             return new Date(current.pubDate).getTime() > new Date(earliest.pubDate).getTime() ? current : earliest;
         });
@@ -196,8 +233,13 @@ function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
             };
         }
 
+        const baseId = createStoryId(sources);
+        const count = (idCounts.get(baseId) || 0) + 1;
+        idCounts.set(baseId, count);
+        const storyId = count === 1 ? baseId : `${baseId}-${count}`;
+
         aggregatedStories.push({
-            id: groupId,
+            id: storyId,
             title: primary.title,
             description: primary.description,
             image: imageSource.imageUrl,
@@ -301,4 +343,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
     }
 }
-

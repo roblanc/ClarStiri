@@ -148,7 +148,7 @@ const Index = () => {
                     ) : (
                       <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500 text-primary" />
                     )}
-                    Load More Stories
+                    Actualizează știrile
                   </Button>
                 </div>
               </div>
@@ -166,7 +166,7 @@ const Index = () => {
             </div>
             <nav className="flex items-center gap-6 text-sm text-muted-foreground">
               <Link to="/metodologie" className="hover:text-foreground transition-colors">Metodologie</Link>
-              <Link to="/metodologie" className="hover:text-foreground transition-colors">Surse</Link>
+              <Link to="/surse" className="hover:text-foreground transition-colors">Surse</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
               © 2025 thesite.ro

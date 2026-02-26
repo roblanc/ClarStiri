@@ -8,6 +8,41 @@ const parser = new Parser();
 const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent';
 
+type StatementImpact = 'high' | 'medium' | 'low';
+type StatementBias = 'left' | 'center' | 'right';
+
+type GeminiStatement = {
+    id?: unknown;
+    text?: unknown;
+    topic?: unknown;
+    date?: unknown;
+    sourceUrl?: unknown;
+    impact?: unknown;
+    bias?: unknown;
+};
+
+type GeminiResult = {
+    statements?: unknown;
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+}
+
+function asString(value: unknown, fallback = ''): string {
+    return typeof value === 'string' ? value : fallback;
+}
+
+function asImpact(value: unknown): StatementImpact {
+    if (value === 'high' || value === 'medium' || value === 'low') return value;
+    return 'low';
+}
+
+function asBias(value: unknown): StatementBias {
+    if (value === 'left' || value === 'center' || value === 'right') return value;
+    return 'center';
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -140,21 +175,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Clean markdown if present
         jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
 
-        const result = JSON.parse(jsonText);
+        const resultUnknown: unknown = JSON.parse(jsonText);
+        const result: GeminiResult = isRecord(resultUnknown) ? (resultUnknown as GeminiResult) : {};
 
-        // Enrich with fallback URLs if missing
-        const statements = (result.statements || []).map((s: any) => {
+        const rawStatements = Array.isArray(result.statements) ? (result.statements as unknown[]) : [];
+
+        // Enrich with fallback URLs if missing + normalize shape
+        const statements = rawStatements.map((raw, index) => {
+            const s: GeminiStatement = isRecord(raw) ? (raw as GeminiStatement) : {};
+
+            const text = asString(s.text).trim();
+            const topic = asString(s.topic, 'General').trim() || 'General';
+            const date = asString(s.date, 'Recent').trim() || 'Recent';
+            let sourceUrl: string | number | undefined = typeof s.sourceUrl === 'string' || typeof s.sourceUrl === 'number'
+                ? (s.sourceUrl as string | number)
+                : undefined;
+
             // Try to find a matching article for the link if it looks like an index
-            if (typeof s.sourceUrl === 'number' || (typeof s.sourceUrl === 'string' && s.sourceUrl.match(/^\d+$/))) {
-                const idx = parseInt(String(s.sourceUrl)) - 1;
-                if (articles[idx]) s.sourceUrl = articles[idx].link;
+            if (typeof sourceUrl === 'number' || (typeof sourceUrl === 'string' && /^\d+$/.test(sourceUrl))) {
+                const idx = parseInt(String(sourceUrl), 10) - 1;
+                if (articles[idx]?.link) sourceUrl = articles[idx].link;
             }
+
             // Ensure we have a link
-            if (!s.sourceUrl || s.sourceUrl === '#') {
-                s.sourceUrl = articles[0]?.link || '#';
+            if (!sourceUrl || sourceUrl === '#') {
+                sourceUrl = articles[0]?.link || '#';
             }
-            return s;
-        });
+
+            return {
+                id: asString(s.id, `ai-${index}`),
+                text,
+                topic,
+                date,
+                sourceUrl,
+                impact: asImpact(s.impact),
+                bias: asBias(s.bias),
+            };
+        }).filter(s => s.text.length > 0);
 
         return res.status(200).json({ statements });
 

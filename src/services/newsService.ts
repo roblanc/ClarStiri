@@ -1,4 +1,5 @@
 import { RSSNewsItem, AggregatedStory, NEWS_SOURCES, BIAS_WEIGHT_MAP, NewsSource } from '@/types/news';
+import { createStoryIdFromSources } from '@/utils/storyId';
 
 // CORS proxies - folosim mai multe pentru redundanță și viteză
 const CORS_PROXIES = [
@@ -8,7 +9,7 @@ const CORS_PROXIES = [
 
 // Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
-const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache';
+const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v2';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
 
 // Timeout pentru fetch (în milisecunde)
@@ -118,7 +119,8 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         const rawDescription = item.querySelector('description')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const link = item.querySelector('link')?.textContent?.trim() || '';
         const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
-        const author = item.querySelector('creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
+        const author = item.querySelector('dc\\:creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
+            item.querySelector('creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
             item.querySelector('author')?.textContent?.trim();
 
         // Extrage categoria
@@ -128,8 +130,8 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         // Extrage imaginea din enclosure sau media:content
         let imageUrl = item.querySelector('enclosure')?.getAttribute('url') || '';
         if (!imageUrl) {
-            const mediaContent = item.querySelector('content');
-            imageUrl = mediaContent?.getAttribute('url') || '';
+            const mediaContent = item.querySelector('media\\:content, media\\:thumbnail');
+            imageUrl = mediaContent?.getAttribute('url') || mediaContent?.getAttribute('href') || '';
         }
         // Fallback: caută în description pentru taguri img
         if (!imageUrl && rawDescription) {
@@ -259,7 +261,7 @@ export async function fetchAllNews(): Promise<RSSNewsItem[]> {
     const priorityPromises = prioritySources.map(source => fetchRSSFeed(source));
     const priorityResults = await Promise.allSettled(priorityPromises);
 
-    let allNews: RSSNewsItem[] = [];
+    const allNews: RSSNewsItem[] = [];
 
     priorityResults.forEach((result) => {
         if (result.status === 'fulfilled') {
@@ -385,7 +387,7 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
     let right = Math.floor(rightRaw);
 
     // Calculează restul pentru a ajunge la 100%
-    let remainder = 100 - (left + center + right);
+    const remainder = 100 - (left + center + right);
 
     // Distribuie restul celor cu cea mai mare parte fracționară
     const fractions = [
@@ -518,7 +520,7 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));
     const aggregatedStories: AggregatedStory[] = [];
 
-    storyGroups.forEach((sources, groupId) => {
+    storyGroups.forEach((sources) => {
         // Ia prima știre ca reprezentativă (cea cu cea mai devreme publicare)
         const primary = sources.reduce((earliest, current) => {
             const earliestDate = new Date(earliest.pubDate).getTime();
@@ -530,7 +532,7 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
         const imageSource = sources.find(s => s.imageUrl) || primary;
 
         aggregatedStories.push({
-            id: groupId,
+            id: createStoryIdFromSources(sources),
             title: primary.title,
             description: primary.description,
             image: imageSource.imageUrl,

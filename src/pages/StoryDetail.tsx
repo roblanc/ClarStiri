@@ -48,16 +48,12 @@ const getBiasLabel = (bias: string) => {
 
 const StoryDetail = () => {
   const { id } = useParams();
-  const { data: stories, isLoading } = useAggregatedNews(50);
+  const { data: stories, isLoading } = useAggregatedNews(200);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Găsește povestea cu ID-ul din URL
-  const story = stories?.find(s => s.id === id);
-
-  // Dacă nu găsim story-ul exact, încercăm să căutăm după o parte din ID
-  const alternativeStory = !story && stories ? stories.find(s => s.id.includes(id?.split('-').slice(0, 2).join('-') || '')) : null;
-  const currentStory = story || alternativeStory;
+  const currentStory = stories?.find(s => s.id === id);
 
   // Hook pentru bias comparison cu AI
   const biasComparison = useBiasComparison(

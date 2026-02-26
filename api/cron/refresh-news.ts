@@ -6,6 +6,7 @@ import {
     BIAS_WEIGHT_MAP,
     fetchRSSFeed
 } from '../shared.js';
+import { createStoryId } from '../storyId.js';
 
 // Initialize Redis
 const redis = new Redis({
@@ -125,7 +126,7 @@ function aggregateNews(newsItems: RSSNewsItem[], limit: number = 20): Aggregated
         );
 
         aggregated.push({
-            id: Buffer.from(key).toString('base64').replace(/[^a-zA-Z0-9]/g, '').slice(0, 20),
+            id: createStoryId(uniqueSources),
             title: primarySource.title,
             description: primarySource.description || '',
             image: primarySource.imageUrl,
