@@ -68,17 +68,21 @@ const Index = () => {
       <main className="container mx-auto px-4 py-12 md:py-20 lg:max-w-[70%] xl:max-w-[60%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-16 md:mb-24 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
-          <div className="flex-1 max-w-xl">
-            <p className="text-muted-foreground font-serif text-2xl md:text-3xl max-w-lg leading-relaxed">
-              Am compilat cele mai relevante subiecte de presă perspectivizate pentru tine. Dacă vrei să revii la rezultatele personalizate, caută prin secțiunile grupate de mai jos.
+        <section className="mb-16 md:mb-24 flex flex-row items-center justify-between gap-6 md:gap-16">
+          <div className="flex-1 min-w-0 max-w-xl">
+            <p className="text-foreground font-serif text-xl sm:text-2xl md:text-3xl leading-snug md:leading-relaxed">
+              Am compilat cele mai relevante subiecte de presă perspectivizate pentru tine.
+              <span className="text-muted-foreground text-[12px] sm:text-lg md:text-xl block mt-3 md:mt-4 leading-snug">
+                Dacă vrei să revii la rezultatele personalizate, caută prin secțiunile grupate de mai jos.
+              </span>
             </p>
           </div>
-          <div className="flex-1 w-full max-w-md md:max-w-none flex justify-center md:justify-end">
+          <div className="w-2/5 md:w-auto md:flex-1 max-w-[160px] md:max-w-none flex justify-end shrink-0">
             <img
               src="/hero-illustration.png"
               alt="Editorial Spotlight Illustration"
-              className="w-full h-auto max-w-[400px] object-contain mix-blend-multiply opacity-90"
+              className="w-full h-auto md:max-w-[400px] object-contain mix-blend-multiply"
+              style={{ filter: "brightness(1.05) contrast(1.1)" }}
             />
           </div>
         </section>
