@@ -46,7 +46,8 @@ ${titlesList}`;
                     temperature: 0.1, // very low for factual/neutral
                     maxOutputTokens: 60,
                 }
-            })
+            }),
+            signal: AbortSignal.timeout(4000), // 4s — prevents hanging in Promise.all with 20+ concurrent calls
         });
 
         if (!response.ok) {
