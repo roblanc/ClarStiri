@@ -85,26 +85,22 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         </div>
 
         {/* Bottom Content Box */}
-        <div className="p-6 flex-1 flex flex-col relative z-10">
-          <h3 className="text-2xl font-serif font-medium leading-snug mb-4 text-foreground">
+        <div className="p-5 flex-1 flex flex-col relative z-10">
+          <h3 className="text-xl font-serif font-medium leading-snug mb-6 text-foreground">
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground">
-                {news.category || "ACTUALITATE"}
-              </span>
-              <span className="w-1 h-1 bg-foreground rounded-full"></span>
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                {news.timeAgo || "ACUM"}
-              </span>
+          <div className="mt-auto pt-4 flex flex-col gap-3 border-t border-border">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="text-foreground">{news.category || "ACTUALITATE"}</span>
+              <span>•</span>
+              <span>{news.timeAgo || "ACUM"}</span>
             </div>
 
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground flex gap-3">
-              <span className="text-[#3b82f6]">{news.bias.left}% S</span>
-              <span className="text-foreground">{news.bias.center}% C</span>
-              <span className="text-[#ef4444]">{news.bias.right}% D</span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-wider">
+              <span className="text-[#3b82f6]">{news.bias.left}% <span className="hidden sm:inline">STÂNGA</span><span className="sm:hidden">S</span></span>
+              <span className="text-foreground">{news.bias.center}% <span className="hidden sm:inline">CENTRU</span><span className="sm:hidden">C</span></span>
+              <span className="text-[#ef4444]">{news.bias.right}% <span className="hidden sm:inline">DREAPTA</span><span className="sm:hidden">D</span></span>
             </div>
           </div>
         </div>
