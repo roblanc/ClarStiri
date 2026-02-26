@@ -96,7 +96,13 @@ function normalizeTitle(title: string): string {
 function aggregateNews(newsItems: RSSNewsItem[], limit: number = 20): AggregatedStory[] {
     const groups: Map<string, RSSNewsItem[]> = new Map();
 
-    newsItems.forEach(item => {
+    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const recentItems = newsItems.filter(item => {
+        const date = new Date(item.pubDate).getTime();
+        return isNaN(date) || date > cutoff;
+    });
+
+    recentItems.forEach(item => {
         const normalizedTitle = normalizeTitle(item.title);
         const existingKey = Array.from(groups.keys()).find(key => {
             const similarity = calculateSimilarity(key, normalizedTitle);
@@ -134,12 +140,12 @@ function aggregateNews(newsItems: RSSNewsItem[], limit: number = 20): Aggregated
 
     return aggregated
         .sort((a, b) => {
-            // Prioritize stories with more sources
-            if (b.sourcesCount !== a.sourcesCount) {
-                return b.sourcesCount - a.sourcesCount;
-            }
-            // Then by date
-            return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+            const dateA = new Date(a.publishedAt).getTime();
+            const dateB = new Date(b.publishedAt).getTime();
+            const dateDiff = dateB - dateA;
+            // Data prima; source count tie-breaker in aceeasi fereastra de 6h
+            if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
+            return b.sourcesCount - a.sourcesCount;
         })
         .slice(0, limit);
 }

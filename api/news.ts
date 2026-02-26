@@ -16,7 +16,9 @@ const redis = new Redis({
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news';
-const CACHE_TTL = 5 * 60; // 5 minute în secunde
+const CACHE_KEY_TS = 'aggregated_news_ts'; // timestamp fetch
+const CACHE_TTL = 60 * 60; // 1 oră — cache lung, refresh în background
+const STALE_AFTER = 10 * 60; // după 10 min → refresh în background, dar servim stale imediat
 
 interface AggregatedStory {
     id: string;
@@ -116,18 +118,27 @@ function calculateTitleSimilarity(title1: string, title2: string): number {
     return intersection / union;
 }
 
+function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
+    const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 zile
+    return news.filter(item => {
+        const date = new Date(item.pubDate).getTime();
+        return isNaN(date) || date > cutoff;
+    });
+}
+
 function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
+    const recent = filterRecentNews(news);
     const storyGroups = new Map<string, RSSNewsItem[]>();
     const processed = new Set<string>();
     const threshold = 0.3;
 
-    news.forEach(item => {
+    recent.forEach(item => {
         if (processed.has(item.id)) return;
 
         const group: RSSNewsItem[] = [item];
         processed.add(item.id);
 
-        news.forEach(other => {
+        recent.forEach(other => {
             if (processed.has(other.id)) return;
             if (item.source.id === other.source.id) return;
 
@@ -200,10 +211,14 @@ function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
         });
     });
 
-    // Sort by sources count, then by date
+    // Sort: data prima (freshnessul > popularitatea),
+    // source count ca tie-breaker in aceeasi fereastra de 6h
     aggregatedStories.sort((a, b) => {
-        if (b.sourcesCount !== a.sourcesCount) return b.sourcesCount - a.sourcesCount;
-        return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+        const dateA = new Date(a.publishedAt).getTime();
+        const dateB = new Date(b.publishedAt).getTime();
+        const dateDiff = dateB - dateA;
+        if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
+        return b.sourcesCount - a.sourcesCount;
     });
 
     return aggregatedStories;
@@ -222,28 +237,53 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const limit = parseInt(req.query.limit as string) || 50;
 
-        // Serve from Redis when fresh (TTL hasn't expired)
-        const cached = await redis.get<AggregatedStory[]>(CACHE_KEY);
+        // Fetch cache + timestamp în paralel
+        const [cached, tsRaw] = await Promise.all([
+            redis.get<AggregatedStory[]>(CACHE_KEY),
+            redis.get<number>(CACHE_KEY_TS),
+        ]);
+
+        const cacheAge = tsRaw ? (Date.now() - tsRaw) / 1000 : Infinity;
+        const isStale = cacheAge > STALE_AFTER;
 
         if (cached && cached.length > 0) {
-            console.log('Returning cached news');
-            res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
-            return res.status(200).json({
+            // Servim cache-ul imediat — utilizatorul nu așteaptă
+            res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=600');
+            res.status(200).json({
                 success: true,
                 data: cached.slice(0, limit),
                 fromCache: true,
-                cachedAt: new Date().toISOString(),
+                stale: isStale,
+                cacheAgeSeconds: Math.round(cacheAge),
             });
+
+            // Dacă e stale, refresh în background (fără a bloca răspunsul)
+            if (isStale) {
+                console.log(`Cache stale (${Math.round(cacheAge)}s) — refreshing in background`);
+                fetchAllNews().then(async news => {
+                    const aggregated = aggregateNews(news);
+                    if (aggregated.length > 0) {
+                        await Promise.all([
+                            redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
+                            redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+                        ]);
+                        console.log('Background cache refresh complete');
+                    }
+                }).catch(err => console.error('Background refresh failed:', err));
+            }
+            return;
         }
 
-        // Cache empty or expired — fetch all sources and repopulate
-        // This happens at most once per CACHE_TTL window (5 min), so it's fine to be synchronous
+        // Cache complet gol — fetch sincron (prima rulare sau după expirare)
         console.log('Cache miss — fetching fresh news from all sources');
         const allNews = await fetchAllNews();
         const aggregated = aggregateNews(allNews);
 
         if (aggregated.length > 0) {
-            await redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL });
+            await Promise.all([
+                redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
+                redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+            ]);
         }
 
         return res.status(200).json({
