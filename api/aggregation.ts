@@ -228,13 +228,16 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     // Execute LLM generators concurrently
     const aggregatedStories = await Promise.all(aggregatedStoriesPromises);
 
-    // Sort: freshness > popularitate
+    // Sort: coverage-first cu freshness decay
+    // score = sourcesCount × e^(-hoursOld / 18)
+    // O știre cu mai multe surse rămâne sus ~18h înainte ca una mai proaspătă să o depășească
+    const now = Date.now();
     aggregatedStories.sort((a, b) => {
-        const dateA = new Date(a.publishedAt).getTime();
-        const dateB = new Date(b.publishedAt).getTime();
-        const dateDiff = dateB - dateA;
-        if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
-        return b.sourcesCount - a.sourcesCount;
+        const hoursA = (now - new Date(a.publishedAt).getTime()) / 3_600_000;
+        const hoursB = (now - new Date(b.publishedAt).getTime()) / 3_600_000;
+        const scoreA = a.sourcesCount * Math.exp(-hoursA / 18);
+        const scoreB = b.sourcesCount * Math.exp(-hoursB / 18);
+        return scoreB - scoreA;
     });
 
     return aggregatedStories;

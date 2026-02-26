@@ -545,12 +545,15 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
         });
     });
 
-    // Sort: data prima (freshnessul > popularitatea),
-    // source count ca tie-breaker in aceeasi fereastra de 6h
+    // Sort: coverage-first cu freshness decay
+    // score = sourcesCount × e^(-hoursOld / 18)
+    const now = Date.now();
     aggregatedStories.sort((a, b) => {
-        const dateDiff = b.publishedAt.getTime() - a.publishedAt.getTime();
-        if (Math.abs(dateDiff) > 6 * 60 * 60 * 1000) return dateDiff;
-        return b.sourcesCount - a.sourcesCount;
+        const hoursA = (now - a.publishedAt.getTime()) / 3_600_000;
+        const hoursB = (now - b.publishedAt.getTime()) / 3_600_000;
+        const scoreA = a.sourcesCount * Math.exp(-hoursA / 18);
+        const scoreB = b.sourcesCount * Math.exp(-hoursB / 18);
+        return scoreB - scoreA;
     });
 
     return aggregatedStories;
