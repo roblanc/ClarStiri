@@ -10,7 +10,7 @@ import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, g
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news';
 const CACHE_KEY_TS = 'aggregated_news_ts';
-const CACHE_TTL = 6 * 60 * 60;
+const CACHE_TTL = 25 * 60 * 60; // 25h — outlasts daily Vercel Hobby cron
 const STALE_AFTER = 10 * 60;
 const MIN_SOURCES_THRESHOLD = 2;
 
