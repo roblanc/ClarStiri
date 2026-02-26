@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
-import { NewsListItem } from "@/components/NewsListItem";
+import { NewsCard } from "@/components/NewsCard";
 import { SourceFavicon } from "@/components/SourceFavicon";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { NEWS_SOURCES } from "@/types/news";
@@ -12,7 +12,6 @@ import {
   MainFeedSkeleton,
   SidebarSkeleton
 } from "@/components/Skeleton";
-import { VoicesSection } from "@/components/VoicesSection";
 import { SplashPage } from "@/components/SplashPage";
 
 // Placeholder imagine când nu avem una
@@ -108,25 +107,20 @@ const Index = () => {
         {/* Content — only render when we actually have stories */}
         {!!stories?.length && (
           <>
-            {/* Voices Barometer Section */}
-            <VoicesSection />
-
-            <div className="grid lg:grid-cols-12 gap-6">
+            <div className="flex flex-col gap-6">
               {/* Main Feed */}
-              <div className="lg:col-span-8">
+              <div className="w-full">
                 {/* Featured Story - Smaller size */}
                 {featuredStory && (
-                  <div className="mb-6">
-                    <FeaturedStory story={featuredStory} />
-                  </div>
+                  <FeaturedStory story={featuredStory} />
                 )}
 
-                {/* News List */}
-                <div className="bg-card rounded-lg border border-border">
+                {/* News Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {otherStories.map((news) => (
-                    <NewsListItem
+                    <NewsCard
                       key={news.id}
-                      story={{
+                      news={{
                         id: news.id,
                         title: news.title,
                         image: news.image,
@@ -134,59 +128,30 @@ const Index = () => {
                         category: news.category,
                         location: news.location,
                         sourcesCount: news.sourcesCount,
-                        sources: news.sources,
+                        timeAgo: news.timeAgo,
+                        description: news.description,
                       }}
                     />
                   ))}
                 </div>
 
-                {/* Refresh Button */}
-                <div className="mt-4 text-center">
+                {/* More Content Loader */}
+                <div className="mt-12 flex justify-center">
                   <Button
                     onClick={() => refetch()}
                     variant="outline"
                     disabled={isFetching}
-                    className="gap-2"
+                    className="flex items-center gap-2 border-2 border-border hover:border-primary px-8 py-6 rounded-xl text-sm font-bold transition-all group bg-transparent text-foreground"
                   >
                     {isFetching ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin text-primary" />
                     ) : (
-                      <RefreshCw className="w-4 h-4" />
+                      <RefreshCw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500 text-primary" />
                     )}
-                    Actualizează știrile
+                    Load More Stories
                   </Button>
                 </div>
               </div>
-
-              {/* Right Sidebar */}
-              <aside className="lg:col-span-4 space-y-6">
-
-                {/* Sources Info */}
-                <div className="bg-muted/50 rounded-lg p-4 text-sm">
-                  <h3 className="font-semibold text-foreground mb-2">📡 Surse Active</h3>
-                  <p className="text-muted-foreground text-xs mb-3">
-                    thesite.ro agregă știri din {NEWS_SOURCES.length} surse pentru o perspectivă echilibrată:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {NEWS_SOURCES.slice(0, 12).map(source => (
-                      <div
-                        key={source.id}
-                        className="flex items-center gap-1.5 px-2 py-1 bg-background rounded"
-                      >
-                        <SourceFavicon source={source} size="xs" showRing={false} />
-                        <span className="text-xs text-muted-foreground">
-                          {source.name}
-                        </span>
-                      </div>
-                    ))}
-                    {NEWS_SOURCES.length > 12 && (
-                      <span className="px-2 py-1 text-xs text-muted-foreground">
-                        +{NEWS_SOURCES.length - 12} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </aside>
             </div>
           </>
         )}

@@ -166,7 +166,7 @@ const HTML_ENTITIES: Record<string, string> = {
     '&laquo;': '«', '&raquo;': '»', '&icirc;': 'î', '&Icirc;': 'Î',
     '&acirc;': 'â', '&Acirc;': 'Â', '&scedil;': 'ș', '&Scedil;': 'Ș',
     '&tcedil;': 'ț', '&Tcedil;': 'Ț', '&atilde;': 'ã', '&Atilde;': 'Ã',
-    '&hellip;': '…', '&rsquo;': ''', '&lsquo;': ''', '&rdquo;': '"', '&ldquo;': '"',
+    '&hellip;': '…', '&rsquo;': '\'', '&lsquo;': '\'', '&rdquo;': '"', '&ldquo;': '"',
 };
 const ENTITY_RE = /&[a-zA-Z#][a-zA-Z0-9]{1,6};/g;
 

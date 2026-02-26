@@ -56,8 +56,11 @@ export function Header() {
               <Link to="/" className="text-sm font-medium text-foreground border-b-2 border-primary pb-1">
                 Acasă
               </Link>
-              <Link to="/metodologie" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/surse" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Surse
+              </Link>
+              <Link to="/barometru" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Barometru
               </Link>
               <Link to="/metodologie" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Metodologie
@@ -129,11 +132,18 @@ export function Header() {
               Acasă
             </Link>
             <Link
-              to="/metodologie"
+              to="/surse"
               className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
               onClick={() => setMobileMenuOpen(false)}
             >
               Surse
+            </Link>
+            <Link
+              to="/barometru"
+              className="block px-4 py-2 text-muted-foreground hover:bg-secondary rounded-lg"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Barometru
             </Link>
             <Link
               to="/metodologie"

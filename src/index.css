@@ -12,24 +12,24 @@
     /* thesite.ro Design System - Inspired by Snoop.ro */
     /* Clean, minimal, professional news platform */
 
-    --background: 0 0% 98%;
-    /* #FAFAFA - Very light gray */
-    --foreground: 0 0% 13%;
-    /* #222222 - Dark text */
+    --background: 240 20% 97%;
+    /* #F6F6F8 - Very light gray from mockup */
+    --foreground: 222 47% 11%;
+    /* #101622 - Slate 900 */
 
     --card: 0 0% 100%;
     /* #FFFFFF - White cards */
-    --card-foreground: 0 0% 13%;
-    /* #222222 */
+    --card-foreground: 222 47% 11%;
+    /* Slate 900 */
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 13%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary - Gold/Orange accent like Snoop */
-    --primary: 38 87% 65%;
-    /* #F0B55B - Gold accent */
-    --primary-foreground: 0 0% 0%;
-    /* #000000 - Black text on gold */
+    /* Primary - Vibrant Blue from mockup */
+    --primary: 220 87% 50%;
+    /* #135BEC - Blue accent */
+    --primary-foreground: 0 0% 100%;
+    /* #FFFFFF - White text on blue */
 
     --secondary: 0 0% 96%;
     /* #F5F5F5 - Light gray */
@@ -57,12 +57,12 @@
     --radius: 0.5rem;
 
     /* Bias colors - For news platform */
-    --bias-left: 210 75% 45%;
-    /* Blue for left */
-    --bias-center: 0 0% 50%;
-    /* Gray for center */
-    --bias-right: 0 70% 50%;
-    /* Red for right */
+    --bias-left: 221 83% 53%;
+    /* #1d4ed8 - Blue for left */
+    --bias-center: 215 16% 47%;
+    /* #64748b - Gray for center */
+    --bias-right: 0 72% 51%;
+    /* #dc2626 - Red for right */
 
     /* Badges */
     --badge-left: 210 70% 92%;

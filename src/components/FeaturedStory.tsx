@@ -52,12 +52,12 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
         {/* Conținut */}
         <div className="lg:w-2/5 p-6 lg:p-8 flex flex-col justify-between bg-card text-card-foreground">
           <div>
-            <div className="flex items-center gap-2 text-muted-foreground text-xs mb-3">
-              <span className="font-bold text-foreground uppercase">
-                {story.category || "Actualitate"}
+            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-3">
+              <span className="font-bold text-slate-900 dark:text-slate-200 uppercase">
+                {story.category || "Reuters"}
               </span>
               <span>•</span>
-              <span>{story.timeAgo || "Recent"}</span>
+              <span>{story.timeAgo || "2 hours ago"}</span>
             </div>
             <h2 className="text-2xl lg:text-3xl font-bold leading-tight mb-4 group-hover:text-primary transition-colors">
               {story.title}
@@ -70,26 +70,26 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
           </div>
 
           <div className="space-y-4 mt-6">
-            <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+            <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
               <span>Distribuție Acoperire</span>
               <div className="flex gap-4">
-                <span className="text-bias-left">{story.bias.left}% S</span>
-                <span className="text-bias-center">{story.bias.center}% C</span>
-                <span className="text-bias-right">{story.bias.right}% D</span>
+                <span className="text-[#1d4ed8]">{story.bias.left}% S</span>
+                <span className="text-[#64748b]">{story.bias.center}% C</span>
+                <span className="text-[#dc2626]">{story.bias.right}% D</span>
               </div>
             </div>
 
             <div className="h-2 w-full flex rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-              <div className="bg-bias-left h-full transition-all duration-300" style={{ width: `${story.bias.left}%` }}></div>
-              <div className="bg-bias-center h-full transition-all duration-300" style={{ width: `${story.bias.center}%` }}></div>
-              <div className="bg-bias-right h-full transition-all duration-300" style={{ width: `${story.bias.right}%` }}></div>
+              <div className="bg-[#1d4ed8] h-full transition-all duration-300" style={{ width: `${story.bias.left}%` }}></div>
+              <div className="bg-[#64748b] h-full transition-all duration-300" style={{ width: `${story.bias.center}%` }}></div>
+              <div className="bg-[#dc2626] h-full transition-all duration-300" style={{ width: `${story.bias.right}%` }}></div>
             </div>
 
-            <div className="flex items-center justify-between pt-2">
+            <div className="flex items-center justify-between pt-4">
               <div className="flex-1">
                 {blindspotLabel ? (
-                  <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-500 text-xs font-bold">
-                    <AlertTriangle className="w-4 h-4" />
+                  <div className="flex items-center gap-1 text-[#135bec] text-xs font-bold">
+                    <EyeOff className="text-[#135bec] w-4 h-4" />
                     <span className="line-clamp-2">Punct Orbit: {blindspotLabel}</span>
                   </div>
                 ) : (

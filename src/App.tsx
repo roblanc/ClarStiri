@@ -15,6 +15,7 @@ const Metodologie = lazy(() => import("./pages/Metodologie"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const VoicesPage = lazy(() => import("./pages/VoicesPage"));
 const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
+const Barometer = lazy(() => import("./pages/Barometer"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
@@ -54,6 +55,7 @@ const App = () => (
                 <Route path="/categorie/:slug" element={<CategoryPage />} />
                 <Route path="/voci" element={<VoicesPage />} />
                 <Route path="/voce/:slug" element={<VoiceProfile />} />
+                <Route path="/barometru" element={<Barometer />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

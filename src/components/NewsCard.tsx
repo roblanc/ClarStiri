@@ -122,45 +122,38 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           )}
         </div>
         <div className="p-5 flex-1 flex flex-col relative z-10 bg-card">
-          <div className="flex items-center justify-between text-[10px] mb-3">
-            <span className="text-muted-foreground font-bold uppercase">
-              {news.category || `${news.sourcesCount} surse`}
+          <div className="flex items-center gap-2 text-[10px] mb-3">
+            <span className="text-slate-500 font-bold uppercase">
+              {news.category || "THE GUARDIAN"}
             </span>
-            <span className="text-muted-foreground opacity-75">{news.timeAgo}</span>
+            <span className="text-slate-400 font-medium">{news.timeAgo || "6h ago"}</span>
           </div>
-          <h3 className="text-lg font-bold leading-snug mb-3 hover:text-primary transition-colors line-clamp-2 text-foreground">
+          <h3 className="text-lg font-bold leading-snug mb-3 hover:text-primary transition-colors line-clamp-2 text-slate-900 dark:text-slate-100">
             {news.title}
           </h3>
           {news.description && (
-            <p className="text-muted-foreground text-sm mb-6 line-clamp-3">
+            <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">
               {news.description}
             </p>
           )}
 
-          <div className="mt-auto pt-4 border-t border-border/50">
+          <div className="mt-auto pt-4 pb-2 border-t border-slate-100 dark:border-slate-800">
             <div className="flex justify-between text-[11px] font-bold mb-2">
-              <span className="text-bias-left">{news.bias.left}% Stânga</span>
-              <span className="text-bias-center">{news.bias.center}% Centru</span>
-              <span className="text-bias-right">{news.bias.right}% Dreapta</span>
+              <span className="text-[#1d4ed8]">{news.bias.left}% Stânga</span>
+              <span className="text-[#64748b]">{news.bias.center}% Centru</span>
+              <span className="text-[#dc2626]">{news.bias.right}% Dreapta</span>
             </div>
-            <div className="h-1.5 w-full flex rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 mb-4">
-              <div className="bg-bias-left h-full" style={{ width: `${news.bias.left}%` }}></div>
-              <div className="bg-bias-center h-full" style={{ width: `${news.bias.center}%` }}></div>
-              <div className="bg-bias-right h-full" style={{ width: `${news.bias.right}%` }}></div>
+            <div className="h-1.5 w-full flex rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 mb-5">
+              <div className="bg-[#1d4ed8] h-full" style={{ width: `${news.bias.left}%` }}></div>
+              <div className="bg-[#64748b] h-full" style={{ width: `${news.bias.center}%` }}></div>
+              <div className="bg-[#dc2626] h-full" style={{ width: `${news.bias.right}%` }}></div>
             </div>
 
-            {news.blindspot && news.blindspot !== 'none' ? (
-              <div className="flex items-center gap-2 p-2 rounded bg-amber-50 dark:bg-amber-950/30">
-                <AlertTriangle className="text-amber-500 w-4 h-4 flex-shrink-0" />
-                <span className="text-[10px] font-medium text-amber-700 dark:text-amber-400">
-                  {blindspotLabel}
-                </span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 p-2 rounded bg-green-50 dark:bg-green-950/30">
-                <CheckCircle className="text-green-500 w-4 h-4 flex-shrink-0" />
-                <span className="text-[10px] font-medium text-green-700 dark:text-green-400">
-                  Acoperire echilibrată. Surse din tot spectrul.
+            {news.blindspot && news.blindspot !== 'none' && (
+              <div className="flex items-start gap-2 p-2.5 rounded bg-slate-50 dark:bg-slate-800/50 outline outline-1 outline-slate-100 dark:outline-slate-700/50">
+                <AlertTriangle className="text-amber-500 w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+                <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 leading-snug">
+                  Punct Orbit: {blindspotLabel}
                 </span>
               </div>
             )}
