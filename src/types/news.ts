@@ -1,5 +1,6 @@
 // Tipuri pentru știri reale din RSS feeds
 import type { BiasAnalysis } from '@/utils/biasDetection';
+import type { SourceProfile } from '@/data/sourceProfiles';
 
 export interface NewsSource {
   id: string;
@@ -10,6 +11,7 @@ export interface NewsSource {
   bias: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
   factuality: 'high' | 'mixed' | 'low';
   category: 'mainstream' | 'independent' | 'tabloid' | 'public';
+  profile?: SourceProfile;
 }
 
 export interface RSSNewsItem {
@@ -337,7 +339,7 @@ export const NEWS_SOURCES: NewsSource[] = [
     rssUrl: 'https://www.antena3.ro/rss',
     logo: 'https://logo.clearbit.com/antena3.ro',
     bias: 'right', // Pro-PSD, pro-Georgescu puternic; Intact Group
-    factuality: 'mixed',
+    factuality: 'low',
     category: 'mainstream',
   },
   {

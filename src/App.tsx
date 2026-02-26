@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 const Index = lazy(() => import("./pages/Index"));
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const Metodologie = lazy(() => import("./pages/Metodologie"));
+const Sources = lazy(() => import("./pages/Sources"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const VoicesPage = lazy(() => import("./pages/VoicesPage"));
 const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
@@ -54,7 +55,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/stire/:id" element={<StoryDetail />} />
                 <Route path="/metodologie" element={<Metodologie />} />
-                <Route path="/surse" element={<Navigate to="/metodologie#surse" replace />} />
+                <Route path="/surse" element={<Sources />} />
                 <Route path="/despre" element={<Despre />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/categorie/:slug" element={<CategoryPage />} />

@@ -897,6 +897,11 @@ export function getProfilesSortedByBias(): SourceProfile[] {
   return Object.values(SOURCE_PROFILES).sort((a, b) => a.biasScore - b.biasScore);
 }
 
+/** Returnează ID-urile de surse care NU au profil documentat. */
+export function getMissingProfileIds(sourceIds: string[]): string[] {
+  return sourceIds.filter((id) => !SOURCE_PROFILES[id]);
+}
+
 // ============================================================
 //  TEMPLATE PENTRU SURSE NOI
 //  Când adaugi o sursă nouă în api/shared.ts, completează

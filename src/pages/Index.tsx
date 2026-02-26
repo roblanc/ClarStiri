@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { FeaturedStory } from "@/components/FeaturedStory";
 import { NewsCard } from "@/components/NewsCard";
@@ -12,19 +12,12 @@ import {
   MainFeedSkeleton,
   SidebarSkeleton
 } from "@/components/Skeleton";
-import { SplashPage } from "@/components/SplashPage";
 
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
 
-// Splash always shows on every visit
 const Index = () => {
-  const [showSplash, setShowSplash] = useState(true);
   const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(20);
-
-  const handleContinue = useCallback(() => {
-    setShowSplash(false);
-  }, []);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = stories?.map(story => ({
@@ -47,13 +40,6 @@ const Index = () => {
   const featuredStory = convertedStories[0];
   const otherStories = convertedStories.slice(1);
 
-  // Data is ready when we have stories loaded
-  const isDataReady = !isLoading && convertedStories.length > 0;
-
-  // Show splash page if needed
-  if (showSplash) {
-    return <SplashPage onContinue={handleContinue} isDataReady={isDataReady} />;
-  }
 
   return (
     <div className="min-h-screen bg-background">
