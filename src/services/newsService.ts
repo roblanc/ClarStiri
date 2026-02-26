@@ -3,11 +3,12 @@ import { createStoryIdFromSources } from '@/utils/storyId';
 
 // CORS proxies - folosim mai multe pentru redundanță și viteză
 // Format: ${proxy}${encodeURIComponent(url)} — toți trebuie să accepte ?url=<encoded>
+// /api/rss este proxy-ul nostru propriu pe Vercel (Frankfurt) — cel mai fiabil în producție
 const CORS_PROXIES = [
+    '/api/rss?url=',
     'https://api.allorigins.win/raw?url=',
     'https://corsproxy.io/?url=',
     'https://corsproxy.org/?url=',
-    'https://api.codetabs.com/v1/proxy?quest=',
 ];
 
 // Cache keys pentru localStorage
