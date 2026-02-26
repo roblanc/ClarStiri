@@ -102,6 +102,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <span className="text-foreground">{news.bias.center}% <span className="hidden sm:inline">CENTRU</span><span className="sm:hidden">C</span></span>
               <span className="text-[#ef4444]">{news.bias.right}% <span className="hidden sm:inline">DREAPTA</span><span className="sm:hidden">D</span></span>
             </div>
+            <BiasBar left={news.bias.left} center={news.bias.center} right={news.bias.right} size="sm" />
           </div>
         </div>
       </article>
