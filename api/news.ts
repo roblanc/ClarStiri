@@ -150,6 +150,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             success: false,
             error: 'Failed to fetch news',
             message: error instanceof Error ? error.message : 'Unknown error',
+            name: error instanceof Error ? error.name : undefined,
+            stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined,
         });
     }
 }

@@ -37,6 +37,9 @@ TITLURI SURSĂ:
 ${titlesList}`;
 
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+
         const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -47,8 +50,9 @@ ${titlesList}`;
                     maxOutputTokens: 60,
                 }
             }),
-            signal: AbortSignal.timeout(4000), // 4s — prevents hanging in Promise.all with 20+ concurrent calls
+            signal: controller.signal as RequestInit['signal'],
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             console.error('LLM API Error during title generation', await response.text());
