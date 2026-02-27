@@ -867,23 +867,25 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     id: 'realitatea',
     foundedYear: 2001,
     founders: ['Sorin Ovidiu Vântu'],
-    currentOwner: 'Cozmin Gușă (din 2018)',
-    parentCompany: 'Realitatea Media',
+    currentOwner: 'Maricel Păcuraru (prin fiica sa, Bertalan Alexandra Beatrice — 99,75% din Geopol International SRL)',
+    parentCompany: 'Geopol International SRL',
     ownershipHistory:
-      'Fondat în 2001 de controversatul om de afaceri Sorin Ovidiu Vântu, condamnat penal pentru fraudă bancară și manipulare de piață. În 2018, postul a fost preluat de Cozmin Gușă, analist politic și fost consilier prezidențial.',
+      'Fondat în 2001 ca Realitatea TV de Sorin Ovidiu Vântu, condamnat penal pentru fraudă. Postul a intrat în insolvență (2011) și faliment (2019). Licența a fost retrasă pe 31 octombrie 2019. A fost înlocuit de Realitatea Plus, care a început emisiunea pe 1 noiembrie 2019. Până în 2021, Geopol International (operatorul licenței) era deținut de Strategies Research (acționari: Maricel Păcuraru și Cozmin Gușă). Din 2021, Cozmin Gușă nu mai figurează printre acționari, iar Bertalan Alexandra Beatrice (fiica lui Maricel Păcuraru) deține 99,75% din Geopol International.',
     politicalConnections: [
       'Sorin Ovidiu Vântu — fondatorul original, condamnat penal, conexiuni politice multiple',
-      'Cozmin Gușă — analist politic, fost consilier al lui Traian Băsescu, orientare naționalistă-conservatoare',
+      'Maricel Păcuraru — om de afaceri, controlează postul prin fiica sa',
+      'Cozmin Gușă — fost acționar (până în 2021), analist politic, fost consilier al lui Traian Băsescu',
       'Poziționare anti-USR, critică la adresa UE în anumite contexte',
     ],
     fundingSources: ['Publicitate', 'Cablu/satelit'],
     editorialLine:
       'Canal de știri cu orientare conservatoare-naționalistă. Accent pe suveranitate națională, critică la adresa globalizării și a „corectitudinii politice". Talk-show-uri cu opinii puternice.',
     biasRationale:
-      'Realitatea TV a oscilat semnificativ de-a lungul timpului în funcție de proprietar. Sub conducerea lui Cozmin Gușă (din 2018), orientarea s-a cristalizat spre dreapta conservatoare-naționalistă. Talk-show-urile promovează frecvent narativele suveraniste și conservatoare. Nu atinge nivelul de dezinformare al Antena 3 sau România TV, dar are un bias editorial clar spre dreapta.',
+      'Realitatea Plus (fost Realitatea TV) a oscilat semnificativ de-a lungul timpului în funcție de proprietar. Sub controlul lui Maricel Păcuraru, orientarea s-a cristalizat spre dreapta conservatoare-naționalistă. Talk-show-urile promovează frecvent narativele suveraniste și conservatoare. Nu atinge nivelul de dezinformare al Antena 3 sau România TV, dar are un bias editorial clar spre dreapta.',
     controversies: [
       'Fondatorul original Sorin Ovidiu Vântu — condamnat penal',
-      'Dificultăți financiare recurente și schimbări de proprietar',
+      'Dificultăți financiare recurente, insolvență și faliment',
+      'Schimbări multiple de proprietar și structuri corporative opace',
       'Acuzații de partinitate politică în diverse perioade',
     ],
     notablePatterns: [
