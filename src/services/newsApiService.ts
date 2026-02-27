@@ -23,7 +23,7 @@ export async function fetchAggregatedNewsFromAPI(limit = 50): Promise<Aggregated
             headers: {
                 'Accept': 'application/json',
             },
-            signal: AbortSignal.timeout(20000), // 20s — prevents hanging on slow/cold Vercel starts
+            signal: AbortSignal.timeout(35000), // 35s — allows for cold start + LLM generation (server maxDuration=60s)
         });
 
         if (!response.ok) {
