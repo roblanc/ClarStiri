@@ -147,14 +147,23 @@ export function quickBiasAnalysis(title: string, description: string = ''): Bias
 }
 
 export async function fetchWithTimeout(url: string, timeout: number): Promise<Response> {
-    const response = await fetch(url, {
-        signal: AbortSignal.timeout(timeout),
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            'Accept': 'application/rss+xml, application/xml, text/xml',
-        }
-    });
-    return response;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, {
+            signal: controller.signal as RequestInit['signal'], // type assertion for older node versions
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'application/rss+xml, application/xml, text/xml',
+            }
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
 }
 
 export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
