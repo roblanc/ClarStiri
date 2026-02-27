@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BiasBar } from "./BiasBar";
 import { BiasBadge } from "./BiasBadge";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
+import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
 
 export interface NewsItem {
@@ -40,14 +41,13 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
       <Link to={`/stire/${news.id}`} className="block">
         <article className="news-card p-4">
           <div className="flex gap-4">
-            <div className="w-24 h-24 flex-shrink-0 bg-muted border border-border overflow-hidden">
-              <img
+            <div className="w-24 h-24 flex-shrink-0 border border-border overflow-hidden">
+              <NewsImage
                 src={getThumbnailUrl(news.image)}
-                alt=""
+                seed={news.title}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.style.opacity = '0'; }}
               />
             </div>
             <div className="flex-1 min-w-0 flex flex-col justify-center">
@@ -68,14 +68,13 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     <Link to={`/stire/${news.id}`} className="block h-full group">
       <article className="bg-card border border-border flex flex-col h-full group-hover:bg-secondary/20 transition-colors">
         {/* Top Image Box */}
-        <div className="h-56 relative border-b border-border overflow-hidden bg-[#e5e7eb]">
-          <img
+        <div className="h-56 relative border-b border-border overflow-hidden">
+          <NewsImage
             src={getThumbnailUrl(news.image)}
-            alt=""
+            seed={news.title}
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-            onError={(e) => { e.currentTarget.style.opacity = '0'; }}
           />
           {blindspotLabel && (
             <div className="absolute top-3 left-3">

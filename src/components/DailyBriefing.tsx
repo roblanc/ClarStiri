@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
 import { getSmallImageUrl } from "@/utils/imageOptimizer";
+import { NewsImage } from "./NewsImage";
 
 interface DailyBriefingProps {
   briefing: {
@@ -31,14 +32,13 @@ export function DailyBriefing({ briefing }: DailyBriefingProps) {
       <div className="space-y-3 mb-4">
         {briefing.stories.map((story, index) => (
           <div key={index} className="flex items-start gap-3">
-            <div className="w-14 h-12 rounded flex-shrink-0 bg-muted overflow-hidden">
-              <img
+            <div className="w-14 h-12 rounded flex-shrink-0 overflow-hidden">
+              <NewsImage
                 src={getSmallImageUrl(story.image)}
-                alt=""
+                seed={story.title}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover"
-                onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+                className="w-full h-full object-cover rounded"
               />
             </div>
             <p className="text-sm text-foreground leading-snug line-clamp-2">

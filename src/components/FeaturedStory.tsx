@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
 import { getFeaturedImageUrl } from "@/utils/imageOptimizer";
+import { NewsImage } from "./NewsImage";
 import { EyeOff, AlertTriangle } from "lucide-react";
 
 interface FeaturedStoryProps {
@@ -33,15 +34,14 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
       <div className="relative flex flex-col lg:flex-row bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
 
         {/* Imagine */}
-        <div className="lg:w-3/5 h-64 lg:h-auto overflow-hidden relative min-h-[300px] bg-muted">
-          <img
+        <div className="lg:w-3/5 h-64 lg:h-auto overflow-hidden relative min-h-[300px]">
+          <NewsImage
             src={getFeaturedImageUrl(story.image)}
-            alt=""
+            seed={story.title}
             loading="eager"
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
-            onError={(e) => { e.currentTarget.style.opacity = '0'; }}
           />
           <div className="absolute top-4 left-4">
             <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
