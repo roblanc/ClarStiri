@@ -4,35 +4,48 @@ interface CoverageBarProps {
   className?: string;
 }
 
-function getDominant(bias: { left: number; center: number; right: number }) {
-  const max = Math.max(bias.left, bias.center, bias.right);
-  if (bias.left === max) return 'left' as const;
-  if (bias.right === max) return 'right' as const;
-  return 'center' as const;
-}
-
-const CONFIG = {
-  left:   { label: 'Stânga',  bar: '#1d4ed8', track: '#dbeafe', text: '#1d4ed8' },
-  center: { label: 'Centru',  bar: '#64748b', track: '#e2e8f0', text: '#64748b' },
-  right:  { label: 'Dreapta', bar: '#dc2626', track: '#fee2e2', text: '#dc2626' },
+const COLORS = {
+  left: '#1d4ed8',
+  center: '#64748b',
+  right: '#dc2626',
 } as const;
 
 export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarProps) {
-  const dominant = getDominant(bias);
-  const { label, bar, track, text } = CONFIG[dominant];
-  const pct = bias[dominant];
+  const total = bias.left + bias.center + bias.right || 1;
 
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: track }}>
-        <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: bar }} />
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      {/* Segmented bar */}
+      <div className="flex h-1.5 rounded-full overflow-hidden bg-muted">
+        {bias.left > 0 && (
+          <div
+            className="h-full"
+            style={{ width: `${(bias.left / total) * 100}%`, backgroundColor: COLORS.left }}
+          />
+        )}
+        {bias.center > 0 && (
+          <div
+            className="h-full"
+            style={{ width: `${(bias.center / total) * 100}%`, backgroundColor: COLORS.center }}
+          />
+        )}
+        {bias.right > 0 && (
+          <div
+            className="h-full"
+            style={{ width: `${(bias.right / total) * 100}%`, backgroundColor: COLORS.right }}
+          />
+        )}
       </div>
-      <span className="text-[11px] font-semibold whitespace-nowrap" style={{ color: text }}>
-        {pct}% {label}
-      </span>
-      <span className="text-[11px] text-muted-foreground whitespace-nowrap">
-        · {sourcesCount} surse
-      </span>
+
+      {/* Labels row */}
+      <div className="flex items-center gap-1.5 text-[10px] font-semibold tracking-wide">
+        <span style={{ color: COLORS.left }}>{bias.left}% S</span>
+        <span className="text-muted-foreground">·</span>
+        <span style={{ color: COLORS.center }}>{bias.center}% C</span>
+        <span className="text-muted-foreground">·</span>
+        <span style={{ color: COLORS.right }}>{bias.right}% D</span>
+        <span className="text-muted-foreground ml-auto">{sourcesCount} surse</span>
+      </div>
     </div>
   );
 }

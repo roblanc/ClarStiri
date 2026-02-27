@@ -48,7 +48,7 @@ const getBiasLabel = (bias: string) => {
 
 const StoryDetail = () => {
   const { id } = useParams();
-  const { data: stories, isLoading } = useAggregatedNews(200);
+  const { data: stories, isLoading } = useAggregatedNews(40);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
 

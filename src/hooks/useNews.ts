@@ -43,6 +43,7 @@ export function useAggregatedNews(limit = 20) {
         staleTime: 10 * 60 * 1000, // 10 minute
         gcTime: 60 * 60 * 1000, // 60 minute
         refetchOnWindowFocus: false,
+        refetchInterval: 5 * 60 * 1000, // Auto-refresh every 5 min silently
         retry: 1,
         // Folosește datele din cache ca placeholder
         placeholderData: initialData,
