@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
+import { NewsImage } from "./NewsImage";
 
 interface NewsListItemProps {
   story: {
@@ -51,12 +52,11 @@ export function NewsListItem({ story }: NewsListItemProps) {
               }}
             />
             {/* Main image */}
-            <img
+            <NewsImage
               src={getThumbnailUrl(story.image)}
-              alt=""
+              seed={story.title}
               loading="lazy"
               className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md"
-              onError={(e) => { e.currentTarget.style.opacity = '0'; }}
               style={{
                 transform: 'rotateY(0deg)',
                 transformOrigin: 'right center'
