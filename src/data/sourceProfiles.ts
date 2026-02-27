@@ -512,16 +512,46 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   criticatac: {
     id: 'criticatac',
-    currentOwner: 'Colectiv editorial independent',
-    fundingSources: ['Donații', 'Autofinanțare colectiv editorial'],
+    currentOwner: 'Platformă colectivă de autori (fără proprietar comercial)',
+    founders: ['Vasile Ernu', 'Ciprian Șiulea', 'Costi Rogozanu', 'Florin Poenaru'],
+    ownershipHistory:
+      'Platformă colectivă de critică socială, coordonată de un nucleu editorial de intelectuali și jurnaliști (Vasile Ernu, Ciprian Șiulea, Costi Rogozanu, Florin Poenaru și alții, componență variabilă în timp). Proiectul a beneficiat de sprijin pentru unele conferințe și activități din partea Fundației Friedrich Ebert, dar nu există un trust media comercial sau un partid politic care să dețină formal platforma.',
+    politicalConnections: [
+      'Fără afiliere la un partid politic — se auto-definește ca grup de critică socială de stânga',
+      'Sprijin ocazional din partea Fundației Friedrich Ebert (fundație germană social-democrată)',
+      'Parte a rețelei regionale de publicații de stânga (LeftEast, Global Dialogue)',
+    ],
+    fundingSources: ['Autofinanțare colectiv editorial', 'Donații', 'Sprijin ocazional fundații (Friedrich Ebert)'],
     editorialLine:
-      'Publicație de analiză politică și socială de stânga. Critică capitalistă, perspectivă socialistă/social-democrată.',
+      'Platformă intelectuală de stânga, axată pe critică socială, politică și economică, cu eseuri, analize și intervenții teoretice. Nu funcționează ca site de știri la zi, ci ca spațiu de idei și dezbatere ideologică. Teme recurente: inegalitate socială, relația capital–muncă, critica elitelor și a capitalismului.',
     biasRationale:
-      'CriticAtac este una dintre puținele publicații de stânga autentică din România. Perspectivă anti-capitalism, critică a inegalității sociale, analize din perspectivă marxistă sau social-democrată radicală.',
+      'CriticAtac se auto-definește explicit ca grup de critică socială cu orientare de stânga. Textele promovează constant perspective egalitariste, anticapitaliste și critice la adresa capitalismului, liberalismului economic și a elitelor intelectuale mainstream. Manifestele și intervențiile lor publice, inclusiv în rețele regionale de stânga, justifică încadrarea în zona stângii radicale, cu o poziționare sistemic critică față de ordinea capitalistă existentă.',
+    notablePatterns: [
+      'Conținut preponderent de opinie și teorie, nu flux de știri',
+      'Eseuri și manifeste anticapitaliste',
+      'Participare la rețele internaționale de stânga (LeftEast, ISA)',
+    ],
+    controversies: [
+      'Percepută de criticii de dreapta ca platformă de propagandă marxistă',
+      'Poziții controversate privind evenimentele din Ucraina (perspective critice față de NATO)',
+    ],
+    strengths: ['Profunzime analitică', 'Originalitate în peisajul media românesc', 'Independență față de trusturi media'],
     biasScore: -80,
-    factualityRationale: 'Factualitate mixtă — articolele de opinie pot fi subiective.',
+    factualityRationale: 'Factualitate variabilă — accent pe opinie și teorie, mai puțin pe raportare neutră de știri. Nu este un „fake news site", dar nu poate fi tratat ca sursă neutră de factualitate. Conținutul este preponderent de analiză și eseu.',
     confidence: 'medium',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'CriticAtac – Pagina „Despre noi"', url: 'https://www.criticatac.ro/despre-noi/' },
+      { label: 'CriticAtac – „Nu mai vreau bogati!" (articol ilustrativ)', url: 'https://www.criticatac.ro/nu-mai-vreau-bogati/' },
+      { label: 'CriticAtac – „Viitorul are autor #COLECTIV. Revendicările stângii"', url: 'https://www.criticatac.ro/viitorul-autor-colectiv-revendicrile-stangii/' },
+      { label: 'Wikipedia – CriticAtac', url: 'https://ro.wikipedia.org/wiki/CriticAtac' },
+      { label: 'Eurotopics – Fișă CriticAtac', url: 'https://www.eurotopics.net/en/148467/criticatac' },
+      { label: 'Global Dialogue (ISA) – „CriticAtac: An Anti-Capitalist Manifesto from Romania"', url: 'https://globaldialogue.isa-sociology.org/articles/criticatac-an-anti-capitalist-manifesto-from-romania' },
+      { label: 'LeftEast – „Romania\'s Fragile New Left" (interviu Costi Rogozanu)', url: 'https://lefteast.org/romanias-fragile-new-left/' },
+      { label: 'HotNews – Publiciștii de stânga din România', url: 'https://hotnews.ro/cum-vad-publicistii-de-stanga-din-romania-evenimentele-din-ucraina-o-paralela-cu-vocea-rusiei-572017' },
+      { label: 'Jurnalul – „Intelectualii de stânga, față în față cu România"', url: 'https://jurnalul.ro/cultura/carte/intelectualii-de-stanga-fata-in-fata-cu-romania-574941.html' },
+      { label: 'Contributors – Critică libertariană la adresa CriticAtac', url: 'https://www.contributors.ro/acul-libertarian-in-cojocul-criticatac-cat-ne-costa-statul/' },
+    ],
   },
 
   // ===================== CENTRU-DREAPTA =====================
