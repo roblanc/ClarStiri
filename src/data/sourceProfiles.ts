@@ -222,14 +222,30 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   europafm: {
     id: 'europafm',
-    currentOwner: 'Proprietate privată',
+    foundedYear: 1990,
+    currentOwner: 'Czech Media Invest (controlat de Daniel Křetínský)',
+    parentCompany: 'Czech Media Invest (CMI)',
+    ownershipHistory:
+      'Post de radio comercial cu acoperire națională. A fost deținut de grupul francez Lagardère Active. În 2018, operațiunile radio din România (Europa FM, Virgin Radio, Vibe FM) au fost vândute către Czech Media Invest (CMI), unul dintre cei mai mari operatori media din Cehia, controlat de omul de afaceri Daniel Křetínský.',
+    politicalConnections: [
+      'Daniel Křetínský — grup media ceh, fără afilieri politice românești directe',
+      'Structura de proprietate documentată în presa economică și media de specialitate',
+    ],
+    fundingSources: ['Publicitate', 'Sponsorizări'],
     editorialLine:
-      'Post de radio cu știri și talk-show-uri politice. Prezentatori cu opinii puternice.',
+      'Post de radio comercial cu muzică, știri și talk-show-uri politice. Emisiuni precum „România în direct" și „Piața Victoriei" pun accent pe dezbatere și opinii ale moderatorilor și invitaților. Prezentatori cu opinii puternice, mai ales în segmentele de dezbatere.',
     biasRationale:
-      'Europa FM are o orientare generală centru-dreapta, vizibilă mai ales în talk-show-urile politice. Știrile propriu-zise sunt mai echilibrate decât conținutul de opinie. Proprietatea și conexiunile nu sunt complet transparente.',
+      'În analiza noastră, Europa FM tinde spre o orientare centru-dreapta, vizibilă în modul în care sunt abordate temele politice în talk-show-uri: pro-economie de piață, pro-UE, accent pe responsabilitate individuală și critică la adresa politicilor etatiste sau populiste. Conținutul de știri este, în general, mai echilibrat decât segmentele de opinie. Această încadrare este o estimare editorială proprie și nu reflectă o declarație oficială a postului. Nu există o clasificare MBFC sau similară disponibilă.',
+    notablePatterns: [
+      'Emisiuni de dezbatere cu opinii puternice ale moderatorilor',
+      'Combinație de muzică, infotainment și știri',
+      'Cel mai ascultat radio privat din România',
+    ],
+    strengths: ['Audiență mare', 'Jurnaliști profesioniști', 'Proprietar internațional fără influență politică locală'],
     biasScore: 20,
-    confidence: 'low',
-    lastAnalysed: '2026-02-26',
+    factualityRationale: 'Factualitate relativ ridicată pentru conținutul de știri. Nu sunt cazuri notorii de fake news. Segmentele de opinie conțin interpretări subiective — normal pentru formatul talk-show.',
+    confidence: 'medium',
+    lastAnalysed: '2026-02-27',
   },
 
   // ===================== CENTRU-STÂNGA =====================
