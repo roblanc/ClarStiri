@@ -52,22 +52,12 @@ export function NewsImage({
 
   if (failed) {
     return (
-      <div
-        className={`flex items-center justify-center ${className}`}
-        style={{ ...style, background: `linear-gradient(135deg, ${c1}, ${c2})` }}
-      >
-        <Newspaper
-          style={{
-            width: '28%',
-            height: '28%',
-            maxWidth: 52,
-            maxHeight: 52,
-            minWidth: 18,
-            minHeight: 18,
-            color: 'rgba(255,255,255,0.18)',
-          }}
-        />
-      </div>
+      <img
+        src="/default-news.png"
+        alt={alt || 'Ilustrație știre'}
+        className={className}
+        style={style}
+      />
     );
   }
 
