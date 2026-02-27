@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, Search, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { Header } from '@/components/Header';
-import { SourceProfileCard } from '@/components/SourceProfileCard';
+import { SourceFavicon } from '@/components/SourceFavicon';
 import { SOURCE_CATALOG } from '@/data/sourceCatalog';
 import { getMissingProfileIds, scoreToBiasCategory } from '@/data/sourceProfiles';
 import { Button } from '@/components/ui/button';
@@ -18,6 +18,22 @@ const BIAS_FILTERS: Array<{ value: BiasFilter; label: string }> = [
   { value: 'center-right', label: 'Centru-Dreapta' },
   { value: 'right', label: 'Dreapta' },
 ];
+
+const biasLabelMap: Record<string, string> = {
+  left: 'Stânga',
+  'center-left': 'Centru-Stânga',
+  center: 'Centru',
+  'center-right': 'Centru-Dreapta',
+  right: 'Dreapta',
+};
+
+const biasClassMap: Record<string, string> = {
+  left: 'bg-blue-100 text-blue-700 border-blue-200',
+  'center-left': 'bg-sky-100 text-sky-700 border-sky-200',
+  center: 'bg-slate-100 text-slate-700 border-slate-200',
+  'center-right': 'bg-orange-100 text-orange-700 border-orange-200',
+  right: 'bg-red-100 text-red-700 border-red-200',
+};
 
 export default function Sources() {
   const [search, setSearch] = useState('');
@@ -231,20 +247,45 @@ export default function Sources() {
           </div>
         </section>
 
+        {/* Compact Source List */}
         {filteredSources.length === 0 ? (
           <section className="bg-card border border-border rounded-lg p-8 text-center">
             <p className="text-foreground font-medium">Nicio sursă nu corespunde filtrelor curente.</p>
             <p className="text-sm text-muted-foreground mt-1">Resetează căutarea sau schimbă filtrul de bias.</p>
           </section>
         ) : (
-          <section className="space-y-4">
-            {filteredSources.map((source) => (
-              <SourceProfileCard key={source.id} source={source} profile={source.profile!} />
-            ))}
+          <section className="bg-card border border-border rounded-lg divide-y divide-border overflow-hidden">
+            {filteredSources.map((source) => {
+              const profile = source.profile!;
+              const biasCategory = scoreToBiasCategory(profile.biasScore);
+
+              return (
+                <Link
+                  key={source.id}
+                  to={`/surse/${source.id}`}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 transition-colors group"
+                >
+                  <SourceFavicon source={{ name: source.name, url: source.url, bias: source.bias }} size="md" />
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-foreground text-sm truncate">{source.name}</span>
+                      <span className={`px-2 py-0.5 text-[10px] rounded-full border shrink-0 ${biasClassMap[biasCategory]}`}>
+                        {biasLabelMap[biasCategory]}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate mt-0.5">
+                      {profile.currentOwner || 'Proprietar nedocumentat'}
+                    </p>
+                  </div>
+
+                  <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
+                </Link>
+              );
+            })}
           </section>
         )}
       </main>
     </div>
   );
 }
-

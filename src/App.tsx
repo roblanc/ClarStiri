@@ -13,6 +13,7 @@ const Index = lazy(() => import("./pages/Index"));
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const Metodologie = lazy(() => import("./pages/Metodologie"));
 const Sources = lazy(() => import("./pages/Sources"));
+const SourceDetail = lazy(() => import("./pages/SourceDetail"));
 const CategoryPage = lazy(() => import("./pages/CategoryPage"));
 const VoicesPage = lazy(() => import("./pages/VoicesPage"));
 const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
@@ -56,6 +57,7 @@ const App = () => (
                 <Route path="/stire/:id" element={<StoryDetail />} />
                 <Route path="/metodologie" element={<Metodologie />} />
                 <Route path="/surse" element={<Sources />} />
+                <Route path="/surse/:id" element={<SourceDetail />} />
                 <Route path="/despre" element={<Despre />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/categorie/:slug" element={<CategoryPage />} />

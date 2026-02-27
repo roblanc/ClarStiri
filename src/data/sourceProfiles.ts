@@ -862,6 +862,41 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
+
+  realitatea: {
+    id: 'realitatea',
+    foundedYear: 2001,
+    founders: ['Sorin Ovidiu Vântu'],
+    currentOwner: 'Cozmin Gușă (din 2018)',
+    parentCompany: 'Realitatea Media',
+    ownershipHistory:
+      'Fondat în 2001 de controversatul om de afaceri Sorin Ovidiu Vântu, condamnat penal pentru fraudă bancară și manipulare de piață. În 2018, postul a fost preluat de Cozmin Gușă, analist politic și fost consilier prezidențial.',
+    politicalConnections: [
+      'Sorin Ovidiu Vântu — fondatorul original, condamnat penal, conexiuni politice multiple',
+      'Cozmin Gușă — analist politic, fost consilier al lui Traian Băsescu, orientare naționalistă-conservatoare',
+      'Poziționare anti-USR, critică la adresa UE în anumite contexte',
+    ],
+    fundingSources: ['Publicitate', 'Cablu/satelit'],
+    editorialLine:
+      'Canal de știri cu orientare conservatoare-naționalistă. Accent pe suveranitate națională, critică la adresa globalizării și a „corectitudinii politice". Talk-show-uri cu opinii puternice.',
+    biasRationale:
+      'Realitatea TV a oscilat semnificativ de-a lungul timpului în funcție de proprietar. Sub conducerea lui Cozmin Gușă (din 2018), orientarea s-a cristalizat spre dreapta conservatoare-naționalistă. Talk-show-urile promovează frecvent narativele suveraniste și conservatoare. Nu atinge nivelul de dezinformare al Antena 3 sau România TV, dar are un bias editorial clar spre dreapta.',
+    controversies: [
+      'Fondatorul original Sorin Ovidiu Vântu — condamnat penal',
+      'Dificultăți financiare recurente și schimbări de proprietar',
+      'Acuzații de partinitate politică în diverse perioade',
+    ],
+    notablePatterns: [
+      'Talk-show-uri cu orientare conservatoare',
+      'Accent pe suveranitate națională',
+      'Critică selectivă a politicienilor din tabăra pro-europeană',
+    ],
+    strengths: ['Acoperire în timp real', 'Dezbateri politice'],
+    biasScore: 60,
+    factualityRationale: 'Factualitate mixtă — afectată de bias editorial în talk-show-uri, mai bună în știrile de actualitate.',
+    confidence: 'medium',
+    lastAnalysed: '2026-02-27',
+  },
 };
 
 // ============================================================
