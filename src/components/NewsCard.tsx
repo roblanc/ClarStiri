@@ -68,7 +68,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     <Link to={`/stire/${news.id}`} className="block h-full group">
       <article className="bg-card border border-border flex flex-col h-full group-hover:bg-secondary/20 transition-colors">
         {/* Top Image Box */}
-        <div className="h-56 relative border-b border-border overflow-hidden">
+        <div className="h-36 md:h-56 relative border-b border-border overflow-hidden">
           <NewsImage
             src={getThumbnailUrl(news.image)}
             seed={news.title}
@@ -88,12 +88,12 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         </div>
 
         {/* Bottom Content Box */}
-        <div className="p-5 flex-1 flex flex-col relative z-10">
-          <h3 className="font-title font-bold text-[22px] leading-[28px] mb-6 text-foreground">
+        <div className="p-3 md:p-5 flex-1 flex flex-col relative z-10">
+          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground">
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-4 flex flex-col gap-3 border-t border-border">
+          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 border-t border-border">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               <span className="text-foreground">{news.category || "ACTUALITATE"}</span>
               <span>•</span>
