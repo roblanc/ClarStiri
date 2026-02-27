@@ -132,6 +132,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }
         }
 
+        // Don't let Vercel CDN cache empty responses — prevents CDN from
+        // serving a stale empty array to all users when on-demand fill fails
+        if (aggregated.length === 0) {
+            res.setHeader('Cache-Control', 'no-store');
+        }
+
         return res.status(200).json({
             success: true,
             data: aggregated.slice(0, limit),
