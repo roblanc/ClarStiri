@@ -12,7 +12,7 @@ const CORS_PROXIES = [
 // Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
 const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v2';
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minute
+const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
 
 // Timeout pentru fetch (în milisecunde)
 const FETCH_TIMEOUT = 8000; // 8 secunde — proxy-urile CORS au latență mai mare din România

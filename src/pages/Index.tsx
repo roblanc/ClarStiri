@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
@@ -18,6 +18,15 @@ const CATEGORY_ORDER = ["Politică", "Actualitate", "Economie", "Sănătate", "T
 
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching, isRefreshing } = useAggregatedNews(40);
+
+  // Arată bannerul de actualizare doar dacă fetch-ul durează mai mult de 1.5s
+  // Fetch-urile rapide din Redis cache (< 1.5s) nu vor declanșa bannerul deloc
+  const [showRefreshBanner, setShowRefreshBanner] = useState(false);
+  useEffect(() => {
+    if (!isRefreshing) { setShowRefreshBanner(false); return; }
+    const t = setTimeout(() => setShowRefreshBanner(true), 1500);
+    return () => clearTimeout(t);
+  }, [isRefreshing]);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
@@ -67,7 +76,7 @@ const Index = () => {
       <Header />
 
       {/* Background Refresh Indicator */}
-      {isRefreshing && (
+      {showRefreshBanner && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-foreground text-background px-4 py-2 rounded-none border border-border flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] animate-fade-in shadow-[4px_4px_0_hsl(var(--primary))]">
           <Loader2 className="w-4 h-4 animate-spin" />
           ACTUALIZARE...

@@ -40,8 +40,8 @@ export function useAggregatedNews(limit = 20) {
     const query = useQuery<AggregatedStory[], Error>({
         queryKey: ['aggregatedNews', limit],
         queryFn: () => fetchNewsWithFallback(limit),
-        staleTime: 2 * 60 * 1000, // 2 minute
-        gcTime: 30 * 60 * 1000, // 30 minute
+        staleTime: 10 * 60 * 1000, // 10 minute
+        gcTime: 60 * 60 * 1000, // 60 minute
         refetchOnWindowFocus: false,
         retry: 1,
         // Folosește datele din cache ca placeholder
@@ -64,8 +64,8 @@ export function useAllNews() {
     return useQuery<RSSNewsItem[], Error>({
         queryKey: ['allNews'],
         queryFn: fetchAllNews,
-        staleTime: 2 * 60 * 1000,
-        gcTime: 30 * 60 * 1000,
+        staleTime: 10 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
         refetchOnWindowFocus: false,
         retry: 1,
     });
