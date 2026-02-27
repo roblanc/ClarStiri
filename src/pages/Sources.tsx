@@ -156,22 +156,27 @@ export default function Sources() {
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-blue-600">Stânga</p>
                   <p className="text-xs text-muted-foreground">Promovează politici progresiste, justiție socială, redistribuire economică, intervenția statului. Critice față de conservatorism și naționalism.</p>
+                  <p className="text-[10px] text-muted-foreground/70 italic mt-1">Figuri asociate: Bernie Sanders, Noam Chomsky, Olof Palme</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-blue-400">Centru-Stânga</p>
                   <p className="text-xs text-muted-foreground">Înclinație pro-europeană și reformistă. Favorizează statul de drept, societatea civilă și modernizarea instituțională, cu ton moderat critic.</p>
+                  <p className="text-[10px] text-muted-foreground/70 italic mt-1">Figuri asociate: Emmanuel Macron, Tony Blair, Barack Obama</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-neutral-500">Centru</p>
                   <p className="text-xs text-muted-foreground">Reportaj echilibrat, fără o agendă politică evidentă. Acoperire factuală cu spațiu editorial minim. Agenții de presă și surse business.</p>
+                  <p className="text-[10px] text-muted-foreground/70 italic mt-1">Figuri asociate: Angela Merkel, Vaclav Havel, Ursula von der Leyen</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-red-400">Centru-Dreapta</p>
                   <p className="text-xs text-muted-foreground">Perspectivă conservatoare moderată, pro-business, accent pe responsabilitate fiscală. Favorable valorilor tradiționale fără radicalism.</p>
+                  <p className="text-[10px] text-muted-foreground/70 italic mt-1">Figuri asociate: Margaret Thatcher, Konrad Adenauer, Nicolas Sarkozy</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-red-600">Dreapta</p>
                   <p className="text-xs text-muted-foreground">Linie editorială naționalistă sau suveranistă, critică față de UE/NATO, favorabilă politicilor conservatoare pe teme sociale și identitare.</p>
+                  <p className="text-[10px] text-muted-foreground/70 italic mt-1">Figuri asociate: Ronald Reagan, Viktor Orbán, Charles de Gaulle</p>
                 </div>
               </div>
             </div>
