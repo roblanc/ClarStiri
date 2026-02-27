@@ -51,8 +51,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let redis: Redis | null = null;
     try {
         if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+            let url = process.env.UPSTASH_REDIS_REST_URL;
+            if (!url.startsWith('http')) url = `https://${url}`;
+
             redis = new Redis({
-                url: process.env.UPSTASH_REDIS_REST_URL,
+                url: url,
                 token: process.env.UPSTASH_REDIS_REST_TOKEN,
             });
         }

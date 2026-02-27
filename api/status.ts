@@ -10,8 +10,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Redis
     try {
+        let url = process.env.UPSTASH_REDIS_REST_URL!;
+        if (url && !url.startsWith('http')) url = `https://${url}`;
+
         const redis = new Redis({
-            url: process.env.UPSTASH_REDIS_REST_URL!,
+            url: url,
             token: process.env.UPSTASH_REDIS_REST_TOKEN!,
         });
         const [cache, ts] = await Promise.all([
