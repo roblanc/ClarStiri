@@ -160,15 +160,23 @@ async function runInBatches<T>(tasks: Array<() => Promise<T>>, batchSize: number
     return results;
 }
 
+// Max stories that receive an LLM-generated title per request.
+// Keeps total LLM time ≤ 2 × batch-round × ~2s ≈ 4s, well within Vercel's 10s limit.
+const MAX_LLM_STORIES = 16;
+
 export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3): Promise<AggregatedStory[]> {
     const recent = filterRecentNews(news);
     const storyGroups = findSimilarStories(recent);
 
     const aggregatedStoryTasks: Array<() => Promise<AggregatedStory>> = [];
     const idCounts = new Map<string, number>();
+    let taskIndex = 0;
 
     storyGroups.forEach((sources) => {
         if (sources.length < minSourcesParam) return;
+
+        const useLlm = taskIndex < MAX_LLM_STORIES;
+        taskIndex++;
 
         const promise = async () => {
             const primary = sources.reduce((earliest, current) => {
@@ -177,8 +185,13 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
 
             const imageSource = sources.find(s => s.imageUrl) || primary;
 
-            // Generate Title via LLM
-            const aggregatedTitle = await generateAggregatedTitle(sources);
+            // Generate Title via LLM only for top stories; rest use best-source fallback.
+            const aggregatedTitle = useLlm
+                ? await generateAggregatedTitle(sources)
+                : (sources.sort((a, b) => {
+                      const order = { high: 2, mixed: 1, low: 0 } as Record<string, number>;
+                      return (order[b.source.factuality] ?? 0) - (order[a.source.factuality] ?? 0);
+                  })[0]?.title ?? primary.title);
 
             let contentBias: BiasAnalysis | undefined;
             const sourcesWithBias = sources.filter(s => s.biasAnalysis);
@@ -236,8 +249,16 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
         aggregatedStoryTasks.push(promise);
     });
 
-    // Execute in batches of 8 to stay within provider RPM limits
-    const aggregatedStories = await runInBatches(aggregatedStoryTasks, 8);
+    // LLM tasks (first MAX_LLM_STORIES) run in batches of 8 to respect RPM limits.
+    // No-LLM tasks (beyond cap) run in parallel since they are instant (no API calls).
+    const llmTasks = aggregatedStoryTasks.slice(0, MAX_LLM_STORIES);
+    const noLlmTasks = aggregatedStoryTasks.slice(MAX_LLM_STORIES);
+
+    const [llmStories, noLlmStories] = await Promise.all([
+        runInBatches(llmTasks, 8),
+        Promise.all(noLlmTasks.map(t => t())),
+    ]);
+    const aggregatedStories = [...llmStories, ...noLlmStories];
 
     // Sort: coverage-first cu freshness decay
     // score = sourcesCount × e^(-hoursOld / 18)

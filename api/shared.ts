@@ -93,7 +93,7 @@ export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; rig
     'right': { left: 0, center: 12, right: 88 },
 };
 
-const FETCH_TIMEOUT = 4000;
+const FETCH_TIMEOUT = 3000;
 
 const POLITICAL_KEYWORDS = {
     left: ['USR', 'REPER', 'progresist', 'anticorupție', 'transparență', 'pro-european', 'reforme'],
@@ -242,10 +242,12 @@ export async function fetchRSSFeed(source: NewsSource, proxyIndex = -1): Promise
 
         return items;
     } catch (error) {
-        if (proxyIndex < CORS_PROXIES.length - 1) {
-            return fetchRSSFeed(source, proxyIndex + 1);
+        // On server-side (Vercel), only try one proxy fallback to stay within the 10s function timeout.
+        // proxyIndex = -1 (direct) → retry once with proxy[0] → give up.
+        if (proxyIndex < 0) {
+            return fetchRSSFeed(source, 0);
         }
-        console.warn(`Failed to fetch ${source.name} after proxies:`, error instanceof Error ? error.message : error);
+        console.warn(`Failed to fetch ${source.name}:`, error instanceof Error ? error.message : error);
         return [];
     }
 }
