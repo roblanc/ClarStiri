@@ -899,6 +899,41 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     confidence: 'medium',
     lastAnalysed: '2026-02-27',
   },
+
+  b1tv: {
+    id: 'b1tv',
+    foundedYear: 2001,
+    founders: ['Bobby Păunescu'],
+    currentOwner: 'Sorin Oancea (50%), George Constantin Păunescu (40%), Luminița Elena Oancea (10%)',
+    parentCompany: 'B1 TV Channel SRL',
+    ownershipHistory:
+      'Lansat în 2001 ca post generalist, transformat în canal de știri 24/7 în 2011. Acționariatul a fost împărțit între Sorin Oancea și George Constantin Păunescu (50/50). În februarie 2025, CNA a aprobat o nouă structură: Oancea 50%, Păunescu 40%, Luminița Elena Oancea (soția lui Sorin Oancea) 10%. Un conflict între familia Păunescu și Oancea pentru controlul postului este documentat din august 2022.',
+    politicalConnections: [
+      'George Constantin Păunescu — fiul lui Viorel Păunescu, controversat om de afaceri',
+      'Bobby Păunescu — fondatorul, producător de film și om de afaceri cu conexiuni politice',
+      'Sorin Oancea — director editorial cu influență asupra liniei postului',
+    ],
+    fundingSources: ['Publicitate', 'Cablu/satelit'],
+    editorialLine:
+      'Canal de știri cu orientare centru-dreapta. Istoric, B1 TV a fost considerat unul dintre puținele posturi cu acoperire echilibrată pro-europeană. În ianuarie 2025, înlocuirea prezentatorului Tudor Mușat cu Laura Chiriac (fostă colaboratoare la Antena 3 și România TV) a generat speculații privind o posibilă viraj spre dreapta suveranistă.',
+    biasRationale:
+      'B1 TV a fost tradițional un post centru-dreapta moderat, oferind spațiu opoziției democratice și perspectivei pro-europene. Conflictul intern de proprietate și schimbările editoriale din 2025 sugerează o posibilă reorientare spre dreapta. Clasificarea actuală reflectă starea curentă, dar necesită monitorizare.',
+    controversies: [
+      'Conflict de proprietate între familia Păunescu și Sorin Oancea (din 2022)',
+      'Înlocuirea prezentatorului Tudor Mușat (ianuarie 2025) — speculații de reorientare editorială',
+      'Laura Chiriac — prezentator nou cu istoric la posturi pro-PSD/suveraniste',
+    ],
+    notablePatterns: [
+      'Dezbateri cu perspective multiple',
+      'Acoperire a opoziției democratice',
+      'Posibilă reorientare editorială în curs (2025)',
+    ],
+    strengths: ['Acoperire 24/7', 'Istoric de echilibru editorial relativ', 'Dezbateri politice'],
+    biasScore: 30,
+    factualityRationale: 'Factualitate mixtă — solidă în știrile de actualitate, variabilă în talk-show-uri.',
+    confidence: 'medium',
+    lastAnalysed: '2026-02-27',
+  },
 };
 
 // ============================================================

@@ -46,6 +46,7 @@ const SOURCE_CATALOG_BASE: SourceCatalogEntry[] = [
   { id: 'factual', name: 'Factual.ro', url: 'https://www.factual.ro', rssUrl: 'https://www.factual.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'jurnalul', name: 'Jurnalul.ro', url: 'https://jurnalul.ro', rssUrl: 'https://jurnalul.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
   { id: 'realitatea', name: 'Realitatea Plus', url: 'https://www.realitatea.net', rssUrl: 'https://www.realitatea.net/feed/', bias: 'right', factuality: 'mixed', category: 'mainstream' },
+  { id: 'b1tv', name: 'B1 TV', url: 'https://www.b1tv.ro', rssUrl: 'https://www.b1tv.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
 ];
 
 function inferFactualityFromProfile(
