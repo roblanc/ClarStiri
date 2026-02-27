@@ -65,6 +65,10 @@ export interface SourceProfile {
   confidence: 'high' | 'medium' | 'low';
   /** Data ultimei analize/actualizări a profilului */
   lastAnalysed: string;
+
+  // --- Referinte ---
+  /** Surse externe folosite pentru analiza acestui profil */
+  references?: Array<{ label: string; url: string }>;
 }
 
 // ============================================================
@@ -246,6 +250,15 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     factualityRationale: 'Factualitate relativ ridicată pentru conținutul de știri. Nu sunt cazuri notorii de fake news. Segmentele de opinie conțin interpretări subiective — normal pentru formatul talk-show.',
     confidence: 'medium',
     lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'Europa FM – Site oficial / Grila de programe', url: 'https://www.europafm.ro/live/' },
+      { label: 'Europa FM – Emisiunea „România în direct"', url: 'https://www.europafm.ro/category/programe/romania-in-direct/' },
+      { label: 'Ziarul Financiar – Vânzarea Europa FM către Czech Media Invest', url: 'https://www.zf.ro/eveniment/postul-de-radio-europa-fm-va-avea-un-nou-proprietar-gigantul-media-francez-lagardere-vinde-radio-urile-detinute-in-europa-de-est-inclusiv-din-romania-catre-czech-media-invest-17133379' },
+      { label: 'Czech Media Invest – Comunicat oficial achiziție Lagardère', url: 'https://www.czechmediainvest.cz/en/press-releases/cmi-has-completed-the-acquisition-of-lagardere-radios/' },
+      { label: 'G4Media – Profil investitori CMI / Daniel Křetínský', url: 'https://www.g4media.ro/cine-sunt-investitorii-care-cumpara-posturile-europa-fm-virgin-radio-si-vibe-fm.html' },
+      { label: 'Pagina de Media – Acționari posturi radio România', url: 'https://www.paginademedia.ro/stiri-media/actionari-posturi-radio-romania-20895178' },
+      { label: 'Wikipedia – Europa FM (Romania)', url: 'https://en.wikipedia.org/wiki/Europa_FM_(Romania)' },
+    ],
   },
 
   // ===================== CENTRU-STÂNGA =====================

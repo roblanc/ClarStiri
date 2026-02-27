@@ -151,6 +151,28 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
 
       <SectionList title="Controverse documentate" items={profile.controversies} />
       <SectionList title="Puncte forte" items={profile.strengths} />
+
+      {profile.references && profile.references.length > 0 && (
+        <section className="space-y-2 border-t border-border pt-4">
+          <h4 className="text-sm font-semibold text-foreground">Surse și referințe</h4>
+          <ol className="space-y-1.5">
+            {profile.references.map((ref, i) => (
+              <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
+                <span className="text-muted-foreground/50 shrink-0 tabular-nums w-4 text-right">{i + 1}.</span>
+                <a
+                  href={ref.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline break-all"
+                >
+                  {ref.label}
+                  <ExternalLink className="w-3 h-3 inline ml-1 -mt-0.5" />
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
     </article>
   );
 }
