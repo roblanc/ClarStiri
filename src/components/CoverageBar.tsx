@@ -5,9 +5,9 @@ interface CoverageBarProps {
 }
 
 const COLORS = {
-  left: '#60a5fa',
-  center: '#a1a1aa',
-  right: '#f87171',
+  left: '#3b82f6',
+  center: '#e5e5e5',
+  right: '#ef4444',
 } as const;
 
 export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarProps) {
