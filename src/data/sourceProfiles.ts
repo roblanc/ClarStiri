@@ -317,26 +317,42 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   recorder: {
     id: 'recorder',
     foundedYear: 2017,
-    founders: ['Victor Ilie', 'Andrei Mușcel', 'echipă de jurnaliști independenți'],
-    currentOwner: 'Echipa fondatoare (independent)',
+    founders: ['Cristian Delcea', 'Mihai Voinea', 'Răzvan Ionescu', 'Iulian Andrei Crăciun'],
+    currentOwner: 'Asociația Recorder Community (ONG de presă independentă)',
     ownershipHistory:
-      'Fondată în 2017 de jurnaliști independenți. Pionier în jurnalismul finanțat prin abonamente în România. A crescut rapid prin documentare video de impact.',
+      'Fondat în 2017 de jurnaliștii Cristian Delcea, Mihai Voinea, Răzvan Ionescu și Iulian Andrei Crăciun. Proiectul a funcționat inițial prin firma Harfa Online Publishing SRL, unde aproape jumătate din acțiuni erau deținute de Dragoș Vîlcu Management SRL (Dragoș Vîlcu + tatăl său), restul de jurnaliștii fondatori. Modelul actual de funcționare este centrat pe Asociația Recorder Community, ONG care derulează activitatea editorială și colectează donațiile.',
     politicalConnections: ['Fără afiliații politice directe cunoscute'],
-    fundingSources: ['Abonamente cititori', 'Granturi pentru jurnalism de investigație', 'Donații'],
-    editorialLine:
-      'Jurnalism de investigație independent. Focus pe subiecte de interes public: corupție, sănătate, educație, justiție. Documentare video de impact.',
-    biasRationale:
-      'Recorder este exemplul clar de publicație independentă finanțată prin abonamente, fără dependență de publicitate politică sau proprietari cu interese. Valorile editoriale (anti-corupție, transparență, responsabilizarea puterii) pot fi percepute ca centru-stânga în contextul românesc, dar reprezintă mai degrabă valori jurnalistice universale. Nu există bias partizan clar în favoarea unui partid.',
-    notablePatterns: [
-      'Investigații profunde documentate cu surse primare',
-      'Documentare video de impact social',
-      'Acoperire îndelungată a dosarelor',
+    fundingSources: [
+      'Donații și contribuții recurente de la public (~90% din venituri)',
+      'Granturi pentru jurnalism de investigație (naționale și internaționale)',
+      'Advertising limitat (online), fără publicitate politică',
     ],
-    strengths: ['Independență editorială', 'Calitate investigativă ridicată', 'Transparență financiară'],
+    editorialLine:
+      'Proiect de jurnalism de investigație și documentar independent, cu focus pe subiecte de interes public: corupție, administrație, justiție, sănătate, educație, infrastructură. Conținutul principal este video (documentare, reportaje), completat de texte explicative și materiale de context.',
+    biasRationale:
+      'Recorder își asumă explicit valori precum lupta împotriva corupției, transparență instituțională și responsabilizarea puterii politice, în linie cu standardele jurnalismului de interes public. În contextul românesc, accentul pus pe instituții puternice, servicii publice funcționale și protecția cetățeanului poate fi perceput ca ușor centru-stânga, dar nu există un bias partizan clar în favoarea unui partid sau actor politic anume.',
+    notablePatterns: [
+      'Investigații profunde, bazate pe documente și surse primare',
+      'Documentare video de impact social, cu audiențe mari și efecte în agenda publică',
+      'Acoperire de durată a unor dosare și teme sistemice (infrastructură, justiție, administrație)',
+    ],
+    strengths: [
+      'Independență editorială susținută de un model de finanțare centrat pe donații',
+      'Calitate investigativă ridicată și capacitate de a produce documentare complexe',
+      'Transparență financiară, cu rapoarte anuale detaliate puse la dispoziția publicului',
+    ],
     biasScore: -35,
-    factualityRationale: 'Factualitate foarte ridicată. Documentare riguroasă.',
+    factualityRationale: 'Factualitate foarte ridicată, bazată pe documentare riguroasă: utilizarea surselor primare (documente, baze de date, interviuri), verificarea afirmațiilor și prezentarea dovezilor în materiale video și texte. Recorder publică periodic rapoarte către cititori despre activitatea sa.',
     confidence: 'high',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'Recorder – Raport anual „Opt ani de Recorder" (finanțare, structură)', url: 'https://recorder.ro/opt-ani-de-recorder-raport-in-fata-cititorilor/' },
+      { label: 'Recorder – Raport anual „7 ani de Recorder"', url: 'https://recorder.ro/7-ani-de-recorder-raport-in-fata-cititorilor/' },
+      { label: 'Recorder – Pagina de susținere / donații', url: 'https://recorder.ro/sustine/' },
+      { label: 'GIJN – Profil Recorder (model de jurnalism independent)', url: 'https://gijn.org/resource/recorder-romania/' },
+      { label: 'IPI – Studiu de caz Recorder (finanțare din donații)', url: 'https://ipi.media/recorder-romania/' },
+      { label: 'HotNews – Despre finanțarea și impactul Recorder', url: 'https://hotnews.ro/recorder-finantare-donatii-model-jurnalism' },
+    ],
   },
 
   libertatea: {
