@@ -13,7 +13,7 @@ import {
 const PLACEHOLDER_IMAGE = "/default-news.png";
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(40);
+  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
