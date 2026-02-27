@@ -138,7 +138,7 @@ const CategoryPage = () => {
                                 story={{
                                     id: story.id,
                                     title: story.title,
-                                    image: story.image || "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&q=80",
+                                    image: story.image || "/default-news.png",
                                     bias: story.bias,
                                     category: category.name,
                                     sourcesCount: story.sourcesCount,

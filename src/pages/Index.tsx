@@ -11,7 +11,7 @@ import {
 } from "@/components/Skeleton";
 
 // Placeholder imagine când nu avem una
-const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
+const PLACEHOLDER_IMAGE = "/default-news.png";
 
 // Ordinea fixă a categoriilor — aceeași pe desktop și mobil
 const CATEGORY_ORDER = ["Politică", "Actualitate", "Economie", "Sănătate", "Tehnologie", "Mediu", "Sport", "Cultură", "Internațional"];

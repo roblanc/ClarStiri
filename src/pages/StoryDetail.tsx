@@ -12,7 +12,7 @@ import { useState } from "react";
 import { NEWS_SOURCES } from "@/types/news";
 
 // Placeholder image
-const PLACEHOLDER_IMAGE = "https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80";
+const PLACEHOLDER_IMAGE = "/default-news.png";
 
 // Mapare bias text pentru filtre
 const BIAS_LABELS = {

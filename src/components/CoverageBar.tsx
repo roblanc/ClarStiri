@@ -39,11 +39,11 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
 
       {/* Labels row */}
       <div className="flex items-center gap-1.5 text-[10px] font-semibold tracking-wide">
-        <span style={{ color: COLORS.left }}>{bias.left}% S</span>
+        <span style={{ color: COLORS.left }}>{bias.left}% Stânga</span>
         <span className="text-muted-foreground">·</span>
-        <span style={{ color: COLORS.center }}>{bias.center}% C</span>
+        <span style={{ color: COLORS.center }}>{bias.center}% Centru</span>
         <span className="text-muted-foreground">·</span>
-        <span style={{ color: COLORS.right }}>{bias.right}% D</span>
+        <span style={{ color: COLORS.right }}>{bias.right}% Dreapta</span>
         <span className="text-muted-foreground ml-auto">{sourcesCount} surse</span>
       </div>
     </div>
