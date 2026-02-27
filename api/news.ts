@@ -74,6 +74,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 ]);
             } catch (e) {
                 console.error('Redis read failed:', e);
+                // Non-fatal, just continue to fetch fresh
             }
         }
 
@@ -109,10 +110,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Cache miss — fetch fresh
         console.log('Cache miss — fetching fresh news');
-        const allNews = await fetchAllNews();
+        let allNews: RSSNewsItem[] = [];
+        try {
+            allNews = await fetchAllNews();
+        } catch (e) {
+            throw new Error(`fetchAllNews failed: ${e instanceof Error ? e.message : String(e)}`);
+        }
+
         console.log(`RSS fetched: ${allNews.length} items`);
 
-        let aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
+        let aggregated: AggregatedStory[] = [];
+        try {
+            aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
+        } catch (e) {
+            throw new Error(`aggregateNewsBuildTopics failed: ${e instanceof Error ? e.message : String(e)}`);
+        }
+
         console.log(`Aggregated: ${aggregated.length} stories`);
 
         // Fallback: if aggregation produced nothing but we have articles, show them individually
@@ -132,8 +145,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }
         }
 
-        // Don't let Vercel CDN cache empty responses — prevents CDN from
-        // serving a stale empty array to all users when on-demand fill fails
+        // Don't let Vercel CDN cache empty responses
         if (aggregated.length === 0) {
             res.setHeader('Cache-Control', 'no-store');
         }
