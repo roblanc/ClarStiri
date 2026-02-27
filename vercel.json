@@ -2,7 +2,7 @@
     "regions": ["fra1"],
     "functions": {
         "api/news.ts": {
-            "maxDuration": 30
+            "maxDuration": 60
         },
         "api/cron/refresh-news.ts": {
             "maxDuration": 60
