@@ -6,6 +6,7 @@ import {
     fetchRSSFeed
 } from './shared.js';
 import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo } from './aggregation.js';
+import { setCorsHeaders } from './cors.js';
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news';
@@ -41,9 +42,7 @@ function buildFallbackStories(allNews: RSSNewsItem[], limit: number): Aggregated
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    setCorsHeaders(req, res);
 
     if (req.method === 'OPTIONS') return res.status(200).end();
 
