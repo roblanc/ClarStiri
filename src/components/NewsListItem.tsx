@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { SourceFaviconGroup } from "./SourceFavicon";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
+import { CoverageBar } from "./CoverageBar";
 
 interface NewsListItemProps {
   story: {
@@ -65,7 +66,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
           </div>
         </div>
 
-        {/* Bottom row: Source Logos + Full-width Bias Bar + Sources count */}
+        {/* Bottom row: Source Logos + Coverage Bar */}
         <div className="flex items-center gap-3">
           {/* Source Logos */}
           {story.sources && story.sources.length > 0 && (
@@ -76,43 +77,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
             />
           )}
 
-          {/* Full-width Bias Bar with labels - smaller on desktop */}
-          <div className="flex-1 md:flex-none md:w-64 lg:w-80 flex h-10 md:h-8 rounded overflow-hidden text-xs font-semibold">
-            {story.bias.left > 0 && (
-              <div
-                className="bg-bias-left flex flex-col items-center justify-center text-white overflow-hidden py-1 md:py-0.5"
-                style={{ width: `${story.bias.left}%` }}
-              >
-                <span className="text-sm md:text-xs font-bold">{story.bias.left}%</span>
-                {story.bias.left >= 15 && <span className="text-[10px] md:text-[9px] opacity-90 hidden md:inline">S</span>}
-                {story.bias.left >= 15 && <span className="text-[10px] opacity-90 md:hidden">Stânga</span>}
-              </div>
-            )}
-            {story.bias.center > 0 && (
-              <div
-                className="bg-bias-center flex flex-col items-center justify-center text-white overflow-hidden py-1 md:py-0.5"
-                style={{ width: `${story.bias.center}%` }}
-              >
-                <span className="text-sm md:text-xs font-bold">{story.bias.center}%</span>
-                {story.bias.center >= 15 && <span className="text-[10px] md:text-[9px] opacity-90 hidden md:inline">C</span>}
-                {story.bias.center >= 15 && <span className="text-[10px] opacity-90 md:hidden">Centru</span>}
-              </div>
-            )}
-            {story.bias.right > 0 && (
-              <div
-                className="bg-bias-right flex flex-col items-center justify-center text-white overflow-hidden py-1 md:py-0.5"
-                style={{ width: `${story.bias.right}%` }}
-              >
-                <span className="text-sm md:text-xs font-bold">{story.bias.right}%</span>
-                {story.bias.right >= 15 && <span className="text-[10px] md:text-[9px] opacity-90 hidden md:inline">D</span>}
-                {story.bias.right >= 15 && <span className="text-[10px] opacity-90 md:hidden">Dreapta</span>}
-              </div>
-            )}
-          </div>
-
-          <span className="text-xs text-muted-foreground whitespace-nowrap">
-            {story.sourcesCount} surse
-          </span>
+          <CoverageBar bias={story.bias} sourcesCount={story.sourcesCount} className="flex-1" />
         </div>
       </article>
     </Link>

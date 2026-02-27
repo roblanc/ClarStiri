@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { BiasBar } from "./BiasBar";
 import { BiasBadge } from "./BiasBadge";
+import { CoverageBar } from "./CoverageBar";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
@@ -99,13 +99,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <span>•</span>
               <span>{news.timeAgo || "ACUM"}</span>
             </div>
-
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-bold uppercase tracking-wider">
-              <span className="text-[#3b82f6]">{news.bias.left}% <span className="hidden sm:inline">STÂNGA</span><span className="sm:hidden">S</span></span>
-              <span className="text-foreground">{news.bias.center}% <span className="hidden sm:inline">CENTRU</span><span className="sm:hidden">C</span></span>
-              <span className="text-[#ef4444]">{news.bias.right}% <span className="hidden sm:inline">DREAPTA</span><span className="sm:hidden">D</span></span>
-            </div>
-            <BiasBar left={news.bias.left} center={news.bias.center} right={news.bias.right} size="sm" />
+            <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
           </div>
         </div>
       </article>
