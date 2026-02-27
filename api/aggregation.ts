@@ -149,11 +149,22 @@ export function findSimilarStories(news: RSSNewsItem[], threshold = 0.25, maxTim
     return cleanGroups;
 }
 
+/** Run tasks in sequential batches to avoid hitting provider RPM limits. */
+async function runInBatches<T>(tasks: Array<() => Promise<T>>, batchSize: number): Promise<T[]> {
+    const results: T[] = [];
+    for (let i = 0; i < tasks.length; i += batchSize) {
+        const batch = tasks.slice(i, i + batchSize);
+        const batchResults = await Promise.all(batch.map(task => task()));
+        results.push(...batchResults);
+    }
+    return results;
+}
+
 export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3): Promise<AggregatedStory[]> {
     const recent = filterRecentNews(news);
     const storyGroups = findSimilarStories(recent);
 
-    const aggregatedStoriesPromises: Promise<AggregatedStory>[] = [];
+    const aggregatedStoryTasks: Array<() => Promise<AggregatedStory>> = [];
     const idCounts = new Map<string, number>();
 
     storyGroups.forEach((sources) => {
@@ -222,11 +233,11 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
             };
         };
 
-        aggregatedStoriesPromises.push(promise());
+        aggregatedStoryTasks.push(promise);
     });
 
-    // Execute LLM generators concurrently
-    const aggregatedStories = await Promise.all(aggregatedStoriesPromises);
+    // Execute in batches of 8 to stay within provider RPM limits
+    const aggregatedStories = await runInBatches(aggregatedStoryTasks, 8);
 
     // Sort: coverage-first cu freshness decay
     // score = sourcesCount × e^(-hoursOld / 18)
