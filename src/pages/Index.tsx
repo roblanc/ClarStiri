@@ -4,17 +4,13 @@ import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Loader2, AlertCircle } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import {
   MainFeedSkeleton,
-  SidebarSkeleton
 } from "@/components/Skeleton";
 
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "/default-news.png";
-
-// Ordinea fixă a categoriilor — aceeași pe desktop și mobil
-const CATEGORY_ORDER = ["Politică", "Actualitate", "Economie", "Sănătate", "Tehnologie", "Mediu", "Sport", "Cultură", "Internațional"];
 
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(40);
@@ -38,29 +34,6 @@ const Index = () => {
       })),
     })) || [];
   }, [stories]);
-
-  // Group stories by category for the editorial layout
-  const groupedStories = useMemo(() => {
-    const groups: Record<string, typeof convertedStories> = {};
-    convertedStories.forEach(story => {
-      if (!groups[story.category]) {
-        groups[story.category] = [];
-      }
-      groups[story.category].push(story);
-    });
-
-    // Sort by fixed order; categories not in list go last sorted by count
-    return Object.entries(groups)
-      .sort((a, b) => {
-        const aIdx = CATEGORY_ORDER.indexOf(a[0]);
-        const bIdx = CATEGORY_ORDER.indexOf(b[0]);
-        if (aIdx === -1 && bIdx === -1) return b[1].length - a[1].length;
-        if (aIdx === -1) return 1;
-        if (bIdx === -1) return -1;
-        return aIdx - bIdx;
-      })
-      .slice(0, 6);
-  }, [convertedStories]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,7 +68,7 @@ const Index = () => {
           </div>
         )}
 
-        {/* Error / Empty State — shows when fetch finished but no stories arrived */}
+        {/* Error / Empty State */}
         {!isLoading && !isFetching && !stories?.length && (
           <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
             <AlertCircle className="w-12 h-12 text-destructive mb-4" />
@@ -109,26 +82,16 @@ const Index = () => {
           </div>
         )}
 
-        {/* Content — Grouped Layout */}
-        {!!groupedStories.length && (
-          <div className="flex flex-col gap-20">
-            {groupedStories.map(([category, items]) => (
-              <section key={category}>
-                <h2 className="font-serif text-3xl text-foreground mb-8 pb-2 border-b border-border">
-                  {category}
-                </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-border">
-                  {items.map((news) => (
-                    <div key={news.id} className="border-r border-b border-border">
-                      <NewsCard
-                        variant="default"
-                        news={news}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </section>
+        {/* Flat Feed */}
+        {convertedStories.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-border">
+            {convertedStories.map((news) => (
+              <div key={news.id} className="border-r border-b border-border">
+                <NewsCard
+                  variant="default"
+                  news={news}
+                />
+              </div>
             ))}
           </div>
         )}
@@ -142,11 +105,9 @@ const Index = () => {
           </span>
 
           <nav className="flex items-center justify-center gap-6 mb-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Metodologie</span>
+            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Surse</Link>
             <span className="w-1 h-1 bg-border rounded-full"></span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Surse</span>
-            <span className="w-1 h-1 bg-border rounded-full"></span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors cursor-pointer">Barometru</span>
+            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Barometru</Link>
           </nav>
 
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">

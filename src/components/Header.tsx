@@ -5,17 +5,6 @@ import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 
-const categories = [
-  "Politică",
-  "Economie",
-  "Sănătate",
-  "Tehnologie",
-  "Mediu",
-  "Sport",
-  "Cultură",
-  "Internațional",
-];
-
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,22 +31,12 @@ export function Header() {
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
 
-          {/* Desktop Categories */}
-          <nav className="hidden md:flex flex-1 items-center gap-x-5 gap-y-2 lg:gap-x-7 flex-wrap justify-center">
-            {categories.map((category) => (
-              <Link
-                key={category}
-                to={`/categorie/${category.toLowerCase()}`}
-                className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground hover:opacity-50 transition-opacity whitespace-nowrap"
-              >
-                {category}
-              </Link>
-            ))}
-            <div className="w-px h-4 bg-border mx-1"></div>
-            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex flex-1 items-center gap-x-5 lg:gap-x-7 justify-center">
+            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground hover:opacity-50 transition-opacity whitespace-nowrap">
               Surse
             </Link>
-            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground hover:text-foreground transition-colors whitespace-nowrap">
+            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground hover:opacity-50 transition-opacity whitespace-nowrap">
               Barometru
             </Link>
           </nav>
@@ -93,19 +72,8 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-background border-b border-border animate-fade-in absolute w-full shadow-lg">
           <nav className="container mx-auto px-4 py-6 space-y-4 flex flex-col items-center text-center">
-            {categories.map(category => (
-              <Link
-                key={category}
-                to={`/categorie/${category.toLowerCase()}`}
-                className="text-xs font-bold uppercase tracking-[0.2em] text-foreground w-full py-2 hover:bg-secondary"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {category}
-              </Link>
-            ))}
-            <div className="w-12 h-px bg-border my-2"></div>
-            <Link to="/surse" className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground w-full py-2" onClick={() => setMobileMenuOpen(false)}>Surse</Link>
-            <Link to="/barometru" className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground w-full py-2" onClick={() => setMobileMenuOpen(false)}>Barometru</Link>
+            <Link to="/surse" className="text-xs font-bold uppercase tracking-[0.2em] text-foreground w-full py-2 hover:bg-secondary" onClick={() => setMobileMenuOpen(false)}>Surse</Link>
+            <Link to="/barometru" className="text-xs font-bold uppercase tracking-[0.2em] text-foreground w-full py-2 hover:bg-secondary" onClick={() => setMobileMenuOpen(false)}>Barometru</Link>
           </nav>
         </div>
       )}
