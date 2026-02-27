@@ -1,11 +1,11 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Parser from 'rss-parser';
 import { NEWS_SOURCES, fetchRSSFeed } from './shared.js';
+import { setCorsHeaders } from './cors.js';
 
 const parser = new Parser();
 
-// Incercam sa luam cheia din ambele variante de env vars
-const GEMINI_API_KEY = process.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-001:generateContent';
 
 type StatementImpact = 'high' | 'medium' | 'low';
@@ -44,10 +44,7 @@ function asBias(value: unknown): StatementBias {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-    // CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    setCorsHeaders(req, res);
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
