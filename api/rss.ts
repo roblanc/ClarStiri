@@ -13,14 +13,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
         const decoded = decodeURIComponent(url);
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000);
+
         const response = await fetch(decoded, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'application/rss+xml, application/xml, text/xml, */*',
                 'Accept-Language': 'ro-RO,ro;q=0.9,en-US;q=0.8,en;q=0.7',
             },
-            signal: AbortSignal.timeout(8000),
+            signal: controller.signal as RequestInit['signal'],
         });
+        clearTimeout(timeoutId);
 
         if (!response.ok) {
             return res.status(response.status).end();

@@ -30,13 +30,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // RSS direct fetch test (digi24)
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
         const r = await fetch('https://www.digi24.ro/rss', {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
                 'Accept': 'application/rss+xml, application/xml, text/xml',
             },
-            signal: AbortSignal.timeout(6000),
+            signal: controller.signal as RequestInit['signal'],
         });
+        clearTimeout(timeoutId);
         const body = await r.text();
         out.rss_digi24 = {
             status: r.ok ? 'ok' : 'http_error',
@@ -50,9 +53,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // RSS via allorigins.win
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
         const r = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://www.digi24.ro/rss'), {
-            signal: AbortSignal.timeout(6000),
+            signal: controller.signal as RequestInit['signal'],
         });
+        clearTimeout(timeoutId);
         const body = await r.text();
         out.rss_digi24_via_allorigins = {
             status: r.ok ? 'ok' : 'http_error',
