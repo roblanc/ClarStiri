@@ -476,38 +476,52 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   g4media: {
     id: 'g4media',
-    foundedYear: 2015,
-    founders: ['Paul Cristian Radu', 'Cristian Pantazi'],
-    currentOwner: 'Structură editorială independentă',
+    foundedYear: 2018,
+    founders: ['Dan Tăpălagă', 'Cristian Pantazi'],
+    currentOwner: 'Titluri Quality SRL (Radu Budeanu) — din august 2025',
+    parentCompany: 'Titluri Quality (include și Mediafax, Gândul, Cancan)',
     ownershipHistory:
-      'Fondat în 2015. Paul Cristian Radu este co-fondator OCCRP (Organized Crime and Corruption Reporting Project), cea mai importantă rețea internațională de jurnalism de investigație.',
+      'Fondat pe 18 martie 2018 de jurnaliștii Dan Tăpălagă și Cristian Pantazi, inițial ca organizație non-profit (Asociația Group 4 Media Freedom and Democracy), finanțată prin donații ale cititorilor. În august 2025, grupul G4Media a fost achiziționat integral de compania Titluri Quality, deținută de Radu Budeanu, formând cel mai mare conglomerat de presă digitală din România. Fondatorii au declarat că rămân implicați activ, iar noul proprietar a semnat un acord privind independența editorială.',
     politicalConnections: [
-      'Paul Cristian Radu — OCCRP, rețea internațională de jurnalism anti-corupție',
-      'Conexiuni cu organizații internaționale pro-press freedom (NED, USAID adjacent)',
+      'Fără afiliere directă la un partid politic',
+      'Finanțare din fonduri europene și USAID pentru combaterea dezinformării (~2.8M EUR)',
+      'Radu Budeanu (noul proprietar din 2025) — om de afaceri în media digitală',
     ],
     fundingSources: [
-      'Granturi internaționale (OCCRP, NED, organizații pro-democrație)',
       'Publicitate',
       'Abonamente',
+      'Donații cititori (perioada non-profit)',
+      'Fonduri europene / USAID (proiecte anti-dezinformare)',
     ],
     editorialLine:
       'Jurnalism de investigație cu focus puternic pe anti-corupție, pro-UE, pro-NATO, anti-extremism. Cea mai explicită poziționare pro-europeană și anti-naționalistă din presa românească.',
     biasRationale:
-      'G4Media are o orientare editorială clar de stânga în contextul românesc: puternic anti-naționalist, anti-AUR, critic al PSD, pro-USR, pro-UE, pro-NATO. Finanțarea prin granturi internaționale (organizații pro-democrație americane și europene) consolidează această orientare. Deși jurnalismul în sine este de calitate și factualitate ridicată, framing-ul editorial este explicit partizan în favoarea taberei pro-europene. Aceasta nu este o critică — G4Media este transparent cu privire la valorile sale.',
-    controversies: [
-      'Finanțare parțială din surse externe (ONG-uri internaționale) — considerată controversată de critica de dreapta',
-    ],
+      'G4Media are o orientare editorială clar de stânga în contextul românesc: puternic anti-naționalist, anti-AUR, critic al PSD, pro-USR, pro-UE, pro-NATO. Finanțarea din fonduri europene și proiecte anti-dezinformare consolidează această orientare. Deși jurnalismul în sine este de calitate și factualitate ridicată, framing-ul editorial este explicit partizan în favoarea taberei pro-europene. Aceasta nu este o critică — G4Media este transparent cu privire la valorile sale.',
     notablePatterns: [
       'Acoperire intensă a extremismului de dreapta',
       'Poziționare clară pro-UE/NATO',
       'Critici consistente la adresa PSD și AUR/SOS',
       'Monitorizare dezinformare',
     ],
-    strengths: ['Calitate investigativă', 'Rețea internațională OCCRP', 'Standarde ridicate de verificare'],
+    controversies: [
+      'Finanțare din fonduri europene/USAID — considerată controversată de critica de dreapta',
+      'Achiziția din 2025 de Titluri Quality — întrebări despre independența editorială viitoare',
+    ],
+    strengths: ['Calitate investigativă', 'Standarde ridicate de verificare', 'Audiență mare în mediul online'],
     biasScore: -65,
     factualityRationale: 'Factualitate ridicată în ciuda bias-ului editorial puternic.',
     confidence: 'high',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'G4Media – Pagina „Despre noi"', url: 'https://www.g4media.ro/despre-noi' },
+      { label: 'Wikipedia – G4Media', url: 'https://ro.wikipedia.org/wiki/G4Media' },
+      { label: 'HotNews – Achiziția G4Media de către Titluri Quality (2025)', url: 'https://hotnews.ro/g4media-achizitionat-titluri-quality-radu-budeanu' },
+      { label: 'Adevărul – G4Media vândut către Radu Budeanu', url: 'https://adevarul.ro/economie/g4media-vandut-titluri-quality-radu-budeanu' },
+      { label: 'PressHub – Cel mai mare conglomerat digital din România', url: 'https://presshub.ro/g4media-titluri-quality-conglomerat-digital' },
+      { label: 'Revista 22 – Profil Dan Tăpălagă și G4Media', url: 'https://revista22.ro/actualitate-2/dan-tapalaga-g4media' },
+      { label: 'Capital – Achiziția G4Media și impactul în piața media', url: 'https://www.capital.ro/g4media-achizitie-titluri-quality.html' },
+      { label: 'G4Media – Finanțare și transparență', url: 'https://www.g4media.ro/dona' },
+    ],
   },
 
   criticatac: {
