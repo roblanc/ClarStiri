@@ -211,7 +211,6 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
 
 const CORS_PROXIES = [
     'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?url=',
 ];
 
 export async function fetchRSSFeed(source: NewsSource, proxyIndex = -1): Promise<RSSNewsItem[]> {

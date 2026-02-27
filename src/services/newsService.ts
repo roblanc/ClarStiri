@@ -7,8 +7,6 @@ import { createStoryIdFromSources } from '@/utils/storyId';
 const CORS_PROXIES = [
     '/api/rss?url=',
     'https://api.allorigins.win/raw?url=',
-    'https://corsproxy.io/?url=',
-    'https://corsproxy.org/?url=',
 ];
 
 // Cache keys pentru localStorage
