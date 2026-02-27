@@ -457,20 +457,39 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   vice: {
     id: 'vice',
-    founders: ['Vice Media (SUA)'],
-    currentOwner: 'Vice Media (sub restructurări financiare continue)',
-    parentCompany: 'Vice Media International',
+    foundedYear: 2010,
+    founders: ['Vice Media Group (brand global fondat în 1994 de Shane Smith, Suroosh Alvi și Gavin McInnes)'],
+    currentOwner: 'Vice Media Group (preluat de consorțiu de creditori: Fortress Investment Group, Soros Fund Management etc.) — redacția română închisă în decembrie 2023',
+    parentCompany: 'Vice Media Group (în reorganizare post-faliment)',
     ownershipHistory:
-      'Ediție românească a brand-ului internațional Vice. Vice Media global a trecut prin dificultăți financiare semnificative în 2023-2024.',
-    fundingSources: ['Publicitate', 'Conținut de brand'],
+      'Vice România a funcționat din 2010 ca ediție locală a Vice Media Group, parte a rețelei internaționale Vice. La nivel global, brandul a fost fondat în 1994 la Montreal de Shane Smith, Suroosh Alvi și Gavin McInnes. Vice Media Group a inițiat procedura de faliment (Chapter 11) în SUA în 2023 și a fost preluat de un consorțiu de creditori. Redacția română și-a închis activitatea în decembrie 2023, pe fondul problemelor financiare ale grupului-mamă.',
+    fundingSources: ['Publicitate', 'Conținut de brand (native advertising)', 'Campanii integrate pentru branduri'],
     editorialLine:
-      'Conținut orientat spre tineri. Știri, cultură, investigații sociale. Abordare neconvențională.',
+      'Ediție românească a brand-ului global Vice, orientată spre public tânăr, cu conținut despre cultură, lifestyle, sexualitate, societate și investigații sociale. Abordare neconvențională, limbaj direct, accent pe teme controversate și pe subiecte marginalizate. Redacția română a fost activă între 2010 și 2023.',
     biasRationale:
-      'Vice Media are la nivel global o orientare stânga-progresistă clară. Ediția românească urmărește această tendință prin subiectele abordate (drepturi LGBTQ+, drepturile minorităților, critici sociale). Factualitatea poate fi mixtă din cauza stilului jurnalistic mai subiectiv.',
+      'Vice, la nivel global, promovează constant teme progresiste: drepturi LGBTQ+, drepturile minorităților, critici la adresa autoritarismului, conservatorismului social și abuzurilor de putere. Ediția românească a urmat aceeași linie, atât prin selecția subiectelor, cât și prin tonul editorial, ceea ce justifică încadrarea în zona centru-stânga / progresistă, fără a fi explicit partizană în favoarea unui partid politic românesc.',
+    notablePatterns: [
+      'Conținut orientat spre Gen Z și public tânăr',
+      'Teme progresiste: LGBTQ+, minorități, critici sociale',
+      'Stil narativ și subiectiv, diferit de jurnalismul tradițional',
+    ],
+    controversies: [
+      'Falimentul Vice Media Group (Chapter 11, 2023)',
+      'Închiderea redacției române în decembrie 2023',
+      'Dependență de finanțare externă și datorii mari la nivel global',
+    ],
+    strengths: ['Acces la public tânăr', 'Subiecte și perspective marginalizate', 'Investigații sociale neconvenționale'],
     biasScore: -35,
-    factualityRationale: 'Factualitate mixtă — uneori subiectiv, alteori riguros.',
+    factualityRationale: 'Factualitate medie: Vice combină reportaje solide și materiale de investigație cu texte subiective, narative sau foarte personale, ceea ce duce la o factualitate inegală între materiale. Redacția românească a produs și materiale bine documentate despre teme sociale sensibile.',
     confidence: 'medium',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'Vice România – „Ce a însemnat Vice România pentru noi" (bilanț)', url: 'https://www.vice.com/ro/article/ce-a-insemnat-vice-romania-pentru-noi/' },
+      { label: 'Wikipedia – Vice (revistă)', url: 'https://ro.wikipedia.org/wiki/Vice_(revist%C4%83)' },
+      { label: 'HotNews – Vice România se închide', url: 'https://hotnews.ro/vice-romnia-a-anuntat-ca-se-va-nchide-dupa-o-prezenta-de-peste-un-deceniu-pe-piata-25265' },
+      { label: 'Știrile ProTV – Vice Media depune cerere de faliment', url: 'https://stirileprotv.ro/stiri/financiar/compania-care-detine-brandul-americano-canadian-vice-a-depus-cerere-pentru-intrarea-in-faliment.html' },
+      { label: 'G4Media – Vice România s-a închis', url: 'https://www.g4media.ro/publicatia-vice-romania-s-a-inchis-zece-angajati-au-fost-concediati-compania-mama-are-probleme-la-nivel-global-dupa-ce-a-primit-bani-din-arabia-saudita.html' },
+    ],
   },
 
   scena9: {
