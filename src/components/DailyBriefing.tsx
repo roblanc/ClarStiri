@@ -31,13 +31,16 @@ export function DailyBriefing({ briefing }: DailyBriefingProps) {
       <div className="space-y-3 mb-4">
         {briefing.stories.map((story, index) => (
           <div key={index} className="flex items-start gap-3">
-            <img
-              src={getSmallImageUrl(story.image)}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="w-14 h-12 object-cover rounded flex-shrink-0"
-            />
+            <div className="w-14 h-12 rounded flex-shrink-0 bg-muted overflow-hidden">
+              <img
+                src={getSmallImageUrl(story.image)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+              />
+            </div>
             <p className="text-sm text-foreground leading-snug line-clamp-2">
               {story.title}
             </p>

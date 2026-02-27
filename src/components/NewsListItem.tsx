@@ -56,6 +56,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
               alt=""
               loading="lazy"
               className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md"
+              onError={(e) => { e.currentTarget.style.opacity = '0'; }}
               style={{
                 transform: 'rotateY(0deg)',
                 transformOrigin: 'right center'

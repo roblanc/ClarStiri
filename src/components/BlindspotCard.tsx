@@ -17,12 +17,13 @@ export function BlindspotCard({ story }: BlindspotCardProps) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="rounded-lg border border-border overflow-hidden bg-card">
-        <div className="relative">
+        <div className="relative bg-muted min-h-[144px]">
           <img
             src={getSmallImageUrl(story.image)}
             alt=""
             loading="lazy"
             className="w-full h-36 object-cover"
+            onError={(e) => { e.currentTarget.style.opacity = '0'; }}
           />
           <div className="absolute top-2 left-2">
             <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-primary text-primary-foreground">
