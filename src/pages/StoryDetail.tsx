@@ -46,6 +46,31 @@ const getBiasLabel = (bias: string) => {
   return labels[bias] || 'Centru';
 };
 
+// Componenta logo sursă cu fallback la inițiale
+function SourceLogo({ source }: { source: { name: string; bias: string; url?: string; logo?: string } }) {
+  const [failed, setFailed] = useState(false);
+  // Use Google favicon service as primary, clearbit logo as fallback
+  const domain = source.url ? new URL(source.url).hostname : '';
+  const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=64` : '';
+
+  if (!faviconUrl || failed) {
+    return (
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${getBiasColor(source.bias)}`}>
+        {source.name.substring(0, 2).toUpperCase()}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={faviconUrl}
+      alt={source.name}
+      className="w-10 h-10 rounded-full object-cover border border-border shrink-0 bg-white"
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 const StoryDetail = () => {
   const { id } = useParams();
   const { data: stories, isLoading } = useAggregatedNews(60);
@@ -306,9 +331,7 @@ const StoryDetail = () => {
                   >
                     <div className="flex items-start gap-4">
                       {/* Source Logo */}
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${getBiasColor(article.source.bias)}`}>
-                        {article.source.name.substring(0, 2).toUpperCase()}
-                      </div>
+                      <SourceLogo source={article.source} />
 
                       <div className="flex-1 min-w-0">
                         {/* Source Name and Badges */}
