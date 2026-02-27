@@ -40,13 +40,16 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
       <Link to={`/stire/${news.id}`} className="block">
         <article className="news-card p-4">
           <div className="flex gap-4">
-            <img
-              src={getThumbnailUrl(news.image)}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              className="w-24 h-24 object-cover flex-shrink-0 border border-border"
-            />
+            <div className="w-24 h-24 flex-shrink-0 bg-muted border border-border overflow-hidden">
+              <img
+                src={getThumbnailUrl(news.image)}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+                onError={(e) => { e.currentTarget.style.opacity = '0'; }}
+              />
+            </div>
             <div className="flex-1 min-w-0 flex flex-col justify-center">
               <h3 className="font-title font-bold text-[22px] leading-[28px] line-clamp-3 text-foreground">
                 {news.title}
@@ -72,6 +75,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             loading="lazy"
             decoding="async"
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+            onError={(e) => { e.currentTarget.style.opacity = '0'; }}
           />
           {blindspotLabel && (
             <div className="absolute top-3 left-3">

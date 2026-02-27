@@ -76,7 +76,6 @@ export function optimizeImageUrl(
     params.set('q', quality.toString());
     params.set('fit', fit);
     params.set('output', 'webp'); // Conversie WebP automată
-    params.set('default', 'placeholder'); // Placeholder dacă imaginea nu există
 
     return `https://wsrv.nl/?${params.toString()}`;
 }

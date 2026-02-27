@@ -33,7 +33,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
       <div className="relative flex flex-col lg:flex-row bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
 
         {/* Imagine */}
-        <div className="lg:w-3/5 h-64 lg:h-auto overflow-hidden relative min-h-[300px]">
+        <div className="lg:w-3/5 h-64 lg:h-auto overflow-hidden relative min-h-[300px] bg-muted">
           <img
             src={getFeaturedImageUrl(story.image)}
             alt=""
@@ -41,6 +41,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => { e.currentTarget.style.opacity = '0'; }}
           />
           <div className="absolute top-4 left-4">
             <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
