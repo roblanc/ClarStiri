@@ -266,30 +266,48 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   digi24: {
     id: 'digi24',
     foundedYear: 2012,
-    founders: ['RCS&RDS'],
-    currentOwner: 'Zoltan Teszari (indirect prin Digi Communications N.V.)',
-    parentCompany: 'Digi Communications N.V. / RCS&RDS',
+    founders: ['RCS&RDS (acum Digi Communications N.V.)'],
+    currentOwner: 'Zoltán Teszári (indirect, prin grupul Digi Communications N.V. / Campus Media TV SRL)',
+    parentCompany: 'Digi Communications N.V. / Campus Media TV SRL',
     ownershipHistory:
-      'Lansat în 2012 ca parte a grupului RCS&RDS, operator de telecomunicații. Zoltan Teszari, fondatorul RCS&RDS, este un antreprenor român-maghiar cu afaceri extinse în telecom și media.',
+      'Lansat la 1 martie 2012 ca parte a grupului RCS&RDS, principal operator de telecomunicații din România, controlat de Zoltán Teszári. În 2019, proprietatea Digi24 a fost transferată către Campus Media TV SRL, pentru a permite distribuția și la alți operatori, nu doar în rețeaua Digi. Controlul rămâne legat de grupul Digi și de Teszári.',
     politicalConnections: [
-      'Zoltan Teszari — fără afiliații politice publice clare',
-      'Interese în telecomunicații (reglementare ANCOM) pot afecta acoperirea subiectelor telecom',
+      'Zoltán Teszári — nu are afiliere publică declarată la un partid politic, dar interesele sale de business în telecom intersectează agenda politică (reglementare ANCOM, legislație telecom)',
+      'Ca televiziune comercială, Digi24 a vândut spații de publicitate și către partide politice, similar altor televiziuni de știri',
+      'Amendamente PSD din 2022 au vizat forțarea separării Digi24 de RCS&RDS',
     ],
-    fundingSources: ['Publicitate', 'Inclus în pachetele Digi'],
+    fundingSources: ['Publicitate (inclusiv publicitate politică de campanie)', 'Distribuție în pachetele Digi', 'Proiecte speciale'],
     editorialLine:
-      'Canal de știri 24/7 profesionist. Acoperire largă, echipe de investigație. Ușoară tendință pro-europeană și pro-reformă.',
+      'Canal de știri TV 24/7, cu acoperire națională și focus pe actualitate politică, economică și internațională. Include jurnale de știri, talk-show-uri, analize și investigații, cu un profil pro-european și pro-reformă.',
     biasRationale:
-      'Digi24 este considerat unul dintre posturile mai echilibrate din peisajul românesc. Teszari nu are un profil politic partizan evident, ceea ce reduce riscul de bias editorial explicit. Tendința centru-stânga se manifestă subtil prin alegerea subiectelor (pro-UE, pro-anticorupție, critici la adresa extremismului). Nu există dovezi de bias partizan sistematic.',
+      'Digi24 este adesea perceput ca unul dintre posturile relativ mai echilibrate din peisajul TV românesc, iar evaluări externe (MediaBiasFactCheck) îl notează ca „least biased" cu factualitate ridicată. Bias-ul estimat centru / ușor centru-stânga vine din accentul pus pe subiecte pro-UE, pro-anticorupție și critice față de extremism și populism, fără o aliniere clară și constantă cu un anumit partid. Există însă perioade în care unele voci din spațiul public au acuzat postul de apropiere de pozițiile partidelor de guvernare, ceea ce justifică o „încredere medie", nu maximă. Această încadrare este o estimare editorială proprie.',
     notablePatterns: [
-      'Investigații jurnalistice de calitate',
-      'Dezbateri cu perspective multiple',
-      'Acoperire extinsă a UE și politicii externe',
+      'Acoperire extinsă a UE și politicii externe, inclusiv dezbateri pe teme europene',
+      'Dezbateri cu invitați din mai multe zone politice, cu moderare percepută ca mai critică față de extremism',
+      'Investigații și analize, deși nu la nivelul outlet-urilor strict investigative',
     ],
-    strengths: ['Profesionalism', 'Investigații', 'Acoperire cuprinzătoare'],
+    controversies: [
+      'Amendamente PSD (2022) vizând forțarea vânzării Digi24 de către RCS&RDS',
+      'Acuzații periodice de apropiere de pozițiile guvernării în funcție',
+      'Interesele Digi în telecom pot influența acoperirea subiectelor legate de reglementare',
+    ],
+    strengths: [
+      'Profesionalism editorial și producție TV bine standardizată',
+      'Acoperire cuprinzătoare a politicii interne și externe, inclusiv live-uri extinse',
+      'Percepție relativ mai bună de echilibru comparativ cu alte posturi de știri românești',
+    ],
     biasScore: -25,
-    factualityRationale: 'Factualitate ridicată. Verificare bună a informațiilor.',
+    factualityRationale: 'Factualitate ridicată: acoperire live extinsă, utilizează agenții de presă și corespondenți, nu este cunoscut pentru dezinformare sistematică. Evaluări independente (MBFC, Reuters Institute) îl menționează ca brand relativ de încredere.',
     confidence: 'medium',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'Wikipedia – Digi24', url: 'https://en.wikipedia.org/wiki/Digi24' },
+      { label: 'Eurotopics – Fișă Digi24 (proprietate, Campus Media TV SRL)', url: 'https://www.eurotopics.net/en/163061/digi-24' },
+      { label: 'MediaBiasFactCheck – Digi24 (least biased, high factuality)', url: 'https://mediabiasfactcheck.com/digi24-bias/' },
+      { label: 'Economedia – PSD vizează ruperea Digi24 de RCS&RDS', url: 'https://economedia.ro/psd-vizeaza-ruperea-digi24-de-rcsrds-un-amendament-depus-de-ministrul-lucian-romascanu-ar-forta-compania-condusa-de-zoltan-teszari-sa-vanda-televiziunea-digi24-cablistii-cu-pozitie-dominanta-pe-pi.html' },
+      { label: 'CMPF/EUI – Media Freedom in Romania (context publicitate politică)', url: 'https://cmpf.eui.eu/local-media-for-democracy-research-results/local-media-for-democracy-country-focus-romania/' },
+      { label: 'Digi Communications – Despre noi', url: 'https://www.digi-communications.ro/ro/despre-noi' },
+    ],
   },
 
   hotnews: {
