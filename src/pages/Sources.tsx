@@ -151,6 +151,29 @@ export default function Sources() {
                 <div className="bg-red-400 text-white py-2 px-1">Centru-Dreapta</div>
                 <div className="bg-red-600 text-white py-2 px-1 rounded-r-md">Dreapta</div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-blue-600">Stânga</p>
+                  <p className="text-xs text-muted-foreground">Promovează politici progresiste, justiție socială, redistribuire economică, intervenția statului. Critice față de conservatorism și naționalism.</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-blue-400">Centru-Stânga</p>
+                  <p className="text-xs text-muted-foreground">Înclinație pro-europeană și reformistă. Favorizează statul de drept, societatea civilă și modernizarea instituțională, cu ton moderat critic.</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-neutral-500">Centru</p>
+                  <p className="text-xs text-muted-foreground">Reportaj echilibrat, fără o agendă politică evidentă. Acoperire factuală cu spațiu editorial minim. Agenții de presă și surse business.</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-red-400">Centru-Dreapta</p>
+                  <p className="text-xs text-muted-foreground">Perspectivă conservatoare moderată, pro-business, accent pe responsabilitate fiscală. Favorable valorilor tradiționale fără radicalism.</p>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-red-600">Dreapta</p>
+                  <p className="text-xs text-muted-foreground">Linie editorială naționalistă sau suveranistă, critică față de UE/NATO, favorabilă politicilor conservatoare pe teme sociale și identitare.</p>
+                </div>
+              </div>
             </div>
 
             {/* How it's calculated */}
