@@ -93,9 +93,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 border-t border-border">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-              <span className="text-foreground">{news.category || "ACTUALITATE"}</span>
+          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 bg-[#1a1a1a] -mx-3 md:-mx-5 -mb-3 md:-mb-5 px-3 md:px-5 py-2 md:py-4">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              <span className="text-white">{news.category || "ACTUALITATE"}</span>
               <span>•</span>
               <span>{news.timeAgo || "ACUM"}</span>
             </div>

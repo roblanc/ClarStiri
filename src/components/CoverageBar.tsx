@@ -5,9 +5,9 @@ interface CoverageBarProps {
 }
 
 const COLORS = {
-  left: '#1d4ed8',
-  center: '#64748b',
-  right: '#dc2626',
+  left: '#60a5fa',
+  center: '#a1a1aa',
+  right: '#f87171',
 } as const;
 
 export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarProps) {
@@ -16,7 +16,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {/* Segmented bar */}
-      <div className="flex h-1.5 rounded-full overflow-hidden bg-muted">
+      <div className="flex h-1.5 rounded-full overflow-hidden bg-neutral-700">
         {bias.left > 0 && (
           <div
             className="h-full"
@@ -40,11 +40,11 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
       {/* Labels row */}
       <div className="flex items-center gap-1.5 text-[10px] font-semibold tracking-wide">
         <span style={{ color: COLORS.left }}>{bias.left}% Stânga</span>
-        <span className="text-muted-foreground">·</span>
+        <span className="text-neutral-500">·</span>
         <span style={{ color: COLORS.center }}>{bias.center}% Centru</span>
-        <span className="text-muted-foreground">·</span>
+        <span className="text-neutral-500">·</span>
         <span style={{ color: COLORS.right }}>{bias.right}% Dreapta</span>
-        <span className="text-muted-foreground ml-auto">{sourcesCount} surse</span>
+        <span className="text-neutral-400 ml-auto">{sourcesCount} surse</span>
       </div>
     </div>
   );
