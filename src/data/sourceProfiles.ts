@@ -459,17 +459,31 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   scena9: {
     id: 'scena9',
-    currentOwner: 'Independent',
-    fundingSources: ['Granturi culturale', 'Abonamente', 'Donații'],
+    currentOwner: 'Fundația9 (fondată de BRD – Groupe Société Générale)',
+    parentCompany: 'Fundația9 / BRD – Groupe Société Générale',
+    ownershipHistory:
+      'Scena9 este un program coordonat de Fundația9, fondată de BRD – Groupe Société Générale. Funcționează ca revistă culturală și de analiză socială, cu sprijin instituțional din partea BRD prin programe culturale (inclusiv Rezidența BRD Scena9).',
+    fundingSources: ['BRD – Groupe Société Générale (partener fondator)', 'Granturi culturale', 'Donații'],
     editorialLine:
-      'Revistă culturală și de analiză socială. Conținut literar, artistic, investigații sociale profunde.',
+      'Revistă culturală și de analiză socială. Conținut literar, artistic, investigații sociale profunde. Teme recurente: artă, feminism, drepturi civile, societate, cultură urbană.',
     biasRationale:
-      'Scena9 are o orientare progresistă clară, reflectată în temele abordate (artă, feminism, drepturi civile, societate). Nu este partizană politic, dar valorile promovate sunt sistematic centru-stânga.',
+      'Scena9 are o orientare progresistă clară, reflectată în temele abordate (artă, feminism, drepturi civile, societate). Nu este partizană politic, dar valorile promovate sunt sistematic centru-stânga. Sprijinul instituțional din partea BRD (bancă comercială) nu influențează vizibil linia editorială.',
+    notablePatterns: [
+      'Conținut cultural și analitic de înaltă calitate',
+      'Teme progresiste: feminism, drepturi civile, critică socială',
+      'Format de revistă, nu flux de știri la zi',
+    ],
     strengths: ['Calitate editorială ridicată', 'Analize profunde', 'Conținut cultural valoros'],
     biasScore: -40,
     factualityRationale: 'Factualitate bună pentru conținut analitic și cultural.',
     confidence: 'medium',
-    lastAnalysed: '2026-02-26',
+    lastAnalysed: '2026-02-27',
+    references: [
+      { label: 'Scena9 – Pagina „Despre noi"', url: 'https://www.scena9.ro/despre' },
+      { label: 'Eurozine – Profil Scena9', url: 'https://www.eurozine.com/partner-journals/scena9/' },
+      { label: 'Journalismfund Europe – Profil Scena9', url: 'https://www.journalismfund.eu/organisation/scena9' },
+      { label: 'Project Oasis – Profil Scena9', url: 'https://www.projectoasis.media/publication/scena9/' },
+    ],
   },
 
   // ===================== STÂNGA =====================
