@@ -23,7 +23,7 @@ export async function fetchAggregatedNewsFromAPI(limit = 50): Promise<Aggregated
             headers: {
                 'Accept': 'application/json',
             },
-            signal: AbortSignal.timeout(10000), // 10s — fallback rapid la localStorage/client RSS dacă API e lent
+            signal: AbortSignal.timeout(35000), // 35s — allows for cold start + Redis fetch (server maxDuration=60s)
         });
 
         if (!response.ok) {
