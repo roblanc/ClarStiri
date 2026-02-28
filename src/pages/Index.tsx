@@ -46,13 +46,13 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[90%] xl:max-w-[85%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-6 md:gap-12">
+        <section className="mb-12 md:mb-20 flex flex-row items-center justify-between gap-6 md:gap-12">
           <div className="flex-1 min-w-0">
-            <p className="text-foreground font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-snug">
-              Citești. Compari. Decizi.
-              <span className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-2 md:mt-3 leading-relaxed font-sans">
-                Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
-              </span>
+            <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold tracking-tight">
+              Citești.<br />Compari.<br />Decizi.
+            </h1>
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-6 md:mt-8 leading-relaxed font-sans max-w-xl">
+              Știrile din România agregate din 40+ surse, grupate pe subiect și perspectivă editorială.
             </p>
           </div>
           <div className="shrink-0 w-40 md:w-72 flex justify-end">
