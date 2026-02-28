@@ -4,7 +4,6 @@ import { CoverageBar } from "./CoverageBar";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
-import { SourceFaviconGroup } from "./SourceFavicon";
 
 export interface NewsItem {
   id: string;
@@ -21,7 +20,6 @@ export interface NewsItem {
   timeAgo: string;
   category?: string;
   location?: string;
-  sources?: Array<{ name: string; url: string; bias?: string }>;
 }
 
 interface NewsCardProps {
@@ -91,20 +89,15 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
         {/* Bottom Content Box */}
         <div className="p-3 md:p-5 flex-1 flex flex-col relative z-10">
-          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground">
+          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground line-clamp-3">
             {news.title}
           </h3>
 
           <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 bg-[#0a0a0a] -mx-3 md:-mx-5 -mb-3 md:-mb-5 px-3 md:px-5 py-2 md:py-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-                <span className="text-white">{news.category || "ACTUALITATE"}</span>
-                <span>•</span>
-                <span>{news.timeAgo || "ACUM"}</span>
-              </div>
-              {news.sources && news.sources.length > 0 && (
-                <SourceFaviconGroup sources={news.sources} maxVisible={4} size="xs" />
-              )}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
+              <span className="text-white">{news.category || "ACTUALITATE"}</span>
+              <span>•</span>
+              <span>{news.timeAgo || "ACUM"}</span>
             </div>
             <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
           </div>
