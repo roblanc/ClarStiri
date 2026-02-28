@@ -1,82 +1,97 @@
-import { Link } from "react-router-dom";
-import { Search, Menu, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Search, X, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { to: "/surse", label: "Surse" },
+    { to: "/barometru", label: "Barometru" },
+    { to: "/voci", label: "Voci" },
+  ];
 
   return (
-    <header className="sticky top-0 z-50">
-      {/* Single unified bar */}
-      <div className="bg-background border-b border-border">
-        <div className="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+    <header className="sticky top-0 z-50 bg-background border-b border-border">
+      {/* Main Bar */}
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-14 md:h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="shrink-0 mr-4">
-            <span className="font-serif italic text-2xl font-semibold text-foreground">
+          <Link to="/" className="shrink-0">
+            <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight">
               thesite.ro
             </span>
           </Link>
 
-          {/* Mobile Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden h-8 w-8 text-foreground ml-auto"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
-
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex flex-1 items-center gap-x-5 lg:gap-x-7 justify-center">
-            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground hover:opacity-50 transition-opacity whitespace-nowrap">
-              Surse
-            </Link>
-            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground hover:opacity-50 transition-opacity whitespace-nowrap">
-              Barometru
-            </Link>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-x-8 justify-center flex-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className={cn(
+                  "text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:opacity-60",
+                  location.pathname === link.to ? "text-primary" : "text-foreground"
+                )}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
 
-          {/* Actions */}
-          <div className="hidden md:flex items-center gap-3 border-l border-border pl-4 ml-auto shrink-0">
-            <ThemeToggle />
+          {/* Actions (Search & Theme) */}
+          <div className="flex items-center gap-2 md:gap-4 ml-auto">
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
+            
             {searchOpen ? (
-              <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-200">
                 <Input
                   type="search"
                   placeholder="CAUTĂ..."
-                  className="w-40 h-8 text-[10px] uppercase tracking-widest bg-transparent border-none focus-visible:ring-0 px-0"
+                  className="w-32 md:w-48 h-8 text-[10px] uppercase tracking-widest bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary px-3 rounded-full"
                   autoFocus
                 />
-                <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setSearchOpen(false)}>
-                  <X className="w-3 h-3" />
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setSearchOpen(false)}>
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
             ) : (
               <button
-                className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground flex items-center gap-2 hover:opacity-50 transition-opacity"
+                className="p-2 text-foreground hover:bg-muted rounded-full transition-colors"
                 onClick={() => setSearchOpen(true)}
               >
-                <Search className="w-4 h-4" />
+                <Search className="w-5 h-5 md:w-4 md:h-4" />
               </button>
             )}
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-background border-b border-border animate-fade-in absolute w-full shadow-lg">
-          <nav className="container mx-auto px-4 py-6 space-y-4 flex flex-col items-center text-center">
-            <Link to="/surse" className="text-xs font-bold uppercase tracking-[0.2em] text-foreground w-full py-2 hover:bg-secondary" onClick={() => setMobileMenuOpen(false)}>Surse</Link>
-            <Link to="/barometru" className="text-xs font-bold uppercase tracking-[0.2em] text-foreground w-full py-2 hover:bg-secondary" onClick={() => setMobileMenuOpen(false)}>Barometru</Link>
-          </nav>
-        </div>
-      )}
+        {/* Mobile Navigation - Visible only on mobile, no hamburger */}
+        <nav className="md:hidden flex items-center gap-x-6 overflow-x-auto pb-3 scrollbar-hide -mx-1 px-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className={cn(
+                "text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-colors py-1 px-2 rounded-md",
+                location.pathname === link.to 
+                  ? "bg-primary text-primary-foreground" 
+                  : "text-muted-foreground hover:text-foreground bg-muted/30"
+              )}
+            >
+              {link.label}
+            </Link>
+          ))}
+          {/* Active link indicator or extra mobile only links could go here */}
+        </nav>
+      </div>
     </header>
   );
 }
