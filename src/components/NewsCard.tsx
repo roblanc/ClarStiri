@@ -67,9 +67,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
   return (
     <Link to={`/stire/${news.id}`} className="block h-full group">
-      <article className="bg-card border border-border flex flex-col h-full group-hover:bg-secondary/20 transition-colors">
+      <article className="flex flex-col h-full transition-all duration-300">
         {/* Top Image Box */}
-        <div className="h-36 md:h-56 relative border-b border-border overflow-hidden">
+        <div className="h-44 md:h-64 relative overflow-hidden rounded-2xl mb-4 md:mb-6">
           <NewsImage
             src={getThumbnailUrl(news.image)}
             seed={news.title}
@@ -82,28 +82,28 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <BiasBadge
                 type={news.blindspot as 'left' | 'right'}
                 label={blindspotLabel}
-                className="rounded-none border-border"
+                className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60"
               />
             </div>
           )}
         </div>
 
-        {/* Bottom Content Box */}
-        <div className="p-4 md:p-5 flex-1 flex flex-col relative z-10">
+        {/* Content Area */}
+        <div className="flex-1 flex flex-col px-1">
           <h3
             className={cn(
-              "font-title font-bold mb-3 md:mb-6 text-foreground min-h-[66px] md:min-h-[84px] line-clamp-4",
+              "font-serif font-bold mb-4 md:mb-6 text-foreground group-hover:text-primary transition-colors line-clamp-3",
               news.title.length > 100
-                ? "text-[15px] md:text-[18px] leading-[20px] md:leading-[24px]"
-                : "text-[17px] md:text-[22px] leading-[22px] md:leading-[28px]"
+                ? "text-[16px] md:text-[20px] leading-[1.3]"
+                : "text-[18px] md:text-[24px] leading-[1.2]"
             )}
           >
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-3 md:gap-4 border-t border-border/50">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
-              <span className="text-primary/70">{news.category || "Actualitate"}</span>
+          <div className="mt-auto pt-4 border-t border-border/40">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 group-hover:opacity-100 transition-opacity mb-3">
+              <span className="text-primary/80">{news.category || "Actualitate"}</span>
               <span className="opacity-30">•</span>
               <span>{news.timeAgo || "Acum"}</span>
             </div>
