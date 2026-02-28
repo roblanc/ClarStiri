@@ -433,62 +433,78 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
 }
 
 /**
- * Grupează știrile similare folosind un index inversat de tokeni.
- * Complexitate O(n·k) în loc de O(n²), unde k = tokeni unici per titlu (~5–10).
+ * Grupează știrile similare folosind un algoritm hibrid: 
+ * Jaccard (cuvinte) + Entity matching + Context (bigrame).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.25): Map<string, RSSNewsItem[]> {
-    const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa']);
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs = 48 * 60 * 60 * 1000): Map<string, RSSNewsItem[]> {
+    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci']);
 
-    // Precomputăm tokenii și seturile pentru fiecare item
-    const itemTokens: Array<{ item: RSSNewsItem; tokens: Set<string> }> = news.map(item => ({
-        item,
-        tokens: new Set(
-            normalizeTitle(item.title)
-                .split(/\s+/)
-                .filter(w => w.length > 2 && !stopwords.has(w))
-        ),
-    }));
+    const extractEntities = (title: string) => {
+        return title.split(/\s+/)
+            .filter(w => w.length > 3 && /^[A-Z]/.test(w))
+            .map(w => normalizeTitle(w));
+    };
 
-    // Index inversat: token → indecșii itemilor care îl conțin
-    const invertedIndex = new Map<string, number[]>();
-    itemTokens.forEach(({ tokens }, idx) => {
-        tokens.forEach(token => {
-            const list = invertedIndex.get(token);
-            if (list) list.push(idx);
-            else invertedIndex.set(token, [idx]);
-        });
+    const itemData = news.map(item => {
+        const normalized = normalizeTitle(item.title);
+        const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
+        const bigrams = [];
+        for (let i = 0; i < words.length - 1; i++) {
+            bigrams.push(`${words[i]}_${words[i+1]}`);
+        }
+
+        return {
+            item,
+            tokens: new Set(words),
+            bigrams: new Set(bigrams),
+            entities: new Set(extractEntities(item.title)),
+            time: new Date(item.pubDate).getTime(),
+        };
     });
 
     const storyGroups = new Map<string, RSSNewsItem[]>();
     const processed = new Set<string>();
 
-    itemTokens.forEach(({ item, tokens }, i) => {
-        if (processed.has(item.id)) return;
+    itemData.forEach((dataI, i) => {
+        if (processed.has(dataI.item.id)) return;
 
-        const group: RSSNewsItem[] = [item];
-        processed.add(item.id);
+        const group: RSSNewsItem[] = [dataI.item];
+        processed.add(dataI.item.id);
 
-        // Conta câți tokeni comuni are fiecare candidat
-        const candidateOverlap = new Map<number, number>();
-        tokens.forEach(token => {
-            invertedIndex.get(token)?.forEach(j => {
-                if (j !== i) candidateOverlap.set(j, (candidateOverlap.get(j) || 0) + 1);
-            });
-        });
+        for (let j = i + 1; j < itemData.length; j++) {
+            const dataJ = itemData[j];
+            if (processed.has(dataJ.item.id)) continue;
+            if (dataI.item.source.id === dataJ.item.source.id) continue;
 
-        candidateOverlap.forEach((overlap, j) => {
-            const { item: other, tokens: otherTokens } = itemTokens[j];
-            if (processed.has(other.id)) return;
-            if (item.source.id === other.source.id) return;
+            if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
 
-            const union = tokens.size + otherTokens.size - overlap;
-            if (union > 0 && overlap / union >= threshold) {
-                group.push(other);
-                processed.add(other.id);
+            // 1. Similitudine Cuvinte
+            const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
+            const unionWords = new Set([...dataI.tokens, ...dataJ.tokens]);
+            const wordScore = intersectWords.size / (unionWords.size || 1);
+
+            // 2. Similitudine Entități
+            const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
+            const entityScore = intersectEntities.size > 0 ? 
+                intersectEntities.size / (Math.min(dataI.entities.size, dataJ.entities.size) || 1) : 0;
+
+            // 3. Similitudine Bigrame
+            const intersectBigrams = new Set([...dataI.bigrams].filter(x => dataJ.bigrams.has(x)));
+            const bigramScore = intersectBigrams.size > 0 ? 
+                intersectBigrams.size / (Math.min(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
+
+            const finalScore = (wordScore * 0.4) + (entityScore * 0.4) + (bigramScore * 0.2);
+            
+            const hasSharedEntities = intersectEntities.size >= 1;
+            const effectiveThreshold = hasSharedEntities ? threshold * 0.8 : threshold;
+
+            if (finalScore >= effectiveThreshold) {
+                group.push(dataJ.item);
+                processed.add(dataJ.item.id);
             }
-        });
+        }
 
-        storyGroups.set(`story-${item.id}`, group);
+        storyGroups.set(`story-${dataI.item.id}`, group);
     });
 
     return storyGroups;

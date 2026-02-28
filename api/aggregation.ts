@@ -90,77 +90,102 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-// Clusterizare Ground News style
-export function findSimilarStories(news: RSSNewsItem[], threshold = 0.25, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
-    const stopwords = new Set(['de', 'la', 'in', 'si', 'a', 'pe', 'cu', 'din', 'pentru', 'un', 'o', 'ca', 'care', 'sa', 'este', 'sunt', 'din', 'spre']);
+// Clusterizare avansată Ground News style
+export function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
+    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci']);
 
-    // Sort cronologic descrescator (cel mai nou primul)
+    // Sort cronologic descrescator
     const sortedNews = [...news].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
 
-    const itemTokens: Array<{ item: RSSNewsItem; tokens: Set<string>; time: number }> = sortedNews.map(item => ({
-        item,
-        tokens: new Set(
-            normalizeTitle(item.title)
-                .split(/\s+/)
-                .filter(w => w.length > 2 && !stopwords.has(w))
-        ),
-        time: new Date(item.pubDate).getTime(),
-    }));
+    // Funcție pentru extragere entități potențiale (Cuvinte care încep cu literă mare în titlul original)
+    const extractEntities = (title: string) => {
+        const words = title.split(/\s+/);
+        return words
+            .filter(w => w.length > 3 && /^[A-Z]/.test(w))
+            .map(w => normalizeTitle(w));
+    };
 
-    const invertedIndex = new Map<string, number[]>();
-    itemTokens.forEach(({ tokens }, idx) => {
-        tokens.forEach(token => {
-            const list = invertedIndex.get(token);
-            if (list) list.push(idx);
-            else invertedIndex.set(token, [idx]);
-        });
+    const itemData = sortedNews.map(item => {
+        const normalized = normalizeTitle(item.title);
+        const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
+        
+        // Generăm bigrame (perechi de cuvinte) pentru context
+        const bigrams = [];
+        for (let i = 0; i < words.length - 1; i++) {
+            bigrams.push(`${words[i]}_${words[i+1]}`);
+        }
+
+        const entities = extractEntities(item.title);
+
+        return {
+            item,
+            tokens: new Set(words),
+            bigrams: new Set(bigrams),
+            entities: new Set(entities),
+            time: new Date(item.pubDate).getTime(),
+        };
     });
 
     const groups: RSSNewsItem[][] = [];
     const processed = new Set<number>();
 
-    itemTokens.forEach(({ item, tokens, time }, i) => {
+    itemData.forEach((dataI, i) => {
         if (processed.has(i)) return;
 
-        const group: RSSNewsItem[] = [item];
+        const group: RSSNewsItem[] = [dataI.item];
         processed.add(i);
 
-        const candidateOverlap = new Map<number, number>();
-        tokens.forEach(token => {
-            invertedIndex.get(token)?.forEach(j => {
-                if (j !== i) candidateOverlap.set(j, (candidateOverlap.get(j) || 0) + 1);
-            });
-        });
+        for (let j = i + 1; j < itemData.length; j++) {
+            if (processed.has(j)) continue;
+            
+            const dataJ = itemData[j];
 
-        candidateOverlap.forEach((overlap, j) => {
-            if (processed.has(j)) return;
-            const { item: other, tokens: otherTokens, time: otherTime } = itemTokens[j];
+            // Verificare fereastră timp
+            if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
 
-            // Prevent clustering duplicate sources in same topic directly if possible, or allow it but filter later.
-            // We allow clustering but we enforce maxTimeDiffMs and similarity.
-            if (isNaN(time) || isNaN(otherTime) || Math.abs(time - otherTime) > maxTimeDiffMs) return;
+            // Calcul similitudine hibridă
+            
+            // 1. Similitudine Cuvinte (Jaccard)
+            const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
+            const unionWords = new Set([...dataI.tokens, ...dataJ.tokens]);
+            const wordScore = intersectWords.size / (unionWords.size || 1);
 
-            const union = tokens.size + otherTokens.size - overlap;
-            if (union > 0 && overlap / union >= threshold) {
-                group.push(other);
+            // 2. Similitudine Entități (Pondere dublă)
+            const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
+            const entityScore = intersectEntities.size > 0 ? 
+                intersectEntities.size / (Math.min(dataI.entities.size, dataJ.entities.size) || 1) : 0;
+
+            // 3. Similitudine Bigrame (Context)
+            const intersectBigrams = new Set([...dataI.bigrams].filter(x => dataJ.bigrams.has(x)));
+            const bigramScore = intersectBigrams.size > 0 ? 
+                intersectBigrams.size / (Math.min(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
+
+            // Scorul final combinat
+            // Entitățile comune sunt cel mai puternic semnal
+            const finalScore = (wordScore * 0.4) + (entityScore * 0.4) + (bigramScore * 0.2);
+
+            // Dacă avem entități critice comune (ex: nume proprii rare), pragul e mai jos
+            const hasSharedEntities = intersectEntities.size >= 1;
+            const effectiveThreshold = hasSharedEntities ? threshold * 0.8 : threshold;
+
+            if (finalScore >= effectiveThreshold) {
+                group.push(dataJ.item);
                 processed.add(j);
             }
-        });
+        }
 
         groups.push(group);
     });
 
-    // Remove duplicates from same source in a single group (keep the first/newest one)
-    const cleanGroups = groups.map(group => {
-        const seenSources = new Set<string>();
+    // Curățare duplicate surse
+    return groups.map(group => {
+        const seen = new Set<string>();
         return group.filter(item => {
-            if (seenSources.has(item.source.id)) return false;
-            seenSources.add(item.source.id);
+            if (seen.has(item.source.id)) return false;
+            seen.add(item.source.id);
             return true;
         });
     });
-
-    return cleanGroups;
 }
 
 /** Run tasks in sequential batches to avoid hitting provider RPM limits. */
