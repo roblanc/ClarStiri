@@ -24,13 +24,9 @@ export function Header() {
           <Link to="/" className="flex items-center gap-3 shrink-0 group">
             <div className="relative w-8 h-8 overflow-hidden bg-transparent">
               <img
-                src="/logo.png"
+                src="/logo_full.png"
                 alt="ClarStiri Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none scale-110"
-                style={{
-                  maskImage: 'radial-gradient(circle, black 70%, transparent 100%)',
-                  WebkitMaskImage: 'radial-gradient(circle, black 70%, transparent 100%)'
-                }}
+                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none scale-125"
               />
             </div>
             <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
