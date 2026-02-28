@@ -20,6 +20,7 @@ const Barometer = lazy(() => import("./pages/Barometer"));
 const Despre = lazy(() => import("./pages/Despre"));
 const Contact = lazy(() => import("./pages/Contact"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const IndexEditorial = lazy(() => import("./pages/IndexEditorial"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +63,7 @@ const App = () => (
                 <Route path="/barometru" element={<Barometer />} />
                 <Route path="/voci" element={<Navigate to="/barometru" replace />} />
                 <Route path="/voce/:slug" element={<VoiceProfile />} />
+                <Route path="/test" element={<IndexEditorial />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
