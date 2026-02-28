@@ -4,7 +4,7 @@ export interface Statement {
     date: string;
     sourceUrl: string;
     topic: string; // ex: "Politica", "Social"
-    bias?: 'left' | 'center' | 'right';
+    bias?: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
     impact: 'high' | 'medium' | 'low';
 }
 
@@ -182,7 +182,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 sourceUrl: 'https://www.republica.ro',
                 topic: 'Justiție',
                 impact: 'high',
-                bias: 'center-right'
+                bias: 'right'
             }
         ]
     },
@@ -191,7 +191,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'catalin-tolontan',
         name: 'Cătălin Tolontan',
         role: 'Jurnalist Investigativ',
-        image: '/images/voices/catalin-tolontan.png',
+        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSvPgqSu73YZLHg73P4LDTySMg5cSu2zUr_A&s',
         bias: {
             leaning: 'center',
             score: 5,
