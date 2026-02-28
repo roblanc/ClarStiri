@@ -35,26 +35,55 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         id: 'dana-budeanu',
         slug: 'dana-budeanu',
         name: 'Dana Budeanu',
-        role: 'Influencer / Critic de modă',
+        role: 'Influencer / Comentator Politic / Critic de Modă',
         image: '/images/voices/dana-budeanu.jpg',
         bias: {
-            leaning: 'right', // De obicei asociată cu valori conservatoare/anti-sistem
-            score: 65,
-            description: 'Critică frecvent "progresismul", USR și măsurile sociale liberale. Adopta adesea o poziție anti-sistem și conservatoare social.'
+            leaning: 'right', 
+            score: 78,
+            description: 'Voce conservatoare și anti-progresistă. Deși folosește o retorică naționalistă, se distanțează critic de partidele suveraniste oficiale (AUR/SOS), pe care le consideră construcții artificiale. Poziționarea sa este una de "critic independent" care atacă virulent curentul #Rezist, partidele liberale (USR) și ceea ce numește influența nocivă a corporațiilor și ONG-urilor asupra valorilor tradiționale.'
         },
-        description: 'Cunoscută pentru stilul direct și rubricile "Amețitele și Mafiloții", Dana Budeanu comentează frecvent scena politică cu un ton satiric și critic la adresa politicienilor din spectrul liberal/progresist.',
+        description: 'Dana Budeanu și-a transformat platformele de social media, în special Instagram, într-un instrument de presiune politică și socială. Prin stilul său "Verdict", ea impune un limbaj care polarizează (ex: "fătălăi", "ametițe"), atacând sistematic ideologiile moderne, digitalizarea forțată și politicile europene. Influența sa este majoră în rândul publicului care resimte o deconectare de valorile conservatoare și care caută o voce critică la adresa "sistemului" globalist, fără a se identifica neapărat cu extremele politice clasice.',
         socialLinks: {
             instagram: 'https://instagram.com/danabudeanu',
-            youtube: 'https://youtube.com/verdictdanabudeanu'
+            youtube: 'https://youtube.com/verdictdanabudeanu',
+            website: 'https://danabudeanu.ro'
         },
         statements: [
             {
-                id: 's1',
-                text: 'Toate fătălăile care votează USR...',
-                date: '2024-03-15',
-                sourceUrl: '#',
+                id: 'db-s1',
+                text: 'Suveranismul promovat de unii este un film Disney. România nu are nevoie de hărneli, ci de bărbați care să nu stea în genunchi.',
+                date: '2024-11-28',
+                sourceUrl: 'https://www.instagram.com/danabudeanu',
+                topic: 'Suveranitate',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'db-s2',
+                text: 'Trotinetarii urii au distrus tot ce era instituție în țara asta. Ne-au adus într-un punct în care a fi normal e o vină.',
+                date: '2025-01-12',
+                sourceUrl: 'https://www.instagram.com/danabudeanu',
+                topic: 'Social',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'db-s3',
+                text: 'USR este un experiment eșuat. O adunătură de impostori care vor să ne vândă țara pe bucăți la pachet cu ideologii de carton.',
+                date: '2024-05-20',
+                sourceUrl: 'https://youtube.com/verdictdanabudeanu',
                 topic: 'Politică',
-                impact: 'high'
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-s4',
+                text: 'Să votezi cu Georgescu înseamnă să votezi cu rușii. Diaspora nu a înțeles nimic din miza geopolitică a acestui moment.',
+                date: '2024-12-01',
+                sourceUrl: 'https://www.antena3.ro',
+                topic: 'Geopolitică',
+                impact: 'high',
+                bias: 'center-right'
             }
         ]
     },
