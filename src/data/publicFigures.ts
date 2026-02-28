@@ -187,6 +187,33 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         ]
     },
     {
+        id: 'catalin-tolontan',
+        slug: 'catalin-tolontan',
+        name: 'Cătălin Tolontan',
+        role: 'Jurnalist Investigativ',
+        image: '/images/voices/catalin-tolontan.png',
+        bias: {
+            leaning: 'center',
+            score: 5,
+            description: 'Focus pe investigații independente, interes public și libertatea presei. Critică abuzurile de putere indiferent de guvernare.'
+        },
+        description: 'Unul dintre cei mai importanți jurnaliști de investigație din România, coordonator al unor anchete care au schimbat legi și miniștri.',
+        socialLinks: {
+            facebook: 'https://facebook.com/catalin.tolontan'
+        },
+        statements: [
+            {
+                id: 'tol-s1',
+                text: 'Jurnalismul nu este despre a fi pe placul cuiva, ci despre a servi publicul. Când prețul tăcerii devine moneda de schimb în democrație, adevărul este prima victimă.',
+                date: '2026-02-20',
+                sourceUrl: 'https://www.libertatea.ro',
+                topic: 'Media',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
+    },
+    {
         id: 'rares-bogdan',
         slug: 'rares-bogdan',
         name: 'Rareș Bogdan',
@@ -210,6 +237,87 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Politică',
                 impact: 'high',
                 bias: 'right'
+            }
+        ]
+    },
+    {
+        id: 'lucian-mandruta',
+        slug: 'lucian-mandruta',
+        name: 'Lucian Mândruță',
+        role: 'Jurnalist / Formator de Opinie',
+        image: '/images/voices/lucian-mandruta.png',
+        bias: {
+            leaning: 'center-left',
+            score: -25,
+            description: 'Abordare liberală, pro-occidentală, critic al naționalismului și populismului.'
+        },
+        description: 'Jurnalist cu o prezență online masivă, Mândruță analizează societatea românească prin prisma valorilor europene și a modernizării.',
+        socialLinks: {
+            facebook: 'https://facebook.com/LucianMandruta'
+        },
+        statements: [
+            {
+                id: 'lm-s1',
+                text: 'Viitorul nostru nu este în izolare, ci într-o Europă puternică. Cei care vând suveranism pe pâine uită că pâinea aia e subvenționată de la Bruxelles.',
+                date: '2026-02-22',
+                sourceUrl: 'https://www.facebook.com/LucianMandruta',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'left'
+            }
+        ]
+    },
+    {
+        id: 'moise-guran',
+        slug: 'moise-guran',
+        name: 'Moise Guran',
+        role: 'Analist Economic',
+        image: '/images/voices/moise-guran.png',
+        bias: {
+            leaning: 'center-right',
+            score: 20,
+            description: 'Analiză economică riguroasă, pro-piață liberă și eficientizarea aparatului de stat.'
+        },
+        description: 'Cunoscut pentru emisiunea "Biziday", Moise Guran este una dintre cele mai ascultate voci pe teme economice și macro-politice.',
+        socialLinks: {
+            facebook: 'https://facebook.com/MoiseGuran'
+        },
+        statements: [
+            {
+                id: 'mg-s1',
+                text: 'Bugetul pe 2026 este un castel din cărți de joc. Dacă nu tăiem masiv din birocrație acum, la prima adiere de recesiune europeană, ne prăbușim toți.',
+                date: '2026-02-14',
+                sourceUrl: 'https://www.biziday.ro',
+                topic: 'Economie',
+                impact: 'high',
+                bias: 'right'
+            }
+        ]
+    },
+    {
+        id: 'andreea-esca',
+        slug: 'andreea-esca',
+        name: 'Andreea Esca',
+        role: 'Prezentatoare Știri',
+        image: '/images/voices/andreea-esca.png',
+        bias: {
+            leaning: 'center',
+            score: 0,
+            description: 'Simbol al echidistanței în jurnalismul TV comercial. Abordare neutră și orientată spre fapte.'
+        },
+        description: 'Cea mai cunoscută figură a știrilor ProTV, un reper de profesionalism și continuitate în media românească.',
+        socialLinks: {
+            instagram: 'https://instagram.com/andreeaesca'
+        },
+        statements: [
+            {
+                id: 'ae-s1',
+                text: 'Într-o lume plină de zgomot și știri false, rolul nostru rămâne același: să fim ancora realității pentru publicul nostru, în fiecare seară la ora 19.',
+                date: '2026-02-01',
+                sourceUrl: 'https://www.protv.ro',
+                topic: 'Social',
+                impact: 'low',
+                bias: 'center'
             }
         ]
     },
