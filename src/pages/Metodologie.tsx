@@ -199,15 +199,41 @@ export default function Metodologie() {
                         <h2 className="text-xl font-bold text-foreground">Ce Sunt "Punctele Orbite"?</h2>
                     </div>
                     <div className="bg-card rounded-lg border border-border p-6">
-                        <p className="text-foreground mb-4">
-                            Un <strong>"Punct Orbit"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic.
+                        <p className="text-foreground mb-4 font-medium text-lg">
+                            Un <strong>"Punct Orbit"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
                         </p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-100 dark:border-blue-900">
+                                <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4" />
+                                    Punct Orbit Stânga
+                                </h4>
+                                <p className="text-sm text-blue-700/80 dark:text-blue-400/80">
+                                    Subiectul este relatat masiv de surse de Dreapta, dar este aproape complet ignorat de sursele de Stânga. Cititorii care urmăresc doar presă de stânga riscă să nu afle deloc despre acest eveniment.
+                                </p>
+                            </div>
+                            <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg border border-red-100 dark:border-red-900">
+                                <h4 className="font-bold text-red-800 dark:text-red-300 mb-2 flex items-center gap-2">
+                                    <AlertTriangle className="w-4 h-4" />
+                                    Punct Orbit Dreapta
+                                </h4>
+                                <p className="text-sm text-red-700/80 dark:text-red-400/80">
+                                    Subiectul este central în publicațiile de Stânga, dar lipsește de pe agenda surselor de Dreapta. Cititorii din "bula" de dreapta pierd această informație.
+                                </p>
+                            </div>
+                        </div>
+
                         <p className="text-muted-foreground mb-4">
-                            De exemplu, dacă o știre e raportată de 80% surse de stânga și doar 5% de dreapta, aceasta sugerează că audiențele de dreapta s-ar putea să nu fie la curent cu acest subiect - și invers.
+                            Aceste fenomene apar adesea atunci când un subiect este inconfortabil pentru o anumită ideologie sau când o temă este folosită ca instrument politic doar de o anumită tabără.
                         </p>
-                        <p className="text-sm text-muted-foreground">
-                            Detectăm automat povești unde distribuția depășește 60% într-o direcție și le marcăm ca "Punct Orbit" pentru a te alerta asupra potențialelor lacune informaționale.
-                        </p>
+                        
+                        <div className="bg-muted/50 p-4 rounded-lg">
+                            <p className="text-sm font-semibold mb-2">Algoritmul nostru:</p>
+                            <p className="text-sm text-muted-foreground">
+                                Detectăm automat aceste cazuri atunci când o știre are cel puțin 3 surse, iar una dintre tabere (Stânga sau Dreapta) are o prezență de <strong>sub 8%</strong> în timp ce cealaltă domină acoperirea.
+                            </p>
+                        </div>
                     </div>
                 </section>
 
