@@ -245,7 +245,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'lucian-mandruta',
         name: 'Lucian Mândruță',
         role: 'Jurnalist / Formator de Opinie',
-        image: '/images/voices/lucian-mandruta.png',
+        image: 'http://larics.ro/wp-content/uploads/2017/05/Lucian-Mandruta-1.png',
         bias: {
             leaning: 'center-left',
             score: -25,
