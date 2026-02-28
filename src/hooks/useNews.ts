@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews } from '@/services/newsService';
 import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 /**
  * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch.
