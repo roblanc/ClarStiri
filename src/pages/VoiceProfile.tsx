@@ -1,10 +1,14 @@
 import { Header } from "@/components/Header";
 import { PUBLIC_FIGURES, Statement } from "@/data/publicFigures";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2, Target, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const VoiceProfile = () => {
     const { slug } = useParams();
@@ -39,173 +43,232 @@ const VoiceProfile = () => {
         );
     }
 
-    // Determine statements to show (Dynamic > Static)
     const displayStatements = dynamicData?.statements && dynamicData.statements.length > 0
         ? dynamicData.statements
         : figure.statements;
 
-    // Calculate bias percentage for the bar
-    const score = figure.bias.score; // -100 to 100
+    // Grupăm declarațiile pe categorii
+    const categories = ['Toate', 'Politică', 'Social', 'Stil', 'Media'];
+    const getStatementsByCategory = (cat: string) => {
+        if (cat === 'Toate') return displayStatements;
+        return displayStatements.filter(s => 
+            s.topic.toLowerCase().includes(cat.toLowerCase()) || 
+            (cat === 'Stil' && s.topic.toLowerCase().includes('lifestyle'))
+        );
+    };
+
+    const score = figure.bias.score;
+    const biasColor = score < -15 ? 'bg-blue-500' : score > 15 ? 'bg-red-500' : 'bg-purple-500';
     const biasLabel = figure.bias.leaning === 'left' ? 'Stânga' :
         figure.bias.leaning === 'right' ? 'Dreapta' :
             figure.bias.leaning === 'center-left' ? 'Centru-Stânga' :
                 figure.bias.leaning === 'center-right' ? 'Centru-Dreapta' : 'Centru';
-
-    const biasColor = score < -15 ? 'bg-blue-500' : score > 15 ? 'bg-red-500' : 'bg-purple-500';
 
     return (
         <div className="min-h-screen bg-background">
             <Header />
 
             <Helmet>
-                <title>{figure.name} | Barometru Opinie thesite.ro</title>
+                <title>{figure.name} | Analiză & Verdict | ClarStiri</title>
                 <meta name="description" content={`Analiza poziționării politice și a declarațiilor recente ale lui ${figure.name}.`} />
             </Helmet>
 
-            <main className="container mx-auto px-4 py-8 max-w-4xl">
-                <Link to="/voci" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6">
+            <main className="container mx-auto px-4 py-8 max-w-5xl">
+                <Link to="/voci" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-1" /> Înapoi la listă
                 </Link>
 
-                <div className="flex flex-col md:flex-row gap-8 mb-12">
-                    {/* Profile Card */}
-                    <div className="w-full md:w-1/3 flex flex-col items-center">
-                        <div className="w-48 h-48 rounded-full overflow-hidden border-4 border-card shadow-lg mb-6 bg-muted">
-                            <img
-                                src={figure.image}
-                                alt={figure.name}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Coloana Stângă: Info Profil */}
+                    <div className="lg:col-span-1 space-y-6">
+                        <div className="lg:sticky lg:top-24">
+                            <div className="aspect-square md:aspect-[3/4] rounded-2xl overflow-hidden mb-4 border shadow-sm bg-muted">
+                                <img src={figure.image} alt={figure.name} className="w-full h-full object-cover" />
+                            </div>
+                            
+                            <h1 className="text-3xl font-serif font-bold mb-2">{figure.name}</h1>
+                            <p className="text-primary font-medium mb-4">{figure.role}</p>
 
-                        <h1 className="text-3xl font-bold text-center mb-2">{figure.name}</h1>
-                        <p className="text-muted-foreground font-medium mb-4">{figure.role}</p>
+                            <div className="flex gap-3 mb-6">
+                                {figure.socialLinks.instagram && (
+                                    <a href={figure.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="p-2 bg-muted rounded-full hover:bg-primary/10 transition-colors">
+                                        <Instagram className="w-5 h-5" />
+                                    </a>
+                                )}
+                                {figure.socialLinks.youtube && (
+                                    <a href={figure.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="p-2 bg-muted rounded-full hover:bg-primary/10 transition-colors">
+                                        <Youtube className="w-5 h-5" />
+                                    </a>
+                                )}
+                                {figure.socialLinks.facebook && (
+                                    <a href={figure.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="p-2 bg-muted rounded-full hover:bg-primary/10 transition-colors">
+                                        <Facebook className="w-5 h-5" />
+                                    </a>
+                                )}
+                            </div>
 
-                        <div className="flex gap-4 mb-6">
-                            {figure.socialLinks.facebook && (
-                                <a href={figure.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#1877F2]">
-                                    <Facebook className="w-6 h-6" />
-                                </a>
-                            )}
-                            {figure.socialLinks.instagram && (
-                                <a href={figure.socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#E4405F]">
-                                    <Instagram className="w-6 h-6" />
-                                </a>
-                            )}
-                            {figure.socialLinks.youtube && (
-                                <a href={figure.socialLinks.youtube} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#FF0000]">
-                                    <Youtube className="w-6 h-6" />
-                                </a>
-                            )}
-                            {figure.socialLinks.tiktok && (
-                                <a href={figure.socialLinks.tiktok} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground">
-                                    <ExternalLink className="w-6 h-6" />
-                                </a>
-                            )}
+                            <Card className="bg-muted/30 border-none shadow-none">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm font-medium flex items-center">
+                                        <Target className="w-4 h-4 mr-2" /> Barometru Ideologic
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="mb-2">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <span className="text-xs font-bold uppercase">{biasLabel}</span>
+                                            <span className="text-[10px] text-muted-foreground">Scor: {score}</span>
+                                        </div>
+                                        <div className="h-2 w-full bg-secondary rounded-full overflow-hidden relative">
+                                            <div className="absolute top-0 bottom-0 w-px bg-foreground/20 left-1/2 z-10" />
+                                            <div 
+                                                className={`h-full ${biasColor} transition-all duration-1000`} 
+                                                style={{ 
+                                                    left: score < 0 ? `${50 + (score / 2)}%` : '50%',
+                                                    width: `${Math.abs(score) / 2}%`,
+                                                    position: 'absolute'
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <p className="text-[11px] mt-3 leading-relaxed opacity-80">{figure.bias.description}</p>
+                                </CardContent>
+                            </Card>
                         </div>
                     </div>
 
-                    {/* Bio & Bias Analysis */}
-                    <div className="w-full md:w-2/3">
-                        <div className="bg-card border border-border rounded-xl p-6 mb-8">
-                            <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                Poziționare Politică
-                            </h2>
+                    {/* Coloana Dreaptă: Declarații și Analiză */}
+                    <div className="lg:col-span-2 space-y-8">
+                        <section className="bg-primary/5 p-6 rounded-2xl border border-primary/10">
+                            <h3 className="text-lg font-bold mb-3 flex items-center">
+                                <Sparkles className="w-5 h-5 mr-2 text-primary" /> Analiză Voice
+                            </h3>
+                            <p className="text-muted-foreground leading-relaxed text-sm md:text-base">{figure.description}</p>
+                        </section>
 
-                            <div className="mb-6">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="font-bold text-2xl capitalize">{biasLabel}</span>
-                                    <span className="text-sm text-muted-foreground">Scor: {score > 0 ? `+${score}` : score}</span>
-                                </div>
-
-                                {/* Visual Bar */}
-                                <div className="h-4 w-full bg-muted rounded-full relative overflow-hidden">
-                                    <div className="absolute top-0 bottom-0 w-0.5 bg-foreground/30 left-1/2 z-10"></div> {/* Center marker */}
-
-                                    {score !== 0 && (
-                                        <div
-                                            className={`h-full absolute top-0 ${biasColor} transition-all duration-1000`}
-                                            style={{
-                                                left: score < 0 ? `${50 + (score / 2)}%` : '50%',
-                                                width: `${Math.abs(score) / 2}%`,
-                                            }}
-                                        ></div>
-                                    )}
-                                </div>
-                                <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                                    <span>Stânga Extremă</span>
-                                    <span>Centru</span>
-                                    <span>Dreapta Extremă</span>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 text-muted-foreground leading-relaxed">
-                                <p>{figure.description}</p>
-                                <div className="bg-muted/30 p-4 rounded-lg text-sm border-l-4 border-primary">
-                                    <strong>Analiză Bias:</strong> {figure.bias.description}
-                                </div>
-                            </div>
+                        <div className="flex items-center justify-between mb-2">
+                            <h2 className="text-2xl font-serif font-bold">Verdicte & Declarații</h2>
+                            {isLoadingDynamic && (
+                                <Badge variant="secondary" className="animate-pulse flex items-center gap-1">
+                                    <Loader2 className="w-3 h-3 animate-spin" /> Actualizare AI
+                                </Badge>
+                            )}
                         </div>
 
-                        {/* Recent Statements */}
-                        <div>
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-bold flex items-center gap-2">
-                                    <Quote className="w-5 h-5 text-primary" />
-                                    Declarații Recente & Derapaje
-                                </h2>
-                                {isLoadingDynamic && (
-                                    <span className="text-xs text-muted-foreground flex items-center gap-1 animate-pulse">
-                                        <Loader2 className="w-3 h-3 animate-spin" /> Actualizare AI...
-                                    </span>
-                                )}
-                                {!isLoadingDynamic && dynamicData?.statements?.length > 0 && (
-                                    <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100 text-xs rounded-full flex items-center gap-1 border border-blue-200 dark:border-blue-800">
-                                        <Sparkles className="w-3 h-3" /> AI Updated
-                                    </span>
-                                )}
-                            </div>
+                        <Tabs defaultValue="Toate" className="w-full">
+                            <TabsList className="w-full justify-start bg-transparent border-b rounded-none h-auto p-0 mb-6 overflow-x-auto scrollbar-hide">
+                                {categories.map(cat => (
+                                    <TabsTrigger 
+                                        key={cat} 
+                                        value={cat}
+                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2 text-sm"
+                                    >
+                                        {cat}
+                                    </TabsTrigger>
+                                ))}
+                            </TabsList>
 
-                            <div className="space-y-4">
-                                {displayStatements.length > 0 ? (
-                                    displayStatements.map((statement, idx) => (
-                                        <div key={statement.id || idx} className="bg-card border border-border rounded-lg p-5 hover:border-primary/30 transition-colors">
-                                            <div className="flex items-start gap-4">
-                                                <Quote className="w-8 h-8 text-muted-foreground/20 flex-shrink-0 mt-1" />
-                                                <div className="flex-1">
-                                                    <p className="italic text-lg mb-3">"{statement.text}"</p>
-                                                    <div className="flex flex-wrap items-center justify-between text-sm gap-2">
-                                                        <div className="flex items-center gap-3">
-                                                            <span className="text-muted-foreground">{statement.date}</span>
-                                                            <span className="px-2 py-0.5 bg-muted rounded text-xs font-medium">
-                                                                {statement.topic}
-                                                            </span>
-                                                            {statement.impact === 'high' && (
-                                                                <span className="px-2 py-0.5 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-100 text-xs rounded-full">
-                                                                    Viral
-                                                                </span>
-                                                            )}
+                            {categories.map(cat => (
+                                <TabsContent key={cat} value={cat} className="space-y-4 focus-visible:outline-none outline-none">
+                                    {getStatementsByCategory(cat).length > 0 ? (
+                                        getStatementsByCategory(cat).map((statement, idx) => (
+                                            <Card key={statement.id || idx} className="group hover:shadow-md transition-all border-muted/60 overflow-hidden">
+                                                <CardContent className="p-6">
+                                                    <div className="flex items-start gap-4">
+                                                        <Quote className="w-8 h-8 text-primary/10 shrink-0 mt-1" />
+                                                        <div className="space-y-3 flex-1">
+                                                            <div className="flex flex-wrap items-center gap-2">
+                                                                <Badge variant="outline" className="text-[10px] font-bold uppercase py-0">
+                                                                    {statement.topic}
+                                                                </Badge>
+                                                                {statement.impact === 'high' && (
+                                                                    <Badge className="bg-red-500/10 text-red-500 border-none text-[10px] font-bold uppercase">
+                                                                        <Zap className="w-3 h-3 mr-1" /> Impact Mare
+                                                                    </Badge>
+                                                                )}
+                                                                <span className="text-[10px] text-muted-foreground ml-auto">{statement.date}</span>
+                                                            </div>
+                                                            <p className="text-base md:text-lg font-medium leading-snug group-hover:text-primary transition-colors italic">
+                                                                "{statement.text}"
+                                                            </p>
+                                                            <div className="flex items-center justify-between pt-2 border-t border-muted/30">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className={`w-2 h-2 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                                                                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">{statement.bias}</span>
+                                                                </div>
+                                                                <a 
+                                                                    href={statement.sourceUrl} 
+                                                                    target="_blank" 
+                                                                    rel="noopener noreferrer"
+                                                                    className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
+                                                                >
+                                                                    Sursă <ExternalLink className="w-3 h-3" />
+                                                                </a>
+                                                            </div>
                                                         </div>
-                                                        <a
-                                                            href={statement.sourceUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-1 text-primary hover:underline ml-auto"
-                                                        >
-                                                            Sursa <ExternalLink className="w-3 h-3" />
-                                                        </a>
                                                     </div>
-                                                </div>
-                                            </div>
+                                                </CardContent>
+                                            </Card>
+                                        ))
+                                    ) : (
+                                        <div className="text-center py-12 border-2 border-dashed rounded-xl border-muted">
+                                            <p className="text-muted-foreground text-sm">Nicio declarație găsită în categoria {cat}.</p>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div className="text-center py-8 text-muted-foreground bg-muted/20 rounded-lg border border-dashed border-border">
-                                        Încă nu au fost analizate declarații recente pentru acest profil.
+                                    )}
+                                </TabsContent>
+                            ))}
+                        </Tabs>
+
+                        {/* Secțiune nouă: Ținte & Retorică */}
+                        <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <Card className="bg-primary/5 border-none shadow-none">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm flex items-center">
+                                        <Target className="w-4 h-4 mr-2" /> Ținte Predilecte
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="flex flex-wrap gap-2">
+                                    {figure.id === 'dana-budeanu' ? (
+                                        <>
+                                            <Badge variant="secondary" className="text-[10px]">Robert Negoiță</Badge>
+                                            <Badge variant="secondary" className="text-[10px]">USR</Badge>
+                                            <Badge variant="secondary" className="text-[10px]">Corporatiști</Badge>
+                                            <Badge variant="secondary" className="text-[10px]">Progresiști</Badge>
+                                            <Badge variant="secondary" className="text-[10px]">Sistemul</Badge>
+                                        </>
+                                    ) : (
+                                        <span className="text-[10px] text-muted-foreground italic uppercase">Analiză automată în curs...</span>
+                                    )}
+                                </CardContent>
+                            </Card>
+
+                            <Card className="bg-secondary/5 border-none shadow-none">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm flex items-center">
+                                        <AlertTriangle className="w-4 h-4 mr-2" /> Tonul Discursului
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="space-y-3">
+                                        <div>
+                                            <div className="flex justify-between text-[10px] mb-1 uppercase font-bold tracking-wider">
+                                                <span>Agresivitate</span>
+                                                <span>{figure.id === 'dana-budeanu' ? '92%' : '...'}</span>
+                                            </div>
+                                            <Progress value={figure.id === 'dana-budeanu' ? 92 : 0} className="h-1" />
+                                        </div>
+                                        
+                                        <div>
+                                            <div className="flex justify-between text-[10px] mb-1 uppercase font-bold tracking-wider">
+                                                <span>Ironie / Sarcasm</span>
+                                                <span>{figure.id === 'dana-budeanu' ? '85%' : '...'}</span>
+                                            </div>
+                                            <Progress value={figure.id === 'dana-budeanu' ? 85 : 0} className="h-1" />
+                                        </div>
                                     </div>
-                                )}
-                            </div>
-                        </div>
+                                </CardContent>
+                            </Card>
+                        </section>
                     </div>
                 </div>
             </main>
