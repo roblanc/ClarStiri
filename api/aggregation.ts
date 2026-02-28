@@ -203,8 +203,25 @@ async function runInBatches<T>(tasks: Array<() => Promise<T>>, batchSize: number
 // Keeps total LLM time ≤ 2 × batch-round × ~2s ≈ 4s, well within Vercel's 10s limit.
 const MAX_LLM_STORIES = 16;
 
+/**
+ * Trimite un semnal către Wayback Machine pentru a arhiva URL-ul.
+ * Fiind un proces extern, nu așteptăm răspunsul pentru a nu bloca API-ul.
+ */
+function triggerWaybackArchive(url: string) {
+    try {
+        // Folosim un fetch fără await (fire and forget)
+        fetch(`https://web.archive.org/save/${url}`).catch(() => {});
+    } catch (e) {
+        // Ignorăm erorile de rețea pentru arhivare
+    }
+}
+
 export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3): Promise<AggregatedStory[]> {
     const recent = filterRecentNews(news);
+    
+    // Declanșăm arhivarea pentru toate știrile noi găsite în acest run
+    recent.forEach(item => triggerWaybackArchive(item.link));
+
     const storyGroups = findSimilarStories(recent);
 
     const aggregatedStoryTasks: Array<() => Promise<AggregatedStory>> = [];

@@ -44,7 +44,7 @@ export default function SourceDetail() {
 
                 <SourceProfileCard source={source} profile={source.profile} />
 
-                <SourceArchive domain={source.url} />
+                <SourceArchive sourceId={source.id} domain={source.url} />
             </main>
         </div>
     );
