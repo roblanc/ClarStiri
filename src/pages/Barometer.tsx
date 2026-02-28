@@ -25,11 +25,10 @@ const Barometer = () => {
                     <div>
                         <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 flex items-center gap-3">
                             <Target className="w-10 h-10 text-primary" />
-                            Barometru Opinie
+                            Influenceri & Jurnaliști
                         </h1>
                         <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
-                            Analiza poziționării ideologice și a declarațiilor recente ale principalelor figuri publice din România. 
-                            Înțelege bias-ul dincolo de cuvinte.
+                            Cine face agenda publică? Analizăm poziționarea ideologică și cele mai recente declarații ale persoanelor care influențează opinia publică în România.
                         </p>
                     </div>
                     
