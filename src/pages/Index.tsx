@@ -55,11 +55,11 @@ const Index = () => {
               Ieși din propria bulă informațională. Comparăm automat peste 40 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
             </p>
           </div>
-          <div className="shrink-0 w-40 md:w-72 flex justify-end">
+          <div className="shrink-0 w-48 md:w-96 flex justify-end md:-mr-12">
             <img
               src="/logo_full.png"
               alt="ClarStiri Investigator Logo"
-              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none"
+              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none transform scale-110"
             />
           </div>
         </section>
