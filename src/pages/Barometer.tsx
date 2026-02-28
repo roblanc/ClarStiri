@@ -93,6 +93,10 @@ const Barometer = () => {
                                             }}
                                         />
                                     </div>
+                                    <div className="flex justify-between text-[7px] font-black uppercase tracking-tighter text-muted-foreground/40 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span>Stânga</span>
+                                        <span>Dreapta</span>
+                                    </div>
                                 </div>
                             </div>
                         </Link>
