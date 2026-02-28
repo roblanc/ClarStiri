@@ -84,7 +84,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const isStale = cacheAge > STALE_AFTER;
 
         if (cached && cached.length > 0) {
-            res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=600');
+            // Instant delivery via Vercel Edge Cache
+            res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=1800');
             res.status(200).json({
                 success: true,
                 data: cached.slice(0, limit),

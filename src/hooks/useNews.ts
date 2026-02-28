@@ -27,34 +27,42 @@ async function fetchNewsWithFallback(limit: number): Promise<AggregatedStory[]> 
  * Hook pentru a obține știrile agregate cu încărcare rapidă din cache
  */
 export function useAggregatedNews(limit = 20) {
-    const [initialData, setInitialData] = useState<AggregatedStory[] | undefined>(undefined);
-
-    // Încarcă din cache sincron la mount
-    useEffect(() => {
-        const cached = getCachedAggregatedNews(limit);
-        if (cached) {
-            setInitialData(cached);
-        }
-    }, [limit]);
+    const queryClient = useQueryClient();
 
     const query = useQuery<AggregatedStory[], Error>({
         queryKey: ['aggregatedNews', limit],
         queryFn: () => fetchNewsWithFallback(limit),
-        staleTime: 10 * 60 * 1000, // 10 minute
-        gcTime: 60 * 60 * 1000, // 60 minute
+        staleTime: 15 * 60 * 1000, // 15 minute (mai lung pentru viteză)
+        gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
         refetchOnWindowFocus: false,
-        refetchInterval: 5 * 60 * 1000, // Auto-refresh every 5 min silently
+        refetchInterval: 5 * 60 * 1000,
         retry: 1,
-        // Folosește datele din cache ca placeholder
-        placeholderData: initialData,
     });
+
+    // Sincronizare cu LocalStorage pentru încărcare INSTANT la revenire
+    useEffect(() => {
+        if (query.data && query.data.length > 0) {
+            localStorage.setItem(`last_news_${limit}`, JSON.stringify({
+                data: query.data,
+                ts: Date.now()
+            }));
+        }
+    }, [query.data, limit]);
+
+    // Încercăm să luăm datele din localStorage ca placeholder
+    const cachedLocal = useMemo(() => {
+        try {
+            const saved = localStorage.getItem(`last_news_${limit}`);
+            if (saved) return JSON.parse(saved).data as AggregatedStory[];
+        } catch (e) { return undefined; }
+        return undefined;
+    }, [limit]);
 
     return {
         ...query,
-        // Dacă avem date din cache, nu suntem în "loading" propriu-zis
-        isLoading: query.isLoading && !initialData,
-        // Indica dacă datele sunt din cache și se actualizează în background
-        isRefreshing: query.isFetching && !!initialData,
+        data: query.data || cachedLocal,
+        isLoading: query.isLoading && !cachedLocal,
+        isRefreshing: query.isFetching && !!query.data,
     };
 }
 
