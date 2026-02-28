@@ -60,6 +60,12 @@ const Index = () => {
               src="/logo.png"
               alt="ClarStiri Investigator Logo"
               className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none"
+              style={{
+                maskImage: 'linear-gradient(to right, black 80%, transparent 100%), linear-gradient(to bottom, black 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to right, black 80%, transparent 100%), linear-gradient(to bottom, black 85%, transparent 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskComposite: 'source-in'
+              }}
             />
           </div>
         </section>

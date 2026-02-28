@@ -26,7 +26,11 @@ export function Header() {
               <img
                 src="/logo.png"
                 alt="ClarStiri Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none"
+                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none scale-110"
+                style={{
+                  maskImage: 'radial-gradient(circle, black 70%, transparent 100%)',
+                  WebkitMaskImage: 'radial-gradient(circle, black 70%, transparent 100%)'
+                }}
               />
             </div>
             <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
