@@ -16,7 +16,7 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b border-border">
+    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all">
       {/* Main Bar */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-14 md:h-16 gap-4">
