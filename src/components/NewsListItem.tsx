@@ -67,7 +67,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
         </div>
 
         {/* Bottom row: Source Logos + Coverage Bar */}
-        <div className="flex items-center gap-3 mt-4 bg-[#D4A017]/10 p-3 rounded-lg border border-[#D4A017]/20">
+        <div className="flex items-center gap-3 mt-4 bg-[#FFD700]/15 p-3 rounded-lg border border-[#FFD700]/30">
           {/* Source Logos */}
           {story.sources && story.sources.length > 0 && (
             <SourceFaviconGroup
