@@ -38,7 +38,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Influencer / Comentator Politic / Critic de Modă',
         image: '/images/voices/dana-budeanu.jpg',
         bias: {
-            leaning: 'right', 
+            leaning: 'right',
             score: 78,
             description: 'Voce conservatoare și anti-progresistă. Deși folosește o retorică naționalistă, se distanțează critic de partidele suveraniste oficiale (AUR/SOS), pe care le consideră construcții artificiale. Poziționarea sa este una de "critic independent" care atacă virulent curentul #Rezist, partidele liberale (USR) și ceea ce numește influența nocivă a corporațiilor și ONG-urilor asupra valorilor tradiționale.'
         },
@@ -94,7 +94,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Realizator TV',
         image: '/images/voices/Mircea_Badea.jpg',
         bias: {
-            leaning: 'center-left', 
+            leaning: 'center-left',
             score: -40,
             description: 'Cunoscut pentru emisiunea "În gura presei", are o lungă istorie de critică la adresa instituțiilor de forță și a "statului paralel". Recent, este critic la adresa măsurilor de austeritate.'
         },
@@ -155,7 +155,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'ctp',
         name: 'C.T. Popescu',
         role: 'Gazetar / Scriitor',
-        image: '/images/voices/ctp.svg',
+        image: 'https://hotnews.ro/wp-content/uploads/2025/09/ctp.webp',
         bias: {
             leaning: 'center-right',
             score: 30,
