@@ -11,7 +11,7 @@ const CORS_PROXIES = [
 
 // Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
-const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v2';
+const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v3_ultra';
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
 
 // Timeout pentru fetch (în milisecunde)
@@ -441,8 +441,15 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un algoritm hibrid: 
  * Jaccard (cuvinte) + Entity matching + Context (bigrame).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.30, maxTimeDiffMs = 48 * 60 * 60 * 1000): Map<string, RSSNewsItem[]> {
-    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele']);
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.35, maxTimeDiffMs = 48 * 60 * 60 * 1000): Map<string, RSSNewsItem[]> {
+    const stopwords = new Set([
+        'care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele',
+        'și', 'sau', 'dar', 'iar', 'încă', 'tot', 'mai', 'chiar', 'atât', 'încât', 'deci', 'însă', 'ori', 'fie', 'nici',
+        'un', 'o', 'unui', 'unei', 'unor', 'niște', 'al', 'ai', 'ale', 'lor', 'lui', 'ei', 'nostru', 'vostru', 'său', 'sa',
+        'pe', 'la', 'în', 'din', 'de', 'cu', 'spre', 'prin', 'sub', 'peste', 'între', 'fără', 'contra', 'asupra', 'împotriva',
+        'cine', 'ce', 'care', 'cineva', 'ceva', 'oricine', 'orice', 'nimeni', 'nimic', 'unde', 'când', 'cum', 'cât', 'câți', 'câte',
+        'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'mie', 'ție', 'îi', 'îl', 'le', 'ne', 'vă', 'l-a', 's-a'
+    ]);
 
     // Cuvinte care încep cu majusculă dar sunt generice și nu ar trebui tratate ca entități de matching puternic
     const genericEntities = new Set(['foto', 'video', 'romania', 'astazi', 'ieri', 'maine', 'azi', 'update', 'breaking', 'news', 'bucuresti', 'echipa', 'oficial', 'surse', 'ziua', 'lumea', 'omul', 'femeia', 'copilul', 'tara', 'guvernul', 'premierul', 'presedintele']);
@@ -590,7 +597,7 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
 // Client-side fallback uses a lower threshold (2) because CORS proxies
 // fetch fewer sources than the server — show something rather than nothing.
 // The server API already enforces 3 sources on the fast path.
-const MIN_SOURCES_THRESHOLD = 2;
+const MIN_SOURCES_THRESHOLD = 3;
 
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));
