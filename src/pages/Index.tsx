@@ -59,7 +59,7 @@ const Index = () => {
             <img
               src="/logo_full.png"
               alt="ClarStiri Investigator Logo"
-              className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none"
+              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none"
             />
           </div>
         </section>

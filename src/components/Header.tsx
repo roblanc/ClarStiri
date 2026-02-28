@@ -26,7 +26,7 @@ export function Header() {
               <img
                 src="/logo_full.png"
                 alt="ClarStiri Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none scale-125"
+                className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none scale-125"
               />
             </div>
             <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
