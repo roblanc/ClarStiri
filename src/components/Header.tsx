@@ -13,7 +13,6 @@ export function Header() {
   const navLinks = [
     { to: "/surse", label: "Surse" },
     { to: "/barometru", label: "Barometru" },
-    { to: "/voci", label: "Voci" },
   ];
 
   return (
