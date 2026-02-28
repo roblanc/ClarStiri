@@ -17,19 +17,24 @@ const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
 // Timeout pentru fetch (în milisecunde)
 const FETCH_TIMEOUT = 8000; // 8 secunde — proxy-urile CORS au latență mai mare din România
 
-const WEATHER_KEYWORDS = [
+const FORBIDDEN_KEYWORDS = [
+    // Vreme
     'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
     'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
-    'precipitatii', 'ninsori', 'viscol', 'canicula'
+    'precipitatii', 'ninsori', 'viscol', 'canicula',
+    // Horoscop
+    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni', 
+    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn', 
+    'varsator', 'pesti', 'previziuni astrale'
 ];
 
 /**
- * Verifică dacă o știre este legată de vreme
+ * Verifică dacă o știre trebuie filtrată (vreme, horoscop etc.)
  */
-export function isWeatherNews(title: string, description: string = ''): boolean {
+export function shouldFilterNews(title: string, description: string = ''): boolean {
     const text = `${title} ${description}`.toLowerCase();
-    return WEATHER_KEYWORDS.some(keyword => {
-        if (['anm', 'meteo'].includes(keyword)) {
+    return FORBIDDEN_KEYWORDS.some(keyword => {
+        if (['anm', 'meteo', 'zodii', 'berbec', 'taur', 'rac', 'leu', 'pesti'].includes(keyword)) {
             return new RegExp(`\\b${keyword}\\b`, 'i').test(text);
         }
         return text.includes(keyword);
@@ -164,8 +169,8 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         const title = decodeHtmlEntities(rawTitle);
         const description = decodeHtmlEntities(stripHtml(rawDescription));
 
-        // Filter out weather news
-        if (isWeatherNews(title, description)) {
+        // Filter out weather, horoscope news, etc.
+        if (shouldFilterNews(title, description)) {
             return;
         }
 

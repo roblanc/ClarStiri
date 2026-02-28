@@ -95,20 +95,25 @@ export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; rig
 
 const FETCH_TIMEOUT = 3000;
 
-const WEATHER_KEYWORDS = [
+const FORBIDDEN_KEYWORDS = [
+    // Vreme
     'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
     'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
-    'precipitatii', 'ninsori', 'viscol', 'canicula'
+    'precipitatii', 'ninsori', 'viscol', 'canicula',
+    // Horoscop
+    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni', 
+    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn', 
+    'varsator', 'pesti', 'previziuni astrale'
 ];
 
 /**
- * Verifică dacă o știre este legată de vreme
+ * Verifică dacă o știre trebuie filtrată (vreme, horoscop etc.)
  */
-export function isWeatherNews(title: string, description: string = ''): boolean {
+export function shouldFilterNews(title: string, description: string = ''): boolean {
     const text = `${title} ${description}`.toLowerCase();
-    return WEATHER_KEYWORDS.some(keyword => {
-        // Match whole word for some keywords, partial for others
-        if (['anm', 'meteo'].includes(keyword)) {
+    return FORBIDDEN_KEYWORDS.some(keyword => {
+        // Match whole word for critical keywords, partial for others
+        if (['anm', 'meteo', 'zodii', 'berbec', 'taur', 'rac', 'leu', 'pesti'].includes(keyword)) {
             return new RegExp(`\\b${keyword}\\b`, 'i').test(text);
         }
         return text.includes(keyword);
@@ -207,8 +212,8 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
         const link = getTagContent('link');
         const pubDate = getTagContent('pubDate');
 
-        // Filter out weather news
-        if (isWeatherNews(title, description)) {
+        // Filter out weather, horoscope news, etc.
+        if (shouldFilterNews(title, description)) {
             continue;
         }
 
