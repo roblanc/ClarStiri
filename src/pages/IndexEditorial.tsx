@@ -170,7 +170,7 @@ const IndexEditorial = () => {
         </Link>
       </div>
 
-      <main className="container mx-auto px-4 py-8 lg:max-w-[75%] xl:max-w-[65%]">
+      <main className="container mx-auto px-4 py-8 lg:max-w-[90%] xl:max-w-[85%]">
 
         {/* Loading */}
         {isLoading && (

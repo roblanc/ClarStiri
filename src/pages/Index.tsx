@@ -43,7 +43,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[70%] xl:max-w-[60%]">
+      <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[90%] xl:max-w-[85%]">
 
         {/* Editorial Hero Greeting */}
         <section className="mb-8 md:mb-12 flex flex-row items-center justify-between gap-6 md:gap-12">
