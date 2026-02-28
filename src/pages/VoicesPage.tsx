@@ -32,7 +32,7 @@ const VoicesPage = () => {
                         <Link
                             key={figure.id}
                             to={`/voce/${figure.slug}`}
-                            className="group bg-card border border-border/50 rounded-2xl p-4 sm:p-5 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full items-center text-center"
+                            className="group flex flex-col h-full items-center text-center p-4 rounded-[2rem] hover:bg-muted/40 transition-all duration-300"
                         >
                             <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
                                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-primary/10 group-hover:border-primary/30 transition-colors shadow-inner">
@@ -64,7 +64,7 @@ const VoicesPage = () => {
                                     <div className="flex justify-between items-center mb-1.5">
                                         <span className="text-[8px] font-bold uppercase text-muted-foreground/60 tracking-tight">Orientare</span>
                                         <span className={`text-[10px] font-black ${figure.bias.score < -15 ? 'text-blue-500' :
-                                                figure.bias.score > 15 ? 'text-red-500' : 'text-purple-500'
+                                            figure.bias.score > 15 ? 'text-red-500' : 'text-purple-500'
                                             }`}>
                                             {figure.bias.score > 0 ? `+${figure.bias.score}` : figure.bias.score}
                                         </span>
@@ -73,7 +73,7 @@ const VoicesPage = () => {
                                         <div className="absolute top-0 bottom-0 w-px bg-foreground/10 left-1/2 z-10" />
                                         <div
                                             className={`h-full absolute top-0 ${figure.bias.score < -15 ? 'bg-blue-500' :
-                                                    figure.bias.score > 15 ? 'bg-red-500' : 'bg-purple-500'
+                                                figure.bias.score > 15 ? 'bg-red-500' : 'bg-purple-500'
                                                 } transition-all duration-1000`}
                                             style={{
                                                 left: figure.bias.score < 0 ? `${50 + (figure.bias.score / 2)}%` : '50%',

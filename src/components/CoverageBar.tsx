@@ -16,7 +16,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {/* Segmented bar */}
-      <div className="flex h-1.5 rounded-full overflow-hidden bg-white/10">
+      <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary/50">
         {bias.left > 0 && (
           <div
             className="h-full"
@@ -38,13 +38,13 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
       </div>
 
       {/* Labels row */}
-      <div className="flex items-center gap-1.5 text-[10px] font-medium tracking-wide">
+      <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-tight">
         <span style={{ color: COLORS.left }}>Stânga {bias.left}%</span>
-        <span className="text-white/20">·</span>
-        <span className="text-white/80">Centru {bias.center}%</span>
-        <span className="text-white/20">·</span>
+        <span className="text-muted-foreground/30">·</span>
+        <span className="text-muted-foreground">Centru {bias.center}%</span>
+        <span className="text-muted-foreground/30">·</span>
         <span style={{ color: COLORS.right }}>Dreapta {bias.right}%</span>
-        <span className="text-white/40 ml-auto">{sourcesCount} surse</span>
+        <span className="text-muted-foreground/60 ml-auto">{sourcesCount} surse</span>
       </div>
     </div>
   );

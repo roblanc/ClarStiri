@@ -101,10 +101,10 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 bg-[#0a0a0a] -mx-4 md:-mx-5 -mb-4 md:-mb-5 px-4 md:px-5 py-3 md:py-4">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold tracking-wider text-neutral-400">
-              <span className="text-white">{news.category || "Actualitate"}</span>
-              <span>•</span>
+          <div className="mt-auto pt-4 md:pt-6 flex flex-col gap-3 md:gap-4 border-t border-border/50">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold tracking-wider text-muted-foreground uppercase">
+              <span className="text-primary/70">{news.category || "Actualitate"}</span>
+              <span className="opacity-30">•</span>
               <span>{news.timeAgo || "Acum"}</span>
             </div>
             <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
