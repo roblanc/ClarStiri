@@ -19,12 +19,12 @@ const FETCH_TIMEOUT = 8000; // 8 secunde — proxy-urile CORS au latență mai m
 
 const FORBIDDEN_KEYWORDS = [
     // Vreme
-    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
+    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius',
     'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
     'precipitatii', 'ninsori', 'viscol', 'canicula',
     // Horoscop
-    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni', 
-    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn', 
+    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni',
+    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn',
     'varsator', 'pesti', 'previziuni astrale'
 ];
 
@@ -455,7 +455,7 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs
         const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
         const bigrams = [];
         for (let i = 0; i < words.length - 1; i++) {
-            bigrams.push(`${words[i]}_${words[i+1]}`);
+            bigrams.push(`${words[i]}_${words[i + 1]}`);
         }
 
         return {
@@ -490,18 +490,25 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs
 
             // 2. Similitudine Entități
             const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
-            const entityScore = intersectEntities.size > 0 ? 
-                intersectEntities.size / (Math.min(dataI.entities.size, dataJ.entities.size) || 1) : 0;
+            const entityScore = intersectEntities.size > 0 ?
+                intersectEntities.size / (Math.max(dataI.entities.size, dataJ.entities.size) || 1) : 0;
 
             // 3. Similitudine Bigrame
             const intersectBigrams = new Set([...dataI.bigrams].filter(x => dataJ.bigrams.has(x)));
-            const bigramScore = intersectBigrams.size > 0 ? 
-                intersectBigrams.size / (Math.min(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
+            const bigramScore = intersectBigrams.size > 0 ?
+                intersectBigrams.size / (Math.max(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
 
-            const finalScore = (wordScore * 0.4) + (entityScore * 0.4) + (bigramScore * 0.2);
-            
-            const hasSharedEntities = intersectEntities.size >= 1;
-            const effectiveThreshold = hasSharedEntities ? threshold * 0.8 : threshold;
+            // Pondere crescută pentru cuvinte și bigrame pentru a evita potriviri doar pe o singură entitate generică (ex: "România")
+            const finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
+
+            // Threshold mai strict
+            const baseThreshold = 0.28;
+
+            // Dacă au entități comune, threshold-ul poate fi puțin mai mic, dar nu exagerat
+            const hasSharedSignificantEntities = intersectEntities.size >= 2 ||
+                (intersectEntities.size === 1 && wordScore > 0.15);
+
+            const effectiveThreshold = hasSharedSignificantEntities ? baseThreshold * 0.85 : baseThreshold;
 
             if (finalScore >= effectiveThreshold) {
                 group.push(dataJ.item);
@@ -581,11 +588,13 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
             return currentDate > earliestDate ? current : earliest;
         });
 
-        // Preferă o imagine de la o sursă care are imagine
-        const imageSource = sources.find(s => s.imageUrl) || primary;
+        // Preferă o imagine de la o sursă care are imagine și are factuality ridicată
+        const imageSource = sources.find(s => s.imageUrl && s.source.factuality === 'high') ||
+            sources.find(s => s.imageUrl) ||
+            primary;
 
         const bias = calculateBiasDistribution(sources);
-        
+
         // Calculează blindspot
         let blindspot: 'left' | 'right' | 'none' = 'none';
         if (sources.length >= 3) {
