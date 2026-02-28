@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, History, Loader2, Calendar, ChevronRight, ChevronDown, AlertCircle, Archive } from 'lucide-react';
+import { ExternalLink, History, Loader2, Calendar, ChevronRight, ChevronDown, Archive, Search } from 'lucide-react';
 
 interface ArchiveEntry {
   url: string;
-  timestamp: string;
+  timestamp?: string;
   displayDate: string;
   year: string;
   month: string;
   title: string;
+  source: 'local' | 'wayback';
 }
 
 interface GroupedArchive {
@@ -26,81 +27,109 @@ const MONTH_NAMES = [
   'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'
 ];
 
-export function SourceArchive({ domain }: SourceArchiveProps) {
+export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
   const [groupedItems, setGroupedItems] = useState<GroupedArchive>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [expandedYears, setExpandedYears] = useState<Record<string, boolean>>({});
   const [expandedMonths, setExpandedMonths] = useState<Record<string, boolean>>({});
+  const [searchQuery, setSearchQuery] = useState('');
 
   const cleanDomain = domain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
 
   useEffect(() => {
-    const fetchWaybackHistory = async () => {
+    const fetchFullHistory = async () => {
       setIsLoading(true);
       setError(null);
+      
+      const grouped: GroupedArchive = {};
+
+      const addToGroup = (entry: ArchiveEntry) => {
+        if (!grouped[entry.year]) grouped[entry.year] = {};
+        if (!grouped[entry.year][entry.month]) grouped[entry.year][entry.month] = [];
+        // Evităm duplicatele pe URL
+        if (!grouped[entry.year][entry.month].some(e => e.url === entry.url)) {
+          grouped[entry.year][entry.month].push(entry);
+        }
+      };
+
       try {
-        // Query the CDX API for the last 200 unique captures to keep it fast but relevant
-        const url = `https://web.archive.org/cdx/search/cdx?url=${cleanDomain}/*&output=json&limit=200&collapse=urlkey&filter=statuscode:200&filter=mimetype:text/html`;
-        
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Nu am putut interoga arhiva.');
-        
-        const data = await response.json();
-        if (data.length <= 1) {
-          setGroupedItems({});
-          return;
+        // 1. Încercăm să încărcăm arhiva LOCALĂ (JSON)
+        try {
+          // Vite specific import trick for dynamic JSON
+          const localData = await import(`../data/archives/${sourceId}.json`);
+          if (localData && localData.default) {
+            localData.default.forEach((item: any) => {
+              const date = new Date(item.date);
+              if (!isNaN(date.getTime())) {
+                const year = date.getFullYear().toString();
+                const monthName = MONTH_NAMES[date.getMonth()];
+                addToGroup({
+                  url: item.url,
+                  title: item.title,
+                  displayDate: date.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short', year: 'numeric' }),
+                  year,
+                  month: monthName,
+                  source: 'local'
+                });
+              }
+            });
+          }
+        } catch (e) {
+          console.log(`No local archive for ${sourceId}`);
         }
 
-        const rows = data.slice(1);
-        const grouped: GroupedArchive = {};
+        // 2. Interogăm Wayback Machine pentru istoric adițional
+        const wbUrl = `https://web.archive.org/cdx/search/cdx?url=${cleanDomain}/*&output=json&limit=150&collapse=urlkey&filter=statuscode:200&filter=mimetype:text/html`;
+        const response = await fetch(wbUrl);
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.length > 1) {
+            const rows = data.slice(1);
+            rows.forEach((row: string[]) => {
+              const timestamp = row[1];
+              const originalUrl = row[2];
+              
+              const year = timestamp.substring(0, 4);
+              const monthIdx = parseInt(timestamp.substring(4, 6)) - 1;
+              const monthName = MONTH_NAMES[monthIdx];
+              const day = timestamp.substring(6, 8);
 
-        rows.forEach((row: string[]) => {
-          const timestamp = row[1];
-          const originalUrl = row[2];
-          
-          const year = timestamp.substring(0, 4);
-          const monthIdx = parseInt(timestamp.substring(4, 6)) - 1;
-          const monthName = MONTH_NAMES[monthIdx];
-          const day = timestamp.substring(6, 8);
+              // Generăm un titlu din URL dacă nu e deja în arhiva locală
+              let title = originalUrl.split('/').pop()?.replace(/-/g, ' ').replace(/\.html?$/, '') || originalUrl;
+              if (title.length < 5) title = originalUrl;
 
-          // Clean title from URL (Wayback doesn't provide titles in CDX, so we prettify the URL)
-          let title = originalUrl
-            .split('/').pop()?.replace(/-/g, ' ').replace(/\.html?$/, '') || originalUrl;
-          if (title.length < 5) title = originalUrl;
+              addToGroup({
+                url: originalUrl,
+                timestamp,
+                title: title.charAt(0).toUpperCase() + title.slice(1),
+                displayDate: `${day} ${monthName} ${year}`,
+                year,
+                month: monthName,
+                source: 'wayback'
+              });
+            });
+          }
+        }
 
-          const entry: ArchiveEntry = {
-            url: originalUrl,
-            timestamp,
-            year,
-            month: monthName,
-            title: title.charAt(0).toUpperCase() + title.slice(1),
-            displayDate: `${day} ${monthName} ${year}`
-          };
-
-          if (!grouped[year]) grouped[year] = {};
-          if (!grouped[year][monthName]) grouped[year][monthName] = [];
-          grouped[year][monthName].push(entry);
-        });
-
-        // Sort months and years descending
         setGroupedItems(grouped);
         
-        // Auto-expand the latest year
+        // Auto-expand latest
         const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
-        if (years.length > 0) {
-          setExpandedYears({ [years[0]]: true });
-        }
+        if (years.length > 0) setExpandedYears({ [years[0]]: true });
 
       } catch (err) {
-        setError('Eroare la conectarea cu Internet Archive.');
+        console.error(err);
+        // Chiar dacă e eroare, poate avem date locale
+        setGroupedItems(grouped);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchWaybackHistory();
-  }, [cleanDomain]);
+    fetchFullHistory();
+  }, [sourceId, cleanDomain]);
 
   const toggleYear = (year: string) => {
     setExpandedYears(prev => ({ ...prev, [year]: !prev[year] }));
@@ -120,82 +149,116 @@ export function SourceArchive({ domain }: SourceArchiveProps) {
     );
   }
 
-  const years = Object.keys(groupedItems).sort((a, b) => b.localeCompare(a));
+  const sortedYears = Object.keys(groupedItems).sort((a, b) => b.localeCompare(a));
 
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-1">
         <div className="flex items-center gap-2">
           <Archive className="w-5 h-5 text-primary" />
           <h3 className="font-bold text-foreground text-lg">Arhivă Evolutivă</h3>
         </div>
-        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground bg-muted px-2 py-1 rounded">
-          Powered by Wayback Machine
-        </span>
+        
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+          <input 
+            type="text" 
+            placeholder="Caută în arhivă..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8 pr-3 py-1.5 text-xs rounded-full border border-border bg-background w-full sm:w-48 focus:outline-none focus:ring-1 focus:ring-primary"
+          />
+        </div>
       </div>
 
-      {years.length === 0 ? (
+      {sortedYears.length === 0 ? (
         <div className="p-8 text-center bg-card border border-border rounded-xl">
           <p className="text-sm text-muted-foreground">Nu am găsit înregistrări istorice pentru acest domeniu.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {years.map(year => (
-            <div key={year} className="bg-card border border-border rounded-xl overflow-hidden">
-              {/* Year Header */}
+          {sortedYears.map(year => (
+            <div key={year} className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
               <button 
                 onClick={() => toggleYear(year)}
                 className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
               >
-                <span className="font-black text-xl tracking-tighter">{year}</span>
+                <div className="flex items-center gap-3">
+                  <span className="font-black text-2xl tracking-tighter text-foreground">{year}</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-primary/10 text-primary rounded-full uppercase">
+                    {Object.values(groupedItems[year]).reduce((acc, val) => acc + val.length, 0)} articole
+                  </span>
+                </div>
                 {expandedYears[year] ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
               </button>
 
               {expandedYears[year] && (
-                <div className="px-4 pb-4 space-y-2 animate-in slide-in-from-top-2 duration-200">
+                <div className="px-4 pb-4 space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
                   {Object.keys(groupedItems[year]).sort((a, b) => {
                     return MONTH_NAMES.indexOf(b) - MONTH_NAMES.indexOf(a);
                   }).map(month => {
                     const monthKey = `${year}-${month}`;
-                    const articles = groupedItems[year][month];
+                    const articles = groupedItems[year][month].filter(a => 
+                      a.title.toLowerCase().includes(searchQuery.toLowerCase())
+                    );
                     
+                    if (searchQuery && articles.length === 0) return null;
+
                     return (
-                      <div key={month} className="border border-border/50 rounded-lg overflow-hidden">
-                        {/* Month Header */}
+                      <div key={month} className="border border-border/40 rounded-lg overflow-hidden bg-muted/10">
                         <button 
                           onClick={() => toggleMonth(year, month)}
-                          className="w-full flex items-center justify-between p-3 bg-muted/30 hover:bg-muted/50 transition-colors text-sm font-bold"
+                          className="w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors text-sm font-bold"
                         >
                           <span className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-primary" />
+                            <Calendar className="w-4 h-4 text-primary/60" />
                             {month}
                           </span>
-                          <span className="text-[10px] text-muted-foreground bg-background px-2 py-0.5 rounded-full border border-border">
-                            {articles.length} înregistrări
-                          </span>
+                          <ChevronRight className={`w-4 h-4 transition-transform ${expandedMonths[monthKey] ? 'rotate-90' : ''}`} />
                         </button>
 
                         {expandedMonths[monthKey] && (
-                          <div className="p-2 space-y-1 bg-background/50">
-                            {articles.sort((a, b) => b.timestamp.localeCompare(a.timestamp)).map((article, idx) => (
-                              <a 
-                                key={idx} 
-                                href={`https://web.archive.org/web/${article.timestamp}/${article.url}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-start gap-3 p-3 rounded-md hover:bg-primary/5 transition-all group"
-                              >
-                                <div className="w-1.5 h-1.5 rounded-full bg-primary/30 mt-1.5 group-hover:bg-primary transition-colors" />
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-foreground leading-snug group-hover:text-primary transition-colors line-clamp-2">
+                          <div className="divide-y divide-border/30 bg-background/40">
+                            {articles.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || '')).map((article, idx) => (
+                              <div key={idx} className="flex flex-col p-3 hover:bg-primary/5 transition-all group relative">
+                                <div className="flex items-start justify-between gap-4">
+                                  <p className="text-sm font-bold text-foreground leading-snug pr-6">
                                     {article.title}
                                   </p>
-                                  <p className="text-[10px] text-muted-foreground mt-1 font-mono uppercase">
-                                    {article.displayDate} • {new URL(article.url).hostname}
-                                  </p>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {article.source === 'local' && (
+                                      <span className="text-[8px] font-bold bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded border border-emerald-200">
+                                        LIVE CAPTURE
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
-                                <ExternalLink className="w-3.5 h-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-all shrink-0 mt-1" />
-                              </a>
+                                
+                                <div className="flex items-center gap-4 mt-2">
+                                  <span className="text-[10px] font-mono text-muted-foreground uppercase">
+                                    {article.displayDate}
+                                  </span>
+                                  
+                                  <div className="flex items-center gap-3 ml-auto opacity-60 group-hover:opacity-100 transition-opacity">
+                                    <a 
+                                      href={article.url} 
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                                    >
+                                      Sursă
+                                    </a>
+                                    <a 
+                                      href={article.source === 'local' ? `https://web.archive.org/web/${article.url}` : `https://web.archive.org/web/${article.timestamp}/${article.url}`}
+                                      target="_blank" 
+                                      rel="noopener noreferrer"
+                                      className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline flex items-center gap-1"
+                                    >
+                                      Arhivă <History className="w-2.5 h-2.5" />
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
                             ))}
                           </div>
                         )}
@@ -209,8 +272,8 @@ export function SourceArchive({ domain }: SourceArchiveProps) {
         </div>
       )}
       
-      <p className="text-[10px] text-muted-foreground text-center pt-2 italic">
-        Datele sunt agregate din indexul public Internet Archive. Legăturile deschid versiunea arhivată a paginii originale.
+      <p className="text-[9px] text-muted-foreground text-center pt-2 max-w-xs mx-auto">
+        Arhiva combină capturi live și indexul istoric Wayback Machine pentru transparență totală.
       </p>
     </section>
   );
