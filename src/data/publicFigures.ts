@@ -84,33 +84,6 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Suveranitate',
                 impact: 'high',
                 bias: 'right'
-            },
-            {
-                id: 'db-s2',
-                text: 'Trotinetarii urii au distrus tot ce era instituție în țara asta. Ne-au adus într-un punct în care a fi normal e o vină.',
-                date: '2025-01-12',
-                sourceUrl: 'https://www.youtube.com/@VerdictDanaBudeanu/search?query=trotinetari',
-                topic: 'Social',
-                impact: 'high',
-                bias: 'right'
-            },
-            {
-                id: 'db-s3',
-                text: 'USR este un experiment eșuat. O adunătură de impostori care vor să ne vândă țara pe bucăți la pachet cu ideologii de carton.',
-                date: '2024-05-20',
-                sourceUrl: 'https://www.youtube.com/@VerdictDanaBudeanu/search?query=USR',
-                topic: 'Politică',
-                impact: 'medium',
-                bias: 'right'
-            },
-            {
-                id: 'db-s4',
-                text: 'Să votezi cu Georgescu înseamnă să votezi cu rușii. Diaspora nu a înțeles nimic din miza geopolitică a acestui moment.',
-                date: '2024-12-01',
-                sourceUrl: 'https://www.antena3.ro/politica/dana-budeanu-calin-georgescu-mesaj-sustinatori-737444.html',
-                topic: 'Geopolitică',
-                impact: 'high',
-                bias: 'center-right'
             }
         ]
     },
@@ -121,15 +94,34 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Realizator TV',
         image: '/images/voices/Mircea_Badea.jpg',
         bias: {
-            leaning: 'center-left', // Tradițional anti-Băsescu/Iohannis, pro-PSD history
+            leaning: 'center-left', 
             score: -40,
-            description: 'Cunoscut pentru emisiunea "În gura presei", are o lungă istorie de critică la adresa instituțiilor de forță (DNA, Servicii) și a președintelui Iohannis.'
+            description: 'Cunoscut pentru emisiunea "În gura presei", are o lungă istorie de critică la adresa instituțiilor de forță și a "statului paralel". Recent, este critic la adresa măsurilor de austeritate.'
         },
-        description: 'Realizator la Antena 3 CNN, Mircea Badea este una dintre cele mai vocale figuri media, cu opinii puternice despre justiție și politică externă.',
+        description: 'Realizator la Antena 3 CNN, Mircea Badea este una dintre cele mai vocale figuri media, folosind ironia și sarcasmul pentru a analiza derapajele politice și sociale.',
         socialLinks: {
             instagram: 'https://instagram.com/mirceabadea'
         },
-        statements: []
+        statements: [
+            {
+                id: 'mb-s1',
+                text: 'Guvernul Bolojan a inventat "austeritatea creativă". Adică tăiem de la polițiști și profesori ca să avem ce pune în PowerPoint-uri despre reformă.',
+                date: '2026-02-15',
+                sourceUrl: 'https://www.antena3.ro',
+                topic: 'Economie',
+                impact: 'high',
+                bias: 'left'
+            },
+            {
+                id: 'mb-s2',
+                text: 'Siguranța publică a devenit o glumă. Când jurnaliștii sunt amenințați în plină stradă și autoritățile ridică din umeri, înseamnă că statul e în concediu.',
+                date: '2026-02-10',
+                sourceUrl: 'https://www.youtube.com/@Antena3Romania',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
     },
     {
         id: 'victor-ciutacu',
@@ -140,13 +132,23 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'center-left',
             score: -35,
-            description: 'Realizator România TV, promovează teme populiste și este frecvent critic la adresa USR și a ONG-urilor.'
+            description: 'Realizator România TV, promovează teme populiste și este frecvent critic la adresa reformiștilor radicali și a austerității.'
         },
-        description: 'Moderator la România TV, Victor Ciutacu abordează subiecte politice și sociale, adesea dintr-o perspectivă critică la adresa guvernării de dreapta.',
+        description: 'Moderator la România TV, Victor Ciutacu este cunoscut pentru stilul său incisiv și pentru campaniile media împotriva politicilor de dreapta dure.',
         socialLinks: {
             facebook: 'https://facebook.com/victorciutacu'
         },
-        statements: []
+        statements: [
+            {
+                id: 'vc-s1',
+                text: 'Barosăneala lui Ilie Sărăcie Bolojan ne costă pe toți. Vreți reformă? Începeți prin a nu mai băga mâna în buzunarul oamenilor simpli sub pretextul eficienței.',
+                date: '2026-02-18',
+                sourceUrl: 'https://www.romaniatv.net',
+                topic: 'Economie',
+                impact: 'high',
+                bias: 'left'
+            }
+        ]
     },
     {
         id: 'cristian-tudor-popescu',
@@ -157,30 +159,32 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'center-right',
             score: 30,
-            description: 'Poziții raționale, pro-europene, dar critic cu toate partidele. Adesea văzut ca o voce a dreptei intelectuale.'
+            description: 'Poziții raționale, pro-europene. Critic acerb al populismului și al imposturii academice sau politice.'
         },
-        description: 'Unul dintre cei mai longevivi și respectați gazetari din România, CTP analizează actualitatea cu un spirit critic incisiv.',
+        description: 'Unul dintre cei mai respectați gazetari, CTP analizează realitatea prin prisma logicii și a integrității, fără a menaja nicio tabără politică.',
         socialLinks: {
             facebook: 'https://facebook.com/ctp'
         },
-        statements: []
-    },
-    {
-        id: 'catalin-tolontan',
-        slug: 'catalin-tolontan',
-        name: 'Cătălin Tolontan',
-        role: 'Jurnalist investigativ',
-        image: '/images/voices/catalin-tolontan.png',
-        bias: {
-            leaning: 'center',
-            score: 5,
-            description: 'Jurnalism de investigație obiectiv, concentrat pe corupție și abuzuri, fără afiliații politice explicite.'
-        },
-        description: 'Jurnalist de investigație la Libertatea, cunoscut pentru investigațiile despre Colectiv și sistemul de sănătate. Premiat internațional pentru jurnalismul său.',
-        socialLinks: {
-            facebook: 'https://facebook.com/catalin.tolontan'
-        },
-        statements: []
+        statements: [
+            {
+                id: 'ctp-s1',
+                text: 'Vizita lui Nicușor Dan la Trump a fost un exercițiu de umilință națională. Să mergi acolo și să fii batjocorit, primind o funcție greșită, este eșecul diplomației personale.',
+                date: '2026-02-25',
+                sourceUrl: 'https://www.hotnews.ro',
+                topic: 'Politică Externă',
+                impact: 'high',
+                bias: 'center'
+            },
+            {
+                id: 'ctp-s2',
+                text: 'Pensiile speciale ale magistraților sunt cancerul care macină PNRR-ul. Amânarea promulgării legii de către președinte este o complicitate la subminarea economiei.',
+                date: '2026-02-12',
+                sourceUrl: 'https://www.republica.ro',
+                topic: 'Justiție',
+                impact: 'high',
+                bias: 'center-right'
+            }
+        ]
     },
     {
         id: 'rares-bogdan',
@@ -191,64 +195,23 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'center-right',
             score: 45,
-            description: 'Fost jurnalist, acum europarlamentar PNL, poziții conservatoare și pro-europene.'
+            description: 'Europarlamentar PNL, voce a curentului conservator-liberal. Recent intrat în conflict cu aripa reformistă dură a partidului.'
         },
-        description: 'Fost realizator TV la Realitatea, actualmente europarlamentar PNL și una dintre cele mai vocale voci ale dreptei politice.',
+        description: 'Fost jurnalist de top, Rareș Bogdan este acum unul dintre liderii PNL, cunoscut pentru retorica sa pro-europeană, dar și pentru apărarea intereselor primarilor liberali.',
         socialLinks: {
             facebook: 'https://facebook.com/RaresBogdan'
         },
-        statements: []
-    },
-    {
-        id: 'lucian-mandruta',
-        slug: 'lucian-mandruta',
-        name: 'Lucian Mândruță',
-        role: 'Jurnalist / Blogger',
-        image: '/images/voices/lucian-mandruta.png',
-        bias: {
-            leaning: 'center-left',
-            score: -25,
-            description: 'Abordare liberală, critică față de naționalismul excesiv și deschis spre teme progresiste.'
-        },
-        description: 'Jurnalist cu experiență la Antena 1 și ProTV, cunoscut pentru blogul său și comentariile pe teme sociale.',
-        socialLinks: {
-            facebook: 'https://facebook.com/LucianMandruta'
-        },
-        statements: []
-    },
-    {
-        id: 'moise-guran',
-        slug: 'moise-guran',
-        name: 'Moise Guran',
-        role: 'Jurnalist / Analist',
-        image: '/images/voices/moise-guran.png',
-        bias: {
-            leaning: 'center-right',
-            score: 20,
-            description: 'Pro-reformist, pro-UE, fost candidat politic. Critică corupția și lipsa reformelor.'
-        },
-        description: 'Fost jurnalist la Europa FM și analist economic, cunoscut pentru pozițiile sale pro-reformiste și analizele economice.',
-        socialLinks: {
-            facebook: 'https://facebook.com/MoiseGuran'
-        },
-        statements: []
-    },
-    {
-        id: 'andreea-esca',
-        slug: 'andreea-esca',
-        name: 'Andreea Esca',
-        role: 'Prezentatoare TV',
-        image: '/images/voices/andreea-esca.png',
-        bias: {
-            leaning: 'center',
-            score: 0,
-            description: 'Abordare neutră și profesionistă, simbol al jurnalismului TV din România.'
-        },
-        description: 'Cea mai longevivă și cunoscută prezentatoare de știri din România, la ProTV din 1995.',
-        socialLinks: {
-            instagram: 'https://instagram.com/andreeaesca'
-        },
-        statements: []
+        statements: [
+            {
+                id: 'rb-s1',
+                text: 'Domnule Bolojan, nu se poate conduce o țară prin dictate lunare. PNL nu este o cazarmă și guvernarea nu se face prin solicitări de voturi de încredere din 30 în 30 de zile.',
+                date: '2026-02-05',
+                sourceUrl: 'https://www.mediafax.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'right'
+            }
+        ]
     },
     {
         id: 'selly',
@@ -258,14 +221,24 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         image: '/images/voices/selly.png',
         bias: {
             leaning: 'center',
-            score: 0,
-            description: 'Comentează ocazional politica din perspectiva generației tinere, fără afilieri clare.'
+            score: 5,
+            description: 'Reprezentant al noii generații, concentrat pe educație și antreprenoriat. Critică sistemul de învățământ învechit.'
         },
-        description: 'Cel mai urmărit YouTuber din România, cu influență semnificativă asupra tinerilor. Implicat ocazional în dezbateri publice.',
+        description: 'Andrei Șelaru (Selly) este cel mai mare creator de conținut din România, folosindu-și platforma pentru a pune presiune pe reformarea educației.',
         socialLinks: {
             youtube: 'https://youtube.com/selly',
-            instagram: 'https://instagram.com/sfrfrfr'
+            instagram: 'https://instagram.com/selly'
         },
-        statements: []
+        statements: [
+            {
+                id: 'selly-s1',
+                text: 'Educația nu a fost niciodată o prioritate reală în România. Avem 31 de miniștri în 30 de ani și o școală care te învață orice, mai puțin cum să supraviețuiești în 2026.',
+                date: '2026-02-27',
+                sourceUrl: 'https://www.euronews.ro',
+                topic: 'Educație',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
     }
 ];
