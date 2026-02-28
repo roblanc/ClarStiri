@@ -92,7 +92,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         <div className="flex-1 flex flex-col px-1">
           <h3
             className={cn(
-              "font-serif font-bold mb-4 md:mb-6 text-foreground group-hover:text-primary transition-colors line-clamp-3",
+              "font-title font-bold mb-4 md:mb-6 text-foreground group-hover:text-primary transition-colors line-clamp-3",
               news.title.length > 100
                 ? "text-[16px] md:text-[20px] leading-[1.3]"
                 : "text-[18px] md:text-[24px] leading-[1.2]"

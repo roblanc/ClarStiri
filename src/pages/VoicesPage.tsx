@@ -52,7 +52,7 @@ const VoicesPage = () => {
 
                             <div className="flex flex-col flex-1 w-full">
                                 <div className="mb-3">
-                                    <h3 className="font-serif font-bold text-base sm:text-lg group-hover:text-primary transition-colors leading-tight mb-1 line-clamp-1">
+                                    <h3 className="font-bold text-base sm:text-lg group-hover:text-primary transition-colors leading-tight mb-1 line-clamp-1">
                                         {figure.name}
                                     </h3>
                                     <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground/80 line-clamp-1">
