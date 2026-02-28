@@ -138,7 +138,7 @@ const Index = () => {
         {/* Flat Feed - Added gap for better separation on mobile */}
         {convertedStories.length > 0 && (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {convertedStories.slice(0, visible).map((news) => (
                 <NewsCard key={news.id} variant="default" news={news} />
               ))}

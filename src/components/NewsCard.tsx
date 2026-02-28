@@ -69,8 +69,26 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     <Link to={`/stire/${news.id}`} className="block h-full group">
       <article className="flex flex-col h-full">
         {/* The Card Box (Image + Title) */}
-        <div className="bg-card border border-border overflow-hidden flex flex-col rounded-none group-hover:bg-secondary/5 transition-colors">
-          <div className="h-44 md:h-56 relative overflow-hidden border-b border-border">
+        <div className="bg-card border border-border overflow-hidden flex flex-row md:flex-col rounded-none group-hover:bg-secondary/5 transition-colors">
+          <div className="flex-1 p-4 md:p-5 flex flex-col justify-center min-h-[90px] md:min-h-[140px] order-1 md:order-2">
+            {/* Category shown above title on mobile only to match screenshot positioning */}
+            <div className="md:hidden text-[9px] font-bold uppercase tracking-[0.1em] text-muted-foreground/60 mb-2">
+              {news.category || "Actualitate"}
+            </div>
+
+            <h3
+              className={cn(
+                "font-title font-bold text-foreground group-hover:text-primary transition-colors line-clamp-3",
+                news.title.length > 100
+                  ? "text-[14px] md:text-[19px] leading-[1.3]"
+                  : "text-[16px] md:text-[22px] leading-[1.2]"
+              )}
+            >
+              {news.title}
+            </h3>
+          </div>
+
+          <div className="w-32 h-32 md:w-full md:h-56 relative overflow-hidden border-l md:border-l-0 md:border-b border-border order-2 md:order-1 flex-shrink-0">
             <NewsImage
               src={getThumbnailUrl(news.image)}
               seed={news.title}
@@ -79,35 +97,22 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
             {blindspotLabel && (
-              <div className="absolute top-3 left-3">
+              <div className="absolute top-2 left-2 md:top-3 md:left-3">
                 <BiasBadge
                   type={news.blindspot as 'left' | 'right'}
                   label={blindspotLabel}
-                  className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60"
+                  className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60 scale-75 md:scale-100 origin-top-left"
                 />
               </div>
             )}
-          </div>
-
-          <div className="p-4 md:p-5 flex-1 flex flex-col justify-center min-h-[100px] md:min-h-[140px]">
-            <h3
-              className={cn(
-                "font-title font-bold text-foreground group-hover:text-primary transition-colors line-clamp-3",
-                news.title.length > 100
-                  ? "text-[15px] md:text-[19px] leading-[1.3]"
-                  : "text-[17px] md:text-[22px] leading-[1.2]"
-              )}
-            >
-              {news.title}
-            </h3>
           </div>
         </div>
 
         {/* Seamless Info Area - Outside the card box */}
         <div className="mt-4 px-1">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
-            <span className="text-primary/70">{news.category || "Actualitate"}</span>
-            <span className="opacity-30">•</span>
+            <span className="hidden md:inline text-primary/70">{news.category || "Actualitate"}</span>
+            <span className="hidden md:inline opacity-30">•</span>
             <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
           </div>
           <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
