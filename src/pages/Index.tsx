@@ -84,14 +84,13 @@ const Index = () => {
 
         {/* Flat Feed */}
         {convertedStories.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-border">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {convertedStories.map((news) => (
-              <div key={news.id} className="border-r border-b border-border">
-                <NewsCard
-                  variant="default"
-                  news={news}
-                />
-              </div>
+              <NewsCard
+                key={news.id}
+                variant="default"
+                news={news}
+              />
             ))}
           </div>
         )}
