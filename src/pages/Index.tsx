@@ -24,13 +24,21 @@ const Index = () => {
   const convertedStories = useMemo(() => {
     let filtered = stories || [];
 
+    const normalize = (text: string) => 
+      text.toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim();
+
     if (query && query.trim().length > 0) {
-      const q = query.toLowerCase().trim();
-      filtered = filtered.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.description.toLowerCase().includes(q) ||
-        s.sources.some(src => src.source.name.toLowerCase().includes(q))
-      );
+      const q = normalize(query);
+      filtered = filtered.filter(s => {
+        const titleMatch = normalize(s.title).includes(q);
+        const descMatch = normalize(s.description || "").includes(q);
+        const sourceMatch = s.sources.some(src => normalize(src.source.name).includes(q));
+        
+        return titleMatch || descMatch || sourceMatch;
+      });
     }
 
     return filtered.map(story => ({
