@@ -59,22 +59,22 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[90%] xl:max-w-[85%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-12 md:mb-20 relative">
-          <div className="md:flex md:items-center md:justify-between md:gap-12">
-            <div className="flex-1 min-w-0">
-              {/* Mobile Image - Floated to allow text wrapping */}
-              <div className="md:hidden float-right w-44 -mt-12 -mr-8 ml-2 pointer-events-none select-none">
-                <img
-                  src="/logo_full.png"
-                  alt="ClarStiri Investigator Logo"
-                  className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert transform scale-125"
-                />
-              </div>
+        <section className="mb-12 md:mb-20 relative px-0 overflow-hidden md:overflow-visible">
+          {/* Mobile-only absolute investigator */}
+          <div className="md:hidden absolute -top-8 -right-10 w-56 h-auto pointer-events-none select-none z-0">
+            <img
+              src="/logo_full.png"
+              alt="ClarStiri Investigator Logo"
+              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert transform scale-100 opacity-80"
+            />
+          </div>
 
+          <div className="md:flex md:items-center md:justify-between md:gap-12 relative z-10">
+            <div className="flex-1 min-w-0">
               <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold tracking-tight">
                 Citești.<br />Compari.<br />Decizi.
               </h1>
-              <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-6 md:mt-8 leading-relaxed font-sans max-w-xl pr-4 md:pr-0">
+              <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-6 md:mt-8 leading-relaxed font-sans max-w-xl pr-12 md:pr-0">
                 Ieși din propria bulă informațională. Comparăm automat peste 40 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
               </p>
             </div>
