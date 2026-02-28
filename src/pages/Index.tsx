@@ -4,7 +4,8 @@ import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, SearchX } from "lucide-react";
+import { useSearchStore } from "@/hooks/useSearchStore";
 import {
   MainFeedSkeleton,
 } from "@/components/Skeleton";
@@ -17,10 +18,22 @@ const BATCH = 20;
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
   const [visible, setVisible] = useState(BATCH);
+  const { query } = useSearchStore();
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
-    return stories?.map(story => ({
+    let filtered = stories || [];
+    
+    if (query && query.trim().length > 0) {
+      const q = query.toLowerCase().trim();
+      filtered = filtered.filter(s => 
+        s.title.toLowerCase().includes(q) || 
+        s.description.toLowerCase().includes(q) ||
+        s.sources.some(src => src.source.name.toLowerCase().includes(q))
+      );
+    }
+
+    return filtered.map(story => ({
       id: story.id,
       title: story.title,
       image: story.image || PLACEHOLDER_IMAGE,
@@ -82,6 +95,20 @@ const Index = () => {
             </p>
             <Button onClick={() => refetch()} variant="outline" className="rounded-none border-border font-serif uppercase text-xs tracking-widest px-8">
               REÎNCEARCĂ
+            </Button>
+          </div>
+        )}
+
+        {/* No Search Results */}
+        {!isLoading && stories?.length && convertedStories.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
+            <SearchX className="w-12 h-12 text-muted-foreground mb-4" />
+            <p className="font-serif text-2xl mb-2 text-foreground">Niciun rezultat</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8 text-center max-w-md">
+              Nu am găsit nimic pentru "{query}". Încearcă alți termeni.
+            </p>
+            <Button onClick={() => useSearchStore.getState().clearQuery()} variant="outline" className="rounded-none border-border font-serif uppercase text-xs tracking-widest px-8">
+              ȘTERGE CĂUTAREA
             </Button>
           </div>
         )}

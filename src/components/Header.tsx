@@ -5,15 +5,22 @@ import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSearchStore } from "@/hooks/useSearchStore";
 
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const { query, setQuery, clearQuery } = useSearchStore();
 
   const navLinks = [
     { to: "/surse", label: "Surse" },
     { to: "/barometru", label: "Influenceri" },
   ];
+
+  const handleSearchClose = () => {
+    setSearchOpen(false);
+    clearQuery();
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all">
@@ -61,10 +68,12 @@ export function Header() {
                 <Input
                   type="search"
                   placeholder="CAUTĂ..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   className="w-32 md:w-48 h-8 text-[10px] uppercase tracking-widest bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary px-3 rounded-full"
                   autoFocus
                 />
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={() => setSearchOpen(false)}>
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={handleSearchClose}>
                   <X className="w-4 h-4" />
                 </Button>
               </div>
