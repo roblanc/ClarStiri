@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, X, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { useSearchStore } from "@/hooks/useSearchStore";
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { query, setQuery, clearQuery } = useSearchStore();
 
   const navLinks = [
@@ -20,6 +21,15 @@ export function Header() {
   const handleSearchClose = () => {
     setSearchOpen(false);
     clearQuery();
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      if (location.pathname !== "/") {
+        navigate("/");
+      }
+    }
   };
 
   return (
@@ -62,19 +72,25 @@ export function Header() {
             <ThemeToggle />
 
             {searchOpen ? (
-              <div className="relative flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-200">
-                <Input
-                  type="search"
-                  placeholder="CAUTĂ..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-32 md:w-48 h-8 text-[10px] uppercase tracking-widest bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary px-3 rounded-full"
-                  autoFocus
-                />
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={handleSearchClose}>
+              <form 
+                onSubmit={handleSearchSubmit}
+                className="relative flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-200"
+              >
+                <div className="relative flex items-center">
+                  <Input
+                    type="search"
+                    placeholder="CAUTĂ..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    className="w-32 md:w-64 h-8 text-[10px] uppercase tracking-widest bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary pl-8 pr-3 rounded-full"
+                    autoFocus
+                  />
+                  <Search className="absolute left-2.5 w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={handleSearchClose} type="button">
                   <X className="w-4 h-4" />
                 </Button>
-              </div>
+              </form>
             ) : (
               <button
                 className="p-2 text-foreground hover:bg-muted rounded-full transition-colors"
