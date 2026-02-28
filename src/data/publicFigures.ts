@@ -218,7 +218,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'rares-bogdan',
         name: 'Rareș Bogdan',
         role: 'Politician / Europarlamentar',
-        image: '/images/voices/rares-bogdan.png',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/1718281681350_20240612_BOGDAN_Rares_Ioan_RO_006.jpg',
         bias: {
             leaning: 'center-right',
             score: 45,
