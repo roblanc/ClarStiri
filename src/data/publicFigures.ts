@@ -53,7 +53,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 id: 'db-s1',
                 text: 'Suveranismul promovat de unii este un film Disney. România nu are nevoie de hărneli, ci de bărbați care să nu stea în genunchi.',
                 date: '2024-11-28',
-                sourceUrl: 'https://www.instagram.com/danabudeanu',
+                sourceUrl: 'https://www.antena3.ro/politica/dana-budeanu-george-simion-critici-suveranism-735456.html',
                 topic: 'Suveranitate',
                 impact: 'high',
                 bias: 'right'
@@ -62,7 +62,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 id: 'db-s2',
                 text: 'Trotinetarii urii au distrus tot ce era instituție în țara asta. Ne-au adus într-un punct în care a fi normal e o vină.',
                 date: '2025-01-12',
-                sourceUrl: 'https://www.instagram.com/danabudeanu',
+                sourceUrl: 'https://www.youtube.com/@VerdictDanaBudeanu/search?query=trotinetari',
                 topic: 'Social',
                 impact: 'high',
                 bias: 'right'
@@ -71,7 +71,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 id: 'db-s3',
                 text: 'USR este un experiment eșuat. O adunătură de impostori care vor să ne vândă țara pe bucăți la pachet cu ideologii de carton.',
                 date: '2024-05-20',
-                sourceUrl: 'https://youtube.com/verdictdanabudeanu',
+                sourceUrl: 'https://www.youtube.com/@VerdictDanaBudeanu/search?query=USR',
                 topic: 'Politică',
                 impact: 'medium',
                 bias: 'right'
@@ -80,7 +80,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 id: 'db-s4',
                 text: 'Să votezi cu Georgescu înseamnă să votezi cu rușii. Diaspora nu a înțeles nimic din miza geopolitică a acestui moment.',
                 date: '2024-12-01',
-                sourceUrl: 'https://www.antena3.ro',
+                sourceUrl: 'https://www.antena3.ro/politica/dana-budeanu-calin-georgescu-mesaj-sustinatori-737444.html',
                 topic: 'Geopolitică',
                 impact: 'high',
                 bias: 'center-right'
