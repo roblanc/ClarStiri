@@ -120,7 +120,7 @@ const CategoryPage = () => {
                     ))}
                 </div>
 
-                {/* Stories List */}
+                {/* Stories List - Added spacing between items for better mobile readability */}
                 {filteredStories.length === 0 ? (
                     <div className="text-center py-16">
                         <p className="text-muted-foreground text-lg mb-4">
@@ -131,24 +131,25 @@ const CategoryPage = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="bg-card rounded-lg border border-border divide-y divide-border">
+                    <div className="flex flex-col gap-4 md:gap-6">
                         {filteredStories.map((story) => (
-                            <NewsListItem
-                                key={story.id}
-                                story={{
-                                    id: story.id,
-                                    title: story.title,
-                                    image: story.image || "/default-news.png",
-                                    bias: story.bias,
-                                    category: category.name,
-                                    sourcesCount: story.sourcesCount,
-                                    sources: story.sources.map(s => ({
-                                        name: s.source.name,
-                                        url: s.source.url,
-                                        bias: s.source.bias,
-                                    })),
-                                }}
-                            />
+                            <div key={story.id} className="bg-card rounded-lg border border-border overflow-hidden hover:border-primary/30 transition-colors">
+                                <NewsListItem
+                                    story={{
+                                        id: story.id,
+                                        title: story.title,
+                                        image: story.image || "/default-news.png",
+                                        bias: story.bias,
+                                        category: category.name,
+                                        sourcesCount: story.sourcesCount,
+                                        sources: story.sources.map(s => ({
+                                            name: s.source.name,
+                                            url: s.source.url,
+                                            bias: s.source.bias,
+                                        })),
+                                    }}
+                                />
+                            </div>
                         ))}
                     </div>
                 )}

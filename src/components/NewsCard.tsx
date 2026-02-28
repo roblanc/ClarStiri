@@ -88,12 +88,12 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         </div>
 
         {/* Bottom Content Box */}
-        <div className="p-3 md:p-5 flex-1 flex flex-col relative z-10">
+        <div className="p-4 md:p-5 flex-1 flex flex-col relative z-10">
           <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground min-h-[66px] md:min-h-[84px]">
             {news.title}
           </h3>
 
-          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 bg-[#0a0a0a] -mx-3 md:-mx-5 -mb-3 md:-mb-5 px-3 md:px-5 py-2 md:py-4">
+          <div className="mt-auto pt-2 md:pt-4 flex flex-col gap-2 md:gap-3 bg-[#0a0a0a] -mx-4 md:-mx-5 -mb-4 md:-mb-5 px-4 md:px-5 py-3 md:py-4">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] font-bold uppercase tracking-wider text-neutral-400">
               <span className="text-white">{news.category || "ACTUALITATE"}</span>
               <span>•</span>

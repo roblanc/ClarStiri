@@ -21,7 +21,7 @@ interface NewsListItemProps {
 export function NewsListItem({ story }: NewsListItemProps) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
-      <article className="py-4 px-4 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors">
+      <article className="py-5 px-4 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors">
         {/* Top row: Category, Title, Image */}
         <div className="flex gap-4 mb-3">
           <div className="flex-1 min-w-0">

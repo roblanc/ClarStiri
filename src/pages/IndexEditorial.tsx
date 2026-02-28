@@ -195,16 +195,16 @@ const IndexEditorial = () => {
         {converted.length > 0 && (
           <>
             {/* ── Rândul 1: Featured + Capsule ── */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-border mb-0">
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 md:border border-border mb-6 md:mb-0">
               {/* Featured: 2/3 */}
-              <div className="md:col-span-2 border-r border-border">
+              <div className="md:col-span-2 md:border-r border-border">
                 {featured && <FeaturedCard story={featured} />}
               </div>
 
               {/* Capsule: 1/3, împărțit vertical */}
-              <div className="flex flex-col">
+              <div className="flex flex-col gap-6 md:gap-0">
                 {capsules.map((s, i) => (
-                  <div key={s.id} className={i === 0 ? "border-b border-border flex-1" : "flex-1"}>
+                  <div key={s.id} className={i === 0 ? "md:border-b border-border flex-1" : "flex-1"}>
                     <CapsuleCard story={s} index={i} />
                   </div>
                 ))}
@@ -212,7 +212,7 @@ const IndexEditorial = () => {
             </section>
 
             {/* Separator cu label */}
-            <div className="border-x border-b border-border px-3 py-1.5 flex items-center gap-3 mb-0">
+            <div className="md:border-x md:border-b border-border px-3 py-1.5 flex items-center gap-3 mb-6 md:mb-0">
               <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
                 Arhivă
               </span>
@@ -223,17 +223,16 @@ const IndexEditorial = () => {
             </div>
 
             {/* ── Rândul 2+: Arhivă ── */}
-            <section className="border-x border-b border-border">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <section className="md:border-x md:border-b border-border">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-0">
                 {archive.slice(0, archiveVisible).map((s, i) => {
-                  const isLastRow = i >= archiveVisible - 3;
-                  const col = i % 3;
                   return (
                     <div
                       key={s.id}
                       className={[
-                        i % 3 !== 2 ? "border-r border-border" : "",
-                        i < archive.slice(0, archiveVisible).length - (archive.slice(0, archiveVisible).length % 3 || 3) ? "border-b border-border" : "",
+                        "h-full",
+                        i % 3 !== 2 ? "md:border-r border-border" : "",
+                        i < archive.slice(0, archiveVisible).length - (archive.slice(0, archiveVisible).length % 3 || 3) ? "md:border-b border-border" : "",
                       ].join(" ")}
                     >
                       <ArchiveCard story={s} />
