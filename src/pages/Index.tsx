@@ -59,11 +59,11 @@ const Index = () => {
       <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[90%] xl:max-w-[85%]">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-12 md:mb-20 relative">
+        <section className="mb-12 md:mb-20 relative pt-4 md:pt-0">
           <div className="md:flex md:items-center md:justify-between md:gap-12">
             <div className="block">
-              {/* Image - Styled to blend perfectly and allow text wrapping */}
-              <div className="md:hidden float-right w-40 -mt-16 -mr-4 ml-4 mb-2 pointer-events-none select-none">
+              {/* Image - Adjusted margins to avoid header overlap */}
+              <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
                   src="/logo_full.png"
                   alt="ClarStiri Investigator Logo"
