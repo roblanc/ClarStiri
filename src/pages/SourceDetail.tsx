@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { SourceProfileCard } from '@/components/SourceProfileCard';
+import { SourceArchive } from '@/components/SourceArchive';
 import { SOURCE_CATALOG_BY_ID } from '@/data/sourceCatalog';
 
 export default function SourceDetail() {
@@ -42,6 +43,8 @@ export default function SourceDetail() {
                 </Link>
 
                 <SourceProfileCard source={source} profile={source.profile} />
+
+                <SourceArchive domain={source.url} />
             </main>
         </div>
     );
