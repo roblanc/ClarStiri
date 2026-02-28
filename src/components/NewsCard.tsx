@@ -86,6 +86,16 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             >
               {news.title}
             </h3>
+
+            {/* Mobile Only Metadata & Bias: Only under the text, not the image */}
+            <div className="md:hidden mt-4">
+              <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-2.5">
+                <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
+              </div>
+              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
+              {/* Added a subtle line only on mobile */}
+              <div className="mt-5 border-b border-border/30 w-full" />
+            </div>
           </div>
 
           <div className="w-28 h-20 md:w-full md:h-56 relative overflow-hidden md:border-b border-border order-2 md:order-1 flex-shrink-0 self-center md:self-auto">
@@ -108,8 +118,8 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           </div>
         </div>
 
-        {/* Seamless Info Area - Outside the card box */}
-        <div className="mt-3 md:mt-4 px-1 pb-6 md:pb-0 border-b border-border/30 md:border-none">
+        {/* Desktop Only Seamless Info Area */}
+        <div className="hidden md:block mt-4 px-1">
           <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
             <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
           </div>
