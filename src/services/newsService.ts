@@ -441,13 +441,17 @@ function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; cent
  * Grupează știrile similare folosind un algoritm hibrid: 
  * Jaccard (cuvinte) + Entity matching + Context (bigrame).
  */
-function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs = 48 * 60 * 60 * 1000): Map<string, RSSNewsItem[]> {
-    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci']);
+function findSimilarStories(news: RSSNewsItem[], threshold = 0.30, maxTimeDiffMs = 48 * 60 * 60 * 1000): Map<string, RSSNewsItem[]> {
+    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele']);
+
+    // Cuvinte care încep cu majusculă dar sunt generice și nu ar trebui tratate ca entități de matching puternic
+    const genericEntities = new Set(['foto', 'video', 'romania', 'astazi', 'ieri', 'maine', 'azi', 'update', 'breaking', 'news', 'bucuresti', 'echipa', 'oficial', 'surse', 'ziua', 'lumea', 'omul', 'femeia', 'copilul', 'tara', 'guvernul', 'premierul', 'presedintele']);
 
     const extractEntities = (title: string) => {
         return title.split(/\s+/)
             .filter(w => w.length > 3 && /^[A-Z]/.test(w))
-            .map(w => normalizeTitle(w));
+            .map(w => normalizeTitle(w))
+            .filter(w => !genericEntities.has(w));
     };
 
     const itemData = news.map(item => {
@@ -479,6 +483,7 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs
         for (let j = i + 1; j < itemData.length; j++) {
             const dataJ = itemData[j];
             if (processed.has(dataJ.item.id)) continue;
+            // Nu grupăm știri din aceeași sursă
             if (dataI.item.source.id === dataJ.item.source.id) continue;
 
             if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
@@ -486,7 +491,7 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs
             // 1. Similitudine Cuvinte
             const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
             const unionWords = new Set([...dataI.tokens, ...dataJ.tokens]);
-            const wordScore = intersectWords.size / (unionWords.size || 1);
+            const wordScore = intersectWords.size / (Math.min(dataI.tokens.size, dataJ.tokens.size) || 1);
 
             // 2. Similitudine Entități
             const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
@@ -498,17 +503,29 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs
             const bigramScore = intersectBigrams.size > 0 ?
                 intersectBigrams.size / (Math.max(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
 
-            // Pondere crescută pentru cuvinte și bigrame pentru a evita potriviri doar pe o singură entitate generică (ex: "România")
-            const finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
+            // Pondere crescută pentru cuvinte și bigrame
+            let finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
 
-            // Threshold mai strict
-            const baseThreshold = 0.28;
+            // Penalizează dacă există entități majore diferite (Mismatch)
+            // Dacă Story A are entitatea "Chivu" și Story B nu o are deloc, și invers pentru "Iran"
+            if (dataI.entities.size > 0 && dataJ.entities.size > 0) {
+                const uniqueToI = [...dataI.entities].filter(e => !dataJ.entities.has(e));
+                const uniqueToJ = [...dataJ.entities].filter(e => !dataI.entities.has(e));
 
-            // Dacă au entități comune, threshold-ul poate fi puțin mai mic, dar nu exagerat
-            const hasSharedSignificantEntities = intersectEntities.size >= 2 ||
-                (intersectEntities.size === 1 && wordScore > 0.15);
+                // Dacă ambele au entități unice semnificative (nu generice), reducem scorul drastic
+                if (uniqueToI.length >= 1 && uniqueToJ.length >= 1 && intersectEntities.size === 0) {
+                    finalScore *= 0.5;
+                }
+            }
 
-            const effectiveThreshold = hasSharedSignificantEntities ? baseThreshold * 0.85 : baseThreshold;
+            // Threshold mai strict pentru a evita false-positives
+            const baseThreshold = 0.32;
+
+            // Dacă au măcar 2 entități comune sau o entitate + un word score bun, putem relaxa puțin
+            const hasSignificantOverlap = intersectEntities.size >= 2 ||
+                (intersectEntities.size === 1 && wordScore > 0.4);
+
+            const effectiveThreshold = hasSignificantOverlap ? baseThreshold * 0.8 : baseThreshold;
 
             if (finalScore >= effectiveThreshold) {
                 group.push(dataJ.item);
