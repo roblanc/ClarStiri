@@ -50,6 +50,33 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         statements: [
             {
+                id: 'db-ig-2026-02-24',
+                text: 'STYLE IS YOU! Cine crede că moda e despre trenduri n-a înțeles nimic. Moda e despre cum te simți când ești stăpân pe tine, nu sclavul revistelor.',
+                date: '2026-02-24',
+                sourceUrl: 'https://verdictapp.com',
+                topic: 'Stil',
+                impact: 'medium',
+                bias: 'center'
+            },
+            {
+                id: 'db-ig-2026-02-20',
+                text: 'Amețitele și fătălăii au pus stăpânire pe digitalizare. S-au trezit toți experți pe TikTok, dar nu știu să lege un nod la cravată sau să stea drepți în fața unei provocări reale.',
+                date: '2026-02-20',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-2026-02-14',
+                text: 'Dați-l pe Negoiță afară din PSD, că d-aia v-ați nenorocit! Țineți toți fătălăii! Cine poartă maiou pe sub helancă de cașmir merită arest preventiv!',
+                date: '2026-02-14',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică / Stil',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
                 id: 'db-s1',
                 text: 'Suveranismul promovat de unii este un film Disney. România nu are nevoie de hărneli, ci de bărbați care să nu stea în genunchi.',
                 date: '2024-11-28',
