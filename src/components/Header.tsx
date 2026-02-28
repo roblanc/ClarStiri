@@ -21,8 +21,15 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-14 md:h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="shrink-0">
-            <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight">
+          <Link to="/" className="flex items-center gap-3 shrink-0 group">
+            <div className="relative w-8 h-8 overflow-hidden bg-transparent">
+              <img
+                src="/logo.png"
+                alt="ClarStiri Logo"
+                className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none"
+              />
+            </div>
+            <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
               thesite.ro
             </span>
           </Link>
@@ -48,7 +55,7 @@ export function Header() {
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>
-            
+
             {searchOpen ? (
               <div className="relative flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-200">
                 <Input
@@ -80,8 +87,8 @@ export function Header() {
               to={link.to}
               className={cn(
                 "text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-colors py-1 px-2 rounded-md",
-                location.pathname === link.to 
-                  ? "bg-primary text-primary-foreground" 
+                location.pathname === link.to
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:text-foreground bg-muted/30"
               )}
             >

@@ -55,11 +55,11 @@ const Index = () => {
               </span>
             </p>
           </div>
-          <div className="shrink-0 w-36 md:w-64 flex justify-end">
+          <div className="shrink-0 w-40 md:w-72 flex justify-end">
             <img
-              src="/hero-illustration.png"
-              alt="Editorial Spotlight Illustration"
-              className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:invert dark:hue-rotate-180"
+              src="/logo.png"
+              alt="ClarStiri Investigator Logo"
+              className="w-full h-auto object-contain mix-blend-multiply dark:invert pointer-events-none"
             />
           </div>
         </section>
