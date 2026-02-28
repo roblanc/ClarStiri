@@ -89,7 +89,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
         {/* Bottom Content Box */}
         <div className="p-3 md:p-5 flex-1 flex flex-col relative z-10">
-          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground line-clamp-3">
+          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground min-h-[66px] md:min-h-[84px]">
             {news.title}
           </h3>
 
