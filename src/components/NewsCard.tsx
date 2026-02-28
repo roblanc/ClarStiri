@@ -29,8 +29,8 @@ interface NewsCardProps {
 
 export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   const getBlindspotLabel = (blindspot: string | undefined) => {
-    if (blindspot === 'left') return 'Punct Orbit Stânga';
-    if (blindspot === 'right') return 'Punct Orbit Dreapta';
+    if (blindspot === 'left') return 'Ignorat de Stânga';
+    if (blindspot === 'right') return 'Ignorat de Dreapta';
     return null;
   };
 

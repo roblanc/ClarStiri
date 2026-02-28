@@ -196,18 +196,18 @@ export default function Metodologie() {
                 <section className="mb-12">
                     <div className="flex items-center gap-2 mb-4">
                         <Eye className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Ce Sunt "Punctele Orbite"?</h2>
+                        <h2 className="text-xl font-bold text-foreground">Ce Sunt "Subiectele Ignorate"?</h2>
                     </div>
                     <div className="bg-card rounded-lg border border-border p-6">
                         <p className="text-foreground mb-4 font-medium text-lg">
-                            Un <strong>"Punct Orbit"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
+                            Un <strong>"Subiect Ignorat"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
                         </p>
                         
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-100 dark:border-blue-900">
                                 <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
                                     <AlertTriangle className="w-4 h-4" />
-                                    Punct Orbit Stânga
+                                    Ignorat de Stânga
                                 </h4>
                                 <p className="text-sm text-blue-700/80 dark:text-blue-400/80">
                                     Subiectul este relatat masiv de surse de Dreapta, dar este aproape complet ignorat de sursele de Stânga. Cititorii care urmăresc doar presă de stânga riscă să nu afle deloc despre acest eveniment.
@@ -216,7 +216,7 @@ export default function Metodologie() {
                             <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg border border-red-100 dark:border-red-900">
                                 <h4 className="font-bold text-red-800 dark:text-red-300 mb-2 flex items-center gap-2">
                                     <AlertTriangle className="w-4 h-4" />
-                                    Punct Orbit Dreapta
+                                    Ignorat de Dreapta
                                 </h4>
                                 <p className="text-sm text-red-700/80 dark:text-red-400/80">
                                     Subiectul este central în publicațiile de Stânga, dar lipsește de pe agenda surselor de Dreapta. Cititorii din "bula" de dreapta pierd această informație.
