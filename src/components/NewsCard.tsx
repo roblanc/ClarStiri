@@ -67,48 +67,50 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
   return (
     <Link to={`/stire/${news.id}`} className="block h-full group">
-      <article className="flex flex-col h-full transition-all duration-300">
-        {/* Top Image Box */}
-        <div className="h-44 md:h-64 relative overflow-hidden rounded-2xl mb-4 md:mb-6">
-          <NewsImage
-            src={getThumbnailUrl(news.image)}
-            seed={news.title}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-          />
-          {blindspotLabel && (
-            <div className="absolute top-3 left-3">
-              <BiasBadge
-                type={news.blindspot as 'left' | 'right'}
-                label={blindspotLabel}
-                className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60"
-              />
-            </div>
-          )}
+      <article className="flex flex-col h-full">
+        {/* The Card Box (Image + Title) */}
+        <div className="bg-card border border-border overflow-hidden flex flex-col rounded-2xl group-hover:bg-secondary/5 transition-colors">
+          <div className="h-44 md:h-56 relative overflow-hidden border-b border-border">
+            <NewsImage
+              src={getThumbnailUrl(news.image)}
+              seed={news.title}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+            />
+            {blindspotLabel && (
+              <div className="absolute top-3 left-3">
+                <BiasBadge
+                  type={news.blindspot as 'left' | 'right'}
+                  label={blindspotLabel}
+                  className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60"
+                />
+              </div>
+            )}
+          </div>
+
+          <div className="p-4 md:p-5 flex-1">
+            <h3
+              className={cn(
+                "font-title font-bold text-foreground group-hover:text-primary transition-colors line-clamp-3",
+                news.title.length > 100
+                  ? "text-[16px] md:text-[20px] leading-[1.3]"
+                  : "text-[18px] md:text-[22px] leading-[1.2]"
+              )}
+            >
+              {news.title}
+            </h3>
+          </div>
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 flex flex-col px-1">
-          <h3
-            className={cn(
-              "font-title font-bold mb-4 md:mb-6 text-foreground group-hover:text-primary transition-colors line-clamp-3",
-              news.title.length > 100
-                ? "text-[16px] md:text-[20px] leading-[1.3]"
-                : "text-[18px] md:text-[24px] leading-[1.2]"
-            )}
-          >
-            {news.title}
-          </h3>
-
-          <div className="mt-auto pt-4 border-t border-border/40">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 group-hover:opacity-100 transition-opacity mb-3">
-              <span className="text-primary/80">{news.category || "Actualitate"}</span>
-              <span className="opacity-30">•</span>
-              <span>{news.timeAgo || "Acum"}</span>
-            </div>
-            <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
+        {/* Seamless Info Area - Outside the card box */}
+        <div className="mt-4 px-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
+            <span className="text-primary/70">{news.category || "Actualitate"}</span>
+            <span className="opacity-30">•</span>
+            <span>{news.timeAgo || "Acum"}</span>
           </div>
+          <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
         </div>
       </article>
     </Link>
