@@ -25,6 +25,7 @@ const Index = () => {
       title: story.title,
       image: story.image || PLACEHOLDER_IMAGE,
       bias: story.bias,
+      blindspot: story.blindspot,
       category: story.mainCategory || "General",
       location: "România",
       sourcesCount: story.sourcesCount,

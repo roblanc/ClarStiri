@@ -39,6 +39,7 @@ export interface AggregatedStory {
     center: number;
     right: number;
   };
+  blindspot?: 'left' | 'right' | 'none';
   contentBias?: BiasAnalysis; // Content-based bias analysis
   mainCategory: string;
   publishedAt: Date;

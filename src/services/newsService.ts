@@ -563,6 +563,15 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
         // Preferă o imagine de la o sursă care are imagine
         const imageSource = sources.find(s => s.imageUrl) || primary;
 
+        const bias = calculateBiasDistribution(sources);
+        
+        // Calculează blindspot
+        let blindspot: 'left' | 'right' | 'none' = 'none';
+        if (sources.length >= 3) {
+            if (bias.left < 8 && bias.right > 25) blindspot = 'left';
+            else if (bias.right < 8 && bias.left > 25) blindspot = 'right';
+        }
+
         aggregatedStories.push({
             id: createStoryIdFromSources(sources),
             title: primary.title,
@@ -570,7 +579,8 @@ export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
             image: imageSource.imageUrl,
             sources,
             sourcesCount: sources.length,
-            bias: calculateBiasDistribution(sources),
+            bias,
+            blindspot,
             mainCategory: primary.category || 'Actualitate',
             publishedAt: new Date(primary.pubDate),
             timeAgo: getTimeAgo(primary.pubDate),

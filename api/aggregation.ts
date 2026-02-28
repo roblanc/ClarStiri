@@ -11,6 +11,7 @@ export interface AggregatedStory {
     sourcesCount: number;
     bias: { left: number; center: number; right: number };
     contentBias?: BiasAnalysis;
+    blindspot?: 'left' | 'right' | 'none';
     mainCategory: string;
     publishedAt: string;
     timeAgo: string;
@@ -30,6 +31,19 @@ export function getTimeAgo(pubDate: string): string {
     if (diffDays < 7) return `acum ${diffDays} ${diffDays === 1 ? 'zi' : 'zile'}`;
 
     return published.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' });
+}
+
+export function calculateBlindspot(bias: { left: number; center: number; right: number }, sourcesCount: number): 'left' | 'right' | 'none' {
+    // Only flag blindspots for stories with a decent amount of coverage (at least 3 sources)
+    if (sourcesCount < 3) return 'none';
+
+    // If Left is missing or very low while other sides are present
+    if (bias.left < 8 && (bias.right > 25)) return 'left';
+    
+    // If Right is missing or very low while other sides are present
+    if (bias.right < 8 && (bias.left > 25)) return 'right';
+
+    return 'none';
 }
 
 export function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; center: number; right: number } {
@@ -231,6 +245,9 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
             idCounts.set(baseId, count);
             const storyId = count === 1 ? baseId : `${baseId}-${count}`;
 
+            const bias = calculateBiasDistribution(sources);
+            const blindspot = calculateBlindspot(bias, sources.length);
+
             return {
                 id: storyId,
                 title: aggregatedTitle,
@@ -238,8 +255,9 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
                 image: imageSource.imageUrl,
                 sources,
                 sourcesCount: sources.length,
-                bias: calculateBiasDistribution(sources),
+                bias,
                 contentBias,
+                blindspot,
                 mainCategory: primary.category || 'Actualitate',
                 publishedAt: primary.pubDate,
                 timeAgo: getTimeAgo(primary.pubDate),
