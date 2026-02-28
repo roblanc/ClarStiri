@@ -58,10 +58,8 @@ export function Header() {
           </nav>
 
           {/* Actions (Search & Theme) */}
-          <div className="flex items-center gap-2 md:gap-4 ml-auto">
-            <div className="hidden sm:block">
-              <ThemeToggle />
-            </div>
+          <div className="flex items-center gap-1 md:gap-4 ml-auto">
+            <ThemeToggle />
 
             {searchOpen ? (
               <div className="relative flex items-center gap-2 animate-in fade-in slide-in-from-right-4 duration-200">

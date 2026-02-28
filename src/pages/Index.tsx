@@ -24,11 +24,11 @@ const Index = () => {
   const convertedStories = useMemo(() => {
     let filtered = stories || [];
 
-    const normalize = (text: string) => 
+    const normalize = (text: string) =>
       text.toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .trim();
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
 
     if (query && query.trim().length > 0) {
       const q = normalize(query);
@@ -36,7 +36,7 @@ const Index = () => {
         const titleMatch = normalize(s.title).includes(q);
         const descMatch = normalize(s.description || "").includes(q);
         const sourceMatch = s.sources.some(src => normalize(src.source.name).includes(q));
-        
+
         return titleMatch || descMatch || sourceMatch;
       });
     }
@@ -109,7 +109,7 @@ const Index = () => {
 
         {/* Error / Empty State */}
         {!isLoading && !isFetching && !stories?.length && (
-          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
+          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card rounded-none">
             <AlertCircle className="w-12 h-12 text-destructive mb-4" />
             <p className="font-serif text-2xl mb-2 text-foreground">Flux gol</p>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8 text-center max-w-md">
@@ -123,7 +123,7 @@ const Index = () => {
 
         {/* No Search Results */}
         {!isLoading && stories?.length && convertedStories.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
+          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card rounded-none">
             <SearchX className="w-12 h-12 text-muted-foreground mb-4" />
             <p className="font-serif text-2xl mb-2 text-foreground">Niciun rezultat</p>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8 text-center max-w-md">

@@ -69,7 +69,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     <Link to={`/stire/${news.id}`} className="block h-full group">
       <article className="flex flex-col h-full">
         {/* The Card Box (Image + Title) */}
-        <div className="bg-card border border-border overflow-hidden flex flex-col rounded-2xl group-hover:bg-secondary/5 transition-colors">
+        <div className="bg-card border border-border overflow-hidden flex flex-col rounded-none group-hover:bg-secondary/5 transition-colors">
           <div className="h-44 md:h-56 relative overflow-hidden border-b border-border">
             <NewsImage
               src={getThumbnailUrl(news.image)}

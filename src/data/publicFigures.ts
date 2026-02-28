@@ -272,7 +272,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'moise-guran',
         name: 'Moise Guran',
         role: 'Analist Economic',
-        image: '/images/voices/moise-guran.png',
+        image: 'https://www.romaniacurata.ro/wp-content/uploads/2014/05/moise-guran.jpg',
         bias: {
             leaning: 'center-right',
             score: 20,
@@ -299,7 +299,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'andreea-esca',
         name: 'Andreea Esca',
         role: 'Prezentatoare Știri',
-        image: '/images/voices/andreea-esca.png',
+        image: 'https://static4.libertatea.ro/wp-content/uploads/2018/09/andreea-esca-costum-rosu.jpg',
         bias: {
             leaning: 'center',
             score: 0,
@@ -326,7 +326,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'selly',
         name: 'Selly',
         role: 'Influencer / Content Creator',
-        image: '/images/voices/selly.png',
+        image: 'https://www.masteringthemusicbusiness.ro/wp-content/uploads/2025/02/fb_selly.jpg',
         bias: {
             leaning: 'center',
             score: 5,

@@ -39,14 +39,14 @@ export function NewsListItem({ story }: NewsListItemProps) {
           <div className="relative w-28 h-20 flex-shrink-0" style={{ perspective: '600px' }}>
             {/* Back cards (decorative layers) */}
             <div
-              className="absolute inset-0 bg-muted rounded-lg border border-border/50"
+              className="absolute inset-0 bg-muted rounded-none border border-border/50"
               style={{
                 transform: 'rotateY(-8deg) translateX(-6px) translateZ(-20px)',
                 transformOrigin: 'right center'
               }}
             />
             <div
-              className="absolute inset-0 bg-muted/80 rounded-lg border border-border/30"
+              className="absolute inset-0 bg-muted/80 rounded-none border border-border/30"
               style={{
                 transform: 'rotateY(-4deg) translateX(-3px) translateZ(-10px)',
                 transformOrigin: 'right center'
@@ -57,7 +57,7 @@ export function NewsListItem({ story }: NewsListItemProps) {
               src={getThumbnailUrl(story.image)}
               seed={story.title}
               loading="lazy"
-              className="absolute inset-0 w-full h-full object-cover rounded-lg shadow-md"
+              className="absolute inset-0 w-full h-full object-cover rounded-none shadow-md"
               style={{
                 transform: 'rotateY(0deg)',
                 transformOrigin: 'right center'

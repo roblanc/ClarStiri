@@ -31,7 +31,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
 
   return (
     <Link to={`/stire/${story.id}`} className="block group mb-12">
-      <div className="relative flex flex-col lg:flex-row bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
+      <div className="relative flex flex-col lg:flex-row bg-card rounded-none overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
 
         {/* Imagine */}
         <div className="lg:w-3/5 h-64 lg:h-auto overflow-hidden relative min-h-[300px]">
@@ -108,7 +108,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
                   </div>
                 )}
               </div>
-              <button className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold px-4 py-2 rounded-lg transition-colors ml-4 shrink-0">
+              <button className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-bold px-4 py-2 rounded-none transition-colors ml-4 shrink-0">
                 Citește Acoperirea
               </button>
             </div>
