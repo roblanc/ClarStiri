@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
@@ -12,8 +12,11 @@ import {
 // Placeholder imagine când nu avem una
 const PLACEHOLDER_IMAGE = "/default-news.png";
 
+const BATCH = 20;
+
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
+  const [visible, setVisible] = useState(BATCH);
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
@@ -84,15 +87,27 @@ const Index = () => {
 
         {/* Flat Feed */}
         {convertedStories.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {convertedStories.map((news) => (
-              <NewsCard
-                key={news.id}
-                variant="default"
-                news={news}
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border-l border-t border-border">
+              {convertedStories.slice(0, visible).map((news) => (
+                <div key={news.id} className="border-r border-b border-border">
+                  <NewsCard variant="default" news={news} />
+                </div>
+              ))}
+            </div>
+
+            {visible < convertedStories.length && (
+              <div className="flex justify-center mt-10">
+                <Button
+                  onClick={() => setVisible(v => v + BATCH)}
+                  variant="outline"
+                  className="rounded-none border-border font-serif uppercase text-xs tracking-widest px-10 py-5"
+                >
+                  Mai multe știri
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </main>
 

@@ -63,7 +63,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const allNews = await fetchAllNews();
         console.log(`[CRON] Fetched ${allNews.length} news items`);
 
-        const aggregatedStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD)).slice(0, 30);
+        const aggregatedStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD)).slice(0, 60);
         console.log(`[CRON] Aggregated into ${aggregatedStories.length} stories`);
 
         await Promise.all([
