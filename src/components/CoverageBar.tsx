@@ -5,9 +5,9 @@ interface CoverageBarProps {
 }
 
 const COLORS = {
-  left: '#1e40af', // Darker blue
-  center: '#4b5563', // Darker gray
-  right: '#b91c1c', // Darker red
+  left: '#3b82f6', // Brighter blue for dark background
+  center: '#9ca3af', // Brighter gray
+  right: '#ef4444', // Brighter red
 } as const;
 
 export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarProps) {
@@ -16,7 +16,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {/* Segmented bar */}
-      <div className="flex h-1.5 rounded-full overflow-hidden bg-black/10">
+      <div className="flex h-1.5 rounded-full overflow-hidden bg-white/10">
         {bias.left > 0 && (
           <div
             className="h-full"
@@ -25,8 +25,8 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
         )}
         {bias.center > 0 && (
           <div
-            className="h-full shadow-[inset_0_0_0_1px_rgba(0,0,0,0.1)]"
-            style={{ width: `${(bias.center / total) * 100}%`, backgroundColor: COLORS.center === '#4b5563' ? '#9ca3af' : COLORS.center }}
+            className="h-full"
+            style={{ width: `${(bias.center / total) * 100}%`, backgroundColor: COLORS.center }}
           />
         )}
         {bias.right > 0 && (
@@ -38,13 +38,13 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
       </div>
 
       {/* Labels row */}
-      <div className="flex items-center gap-1.5 text-[9px] font-bold tracking-wide">
-        <span style={{ color: COLORS.left }}>STÂNGA {bias.left}%</span>
-        <span className="text-black/30">·</span>
-        <span className="text-black/80">CENTRU {bias.center}%</span>
-        <span className="text-black/30">·</span>
-        <span style={{ color: COLORS.right }}>DREAPTA {bias.right}%</span>
-        <span className="text-black/60 ml-auto">{sourcesCount} SURSE</span>
+      <div className="flex items-center gap-1.5 text-[10px] font-medium tracking-wide">
+        <span style={{ color: COLORS.left }}>Stânga {bias.left}%</span>
+        <span className="text-white/20">·</span>
+        <span className="text-white/80">Centru {bias.center}%</span>
+        <span className="text-white/20">·</span>
+        <span style={{ color: COLORS.right }}>Dreapta {bias.right}%</span>
+        <span className="text-white/40 ml-auto">{sourcesCount} surse</span>
       </div>
     </div>
   );
