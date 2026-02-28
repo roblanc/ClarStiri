@@ -23,7 +23,7 @@ export async function fetchAggregatedNewsFromAPI(limit = 50): Promise<Aggregated
             headers: {
                 'Accept': 'application/json',
             },
-            signal: AbortSignal.timeout(35000), // 35s — allows for cold start + LLM generation (server maxDuration=60s)
+            signal: AbortSignal.timeout(10000), // 10s — fallback rapid la localStorage/client RSS dacă API e lent
         });
 
         if (!response.ok) {
