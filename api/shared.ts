@@ -95,6 +95,26 @@ export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; rig
 
 const FETCH_TIMEOUT = 3000;
 
+const WEATHER_KEYWORDS = [
+    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
+    'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
+    'precipitatii', 'ninsori', 'viscol', 'canicula'
+];
+
+/**
+ * Verifică dacă o știre este legată de vreme
+ */
+export function isWeatherNews(title: string, description: string = ''): boolean {
+    const text = `${title} ${description}`.toLowerCase();
+    return WEATHER_KEYWORDS.some(keyword => {
+        // Match whole word for some keywords, partial for others
+        if (['anm', 'meteo'].includes(keyword)) {
+            return new RegExp(`\\b${keyword}\\b`, 'i').test(text);
+        }
+        return text.includes(keyword);
+    });
+}
+
 const POLITICAL_KEYWORDS = {
     left: ['USR', 'REPER', 'progresist', 'anticorupție', 'transparență', 'pro-european', 'reforme'],
     right: ['AUR', 'SOS', 'Georgescu', 'tradițional', 'suveranist', 'patriot', 'anti-UE', 'ortodox'],
@@ -186,6 +206,11 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
         const description = getTagContent('description').replace(/<[^>]*>/g, '').substring(0, 500);
         const link = getTagContent('link');
         const pubDate = getTagContent('pubDate');
+
+        // Filter out weather news
+        if (isWeatherNews(title, description)) {
+            continue;
+        }
 
         // Extract image
         let imageUrl = '';

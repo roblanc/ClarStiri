@@ -1,0 +1,22 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+	precomposeunicode = true
+[submodule]
+	active = .
+[branch "main"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/main
+[lfs]
+	repositoryformatversion = 0
+[remote "origin"]
+	url = https://github.com/roblanc/ClarStiri.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "claude/optimistic-elbakyan"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/claude/optimistic-elbakyan

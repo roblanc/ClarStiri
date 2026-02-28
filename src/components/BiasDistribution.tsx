@@ -160,34 +160,40 @@ export function BiasDistribution({ sources, bias }: BiasDistributionProps) {
                 </div>
             </div>
 
-            {/* Source Logos Grid - 3 coloane */}
-            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
+            {/* Source Logos Grid - Responsive (1 col on mobile, 3 cols on desktop) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-border">
                 {/* Coloana Stânga */}
-                <div>
-                    <div className="text-xs text-blue-600 font-medium mb-2 flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-blue-500" />
-                        Stânga ({leftSources.length})
+                {leftSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-blue-600 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm" />
+                            Stânga ({leftSources.length})
+                        </div>
+                        {renderSourceGrid(leftSources, MAX_VISIBLE, 'left')}
                     </div>
-                    {renderSourceGrid(leftSources, MAX_VISIBLE, 'left')}
-                </div>
+                )}
 
                 {/* Coloana Centru */}
-                <div>
-                    <div className="text-xs text-gray-500 font-medium mb-2 flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-gray-400" />
-                        Centru ({centerSources.length})
+                {centerSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-gray-500 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-gray-400 shadow-sm" />
+                            Centru ({centerSources.length})
+                        </div>
+                        {renderSourceGrid(centerSources, MAX_VISIBLE, 'center')}
                     </div>
-                    {renderSourceGrid(centerSources, MAX_VISIBLE, 'center')}
-                </div>
+                )}
 
                 {/* Coloana Dreapta */}
-                <div>
-                    <div className="text-xs text-red-600 font-medium mb-2 flex items-center gap-1">
-                        <div className="w-2 h-2 rounded-full bg-red-500" />
-                        Dreapta ({rightSources.length})
+                {rightSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-red-600 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm" />
+                            Dreapta ({rightSources.length})
+                        </div>
+                        {renderSourceGrid(rightSources, MAX_VISIBLE, 'right')}
                     </div>
-                    {renderSourceGrid(rightSources, MAX_VISIBLE, 'right')}
-                </div>
+                )}
             </div>
         </div>
     );

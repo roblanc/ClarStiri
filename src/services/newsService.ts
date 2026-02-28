@@ -17,6 +17,25 @@ const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
 // Timeout pentru fetch (în milisecunde)
 const FETCH_TIMEOUT = 8000; // 8 secunde — proxy-urile CORS au latență mai mare din România
 
+const WEATHER_KEYWORDS = [
+    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
+    'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
+    'precipitatii', 'ninsori', 'viscol', 'canicula'
+];
+
+/**
+ * Verifică dacă o știre este legată de vreme
+ */
+export function isWeatherNews(title: string, description: string = ''): boolean {
+    const text = `${title} ${description}`.toLowerCase();
+    return WEATHER_KEYWORDS.some(keyword => {
+        if (['anm', 'meteo'].includes(keyword)) {
+            return new RegExp(`\\b${keyword}\\b`, 'i').test(text);
+        }
+        return text.includes(keyword);
+    });
+}
+
 interface CachedNews {
     timestamp: number;
     news: RSSNewsItem[];
@@ -144,6 +163,11 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         // Decode HTML entities din titlu și descriere
         const title = decodeHtmlEntities(rawTitle);
         const description = decodeHtmlEntities(stripHtml(rawDescription));
+
+        // Filter out weather news
+        if (isWeatherNews(title, description)) {
+            return;
+        }
 
         if (title && link) {
             newsItems.push({

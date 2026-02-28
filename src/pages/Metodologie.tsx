@@ -259,11 +259,11 @@ export default function Metodologie() {
                                     <p className="text-sm text-muted-foreground mb-4">
                                         {biasLabels[bias].description}
                                     </p>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {sources.map(source => (
                                             <div
                                                 key={source.id}
-                                                className="flex items-center gap-3 p-2 rounded bg-muted/50"
+                                                className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-transparent hover:border-border transition-colors"
                                             >
                                                 <SourceFavicon source={source} size="sm" showRing={false} />
                                                 <div className="flex-1 min-w-0">
