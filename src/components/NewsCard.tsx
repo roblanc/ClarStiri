@@ -4,6 +4,7 @@ import { CoverageBar } from "./CoverageBar";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface NewsItem {
   id: string;
@@ -89,7 +90,14 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
         {/* Bottom Content Box */}
         <div className="p-4 md:p-5 flex-1 flex flex-col relative z-10">
-          <h3 className="font-title font-bold text-[17px] md:text-[22px] leading-[22px] md:leading-[28px] mb-3 md:mb-6 text-foreground min-h-[66px] md:min-h-[84px]">
+          <h3
+            className={cn(
+              "font-title font-bold mb-3 md:mb-6 text-foreground min-h-[66px] md:min-h-[84px] line-clamp-4",
+              news.title.length > 100
+                ? "text-[15px] md:text-[18px] leading-[20px] md:leading-[24px]"
+                : "text-[17px] md:text-[22px] leading-[22px] md:leading-[28px]"
+            )}
+          >
             {news.title}
           </h3>
 
