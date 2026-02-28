@@ -1,0 +1,37 @@
+name: Instagram OCR Scraper
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Rulează zilnic la miezul nopții
+  workflow_dispatch: # Permite rularea manuală din GitHub
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install instaloader google-generativeai upstash-redis python-dotenv
+
+      - name: Run Scraper for Dana Budeanu
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: |
+          # Creăm un .env.local temporar pentru script
+          echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env.local
+          echo "UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL" >> .env.local
+          echo "UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN" >> .env.local
+          
+          # Rulăm scriptul
+          python scripts/scrapers/instagram_ocr.py danabudeanu --profile-id dana-budeanu

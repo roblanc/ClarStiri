@@ -14,7 +14,7 @@ const VoiceProfile = () => {
         queryKey: ['voice-analysis', figure?.name],
         queryFn: async () => {
             if (!figure) return null;
-            const res = await fetch(`/api/analyze-voice?name=${encodeURIComponent(figure.name)}`);
+            const res = await fetch(`/api/analyze-voice?name=${encodeURIComponent(figure.name)}&slug=${figure.slug}`);
             if (!res.ok) {
                 console.error('API Error');
                 return null;
