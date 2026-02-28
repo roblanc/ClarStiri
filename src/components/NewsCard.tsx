@@ -89,13 +89,13 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             )}
           </div>
 
-          <div className="p-4 md:p-5 flex-1">
+          <div className="p-4 md:p-5 flex-1 flex flex-col justify-center min-h-[100px] md:min-h-[140px]">
             <h3
               className={cn(
                 "font-title font-bold text-foreground group-hover:text-primary transition-colors line-clamp-3",
                 news.title.length > 100
-                  ? "text-[16px] md:text-[20px] leading-[1.3]"
-                  : "text-[18px] md:text-[22px] leading-[1.2]"
+                  ? "text-[15px] md:text-[19px] leading-[1.3]"
+                  : "text-[17px] md:text-[22px] leading-[1.2]"
               )}
             >
               {news.title}
@@ -108,7 +108,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
             <span className="text-primary/70">{news.category || "Actualitate"}</span>
             <span className="opacity-30">•</span>
-            <span>{news.timeAgo || "Acum"}</span>
+            <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
           </div>
           <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
         </div>

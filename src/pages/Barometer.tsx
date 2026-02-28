@@ -67,7 +67,7 @@ const Barometer = () => {
                             </div>
 
                             <div className="flex flex-col flex-1 w-full">
-                                <div className="mb-3">
+                                <div className="mb-3 min-h-[56px] flex flex-col justify-center">
                                     <h3 className="font-serif font-bold text-base sm:text-lg group-hover:text-primary transition-colors leading-tight mb-1 line-clamp-1">
                                         {figure.name}
                                     </h3>
