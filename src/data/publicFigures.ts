@@ -2,7 +2,8 @@ export interface Statement {
     id: string;
     text: string;
     date: string;
-    sourceUrl: string;
+    sourceUrl: string;      // homepage-ul publicației (ex: https://www.hotnews.ro)
+    articleUrl?: string;    // URL-ul articolului specific, dacă există
     topic: string; // ex: "Politica", "Social"
     bias?: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
     impact: 'high' | 'medium' | 'low';

@@ -196,14 +196,20 @@ const VoiceProfile = () => {
                                                                     <div className={`w-2 h-2 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
                                                                     <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">{statement.bias}</span>
                                                                 </div>
-                                                                <a
-                                                                    href={statement.sourceUrl}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
-                                                                >
-                                                                    Sursă <ExternalLink className="w-3 h-3" />
-                                                                </a>
+                                                                {statement.articleUrl ? (
+                                                                    <a
+                                                                        href={statement.articleUrl}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
+                                                                    >
+                                                                        Articol <ExternalLink className="w-3 h-3" />
+                                                                    </a>
+                                                                ) : (
+                                                                    <span className="text-xs text-muted-foreground inline-flex items-center gap-1 font-medium">
+                                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')}
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </div>
