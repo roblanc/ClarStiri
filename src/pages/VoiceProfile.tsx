@@ -53,8 +53,10 @@ const VoiceProfile = () => {
                     {/* Coloana Stângă: Info Profil */}
                     <div className="lg:col-span-1 space-y-6">
                         <div className="lg:sticky lg:top-24">
-                            <div className="aspect-square md:aspect-[3/4] rounded-sm overflow-hidden mb-6 bg-muted/30">
-                                <img src={figure.image} alt={figure.name} className="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0" />
+                            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden mb-6 border border-border/50 shadow-sm p-1">
+                                <div className="w-full h-full rounded-full overflow-hidden bg-muted/20">
+                                    <img src={figure.image} alt={figure.name} className="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0" />
+                                </div>
                             </div>
 
                             <h1 className="text-3xl font-anthropic font-bold mb-2">{figure.name}</h1>

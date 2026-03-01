@@ -35,13 +35,15 @@ const VoicesPage = () => {
                             className="group flex flex-col h-full items-center text-center py-6 px-2 hover:opacity-80 transition-all duration-300"
                         >
                             <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
-                                <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden transition-all shadow-sm">
-                                    <img
-                                        src={figure.image}
-                                        alt={figure.name}
-                                        className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
-                                        loading="lazy"
-                                    />
+                                <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden transition-all shadow-sm p-[3px] border border-border/40 group-hover:border-primary/20">
+                                    <div className="w-full h-full rounded-full overflow-hidden bg-muted/20">
+                                        <img
+                                            src={figure.image}
+                                            alt={figure.name}
+                                            className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                                            loading="lazy"
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background shadow-sm
