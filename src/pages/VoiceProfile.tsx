@@ -117,35 +117,37 @@ const VoiceProfile = () => {
                                                 </>
                                             )}
                                         </div>
-                                        <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-[22px] md:text-3xl selection:bg-primary/20">
-                                            "{statement.text}"
-                                        </p>
-                                        <div className="flex items-center justify-between mt-4">
-                                            <div className="flex items-center gap-2">
-                                                <div className={`w-1.5 h-1.5 rounded-full ${statement.bias.includes('right') ? 'bg-red-500' : statement.bias.includes('left') ? 'bg-blue-500' : 'bg-purple-500'}`} />
-                                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
-                                                    {statement.bias === 'left' ? 'Stânga' :
-                                                        statement.bias === 'right' ? 'Dreapta' :
-                                                            statement.bias === 'center' ? 'Centru' :
-                                                                statement.bias === 'center-left' ? 'Centru-Stânga' :
-                                                                    statement.bias === 'center-right' ? 'Centru-Dreapta' : statement.bias}
-                                                </span>
-                                            </div>
-                                            {statement.articleUrl ? (
-                                                <StyledLink
-                                                    href={statement.articleUrl}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
-                                                >
-                                                    Sursa <ExternalLink className="w-3 h-3" />
-                                                </StyledLink>
-                                            ) : (
-                                                <span className="text-[11px] text-muted-foreground/70 inline-flex items-center gap-1 font-medium uppercase tracking-wide">
-                                                    {new URL(statement.sourceUrl).hostname.replace('www.', '')}
-                                                </span>
-                                            )}
-                                        </div>
+                                        <blockquote className="border-l-4 border-primary/20 pl-6 py-2 my-4 group-hover:border-primary/50 transition-colors">
+                                            <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-[22px] md:text-3xl selection:bg-primary/20">
+                                                "{statement.text}"
+                                            </p>
+                                            <footer className="flex items-center justify-between mt-6">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={`w-1.5 h-1.5 rounded-full ${statement.bias.includes('right') ? 'bg-red-500' : statement.bias.includes('left') ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                                                    <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
+                                                        {statement.bias === 'left' ? 'Stânga' :
+                                                            statement.bias === 'right' ? 'Dreapta' :
+                                                                statement.bias === 'center' ? 'Centru' :
+                                                                    statement.bias === 'center-left' ? 'Centru-Stânga' :
+                                                                        statement.bias === 'center-right' ? 'Centru-Dreapta' : statement.bias}
+                                                    </span>
+                                                </div>
+                                                {statement.articleUrl ? (
+                                                    <StyledLink
+                                                        href={statement.articleUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
+                                                    >
+                                                        Sursa <ExternalLink className="w-3 h-3" />
+                                                    </StyledLink>
+                                                ) : (
+                                                    <span className="text-[11px] text-muted-foreground/70 inline-flex items-center gap-1 font-medium uppercase tracking-wide">
+                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')}
+                                                    </span>
+                                                )}
+                                            </footer>
+                                        </blockquote>
                                     </div>
                                 </div>
                             ))}
