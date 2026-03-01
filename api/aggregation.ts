@@ -2,6 +2,25 @@ import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP } from './shared.js';
 import { createStoryId } from './storyId.js';
 import { generateAggregatedTitle } from './llm.js';
 
+async function fetchOgImage(url: string): Promise<string> {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(url, {
+            signal: controller.signal,
+            headers: { 'User-Agent': 'Mozilla/5.0 (compatible; thesite-bot/1.0)' },
+        });
+        clearTimeout(timeout);
+        if (!res.ok) return '';
+        const html = await res.text();
+        const match = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+            || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+        return match?.[1] || '';
+    } catch {
+        return '';
+    }
+}
+
 export interface AggregatedStory {
     id: string;
     title: string; // The aggregated title
@@ -240,6 +259,15 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
             });
 
             const imageSource = sources.find(s => s.imageUrl) || primary;
+            let resolvedImage = imageSource.imageUrl;
+            if (!resolvedImage) {
+                // Încearcă să extragă og:image de la sursa primară
+                const candidateUrls = [primary.link, ...sources.map(s => s.link)].filter(Boolean);
+                for (const url of candidateUrls.slice(0, 3)) {
+                    resolvedImage = await fetchOgImage(url);
+                    if (resolvedImage) break;
+                }
+            }
 
             // Generate Title via LLM only for top stories; rest use best-source fallback.
             const aggregatedTitle = useLlm
@@ -294,7 +322,7 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
                 id: storyId,
                 title: aggregatedTitle,
                 description: primary.description,
-                image: imageSource.imageUrl,
+                image: resolvedImage,
                 sources,
                 sourcesCount: sources.length,
                 bias,
