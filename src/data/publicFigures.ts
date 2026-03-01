@@ -37,6 +37,7 @@ export interface PublicFigure {
         irony: number;           // 0-100
     };
     description: string;
+    contextNotes?: string[];  // Extra factual or behavioral notes about the figure
     statements: Statement[];
 }
 
@@ -60,6 +61,14 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Robert Negoiță', 'USR', 'Corporatiști', 'Progresiști', 'Sistemul'],
         rhetoric: { aggressiveness: 92, irony: 85 },
+        contextNotes: [
+            'În analizele sale citează frecvent publicația internațională Financial Times, un redutabil cotidian economic internațional deținut în prezent de holdingul de presă japonez Nikkei.',
+            'Pe plan intern, recomandă adesea și preia informații exclusiviste din ziarul Gândul.',
+            'Are apariții constante ca invitat la România TV, unde are o relație bună și un acord destul de frecvent cu moderatorul Victor Ciutacu.',
+            'Apare totodată și la Antena 3 CNN, însă acolo discursul său generează mai multe contraziceri cu moderatorii postului.',
+            'Pe canalele sale (mai ales pe Instagram) abordează frecvent o postură religioasă asumată, aducând des în discuție subiectul credinței.',
+            'La nivelul personajelor istorice post-decembriste din România, s-a declarat în repetate rânduri o simpatizantă a viziunii și personalității lui Ion Iliescu.'
+        ],
         statements: [
             {
                 id: 'db-ig-2026-02-24',
