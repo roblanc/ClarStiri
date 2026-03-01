@@ -1006,5 +1006,48 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'center'
             }
         ]
+    },
+    {
+        id: 'anca-alexandrescu',
+        slug: 'anca-alexandrescu',
+        name: 'Anca Alexandrescu',
+        role: 'Realizator TV / Fost Consilier Politic',
+        image: '/images/voices/anca-alexandrescu.jpg',
+        bias: {
+            leaning: 'right',
+            score: 85,
+            description: 'Jurnalistă TV, fostă consilieră a lui Liviu Dragnea și Viorica Dăncilă. Actualmente, prezintă o abordare puternic critică față de guvernările actuale, promovând un naționalism suveranist și teoretizând conceptul de "stat paralel". A susținut asumat candidatura lui Călin Georgescu și promovează sistematic ideile sale politice ca moderator TV.'
+        },
+        description: 'Anca Alexandrescu s-a remarcat ca o forță invizibilă a comunicării politice de tip PSD timp de ani de zile (fiind alături de lideri grei precum Adrian Năstase sau Liviu Dragnea). După căderea ultimului lider, Alexandrescu s-a reinventat spectaculos ca front-woman la canalul Realitatea Plus, conducând emisiunea „Culisele Statului Paralel”. Pe tot parcursul anului 2025 și 2026 a evoluat vertiginos spre mesajul „suveranist” și de revoltă împotriva sistemului euro-atlantic, sprijinind campaniile pro-AUR și Georgescu. Anul acesta și-a prefigurat chiar un parcurs politic propriu.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/AncaAlexandrescuRealitatea',
+        },
+        targets: ['Politicieni din arcul guvernamental clasic', 'Sistemul (Statul Paralel)', 'Oficialii instituțiilor UE', 'Klaus Iohannis'],
+        rhetoric: { aggressiveness: 90, irony: 70 },
+        contextNotes: [
+            'Pe rând, consilieră / responsabilă de comunicare pentru cele mai controversate personalități ale PSD: Adrian Năstase (Guvernul Năstase), Victor Ponta, Liviu Dragnea (eminența cenușie din umbră), Viorica Dăncilă (ca premier).',
+            'Realizatoarea emisiunii "Culisele Statului Paralel" a adus postului Realitatea Plus sancțiuni, inclusiv o suspendare recentă (2026) dictată de CNA din cauză că modera emisiuni în timp ce candida pentru Primărie (unde a obținut locul 2, susținută masiv de aparatul lui Călin Georgescu).',
+            'Postul Realitatea este platforma prin care s-a transformat dintr-un jucător de culise într-un influencer media de calibru pentru electoratul antisistem românesc.'
+        ],
+        statements: [
+            {
+                id: 'aa-statement-1',
+                text: 'Toate problemele țării pleacă de la sistemul ocult pe care politicienii aserviți îl servesc! Băsiștii s-au reprofilat, dar statul paralel a rămas să jefuiască resursele.',
+                date: '2026-02-15',
+                sourceUrl: 'https://realitatea.net',
+                topic: 'Sistem',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'aa-statement-2',
+                text: 'S-au speriat liderii mondiali de suveraniști! Dacă îți iubești țara acum, ești automat catalogat ca extremist de presa aservită.',
+                date: '2026-02-28',
+                sourceUrl: 'https://realitatea.net',
+                topic: 'Suveranism',
+                impact: 'high',
+                bias: 'right'
+            }
+        ]
     }
 ];
