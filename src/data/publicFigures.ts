@@ -115,21 +115,23 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 'mb-s1',
-                text: 'Guvernul Bolojan a inventat "austeritatea creativă". Adică tăiem de la polițiști și profesori ca să avem ce pune în PowerPoint-uri despre reformă.',
-                date: '2026-02-15',
+                text: 'Nu dau doi bani găuriți pe FMI.',
+                date: '2025-09-01',
                 sourceUrl: 'https://www.antena3.ro',
+                articleUrl: 'https://www.antena3.ro/emisiuni/in-fata-natiunii/mircea-badea-mesaj-fmi-699400.html',
                 topic: 'Economie',
                 impact: 'high',
                 bias: 'left'
             },
             {
                 id: 'mb-s2',
-                text: 'Siguranța publică a devenit o glumă. Când jurnaliștii sunt amenințați în plină stradă și autoritățile ridică din umeri, înseamnă că statul e în concediu.',
-                date: '2026-02-10',
-                sourceUrl: 'https://www.youtube.com/@Antena3Romania',
-                topic: 'Social',
+                text: 'De la 1 ianuarie 2025, dacă dai cuiva 6.000 de lei cash, primești amendă. 25% din suma folosită. Acesta este capitolul neexplicat din legea austerității.',
+                date: '2025-09-28',
+                sourceUrl: 'https://www.antena3.ro',
+                articleUrl: 'https://www.antena3.ro/emisiuni/in-gura-presei/mircea-badea-limitare-tranzactii-bani-cash-2025-persoane-fizice-capitol-neexplicat-lege-687233.html',
+                topic: 'Economie / Austeritate',
                 impact: 'medium',
-                bias: 'center'
+                bias: 'left'
             }
         ]
     },
@@ -153,10 +155,21 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 'vc-s1',
-                text: 'Barosăneala lui Ilie Sărăcie Bolojan ne costă pe toți. Vreți reformă? Începeți prin a nu mai băga mâna în buzunarul oamenilor simpli sub pretextul eficienței.',
-                date: '2026-02-18',
+                text: 'Vlădica boierește, opinca pătimește.',
+                date: '2025-06-24',
                 sourceUrl: 'https://www.romaniatv.net',
+                articleUrl: 'https://www.romaniatv.net/victor-ciutacu-dupa-primele-masuri-ale-lui-mesia-bolojan-vladica-boiereste-opinca-patimeste_8998057.html',
                 topic: 'Economie',
+                impact: 'high',
+                bias: 'left'
+            },
+            {
+                id: 'vc-s2',
+                text: 'Achită fraierii nota de plată!',
+                date: '2025-07-10',
+                sourceUrl: 'https://www.romaniatv.net',
+                articleUrl: 'https://www.romaniatv.net/exclusiv-victor-ciutacu-dupa-ce-ilie-bolojan-a-anuntat-masuri-dure-de-austeritate-achita-fraierii-nota-de-plata_9013519.html',
+                topic: 'Economie / Austeritate',
                 impact: 'high',
                 bias: 'left'
             }
@@ -182,21 +195,33 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 'ctp-s1',
-                text: 'Vizita lui Nicușor Dan la Trump a fost un exercițiu de umilință națională. Să mergi acolo și să fii batjocorit, primind o funcție greșită, este eșecul diplomației personale.',
-                date: '2026-02-25',
+                text: 'AUR este o grupare fascistă, condusă de un individ care are astfel de idei.',
+                date: '2025-05-15',
                 sourceUrl: 'https://www.hotnews.ro',
+                articleUrl: 'https://hotnews.ro/ctp-mesaj-vehement-aur-este-o-grupare-nazista-condusa-de-un-individ-care-are-astfel-de-idei-1976180',
+                topic: 'Politică / Extremism',
+                impact: 'high',
+                bias: 'left'
+            },
+            {
+                id: 'ctp-s2',
+                text: 'În sfârșit, primul gest de politică externă hotărât și clar al președintelui Dan. După mai rău de 10 ani, vocea României se face auzită în Europa și în lume.',
+                date: '2025-12-20',
+                sourceUrl: 'https://www.hotnews.ro',
+                articleUrl: 'https://hotnews.ro/observatia-lui-cristian-tudor-popescu-despre-vocea-romaniei-in-lume-dupa-interviul-lui-nicusor-dan-acordat-politico-2137737',
                 topic: 'Politică Externă',
                 impact: 'high',
                 bias: 'center'
             },
             {
-                id: 'ctp-s2',
-                text: 'Pensiile speciale ale magistraților sunt cancerul care macină PNRR-ul. Amânarea promulgării legii de către președinte este o complicitate la subminarea economiei.',
-                date: '2026-02-12',
-                sourceUrl: 'https://www.republica.ro',
-                topic: 'Justiție',
+                id: 'ctp-s3',
+                text: 'Dacă Georgescu va candida, îl va transforma într-o tumoare imensă inoperabilă, în organismul românesc.',
+                date: '2025-01-10',
+                sourceUrl: 'https://www.hotnews.ro',
+                articleUrl: 'https://hotnews.ro/cristian-tudor-popescu-ctp-calin-georgescu-tumoare-imensa-inoperabila-1874829',
+                topic: 'Alegeri',
                 impact: 'high',
-                bias: 'right'
+                bias: 'center'
             }
         ]
     },
@@ -220,11 +245,12 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 'tol-s1',
-                text: 'Jurnalismul nu este despre a fi pe placul cuiva, ci despre a servi publicul. Când prețul tăcerii devine moneda de schimb în democrație, adevărul este prima victimă.',
-                date: '2026-02-20',
-                sourceUrl: 'https://www.libertatea.ro',
-                topic: 'Media',
-                impact: 'medium',
+                text: 'Știam că vom pierde. Jurnalismul se face cu fața la public sau nu se poate face deloc.',
+                date: '2024-03-10',
+                sourceUrl: 'https://www.euronews.ro',
+                articleUrl: 'https://www.euronews.ro/articole/catalin-tolontan-dupa-plecarea-de-la-libertatea-stiam-ca-vom-pierde-jurnalismul-s',
+                topic: 'Media / Libertatea Presei',
+                impact: 'high',
                 bias: 'center'
             }
         ]
@@ -249,12 +275,13 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         statements: [
             {
                 id: 'rb-s1',
-                text: 'Domnule Bolojan, nu se poate conduce o țară prin dictate lunare. PNL nu este o cazarmă și guvernarea nu se face prin solicitări de voturi de încredere din 30 în 30 de zile.',
-                date: '2026-02-05',
-                sourceUrl: 'https://www.mediafax.ro',
+                text: 'Ilie, nu poți să ceri vot de încredere din lună în lună. Ilie Bolojan este ales președinte al Partidului Național Liberal. Congres avem peste un an și jumătate. Nu acum.',
+                date: '2026-02-01',
+                sourceUrl: 'https://www.digi24.ro',
+                articleUrl: 'https://www.digi24.ro/stiri/actualitate/politica/rares-bogdan-despre-un-posibil-vot-de-incredere-cerut-de-ilie-bolojan-in-pnl-nu-poti-sa-ceri-din-luna-n-luna-facem-consiliu-national-3612597',
                 topic: 'Politică',
                 impact: 'high',
-                bias: 'right'
+                bias: 'center'
             }
         ]
     },

@@ -5,7 +5,7 @@ import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles,
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -47,15 +47,6 @@ const VoiceProfile = () => {
         ? dynamicData.statements
         : figure.statements;
 
-    // Grupăm declarațiile pe categorii
-    const categories = ['Toate', 'Politică', 'Social', 'Stil', 'Media'];
-    const getStatementsByCategory = (cat: string) => {
-        if (cat === 'Toate') return displayStatements;
-        return displayStatements.filter(s =>
-            s.topic.toLowerCase().includes(cat.toLowerCase()) ||
-            (cat === 'Stil' && s.topic.toLowerCase().includes('lifestyle'))
-        );
-    };
 
     const score = figure.bias.score;
     const biasColor = score < -15 ? 'bg-blue-500' : score > 15 ? 'bg-red-500' : 'bg-purple-500';
@@ -155,75 +146,53 @@ const VoiceProfile = () => {
                             )}
                         </div>
 
-                        <Tabs defaultValue="Toate" className="w-full">
-                            <TabsList className="w-full justify-start bg-transparent border-b rounded-none h-auto p-0 mb-6 overflow-x-auto scrollbar-hide">
-                                {categories.map(cat => (
-                                    <TabsTrigger
-                                        key={cat}
-                                        value={cat}
-                                        className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2 text-sm"
-                                    >
-                                        {cat}
-                                    </TabsTrigger>
-                                ))}
-                            </TabsList>
-
-                            {categories.map(cat => (
-                                <TabsContent key={cat} value={cat} className="space-y-4 focus-visible:outline-none outline-none">
-                                    {getStatementsByCategory(cat).length > 0 ? (
-                                        getStatementsByCategory(cat).map((statement, idx) => (
-                                            <Card key={statement.id || idx} className="group hover:shadow-md transition-all border-muted/60 overflow-hidden">
-                                                <CardContent className="p-6">
-                                                    <div className="flex items-start gap-4">
-                                                        <Quote className="w-8 h-8 text-primary/10 shrink-0 mt-1" />
-                                                        <div className="space-y-3 flex-1">
-                                                            <div className="flex flex-wrap items-center gap-2">
-                                                                <Badge variant="outline" className="text-[10px] font-bold uppercase py-0">
-                                                                    {statement.topic}
-                                                                </Badge>
-                                                                {statement.impact === 'high' && (
-                                                                    <Badge className="bg-red-500/10 text-red-500 border-none text-[10px] font-bold uppercase">
-                                                                        <Zap className="w-3 h-3 mr-1" /> Impact Mare
-                                                                    </Badge>
-                                                                )}
-                                                                <span className="text-[10px] text-muted-foreground ml-auto">{statement.date}</span>
-                                                            </div>
-                                                            <p className="text-base md:text-lg font-medium leading-snug group-hover:text-primary transition-colors italic">
-                                                                "{statement.text}"
-                                                            </p>
-                                                            <div className="flex items-center justify-between pt-2 border-t border-muted/30">
-                                                                <div className="flex items-center gap-2">
-                                                                    <div className={`w-2 h-2 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
-                                                                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">{statement.bias}</span>
-                                                                </div>
-                                                                {statement.articleUrl ? (
-                                                                    <a
-                                                                        href={statement.articleUrl}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
-                                                                    >
-                                                                        Articol <ExternalLink className="w-3 h-3" />
-                                                                    </a>
-                                                                ) : (
-                                                                    <span className="text-xs text-muted-foreground inline-flex items-center gap-1 font-medium">
-                                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')}
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </div>
+                        <div className="space-y-4">
+                            {displayStatements.map((statement, idx) => (
+                                <Card key={statement.id || idx} className="group hover:shadow-md transition-all border-muted/60 overflow-hidden">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-start gap-4">
+                                            <Quote className="w-8 h-8 text-primary/10 shrink-0 mt-1" />
+                                            <div className="space-y-3 flex-1">
+                                                <div className="flex flex-wrap items-center gap-2">
+                                                    <Badge variant="outline" className="text-[10px] font-bold uppercase py-0">
+                                                        {statement.topic}
+                                                    </Badge>
+                                                    {statement.impact === 'high' && (
+                                                        <Badge className="bg-red-500/10 text-red-500 border-none text-[10px] font-bold uppercase">
+                                                            <Zap className="w-3 h-3 mr-1" /> Impact Mare
+                                                        </Badge>
+                                                    )}
+                                                    <span className="text-[10px] text-muted-foreground ml-auto">{statement.date}</span>
+                                                </div>
+                                                <p className="text-base md:text-lg font-medium leading-snug group-hover:text-primary transition-colors italic">
+                                                    "{statement.text}"
+                                                </p>
+                                                <div className="flex items-center justify-between pt-2 border-t border-muted/30">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`w-2 h-2 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                                                        <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">{statement.bias}</span>
                                                     </div>
-                                                </CardContent>
-                                            </Card>
-                                        ))
-                                    ) : (
-                                        <div className="text-center py-12 border-2 border-dashed rounded-xl border-muted">
-                                            <p className="text-muted-foreground text-sm">Nicio declarație găsită în categoria {cat}.</p>
+                                                    {statement.articleUrl ? (
+                                                        <a
+                                                            href={statement.articleUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
+                                                        >
+                                                            Articol <ExternalLink className="w-3 h-3" />
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-xs text-muted-foreground inline-flex items-center gap-1 font-medium">
+                                                            {new URL(statement.sourceUrl).hostname.replace('www.', '')}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
-                                    )}
-                                </TabsContent>
+                                    </CardContent>
+                                </Card>
                             ))}
-                        </Tabs>
+                        </div>
 
                         {/* Secțiune nouă: Ținte & Retorică */}
                         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
