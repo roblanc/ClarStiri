@@ -186,15 +186,6 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'right'
             },
             {
-                id: 'db-ig-auto-5',
-                text: `14:41 •01 5G 37 0 1h`,
-                date: '2026-03-01',
-                sourceUrl: 'https://www.instagram.com/danajustlove/',
-                topic: 'Politică',
-                impact: 'medium',
-                bias: 'right'
-            },
-            {
                 id: 'db-ig-auto-6',
                 text: `09:46 • | g 67 • 41m .•• X CU OCAZIA ZILEI SRI DANUTA VA SPUNE CA HOHHA NA NUMIT SEF SRI UN AN JUMA CA SA FACA MASCARADA CU CACALIN SI CA SA L PJNA PRESEDINTE PĂ NICUSOR! LA MULTI ANI!`,
                 date: '2026-03-01',
@@ -746,6 +737,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['DNA', 'SRI', 'Statul Paralel', 'Reformiștii', 'Klaus Iohannis'],
         rhetoric: { aggressiveness: 75, irony: 90 },
+        contextNotes: [
+            'Realizator longeviv al emisiunii „În gura presei” de la Antena 3 CNN, post fondat de Dan Voiculescu, față de care și-a asumat mereu loialitatea.',
+            'Pe parcursul carierei, s-a poziționat ca un critic vehement al procurorilor anticoruptie (DNA), al Laurei Codruța Kövesi, al președintelui Traian Băsescu și, ulterior, al lui Klaus Iohannis și al partidelor de dreapta/USL.',
+            'Folosește un discurs puternic satiric, bazat pe porecle, pamflet și revizuirea ironică a presei.',
+        ],
         statements: [
             {
                 id: 'mb-s1',
@@ -786,6 +782,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Ilie Bolojan', 'PNL', 'Austeritatea', 'Reformiștii'],
         rhetoric: { aggressiveness: 70, irony: 65 },
+        contextNotes: [
+            'S-a afirmat la Jurnalul Național și Antena 3, iar în ultimii ani a devenit ancora principală a postului România TV, preluând zona de prime-time.',
+            'Stilul său este direct, adesea conflictual, și are o istorie lungă de contre publice dure cu figuri ale opoziției, activiști civici și jurnaliști independenți.',
+            'Postul pe care îl reprezintă (România TV) are frecvent derapaje sancționate de CNA, promovând narative senzaționaliste sau pro-PSD/suveraniste.'
+        ],
         statements: [
             {
                 id: 'vc-s1',
@@ -826,6 +827,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['PSD', 'Populiștii', 'Impostura Academică', 'AUR'],
         rhetoric: { aggressiveness: 45, irony: 70 },
+        contextNotes: [
+            'Fost director la Adevărul, fondator al publicației Gândul și colaborator de lungă durată la Digi24 și Europa FM, de care s-a despărțit ulterior. În prezent scrie independent și comentează frecvent pe platforme online.',
+            'Asumă o poziție de critic intransigent, taxând în limbaj adesea vitriolic și plastic atât liderii populiști / extremiști (AUR, SOS, Călin Georgescu), cât și clasa politică tradițională (PSD, PNL).',
+            'Adoptă o perspectivă pro-occidentală, secular-umanistă și științifică.'
+        ],
         statements: [
             {
                 id: 'ctp-s1',
@@ -876,6 +882,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Corupția', 'Abuzul de Putere', 'Sistemul Sanitar', 'Mafia Medicală'],
         rhetoric: { aggressiveness: 30, irony: 20 },
+        contextNotes: [
+            'Jurnalist de investigație premiat internațional, renumit pentru dosarele Hexi Pharma, Colectiv, Gala Bute. A condus redacțiile Gazeta Sporturilor și Libertatea.',
+            'Demiterea sa recentă din trustul elvețian Ringier a declanșat un val de dezbateri vizavi de presiunile din partea industriei de pariuri și amestecul comercialului în independența editorială.',
+            'Are o poziție axată pe transparența banilor publici, protecția cetățeanului și responsabilitatea instituțiilor de stat.'
+        ],
         statements: [
             {
                 id: 'tol-s1',
@@ -906,6 +917,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Ilie Bolojan', 'Aripa Reformistă PNL', 'Austeritatea'],
         rhetoric: { aggressiveness: 60, irony: 40 },
+        contextNotes: [
+            'Și-a construit profilul public ca moderator TV "anti-PSD" la Realitatea TV, folosind un discurs foarte emoțional și naționalist.',
+            'În 2019 a părăsit presa pentru a intra în politică direct la vârful PNL, obținând un mandat de europarlamentar.',
+            'A fost criticat frecvent în spațiul public pentru trecerea de la critic acerb al PSD-ului (la televizor) la partener de guvernare (prin intrarea PNL în alianța PSD-PNL).'
+        ],
         statements: [
             {
                 id: 'rb-s1',
@@ -936,6 +952,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Naționaliștii', 'AUR', 'Populismul', 'Pro-Rusia'],
         rhetoric: { aggressiveness: 35, irony: 55 },
+        contextNotes: [
+            'Fost prezentator de jurnale de știri clasice (Pro TV, Antena 1), s-a reinventat ca un susținător și catalizator al clasei de mijloc pro-europene.',
+            'Emisiunea sa de la Digi FM se axează pe dialogul cu ascultătorii, demontarea de teorii ale conspirației (antivaccinism, suveranism exacerbat) prin apel la știință și spirit civic.',
+            'Organizează tururi cicliste cu publicul și promovează activ un stil de viață occidental, democratic.'
+        ],
         statements: [
             {
                 id: 'lm-s1',
@@ -965,6 +986,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Birocrația', 'Risipa Bugetară', 'Guvernul', 'Sindicatele'],
         rhetoric: { aggressiveness: 45, irony: 50 },
+        contextNotes: [
+            'Fost realizator al emisiunii economice Biziday (la TVR, apoi Digi24) și voce importantă la Europa FM. Creatorul uneia dintre cele mai descărcate aplicații de știri din România.',
+            'A renunțat temporar la publicistică în 2020 pentru a consilia politic partidele de dreapta (USR / PNL), dar ulterior a revenit la statutul de analist și comentator.',
+            'Discursul său îmbină pedagogia economică cu un simț civic pronunțat și cu o abordare critică, bazată frecvent pe predicții de criză.'
+        ],
         statements: [
             {
                 id: 'mg-s1',
@@ -995,6 +1021,11 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         },
         targets: ['Sistemul de Învățământ', 'Politicienii', 'Birocrația Educațională'],
         rhetoric: { aggressiveness: 25, irony: 45 },
+        contextNotes: [
+            'Creator de conținut și antreprenor, reprezentant influent pentru publicul "Gen Z".',
+            'Are un număr imens de urmăritori pe YouTube (peste 3 milioane) și un istoric de ieșiri publice bine documentate în care a criticat sever anacronismele și deficiențele sistemului de învățământ din România.',
+            'Deși nu are orientare partinică, impactul său social în rândul tinerilor îl face o voce urmărită chiar și de politicieni.'
+        ],
         statements: [
             {
                 id: 'selly-s1',
