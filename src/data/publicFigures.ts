@@ -762,6 +762,21 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Economie / Austeritate',
                 impact: 'medium',
                 bias: 'left'
+            },
+            {
+                id: 'mb-yt-1',
+                text: 'Cum au dat englezii și americanii, practic agenția americană de spionaj CIA, o lovitură de stat pe față în Iran pur și simplu pentru a prelua controlul absolut asupra petrolului lor... Păi după aia mai stăm și ne întrebăm ipocrit de unde au decurs toate derapajele istorice în Orientul Mijlociu.',
+                date: '2026-03-01',
+                sourceUrl: 'https://youtu.be/6knOlBGxrOE?si=NrT3B4iN40H-wKBw',
+                topic: 'Geo-Politică',
+                impact: 'high',
+                bias: 'center-left',
+                factCheck: {
+                    text: 'Referința istorică vizează Lovitura de stat iraniană din 1953 (Operațiunea Ajax), orchestrată oficial de MI6 (Marea Britanie) și CIA (SUA) pentru a-l înlătura pe premierul ales democratic Mohammad Mosaddegh, după ce acesta a naționalizat industria petrolieră a Iranului, aflată anterior sub control britanic.',
+                    sources: [
+                        { label: 'Declassified CIA Documents', url: 'https://nsarchive2.gwu.edu/NSAEBB/NSAEBB435/' }
+                    ]
+                }
             }
         ]
     },
