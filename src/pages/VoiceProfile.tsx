@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2, Target, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
+import { StyledLink } from "@/components/ui/styled-link";
 
 
 
@@ -131,14 +132,14 @@ const VoiceProfile = () => {
                                                 </span>
                                             </div>
                                             {statement.articleUrl ? (
-                                                <a
+                                                <StyledLink
                                                     href={statement.articleUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-[11px] text-foreground hover:text-primary transition-colors inline-flex items-center gap-1 font-medium tracking-wide uppercase"
+                                                    className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
                                                 >
                                                     Sursa <ExternalLink className="w-3 h-3" />
-                                                </a>
+                                                </StyledLink>
                                             ) : (
                                                 <span className="text-[11px] text-muted-foreground/70 inline-flex items-center gap-1 font-medium uppercase tracking-wide">
                                                     {new URL(statement.sourceUrl).hostname.replace('www.', '')}
