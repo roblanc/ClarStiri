@@ -48,22 +48,23 @@ def get_image_path(username, post_shortcode):
             return os.path.join(username, file)
     return None
 
-def process_image_with_gemini(image_path, is_profile=False):
+def process_image_with_gemini(image_path, is_profile=False, profile_name=None):
     try:
         img_data = genai.upload_file(path=image_path)
         
         if is_profile:
-            prompt = """
-            Ești un jurnalist la ClarStiri. Analizează imaginea (postare Instagram de la Dana Budeanu).
-            Extrage declarația principală din imagine. Trebuie să fie scurtă (max 20 cuvinte), percutantă și în stilul ei specific.
+            name = profile_name or "această persoană publică"
+            prompt = f"""
+            Ești un jurnalist la ClarStiri. Analizează imaginea (postare Instagram de la {name}).
+            Extrage declarația principală din imagine. Trebuie să fie scurtă (max 20 cuvinte), percutantă și în stilul persoanei.
             Returnează JSON valid:
-            {
+            {{
               "text": "Declarația extrasă",
               "topic": "Subiectul (ex: Politică, Social, Stil de viață)",
               "date": "YYYY-MM-DD",
               "impact": "high/medium/low",
               "bias": "right/left/center"
-            }
+            }}
             """
         else:
             prompt = """
@@ -154,6 +155,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("username", help="Instagram username")
     parser.add_argument("--profile-id", help="Profile ID to augment (e.g. dana-budeanu)")
+    parser.add_argument("--profile-name", help="Display name for AI prompt (e.g. 'Dana Budeanu')")
     args = parser.parse_args()
         
     user = args.username
@@ -164,7 +166,11 @@ if __name__ == "__main__":
         img_path = get_image_path(user, post.shortcode)
         if img_path:
             print(f"Procesez imaginea {img_path}...")
-            result = process_image_with_gemini(img_path, is_profile=bool(args.profile_id))
+            result = process_image_with_gemini(
+                img_path,
+                is_profile=bool(args.profile_id),
+                profile_name=args.profile_name
+            )
             if result:
                 result['post_url'] = f"https://www.instagram.com/p/{post.shortcode}/"
                 sync_to_redis(result, profile_id=args.profile_id)

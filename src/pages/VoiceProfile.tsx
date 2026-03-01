@@ -51,8 +51,8 @@ const VoiceProfile = () => {
     const categories = ['Toate', 'Politică', 'Social', 'Stil', 'Media'];
     const getStatementsByCategory = (cat: string) => {
         if (cat === 'Toate') return displayStatements;
-        return displayStatements.filter(s => 
-            s.topic.toLowerCase().includes(cat.toLowerCase()) || 
+        return displayStatements.filter(s =>
+            s.topic.toLowerCase().includes(cat.toLowerCase()) ||
             (cat === 'Stil' && s.topic.toLowerCase().includes('lifestyle'))
         );
     };
@@ -85,7 +85,7 @@ const VoiceProfile = () => {
                             <div className="aspect-square md:aspect-[3/4] rounded-2xl overflow-hidden mb-4 border shadow-sm bg-muted">
                                 <img src={figure.image} alt={figure.name} className="w-full h-full object-cover" />
                             </div>
-                            
+
                             <h1 className="text-3xl font-serif font-bold mb-2">{figure.name}</h1>
                             <p className="text-primary font-medium mb-4">{figure.role}</p>
 
@@ -121,9 +121,9 @@ const VoiceProfile = () => {
                                         </div>
                                         <div className="h-2 w-full bg-secondary rounded-full overflow-hidden relative">
                                             <div className="absolute top-0 bottom-0 w-px bg-foreground/20 left-1/2 z-10" />
-                                            <div 
-                                                className={`h-full ${biasColor} transition-all duration-1000`} 
-                                                style={{ 
+                                            <div
+                                                className={`h-full ${biasColor} transition-all duration-1000`}
+                                                style={{
                                                     left: score < 0 ? `${50 + (score / 2)}%` : '50%',
                                                     width: `${Math.abs(score) / 2}%`,
                                                     position: 'absolute'
@@ -158,8 +158,8 @@ const VoiceProfile = () => {
                         <Tabs defaultValue="Toate" className="w-full">
                             <TabsList className="w-full justify-start bg-transparent border-b rounded-none h-auto p-0 mb-6 overflow-x-auto scrollbar-hide">
                                 {categories.map(cat => (
-                                    <TabsTrigger 
-                                        key={cat} 
+                                    <TabsTrigger
+                                        key={cat}
                                         value={cat}
                                         className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent px-4 py-2 text-sm"
                                     >
@@ -196,9 +196,9 @@ const VoiceProfile = () => {
                                                                     <div className={`w-2 h-2 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
                                                                     <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-widest">{statement.bias}</span>
                                                                 </div>
-                                                                <a 
-                                                                    href={statement.sourceUrl} 
-                                                                    target="_blank" 
+                                                                <a
+                                                                    href={statement.sourceUrl}
+                                                                    target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="text-xs text-primary hover:underline inline-flex items-center gap-1 font-medium"
                                                                 >
@@ -228,16 +228,12 @@ const VoiceProfile = () => {
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="flex flex-wrap gap-2">
-                                    {figure.id === 'dana-budeanu' ? (
-                                        <>
-                                            <Badge variant="secondary" className="text-[10px]">Robert Negoiță</Badge>
-                                            <Badge variant="secondary" className="text-[10px]">USR</Badge>
-                                            <Badge variant="secondary" className="text-[10px]">Corporatiști</Badge>
-                                            <Badge variant="secondary" className="text-[10px]">Progresiști</Badge>
-                                            <Badge variant="secondary" className="text-[10px]">Sistemul</Badge>
-                                        </>
+                                    {figure.targets.length > 0 ? (
+                                        figure.targets.map((target) => (
+                                            <Badge key={target} variant="secondary" className="text-[10px]">{target}</Badge>
+                                        ))
                                     ) : (
-                                        <span className="text-[10px] text-muted-foreground italic uppercase">Analiză automată în curs...</span>
+                                        <span className="text-[10px] text-muted-foreground italic uppercase">Profil echidistant — fără ținte recurente</span>
                                     )}
                                 </CardContent>
                             </Card>
@@ -253,17 +249,17 @@ const VoiceProfile = () => {
                                         <div>
                                             <div className="flex justify-between text-[10px] mb-1 uppercase font-bold tracking-wider">
                                                 <span>Agresivitate</span>
-                                                <span>{figure.id === 'dana-budeanu' ? '92%' : '...'}</span>
+                                                <span>{figure.rhetoric.aggressiveness}%</span>
                                             </div>
-                                            <Progress value={figure.id === 'dana-budeanu' ? 92 : 0} className="h-1" />
+                                            <Progress value={figure.rhetoric.aggressiveness} className="h-1" />
                                         </div>
-                                        
+
                                         <div>
                                             <div className="flex justify-between text-[10px] mb-1 uppercase font-bold tracking-wider">
                                                 <span>Ironie / Sarcasm</span>
-                                                <span>{figure.id === 'dana-budeanu' ? '85%' : '...'}</span>
+                                                <span>{figure.rhetoric.irony}%</span>
                                             </div>
-                                            <Progress value={figure.id === 'dana-budeanu' ? 85 : 0} className="h-1" />
+                                            <Progress value={figure.rhetoric.irony} className="h-1" />
                                         </div>
                                     </div>
                                 </CardContent>

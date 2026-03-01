@@ -26,6 +26,11 @@ export interface PublicFigure {
         tiktok?: string;
         website?: string;
     };
+    targets: string[];    // Ținte predilecte — persoane, partide, concepte pe care le atacă frecvent
+    rhetoric: {
+        aggressiveness: number;  // 0-100
+        irony: number;           // 0-100
+    };
     description: string;
     statements: Statement[];
 }
@@ -48,6 +53,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
             youtube: 'https://youtube.com/verdictdanabudeanu',
             website: 'https://danabudeanu.ro'
         },
+        targets: ['Robert Negoiță', 'USR', 'Corporatiști', 'Progresiști', 'Sistemul'],
+        rhetoric: { aggressiveness: 92, irony: 85 },
         statements: [
             {
                 id: 'db-ig-2026-02-24',
@@ -102,6 +109,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             instagram: 'https://instagram.com/mirceabadea'
         },
+        targets: ['DNA', 'SRI', 'Statul Paralel', 'Reformiștii', 'Klaus Iohannis'],
+        rhetoric: { aggressiveness: 75, irony: 90 },
         statements: [
             {
                 id: 'mb-s1',
@@ -138,6 +147,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/victorciutacu'
         },
+        targets: ['Ilie Bolojan', 'PNL', 'Austeritatea', 'Reformiștii'],
+        rhetoric: { aggressiveness: 70, irony: 65 },
         statements: [
             {
                 id: 'vc-s1',
@@ -165,6 +176,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/ctp'
         },
+        targets: ['PSD', 'Populiștii', 'Impostura Academică', 'AUR'],
+        rhetoric: { aggressiveness: 45, irony: 70 },
         statements: [
             {
                 id: 'ctp-s1',
@@ -201,6 +214,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/catalin.tolontan'
         },
+        targets: ['Corupția', 'Abuzul de Putere', 'Sistemul Sanitar', 'Mafia Medicală'],
+        rhetoric: { aggressiveness: 30, irony: 20 },
         statements: [
             {
                 id: 'tol-s1',
@@ -228,6 +243,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/RaresBogdan'
         },
+        targets: ['Ilie Bolojan', 'Aripa Reformistă PNL', 'Austeritatea'],
+        rhetoric: { aggressiveness: 60, irony: 40 },
         statements: [
             {
                 id: 'rb-s1',
@@ -255,6 +272,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/LucianMandruta'
         },
+        targets: ['Naționaliștii', 'AUR', 'Populismul', 'Pro-Rusia'],
+        rhetoric: { aggressiveness: 35, irony: 55 },
         statements: [
             {
                 id: 'lm-s1',
@@ -282,6 +301,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         socialLinks: {
             facebook: 'https://facebook.com/MoiseGuran'
         },
+        targets: ['Birocrația', 'Risipa Bugetară', 'Guvernul', 'Sindicatele'],
+        rhetoric: { aggressiveness: 45, irony: 50 },
         statements: [
             {
                 id: 'mg-s1',
@@ -291,33 +312,6 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Economie',
                 impact: 'high',
                 bias: 'right'
-            }
-        ]
-    },
-    {
-        id: 'andreea-esca',
-        slug: 'andreea-esca',
-        name: 'Andreea Esca',
-        role: 'Prezentatoare Știri',
-        image: 'https://static4.libertatea.ro/wp-content/uploads/2018/09/andreea-esca-costum-rosu.jpg',
-        bias: {
-            leaning: 'center',
-            score: 0,
-            description: 'Simbol al echidistanței în jurnalismul TV comercial. Abordare neutră și orientată spre fapte.'
-        },
-        description: 'Cea mai cunoscută figură a știrilor ProTV, un reper de profesionalism și continuitate în media românească.',
-        socialLinks: {
-            instagram: 'https://instagram.com/andreeaesca'
-        },
-        statements: [
-            {
-                id: 'ae-s1',
-                text: 'Într-o lume plină de zgomot și știri false, rolul nostru rămâne același: să fim ancora realității pentru publicul nostru, în fiecare seară la ora 19.',
-                date: '2026-02-01',
-                sourceUrl: 'https://www.protv.ro',
-                topic: 'Social',
-                impact: 'low',
-                bias: 'center'
             }
         ]
     },
@@ -337,6 +331,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
             youtube: 'https://youtube.com/selly',
             instagram: 'https://instagram.com/selly'
         },
+        targets: ['Sistemul de Învățământ', 'Politicienii', 'Birocrația Educațională'],
+        rhetoric: { aggressiveness: 25, irony: 45 },
         statements: [
             {
                 id: 'selly-s1',

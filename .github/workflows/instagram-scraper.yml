@@ -22,16 +22,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install instaloader google-generativeai upstash-redis python-dotenv
 
-      - name: Run Scraper for Dana Budeanu
+      - name: Create env file
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
         run: |
-          # Creăm un .env.local temporar pentru script
           echo "GEMINI_API_KEY=$GEMINI_API_KEY" > .env.local
           echo "UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL" >> .env.local
           echo "UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN" >> .env.local
-          
-          # Rulăm scriptul
-          python scripts/scrapers/instagram_ocr.py danabudeanu --profile-id dana-budeanu
+
+      - name: Scrape Dana Budeanu
+        continue-on-error: true
+        run: python scripts/scrapers/instagram_ocr.py danabudeanu --profile-id dana-budeanu --profile-name "Dana Budeanu"
+
+      - name: Scrape Mircea Badea
+        continue-on-error: true
+        run: python scripts/scrapers/instagram_ocr.py mirceabadea --profile-id mircea-badea --profile-name "Mircea Badea"
+
+      - name: Scrape Selly
+        continue-on-error: true
+        run: python scripts/scrapers/instagram_ocr.py selly --profile-id selly --profile-name "Selly"
+
