@@ -92,7 +92,638 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Suveranitate',
                 impact: 'high',
                 bias: 'right'
+            },
+            {
+                id: 'db-ig-img-1',
+                text: 'Încă una și mă culc. Că așa proști n-am văzut. CHINA a băgat deja 1 miliard în două dintre resursele de petrol ale lui MADURO și le-a luat pe 20 de ani ÎN 2025!',
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-img-2',
+                text: 'Doresc să mai anunț că toți băieții buni Peterson Brand etc au trecut la crestinism si chiar la ortodoxie așa la bătrânețe brusc voiam sa va spun atat! PUPIX!',
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Religie / Social',
+                impact: 'medium',
+                bias: 'center-right'
+            },
+            {
+                id: 'db-ig-img-3',
+                text: 'Mai știi când erai #REZIST, Siemioane? Ai culcat pisica lu Ciolacu? De mâine intră Căcălin 24/7 și tu mergi să lipești afișe pentru fratele tău Nicușor!',
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-img-4',
+                text: 'AHAHAHA! Și așa a fost! Hai culcați-vă-n frig nespălați și mai vedem mâine! Tudororo? Tot prost ești?',
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-0',
+                text: `01:42 8 •nl 56 • 6h • •• X DORESC SA MAI ANUNT CA TOTI BAIETII BUNI PETERSON BRAND ETC AU TRECUT LA CRESTINISM SI CHIAR LA ORTODOXIE ASA LA BATRANETE BRUSC VOIAM SA VA SPUN ATATI PUPIX!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-1',
+                text: `09:51 \ • 10h X RUSSIA IN 2019 AHAHAHA! REPORTEDLY FLOATED SI ASA A DEAL TO THE A FOSTE FIRST- TERM TRUMP ADMINISTRATION HAI CULCATI VA N OFFERING US INFLUENCE OVER VENEZUELA FRIG IN EXCHANGE FOR NESPALATI WASHINGTON SI MAI VEDEM MAINE! TUDORORO? STEPPING AWAY FROM TOT PROST UKRAINE ESTI? FIONA HILL`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-3',
+                text: `01:41 8 .00U 56 • 8h ••• X HOHHA DATI VA DRECU NU LOCUIESTE LA DE PE POD COTROCENI SATREACA SI ORICUM E NEPALEZII PLECAT LA SKI! CU GLOVO MASCARADE CA AIA MUNCESC CARE SI BAT JOC SI DUMINICA! DE JANDARMI SI DE POLITIE CARE TREBUIE SA STEA DUPA IDIOTENIILE LU SIEMION! VEZI CA MAI AI O ORA SI TREBUIE SA ALAPTEZI SI SA FACI BAITA!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-4',
+                text: `23:09 - •DIU 45 • 2h < Patrick André de Hillerin o 20m • 0 .•• Ce o sá se ascuta lupta anti-drog la nivel planetar... China o să caute droguri în Taiwan, Iranul în Israel, Israelul în Iran, Israelul în Liban, Rusia în Ucraina, Macron la Le Pen, Merz la AFD, Maia Sandu la toți adversarii pe care încă îi mai are și tot așa. Numai în România nu o sá se întâmple nimic, pentru că la noi se face trafc de supraviețuire, nu în scopuri oneroase.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-5',
+                text: `14:41 •01 5G 37 0 1h`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-6',
+                text: `09:46 • | g 67 • 41m .•• X CU OCAZIA ZILEI SRI DANUTA VA SPUNE CA HOHHA NA NUMIT SEF SRI UN AN JUMA CA SA FACA MASCARADA CU CACALIN SI CA SA L PJNA PRESEDINTE PĂ NICUSOR! LA MULTI ANI!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-7',
+                text: `17:49 Your story reea.litycheck bucuresti.central.memes and.. • Smashing Pumpkins • Cherub Ro...`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-11',
+                text: `23:31 8 •|| 64 • ... AVATARUL CACALIN SUNT DOAR O LOVITURA DE STAT IMPOTRIVA ECHILIBRULUI POLITIC CREAT, CA NU ESTE SUSTINUT DE NIMENI, DE NICIUN TRUMP SI IATA CA ASA A FOST! IN ZIUA IN CARE NICUSOR A FOST INSTALAT, CONSERVA CACALIN S A RETRAS DIN POLITICA IN CARE ORICUM NU A FOST NICIODATA! 7. IN SEARA DE 18 MAI, SIEMION CU CONCURSUL TUTUROR, NU A MAI NUMARAT NICIUN BULETIN! V AM DEMONSTRAT (TOT SINGURA DIN ROMANIA), SAT CU SAT, JUDET CU JUDET, CUM A FOST FURAT VOTUL PE LISTE SUPLIMENTARE! 8. AM FOST SINGURA CARE V AM EXPLICAT CA AL DOILEA RAZBOI MONDIAL A FOST CASTIGAT DE RUSIA IMPREUNA CU STATELE UNITE SI NOI SE STIE UNDE AM RAMAS! RAZBOIUL RECE ESTE UN SERIAL DE HOLLYWOOD PENTRU PROSTII CA VOI! NU A EXISTAT NICIODATA! DESTEPTII STIU CA A FOST O IMPARTEALA PE RESURSE SI ALTELE, CA SI ACUM! 9. SINGURA SOLUTIE AZI E UNA PE CARE NU MERITATI SA O STITI! PUP! 805 5 days ago`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-12',
+                text: `19:22 \ • 2h •ll 9 94 • •• X ZELEVOGUE MOMAIASANDU BUTTHEAD SUNT SOLDATII LU PUTIN! BINE PROSTII O SA AFLE PESTE 10 ANI!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-13',
+                text: `14:18 For you v 84 + Your story corinasucarov mariaol V ... INTERESUL RUSIEI ASA CUM VI L A ROSTIT SI PUTIN ESTE CA N TOATE TARILE DIN EUROPA SA FIE PROGRESISTI CURCUBEI LA CONDUCERE NU EL L A PUS PE ZELEVOGUE? RESTU E NUTRET PENTRU PROSTI RUSII AMERICANII CHINEZII STIU CA SUNTETI MULTI PROSTI! 418 SIEMION E NUTRETU PENTRU PROSTII CU VIN RUSII! RUSII S AICI SI N TOATE TARILE PRECUM FRANTA GERMANIA ETC! PRIN PRESEDINTII PROGRESISTI! JE SUIS MATEI PAUN... more .. maladia n`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-14',
+                text: `16:43 •1| 5 52 SA RAMANA SCRIS REAMINTESC - DANA BUDEAMJIL A FOST SINGURA' :DIN 'ROMANIA» CARE A SPUS CĂCĂLIN GEORGESCU ESTE CANDIDATUL LUI HOHHANIS SI A SISTEMULUI LUT!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-15',
+                text: `15:47 + Your story •0l 5G 78 annoujkah reea lity V ... < Dana Budeanu c 6m • ••• VAAAAAAAAI! HAIDETI DOMNU PALADA, CE DRECU! PAI VA FACETI DE RAS, SINCER! CE VOT? NICUSOR A IESIT PRESEDINTE NEVOTAT! A IESIT PRIN MASCARADA HATA SUVERANISTA CU CÃCÃLIN, PENTRU CREAREA UNEI SANCHI PANICI CA VIN RUSII SI NE IAU TROTINETELE SI GOJI (RUSII NU VIN SI SUNT INTERESATI DOAR CA N FIECARE TARA VECINA SA EXISTE UN ZELEVOGUE PRESEDINTE, PE CARE TOT EI L AU PUS), PANICA, CARE SA DEA SENZATIA FALSA CA MAMA GATA S A SPERIAT CINEVA SI PAC O SA VOTEZE PRO SANCHI EUROPA, CE DRECU O MAI FI SI AIA! NICUSOR DAN N A IESIT PRESEDINTE, ASA CUM DOAR EU AM SCRIS, DUPA CE AM STAT O NOAPTE SI V AM PREZENTAT SCHEMA CU LISTELE SUPLIMENTARE DE PESTE 1 MILION DE VOTURI! LASATI O ASA! 306`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-16',
+                text: `11:50 \ | 26 • 2h < Dana Budeanu e 3m • O ••• Dana Budeanu c 14 ian. 2025 • 2021 CAND SCRIAM EU DESPRE ALA MICU WANNABE VLADIMIR, CA SE PANICASE GARNIZOANA RAIZ! AHAHAHAHAHAHA! < Dana Budeanu • 14 Jan 2021 • Q AHAHAHAHAHAHAHAHAHAHAHAHAHA! N AI MA CUM ASA CEVAAAAAAAAAA! CE S A INTAMPLAT, BAI, NENE? PROBABIL CA A RUPT CLIPU SI GATA E AMENINTARE??!!! PENTRU CINE? CA AIA FOARTE DESTEPTI STIU CE VOR PENTRU EI, NU STAU PE FB SA COMENTEZE CA DE CE S A FILMAT UNU LA VIENA SI CA DE CE LA VIENA! АНАНАНАНА! MORI, MA! PAI CUM DE CE? PENTRU CA S A UITAT LA MAGICIANU CARE TOT DE LA VIENA A VENIT SA NE LUMINEZE! NU? SAU DOAR ALA ARE VOIE LA, DE LA SI PENTRU VIENA? BAI, NENE, SA SE DERANJEZE RISE PENTRU ASA CEVA. MI SE PARE DE LA NEBUN!!!! CA CE? Dana Budeanu e 14 Jan 2021 • G FREEDOM OF SPEECH, COPII! ORICUM OAMENII FOARTE DESTEPTI STIU CE AU DE FACUT, NU? SAU VA E FRICA PENTRU PROSTI? N ARE CUM, CA AIA HALESC ORICE II SPERIE! NU I ATI SPERIAT SUFICIENT? AU MAI RAMAS D ASTIA NESPERIATI? RISE Project.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-17',
+                text: `< Dana Budeanu • Chiar acum • Q ••. OF, IAR SE CONFIRMA TOT CE E SCRIS CU ANI INAINTE DOAR PE VERDICT APP DANA BUDEANU? https://www.gandul.ro/financiar/cati-bani-a- incasat-ucraina-din-taxele-platite-de-rusia- pentru-tranzitul-gazului-contractele-s-au- incheiat-abia-dupa-trei-ani-de- razboi-20610951 2 app.verdictapp.com ZELENSKI - SOLDATUL LUI PUTIN | Brainy`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-18',
+                text: `15:32 0 8 NICUSOR DAN ESTE ANDIDATUL SISTEMULUI HOHHANIS! 604 7 DORESC SA SE NOTEZE CA NICI PANA AZI, NICIUN HANALIST POLITIC NU A SCRIS ASTA! NICUSOR ESTE CANDIDATUL SISTEMULUI HOHHANIS! ASA A AJUNS PRIMAR IN 2020 SI 2024. PENTRU ASCENSIUNEA SI PREDAREA STAFETEI LA PREZIDENTIALE S A FOLOSIT INTERFATA CĂCĂLIN, PREGATITA DE ANI! DORESC SA VA INVIT SA VIZIONATI VERDICTUL POLITIC 'E LOVITURA DE STAT', ASTAZI CAND ANIVERSAM PATRU ANI DE ADEVAR CONTINUU PE VERDICT APP DANA BUDRANU! SCHEMA A FOST MEREU: FASOLE TECI CĂCĂLIN NICUSOR DAN! PS: SI DUPA MASCARADA V ATI TREZIT LA AN DISTANTA! 7 hours ago • Q ...`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-19',
+                text: `09:59 .0l 24 Dana Budeanu * dana Chiar acum • NICUSOR PRESEDINTE! Dana Budeanu 10 feb. 2022 • 0 PLICUSOR CANDIDATUL PNL USRI PLUS 2 1/4 "FRATELE" LUI RARES RUJ ROZ OMUL PE MANA CARUIA ORBAN A INGROPAT CAPITALA ROMANIEI CANDIDATUL LUI IOHANNIS PRIMARUL GUNOAIELOR, PARCURILOR DISTRUSE, STRAZILOR INSALUBRE, CLADIRILOR IN PARAGINA, TRANSPORTULUI INFECT, TRISTETILOR SI MIZERIILOR CONTINUE, FRIGULUI INSUPORTABIL DIN SUTE DE MII DE CASE, AJUTOARELOR TAIATE ALE COPIILOR, MAMELOR SI BATRANILOR NEPUTINCIOSI... REPREZENTANTUL DREPTEI SI AL STATULUI ESUAT PE SUFLETUL, MINTEA SI MUNCA OAMENILOR...`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-20',
+                text: `15:32 56 • 4h •.. X CĂCĂLINE MIE NU MI E IESI IN MM MILA DE DE CONSERVA #REZISTI DOI LA METRU CA S NISTE SI EXPLICA LE NETERMINATI ALORA PE CARE DAR DE BATRANII I AI CARDIT SI OAMENII CA SEMNU ALA AMARATI DE CARE V ATI BATUT JOC MARELE CU SUVERANISMU DIN AMERICA E IMI ESTE NICUSOR! TRADATORILOR! HAI MAI FA UN FILM AI SI SPUNE LE LA PROSTI CUM SE FACE!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-21',
+                text: `20:47 .ll 69 • 3h ... X MUSKA PĂ KETAMINA VORBESTE DÃ CCR! AHAHAHAHA! NU VA MAI AU ZIS SEFII DROGATZ TAI DE LA CHIAR CIAIEI NON STOP! SA FACI CE TI AU DAT LA YANKEI ACOLO SCLAVULE!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-22',
+                text: `09:23 5 + Your story finklness dianana S9 scena_9 ... PA DYICKA www.dacica.ro Peso de pizda țigăncii Plante, rasism și marketing Eticheta de pe un borcan ridică o întrebare la care se gândesc și botaniștii lumii: ce facem cu numele ofensatoare ale plantelor? Citește articolul din arhivă pe scenag.ro S9 © 1.319 • 25 7 56 Q`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-23',
+                text: `19:05 < Dana Budeanu • Chiar acum • O ... UN NETERMINAT PUS PRIMAR DE GARNIZOANE SI SAGETI ALE GARNIZOANELOR CU AJUTORUL PNL! S LIVE stiripesurse.roo 12m• Săptămâna trecută, chiar în ziua ședinței Consiliului General, la care edilul Capitalei a absentat, blocând prin nesemnarea raportului, încă o investiție în sănătate, la Spitalul Clinic „Bagdasar-Arseni", judecătorii au administrat încă o sentință usturătoare candidatului „independent" la președinție. Astfel, Nicuşor Dan și Asociația Ecopolis au primit miercuri o lovitură uriașă din partea Curții de Apel Pitești, judecătorii respingând, prin hotărâre definitivă, recursul Municipiului București cu privire la anularea suspendării PUZ Sector 2.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-24',
+                text: `23:00 m For you v + Your story mariaoprina TRAFICANTUL DE INFLUENTA NICUSOR UN RATAT MAIDANEZ #REZIST CARE A INGROPAT BUCURESTIUL • CONSERVA A SERVICILOR ARE TUPEU SA SPUNA CA ROMANIA E UN STAT SLAB! 709 SIMSFIPDJPM! •ll 5G 65 annoujkah dianana ... BAI NESPALATULE PUTE LOCU SUB TINE SI SUB ZECILE DE PLANGERI PENALE TINUTE LA MISTO N SERTAR! MARS!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-25',
+                text: `13:37 For you v 76 + Your story finklness mariaor ... TOT APARATUL FORMAT DIN ASTFEL REZERVISTI SUNTETI HATA JURNALISTI PARTAS! POLITICIENI SI VINOVATI DE INALTA VOTANTI TRADARE CAREI MARS! L AU SUSTINUT PÃ ATI JUCAT CĂCĂLIN ROMANIA LA BARBUTI AU PARTICIPAT LA LOVITURA DE STAT ORGANIZATA PENTRU NICUSOR! 606 3 hours ago +`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-26',
+                text: `18:13 •ll 5G 51 • ... < Dana Budeanu e Chiar acum • O UN SERIAL UNIC IN ROMANIA! PFIUUUU IA UITE CAPITANII CARE SANCHI AU FACUT REVOLUTIA FACUTI GOLANI IN PIATA! BAEJNEBUN? ATAT DE PROSTI VA CRED! ••• 9 24 4 1990 app.verdictapp.com CARDEALA GOLANIADA MINERIADA (II)! 150 4 days ago SNOOP snoop.ro • .. Q`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-27',
+                text: `23:01 A •Il 5G 65 • ... < Dana Budeanu • Chiar acum • O ••• PÃ SISTEM FRUMOS! PS: NU ASTA MA INTERESEAZA, CA AM SPUS DIN ZIUA UNU CA NICUSOR E CANDIDATUL GARNIZOANELOR, EU VREAU SA STIU EXACT SAGETILE CARE FINANTEAZA CAMPANIA...SA LE SPUNA GARNIZOANA SI SARACILOR, CA NU E TREABA MEA...ASA, CA SA STIE SI PROSTII PE CARE I PUNETI SA VOTEZE "CANDIDATI INDEPENDENTI"! PENTRU PROSTI, CA NU CRED CA STIU, BIROUL ELECTORAL DECONTEAZA DIN BANII POPULATIEI CE CHELTUIE SAGETILE! stiripesurse.ro e 39m • Fost colonel #SRI, în permanență la dreapta lui Nicușor Dan. 'Da, fac parte din echipa de campanie' ~ 289 1 day ago Q 7 • Q`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-28',
+                text: `14:22 lan (26 Dara Budeanu e Chiar acum • O URLU DIN NOIEMBRIE! @ STIRIPESURSE.RO ACUM S A TREZIT SI PRESA: https://www.stiripesurse.ro/diversiunea- georgescu-si-adevaratul-pericol-pentru- romania_3619431.html Dana Budeanu o 2 mar. • NOTA TI SINGURA CARE V A CACALIN SPUS ESTE CONSERVA #REZIST REZERVISTILOR • #SUVERANIS1 DE ARUNCAT IN AU ACEIAS OCHII POPULATIEI IMBECILE SEFI IN SPATE PENTRU CA NETERMINATUL NICUSOR SA FIE VARIANTA!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-29',
+                text: `16:54 82 • 46m ASA E N TOATA TARA ! & Voturi majoritare g Candidat 2 Grad centralizare JUDET IS IAŞI NIVEL Maxim 100% JUDET IS ASI Rezultate NTARE GRAFICA G cerc SOR-DANIEL DAN : 232.461 Date din procesul verbal Total alegatori inscriși in liste Total alegatori prezenți la urne 810595 400437 Proces-verbal Candidat 1. NICUSOR-DANIEL DAN 2. GEORGE-NICOLAE SIMION TOTAL Fisiere (v2 v1 Data ultimului fisier: 19.05.2025 16-5758 Votur tocent ~) 232.461 182 222 395.694 58,75 % 41,25 % 100,00 % SIEMION A FACUT LA MISTO CONTESTATIE! CÃCÃLIN A ANULAT ALEGERILE! TOTI SUNT MANA N MANA! RETINETI!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-30',
+                text: `22:38 г .0l • 13h Dana Budeanu • Just now • DIN CE BANI, MAGICIENE? AAAAA...DIN AUSTRIA? AM CREZUT CA DE LA NIC! ••• gandul.ro Exclusiv. După despărțire, Vlad Voiculescu și fosta și-au cumpărat casă împreună!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-31',
+                text: `11:40 •0l 81) VERDICT APP DANA BUDEANU NU FUNCTIONEAZA PENTRU CA A PICAT CLOUDFARE! ISI VA REVENI! SUNTEM COPLESITI DE MESAJE! STATI LINISTITI APLICATIA ESTE OK! ASTEPTAM ALATURI DE X CHATPROST SI ALTE APPS SA SI REVINA! @Telegraph.co.uk`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-32',
+                text: `11:00 39 yyyyyyyekaterina 29m ••• X Ecaterina Elena Lupu 1m • recunosc că și eu scriu în CV: instrument - pian deşi nu am mai cântat de mai bine de zece ani Dana Hering 44m • Deci Georgescu asta e un fake perfect. Jobul la ONU, nu era la ONU ci la o fundatie privata. United Nations Global Sustainable Index Institute (UNGSII) este o fundație înființată în 2014 ce nu are vreo legătură directă cu ONU, nu face parte din ONU, ci doar susține inițiativele ONU. Adresa UNGSII nu este la Biroul ONU din Geneva, cum a trecut Călin Georgescu în CV, ci în Gebertingen, un sat din Elveția, aflat la aproape 185 de kilometri de Geneva. articol Adevărul EXCLUSIV Informațiile false din CV-ul lui Călin Georgescu. A seris că a lucrat la un institut al ONU, însa în realitate e o fundație privată Alegeri prezidențiale 2024 ° Denis Grigorescu 15 live V VR • Publicat: 29.11.2024 01:30 În CV-ul public al lui Călin Georgescu apare un job din perioada 2015-2016, care la prima vedere sună pompos și impresionant: "director executiv și consilier special al directorului general ONU de la Geneva". După o minimă verificare pe internet, se poate constata că e vorba de o fundație. • •• Send message...`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-33',
+                text: `22:38 - •00l 70 • 23h •.. X MISCARILE CAND SANCHI VAD SUVERANISTE ATATA PROSTIE NASCUTE IN JUR ROSTOGOLITE iMI CrESTE INTRETINUTE INIMA DE EXCLUSIV BUCURIE! DE PLATFORMELE SOCIAL MEDIA SOROSISTE!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-34',
+                text: `20:33 • 9h TINERI AU MURIT LA REVOLUTIE PENTRU LIBERTATE SI DUCEREA ROMANIEI CATRE VEST CA SA VINA ASTIA PROSTITI CARE AZI URLA SA NE IZOLAM DE OCCIDENT! 20 ••• X`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-35',
+                text: `07:25 •0l 18 • 10h •.. X PROSTILOR DANA CE FACETI MA? BUDEANU CĂCĂLIN SINGURA SUVERANISTU P DIN ROMANIA SI A ANUNTAT • CAREV A SPUS RETRAGEREA DESPRE V A ARS PENTRU HARNEALA NICUSOR ) SUVERANISTA IMPREUNA CU SIEMION SI PLEACA IN M M DE UNDE A VENIT!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-36',
+                text: `18:01 8 264 8 hours ago 68 • •.. Dana Budeanu e 1m . ••• ALTEX UNUL DINTRE SPONSORII PRINCIPALI AI LUI NICUSOR DAN! AM FOST SI RAMAS SINGURA DIN ROMANIA CARE V A SPUS DESPRE LOVITURA DE STAT DATA DE PENSATI PRIN CREAREA SI FINANTAREA VALULUI CÃCÃLIN, CU PARTICIPAREA LU SIEMION, PENTRU ADUCEREA LUI NICUSOR! REMUS BORZA cul DAN OSTAHIE NICOLAE CIUCA ORA 22:04 ORA 22:06 LOCATIA: CERCUL MILITAR gandul.ro IMAGINI EXCLUSIVE | Cină de taină de 3 ore: candidatul la Președinție Ciucă, miliardarul A... 370`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-37',
+                text: `19:00 \ •0ll 74 • 41m ... X FÂSU LU BIBI E DE LA ACEEASI FABRICACA TRICOU LU ZELEVOGUE!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-38',
+                text: `12:15 93 < Dana Budeanu • 9 apr. • .•• SI DUPA DOI ANI, LUI PREA TARZIU I SE FACE ALT PARTID SI AU INCALECAT PE O SA SI AU FOLOSIT TOATE CONSERVELE GARNIZOANELOR PENTRU NICUSOR DAN! PS: INAINTE SA MAI MERGETI CA PROSTII LA VOT, NU UITATI CA AM FOST, SUNT SI VOI RAMANE SINGURA DIN ROMANIA, CARE V A EXPLICAT CA REZISTII SI SUVERANISTII SUNT UNII SI ACEIASI!!!! O MIZERIE SUSTINUTA DE PRESA DE DOI BANI, DIN PATRU N PATRU ANI! lorian Coldea Vasile Dincu Radu Popa Claudiu Târziu STASA A FOST! adul mdul Sâmbătă, 27 mai 2023 gandul.ro IMAGINI EXCLUSIVE. Coldea, Dîncu & finuțul Popică au prânzit cu doamnele la libanez! Cl...`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-39',
+                text: `13:40 •Ill 65 • 4h ... X BAI DECI GATA A VORBIT CALIN FILE DIN POVESTE IN AMERICA SI LUCRURILE NU RAMAN ASA AM INTELES DECI NU MAI SUNTEM SUVERANI? CU CINE A VORBIT CA VREAU SA SUN SI EU SA NE FACA SI NOUA CU LUMINITE FRUMOS ASA IN BUCURESTI!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-40',
+                text: `20:32 • | 20• • 9h X SA RAMANA SCRIS REAMINTESC DANA BUDEANUIL A FOST SINGURA' DIN 'ROMANIA» CARE A SPUS CĂCĂLIN GEORGESCU ESTE CANDIDATUL LUI HOHHANIS SI A SISTEMULUI LUT!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-41',
+                text: `10:01 .ll 42 Dana Budeanu o Chiar acum • O ••• VA VORBESTE #HURSULASUVERANISTA! IN TRADUCERE E BINE SA DAM 5% DIN PIB PÃ HARME LA NATO, NU I ASA HÃUREL? FRATELE LU NICUSOR DAN, ATAT DE PROSTI VA CREDE! AHAHAHAHA! PS: BAI, AMETITULE LASA L PÃ TRUMP, CA NU STIE CINE ESTI! IN ACEASTA ORDINE DE IDEI, STII DIFERENTA DINTRE ARMATA NATO SI ARMATA RUSIEI? ASA CA FAPT DIVERS LA MISTO? NU! CULCA TE SI CAND TE TREZESTI, VEZI CE MAI ARE NEVOIE FRATELE TAU NICUSOR PE CARE L AI PUS PRESEDINTE! George Simion • • Urmărește 2z• Dorim PACE. O vom obține numai prin umbrela de securitate NATO și cu aliații noștri strategici, Statele Unite și Polonia. Triada este soluția viitorului în Europa: Singura țară care luce Rusia la masa`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-42',
+                text: `23:40 - MESAJ DE LA Ionut D ana Budeanu noiembrie 2024: "Lasoni si Cacalin sunt candidatul sistemului." Dana Budeanu decembrie 2024: "Nicusor candidatul sistemului, candidatul lui Hoha." Lasconi si-a facut treaba, s-a "detonat" in favoarea lui Nicusor. Urmeaza si cealalta conserva sa isi faca treaba.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-43',
+                text: `19:23 : •ll 94 • 1h > VICEPRESEDINTA VENEZUELEI E LA MOSCOVA SE UITA CA LA NETFLIX CU LAVROV JOACA TABLE! •.. ABIA ASTEPT DE LUNI HANALISTII POLITICI DE LA NOI PE LA TEVEURI! LUATI VA DRECU VERDICT APP DANA BUDEANU CITITI ULTIMII TREI ANI CA SA NU VA MAI FACETI DE KKT CONTINUU!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-44',
+                text: `00:16 A .ll 4G (80 thesite.ro Q Politică Economie Sănătate Tehnologie Barometru Opinie Analiza poziționării figurilor publice din România Vezi toți D Dana Budeanu Influencer / Critic de modă Mircea Badea Realizator TV Victor C Jurnali: S Actualizează știrile Surse Active thesite.ro agregă știri din 42 surse pentru o perspectivă thesite.ro`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-45',
+                text: `13:50 • 2h ... 58 X SISTEMU A DAT ORDIN 10% PE LISTE SUPLIMENTARE DIN TOTAL CU DREPT DE VOT PESTE TOT! PRIVITI CA SA STITI SA GANDITI!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-47',
+                text: `16:44 •Il 52}' dan Dana Budeanu e`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-48',
+                text: `13:42 0 | 82)' Dana Budeanu • Chiar acumi • ATAT DE PROSTI VA CRED! V AM SPUS CA E O HARNEALA FACUTA CA SANCHI SA CREEZE VALU SUVERANIST, UN ANTEMERGATOR SOCIAL DUS IN EXTREMISM INTENTIONAT, PENTRU A BATATORI CALEA PROGRESISTA! SINGURA DIN ROMANIA CARE V A EXPLICAT! E RETETA! S A MAI FACUT SI N UK SI N FRANTA... stiripesurse.ro • 18m • Asociația „Pământul Strămoșesc", fondată de Călin Georgescu în toamna anului 2021, a fost oficial dizolvată în data de 6 iunie 2025. Anunțul a fost făcut printr-un mesaj publicat pe pagina oficială de Facebook a organizației, în care fondatorii vorbesc despre „lucrarea" lor ca despre o misiune spirituală ce continuă dincolo de existența juridică.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-51',
+                text: `MESAJ DE LA Ionut D ana Budeanu noiembrie 2024: "Lasoni si Cacalin sunt candidatul sistemului." Dana Budeanu decembrie 2024: "Nicusor candidatul sistemului, candidatul lui Hoha." Lasconi si-a facut treaba, s-a "detonat" in favoarea lui Nicusor. Urmeaza si cealalta conserva sa isi faca treaba.`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-52',
+                text: `.•• - CATI PROSTI SUNT IN ROMANIA SI UNDE? - LA ORASE 40% FOLOSESC CHATGPT! - MULTUMESC! - PENTRU PUTIN!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-53',
+                text: `13:50 .00l 58 • 10h ... X SVIMSFIPDMR НОННА ATI JUCAT FASOLE TECI CĂCĂLIN TARA SIEMION MUCISOR CEI DIN LA ZARURI! GARNIZOANE CARE AU TRADAREA TRADAT DE GLIE REZERVISTII SE PLATESTE CU VIATA!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-55',
+                text: `13:50 58 Dana Budeanu e Chiar acum • HAUR PESEDE ATI VAZUT ASTEA SAU ATI PLECAT DIN SECTII LA PRANZ? V AU CHEMAT NEVESTELE ACASA, MAFIOTILOR? SA MOARA FRANTA ASTIA S NUMA 186 187 PE LISTE SUPLIMENTARE! BAEJNEBUN? 86 - 87 CAND STATEAM LA RAND LA LAPTE! HOTILOOOOOOR! 69000 DE VOTURI PE LISTE SUPLIMENTARE N IASI! 8 Mai 2025 ₴ VANATORI Inscriși pe liste permanente Secti de votare Votanți pe liste permanente Votanti pe liste suplimentare Votanți cu urnà mobils Total votant s.s0u ngã la vot 8 Vot nte Eh Secti de votarel 36.26 * GRAJDUR inscriși pe liste permanente Sectil de volate Votanti ne liste permanente Votanti no licte cuntimentare Vatanti eutuna mobila Totat votanti Seati de votare Votanți pe liste permanen BT) @PEelve EVE 49.76 %`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-56',
+                text: `00:42 8 •Ill 44 • 7h • • • SEFII LA LUME SI AU IMPARTIT EUROPA TRUMP PUTIN XI AU HOTARAT CA ROMANIA SA REVINA FRANTEI LA MULS AKA MUE! RESTUL E CANCAN!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-57',
+                text: `10:31 .0l • 26m ... X MESAJ DE LA Letters from D to Dana A stăzi India-Pakistan, mâine Grecia- • Turcia, poimâine Taiwan, mai e și Siria. 'US wants UK military to focus more on Europe and away from Asia' - deja 2 'războaie' dintr-un titlu decise tot da șefii la lume astazi s-a postat si in FT ce se știa pe aplicația din 2022 singurul loc unde se spune adevărul și oamneii traiesc frumos liniștiți, iar prostii de mira și fac politică pa Insta. Ador și mulțumim`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-58',
+                text: `18:56 64 < Posts • GEORGESCU ESTE O CONSERVA A SISTEMULUI ARUNCAT IN OCHII OAMENILOR LA MISTO CA SA FACA LOC CANDIDATULUI SISTEMULUI IN FINAL! LA FEL AU FACUT SI CU SIEMION! ... 693 • 7 11 April • S •`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-59',
+                text: `17:23 62) < Dana Budeanu o 2m • SINGURA CARE V A SPUS CA FATALAU E PRIMARU LU TRUMP! MAINE SE DUCE N GENUNCHI PANA LA SEFU LUI! ••• Dana Budeanu e 5 nov. • O ALL RISE FOR THE FINAL COUNTDOWN TOWARDS THE FALL OF THE DEMOCRAT S ESTABLISHMENT! OMUL LUI TRUMP AJUNGE PRIMAR LA NY! ASA CUM PROGRESISMUL COORDONAT DE PUTIN SI US A INGROPAT EUROPA! DACA PROSTIA AR DUREA ATI FI TOTI LA ATI! Donald J. Trump • O @realDonaldTrump • 4h TRUTI ND SO IT BEGINS! | 4.81k g 4K 14.2k`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-60',
+                text: `ACUM DOUA SAPTAMANI ELVETIA A REFUZAT SA PREDEA CONTROLUL TARII CATRE PALANTIR! O916 Q 5 24 138 RESTU E...COLECTIV!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-61',
+                text: `SINGURA DIN ANU ASTA ROMANIA 'FIRMA' DE PROD CARE VA EXPLICAI ĂNTOLD CA PARANGHELIILE A 'LUCRAT" ÄNTOLDSI LA PLAJA PLEASE! SUNT CONTROLATE DE GARNIZOANE LOGIC PROSTILOR! 800 UN COPIL RÃRÃIT CU MAYBACH SAU UN PUI DE SECURIST CARUIA I SE CLASEAZA UN DOSAR DE PEDOFILIE, NU DETIN NIMIC...E FIRESC... RESTU E...CACAN! PS: BA DA, CONTEAZA ENORM CE MUZICA ASCULTI, ACEASTA MODELEAZA MINTI SI SUFLETE! MUZICA UNDERGROUD, IN SPETA SI HIP HOP UL HARDCORE, D AIA SE SI ASCULTA "PE ASCUNS", ASTA E IDEEA... AROGANTA VOASTRA ACOPERA DOAR IGNORANTA!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-62',
+                text: `20:49 For you v + Your story mariaoprina sandra. ... CRED ULTRASINLU CASALIN RA CAL ATAT UNDE SUNT? CUM UNDE? LA NICUSOR! SUNT ACEIASI V AM MAI EXPLICAT! 213 4 hours ago Q`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-63',
+                text: `23:31 д v 65 ... < Dana Budeanu o 1m • ••• ATAT DE PROSTI VA CRED! CITITI CA SA STITI SA GANDITI! Dana Budeanu • 2 iun. • O 1. SEFII LA LUME ISI IMPART TARILE DE SCLAVI CA MEREU IN ISTORIE: DPDV POLITIC, ECONOMIC ETC! 2. URLU DIN 2021, PUBLIC SI MULT MAI APLICAT PE VERDICT APP DANA BUDEANU! 3. V AM EXPLICAT CA, PESTE TOT IN EUROPA S A ORGANIZAT LA ORDIN, ODATA CU INCEPEREA MASCARADEI NUMITA PANDEMIE, O MISCARE SANCHI SUVERANISTA GENERALA, CARE SA DEA SENZATIA PROSTILOR, CA CINEVA SE LUPTA PENTRU EI, IN TIMP CE ACESTIA TREBUIE SA STEA CUMINTEI IN CASA SI SA ASTEPTE CA SEFII LA LUME, SA DESENEZE NOUA HARTA! 4. AM FOST SI RAMAS SINGURA DIN ~ 805 5 days ago`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-64',
+                text: `23:31 8 64 • 4. AM FOST SI RAMAS SINGURA DIN ROMANIA CARE V A SPUS DIN ZIUA UNU CA SIEMION E O CONSERVA CREATA TOCMAI PENTRU ACEST SCENARIU, IAR CÃCÃLIN ESTE DOAR ANTEMERGATORUL LUI NICUSOR, INTERFATA PESTEI PROGRESISTE, CARE SE CHINUIE DE 35 DE ANI SA SE INSTALEZE PERMANENT IN ROMANIA! 5. ATI HALIT CU POLONICU SI #REZIST SI #SUVERANIST SI #MUEPSD! DE CE? PENTEU CA SUNTETI MANIPULATI CA NISTE CARPE, PENTRU CA VA DUCETI DUPA ORICE VAL, PENTRU CA STATI PRAJITI PE NET, PENTRU CA NU STITI CE S ALEA REGIM COMUNIST SI DICTATURA SI CREDETI CA ACESTEA SE POT MANIFESTA DOAR DACA TRAITI IN KOREA DE NORD! CEA MAI MARE DICTATURA E MANIPULAREA, ADICA INCHISOAREA MINTII! 6. DIN NOIEMBRIE V AM EXPLICAT SI AM URLAT CATRE TOATE AUTORITATILE STATULUI CA FENOMENUL #SUVERANIST SI AVATARUL CACALIN SUNT DOAR O LOVITURA DE STAT IMPOTRIVA O 805 5 days ago`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-65',
+                text: `< Dana Budeanu ® Chiar acum • O • VICTOR #REZIST ZIS SI MICU SECURIST, REGRETA DECIZIA! PAI RADE O DIN PSD SI DA I DRUMU LA USRI, UNDE A ADUNAT GARNIZOANA TOTI PUII DE COMUNISTI! NU VA E RUSINE, BAI, FATALAILOR! CE E AIA DECLARATIE DE AVERE, NETERMINATILOR? SA DAM CU SUBSEMNATU CU CE AVEM PRIN CASA SI PRIN CONTURI? UNDE SUNTEM? IN KOREA DE NORD? UNDE ATI INVATAT SA GANDITI ASA, LINGAILOR? CUM SA DAM CU SUBSEMNATU? MARS IN COMUNISM! URLU DE 10 ANI PE ACEASTA TEMA IMBECILA, DEMNA DE UN STAT DICTATORIAL!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-66',
+                text: `00:58 m Dana Budeanu PENTRU ALTII! BAI NENOROCITILOOOIOOOR! DULE VA VOIL NOI SUNTEM CARNE DE TUN! CUM ADICA SANE APARAMI DE CINE? DE RUSII DIN SLAVA? CE TREABA AVEM NOI BAI INCHIPUHTILUR! Author grae Average influencer... 340 votes, 170 comments.... • imediat dupa ce noul Papa a fost anuntat --- Dana a postat pe Instagram story o poza cu Trump generata cu Al, unde Trump apare drept Papa (poza a fost postata de Trump cu ceva gen 1-2 saptamani inainte) • avand in vedere o recurenta a caracterului conspirationist al Danei (vaccin, great reset stuff etc.) --- probabil vrea sa spuna ca Trump a avut o influenta in punerea Papei ?! • de notat este ca noul Papa avea Tweeterul plin de postari anti JD Vance (vicepresedintele Americii + Insert`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-67',
+                text: `09:02 13 Dana Budeanu o na Chiar acum •`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-68',
+                text: `09:45 Afshin Rattansi C @afshinrattansi Secretary of War Pete Hegseth: 'European countries buy US weapons, transfer them to NATO for the fight in Ukraine.' The US makes all the money, Europe bankrupts itself for Washington's proxy war, and Ukrainians keep dying for the failed goal of weakening Russia.' ••. NATO OTAN •TATO I1 0:29 Oskabeeva NATO OTAN AHAHAHAHA! DANA BUDEANU PE 9 IULIE I A VICTAR CIUTACU! @Youtu.be AZI SECRETARU PA RAZBOI! PS: ATAT DÃ PROSTI VA CRED BOLOVAN SI RESTU!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică Externă',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-69',
+                text: `13:59 - 30 Dana Budeanu o Chiar acum • O ••• "E FOAME DÃ BANI, E FOAME DÃ BANI BAIETI! LUMEA TRE SA STIE CE FEL DE BAIETI SUNTETI!" FAIN SI SIMPLU A PUS? Ionut Cristache 21h • Breaking News! A venit si punctajul la deontologi! lancu Guda (IQ) Florin Negruțiu e`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-70',
+                text: `23:57 P • 9h SINGURA DIN ROMANIA CARE V A SPUS CA MISIUNEA LU HOHHA A FOST ACEEA DE A DUSTRUGE PNL SI POLUL DE DREAPRA SI ALDA LA NETERMINATII A REUSIT! • 0`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-71',
+                text: `09:52 •Ill 51 • 13h SI TOATE AMETITELE NE POVESTESC TRAUMELE LOR LOR DE RATEURI STITI DE CE MA CA SA STIE SI ALTE AMETITE CA NU SUNT SIGURE IN CRETINISM MA! MARS NETERMINATELOR!`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-73',
+                text: `00:24 m 34 v Dana Budeanu c Chiar acum •`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'db-ig-auto-74',
+                text: `08:31 8 •00l 100 < v Dana Budeanu e 2m • Patrick André de Hillerin e 51m • Din punctul meu de vedere, materialul jurnalistic al recorder s-a oprit în minutul 12 și 15 secunde, când am observat în colțul din stânga sus al ecranului mențiunea "INTERVIU RECONSTITUIT". Din acel moment nu mai este vorba despre un material jurnalistic, despre un documentar, ci despre orice altceva. Poate fi o piesă de teatru în care un actor recită ceva ce i s-a dat să recite, poate fi orice, dar material jurnalistic nu este, îmi pare rău. ulube Search Q NTERVIU RECONST + Create O recorder Trimite un cadou ire judecătorul de drepturi și libertăți 12:15 / 2:00:09 cc`,
+                date: '2026-03-01',
+                sourceUrl: 'https://www.instagram.com/danajustlove/',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'right'
             }
+        
         ]
     },
     {
