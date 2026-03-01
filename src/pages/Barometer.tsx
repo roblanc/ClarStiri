@@ -55,7 +55,7 @@ const Barometer = () => {
                                     <img
                                         src={figure.image}
                                         alt={figure.name}
-                                        className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+                                        className="w-full h-full object-cover transition-all duration-500"
                                         loading="lazy"
                                     />
                                 </div>
@@ -93,7 +93,7 @@ const Barometer = () => {
                                             }}
                                         />
                                     </div>
-                                    <div className="flex justify-between text-[7px] font-black uppercase tracking-tighter text-muted-foreground/40 mt-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="flex justify-between text-[7px] font-black uppercase tracking-tighter text-muted-foreground/40 mt-1">
                                         <span>Stânga</span>
                                         <span>Dreapta</span>
                                     </div>
