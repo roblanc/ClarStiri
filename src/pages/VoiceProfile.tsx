@@ -141,19 +141,18 @@ const VoiceProfile = () => {
                             </div>
                         </section>
 
-                        <details className="group [&_summary::-webkit-details-marker]:hidden border-t border-border/40" open>
-                            <summary className="flex items-center justify-between cursor-pointer list-none py-8 hover:opacity-80 transition-opacity">
-                                <h2 className="text-2xl font-anthropic font-bold">
-                                    Verdicte & Declarații <span className="text-muted-foreground text-xl italic ml-2">({displayStatements.length})</span>
+                        <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                            <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
+                                <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
+                                    Verdicte & Declarații <span className="text-muted-foreground text-sm xl:text-lg font-normal ml-2">({displayStatements.length} declarații)</span>
                                 </h2>
-                                <div className="w-8 h-8 rounded-full border border-border/40 flex items-center justify-center group-open:rotate-180 transition-transform duration-300">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
+                                <div className="w-6 h-6 shrink-0 relative flex items-center justify-center text-primary ml-4">
+                                    <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300"></div>
+                                    <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300 rotate-90 group-open:rotate-0"></div>
                                 </div>
                             </summary>
 
-                            <div className="space-y-4 animate-in fade-in duration-500 pb-12">
+                            <div className="space-y-4 animate-in fade-in duration-500 p-6 pt-0 border-t border-border/40 pb-8 bg-card">
                                 {displayStatements.map((statement, idx) => (
                                     <div key={statement.id || idx} className="py-10 border-b border-border/30 last:border-0 group">
                                         <div className="flex flex-col gap-4">
