@@ -98,47 +98,72 @@ const VoiceProfile = () => {
                             <p className="leading-relaxed text-foreground font-anthropic text-xl md:text-2xl pt-2">{figure.description}</p>
 
                             {figure.contextNotes && figure.contextNotes.length > 0 && (
-                                <div className="p-6 bg-muted/30 border border-border/40 rounded-sm">
-                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-4">Note de Context</h3>
-                                    <ul className="space-y-3">
-                                        {figure.contextNotes.map((note, i) => (
-                                            <li key={i} className="text-sm text-foreground/80 leading-relaxed font-anthropic flex gap-3 pb-2 border-b border-border/20 last:border-0 last:pb-0">
-                                                <span className="text-primary mt-1 opacity-50 text-[10px]">■</span>
-                                                <span className="flex-1">{note}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
+                                <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                                    <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
+                                        <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
+                                            Note de Context
+                                        </h2>
+                                        <div className="w-6 h-6 shrink-0 relative flex items-center justify-center text-primary ml-4">
+                                            <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300"></div>
+                                            <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300 rotate-90 group-open:rotate-0"></div>
+                                        </div>
+                                    </summary>
+
+                                    <div className="space-y-4 animate-in fade-in duration-500 p-6 pt-6 border-t border-border/40 bg-card">
+                                        <ul className="space-y-3">
+                                            {figure.contextNotes.map((note, i) => (
+                                                <li key={i} className="text-base text-foreground/80 leading-relaxed font-anthropic flex gap-3 pb-3 border-b border-border/20 last:border-0 last:pb-0">
+                                                    <span className="text-primary mt-1.5 opacity-50 text-[10px]">■</span>
+                                                    <span className="flex-1">{note}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </details>
                             )}
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-border/40">
-                                <div>
-                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Ținte Predilecte</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {figure.targets.length > 0 ? (
-                                            figure.targets.map((target) => (
-                                                <span key={target} className="text-xs font-medium border border-border/40 px-3 py-1.5 rounded-full text-foreground/80">{target}</span>
-                                            ))
-                                        ) : (
-                                            <span className="text-xs text-muted-foreground font-anthropic italic">Nimeni în special</span>
-                                        )}
+                            <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                                <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
+                                    <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
+                                        Profil Analitic <span className="text-muted-foreground text-sm xl:text-lg font-normal ml-2">(Ținte & Retorică)</span>
+                                    </h2>
+                                    <div className="w-6 h-6 shrink-0 relative flex items-center justify-center text-primary ml-4">
+                                        <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300"></div>
+                                        <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300 rotate-90 group-open:rotate-0"></div>
                                     </div>
-                                </div>
+                                </summary>
 
-                                <div>
-                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Tonul Discursului</h3>
-                                    <div className="space-y-4 max-w-sm">
-                                        <div className="flex justify-between items-center text-sm">
-                                            <span className="font-medium text-foreground/80">Agresivitate verbală</span>
-                                            <span className="font-anthropic italic text-lg">{figure.rhetoric.aggressiveness}%</span>
+                                <div className="animate-in fade-in duration-500 p-6 pt-6 border-t border-border/40 bg-card">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                                        <div>
+                                            <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Ținte Predilecte</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {figure.targets.length > 0 ? (
+                                                    figure.targets.map((target) => (
+                                                        <span key={target} className="text-sm font-medium border border-border/40 px-3 py-1.5 rounded-full text-foreground/80 font-anthropic">{target}</span>
+                                                    ))
+                                                ) : (
+                                                    <span className="text-sm text-muted-foreground font-anthropic italic">Nimeni în special</span>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className="flex justify-between items-center text-sm">
-                                            <span className="font-medium text-foreground/80">Ironie / Sarcasm</span>
-                                            <span className="font-anthropic italic text-lg">{figure.rhetoric.irony}%</span>
+
+                                        <div>
+                                            <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Tonul Discursului</h3>
+                                            <div className="space-y-4 max-w-sm">
+                                                <div className="flex justify-between items-center text-sm border-b border-border/20 pb-2">
+                                                    <span className="font-medium text-foreground/80 font-anthropic">Agresivitate verbală</span>
+                                                    <span className="font-anthropic font-bold text-lg">{figure.rhetoric.aggressiveness}%</span>
+                                                </div>
+                                                <div className="flex justify-between items-center text-sm">
+                                                    <span className="font-medium text-foreground/80 font-anthropic">Ironie / Sarcasm</span>
+                                                    <span className="font-anthropic font-bold text-lg">{figure.rhetoric.irony}%</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </details>
                         </section>
 
                         <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
