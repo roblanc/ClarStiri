@@ -144,7 +144,10 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         const rawTitle = item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const rawDescription = item.querySelector('description')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const link = item.querySelector('link')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
+        const pubDate = item.querySelector('pubDate')?.textContent?.trim() ||
+            item.querySelector('published')?.textContent?.trim() ||
+            item.querySelector('updated')?.textContent?.trim() ||
+            item.querySelector('dc\\:date')?.textContent?.trim() || '';
         const author = item.querySelector('dc\\:creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
             item.querySelector('creator')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() ||
             item.querySelector('author')?.textContent?.trim();
@@ -372,6 +375,7 @@ export async function fetchNewsWithCache(): Promise<{
 export function getTimeAgo(pubDate: string): string {
     const now = new Date();
     const published = new Date(pubDate);
+    if (isNaN(published.getTime())) return '';
     const diffMs = now.getTime() - published.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);

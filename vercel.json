@@ -14,12 +14,6 @@
             "maxDuration": 15
         }
     },
-    "crons": [
-        {
-            "path": "/api/cron/refresh-news",
-            "schedule": "0 6 * * *"
-        }
-    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
