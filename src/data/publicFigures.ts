@@ -382,15 +382,6 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'right'
             },
             {
-                id: 'db-ig-auto-32',
-                text: `11:00 39 yyyyyyyekaterina 29m ••• X Ecaterina Elena Lupu 1m • recunosc că și eu scriu în CV: instrument - pian deşi nu am mai cântat de mai bine de zece ani Dana Hering 44m • Deci Georgescu asta e un fake perfect. Jobul la ONU, nu era la ONU ci la o fundatie privata. United Nations Global Sustainable Index Institute (UNGSII) este o fundație înființată în 2014 ce nu are vreo legătură directă cu ONU, nu face parte din ONU, ci doar susține inițiativele ONU. Adresa UNGSII nu este la Biroul ONU din Geneva, cum a trecut Călin Georgescu în CV, ci în Gebertingen, un sat din Elveția, aflat la aproape 185 de kilometri de Geneva. articol Adevărul EXCLUSIV Informațiile false din CV-ul lui Călin Georgescu. A seris că a lucrat la un institut al ONU, însa în realitate e o fundație privată Alegeri prezidențiale 2024 ° Denis Grigorescu 15 live V VR • Publicat: 29.11.2024 01:30 În CV-ul public al lui Călin Georgescu apare un job din perioada 2015-2016, care la prima vedere sună pompos și impresionant: "director executiv și consilier special al directorului general ONU de la Geneva". După o minimă verificare pe internet, se poate constata că e vorba de o fundație. • •• Send message...`,
-                date: '2026-03-01',
-                sourceUrl: 'https://www.instagram.com/danajustlove/',
-                topic: 'Politică',
-                impact: 'medium',
-                bias: 'right'
-            },
-            {
                 id: 'db-ig-auto-33',
                 text: `22:38 - •00l 70 • 23h •.. X MISCARILE CAND SANCHI VAD SUVERANISTE ATATA PROSTIE NASCUTE IN JUR ROSTOGOLITE iMI CrESTE INTRETINUTE INIMA DE EXCLUSIV BUCURIE! DE PLATFORMELE SOCIAL MEDIA SOROSISTE!`,
                 date: '2026-03-01',
@@ -723,7 +714,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 impact: 'medium',
                 bias: 'right'
             }
-        
+
         ]
     },
     {
