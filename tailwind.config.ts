@@ -22,6 +22,7 @@ export default {
         sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
         serif: ["Playfair Display", "Georgia", "serif"],
         title: ["VICE Grotesk", "Helvetica", "Arial", "sans-serif"],
+        anthropic: ["Newsreader", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
