@@ -1080,5 +1080,56 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'right'
             }
         ]
+    },
+    {
+        id: 'calin-georgescu',
+        slug: 'calin-georgescu',
+        name: 'Călin Georgescu',
+        role: 'Fost Candidat Prezidențial (Independent)',
+        image: '/images/voices/calin-georgescu.jpg',
+        bias: {
+            leaning: 'right',
+            score: 95,
+            description: 'Figură proeminentă a curentului ultranaționalist, suveranist și antieuropean. Discursul său capătă frecvent accente de extremă dreapta, mistice, mesianice și este critic cu adresa NATO și UE. În timpul scurtei dar intensei sale ascensiuni politice din 2024, a minimalizat asistența vestică și a avut un discurs adesea considerat de experți ca fiind pro-rus.'
+        },
+        description: 'Călin Georgescu a generat un șoc masiv în politica românească spre finalul anului 2024, reușind, din poziția de candidat independent susținut exclusiv de o vastă campanie pe TikTok și de o rețea de influenceri suveraniști, să câștige primul tur al alegerilor prezidențiale. Ascensiunea sa a fost însă urmată de o decizie fără precedent a Curții Constituționale de a anula scrutinul din cauza suspiciunilor majore de manipulare cibernetică coordonată și acțiuni ale unui actor statal străin. În urma presiunilor publice și anchetelor demarate de Parchetul General, Georgescu și-a anunțat în luna mai 2025 retragerea din politica activă, declarându-se un simplu „observator” al vieții sociale.',
+        socialLinks: {
+            tiktok: 'https://tiktok.com/@calingc',
+            youtube: 'https://youtube.com/calingeorgescu'
+        },
+        targets: ['Sistemul Euro-Atlantic (NATO/UE)', 'Clasa Politică Tradițională (PNL/PSD)', 'Corporatismul Globalist', 'Scutul de la Deveselu'],
+        rhetoric: { aggressiveness: 40, irony: 20 },
+        contextNotes: [
+            'Fost Raportor Special ONU privind deșeurile toxice și propunere repetată de premier din partea partidului AUR (înainte de a se distanța de George Simion și a candida independent).',
+            'Victoria sa surprinzătoare din turul 1 al prezidențialelor din anul 2024 (22.9%) a declanșat o criză națională și constituțională de proporții, culminând cu anularea alegerilor prin hotărârea CCR (decembrie 2024).',
+            'Campania sa, derulată cu sloganuri precum „Hrană-Apă-Energie”, s-a bazat masiv pe mesaje algoritmice pe rețeaua chineză TikTok și a prezentat repetat elemente de misticism, conservatorism ortodox și simpatie declarată față de figuri legionare istorice (precum Corneliu Zelea Codreanu).',
+            'Pe 26 mai 2025, în contextul mai multor anchete penale ce implicau finanțarea obscure a campaniei, s-a retras oficial din peisajul politic, invocând dorința de a nu face parte din „stricăciunea sistemului partinic”.'
+        ],
+        statements: [
+            {
+                id: 'cg-statement-1',
+                text: 'Scutul de la Deveselu este o rușine diplomatică! Nu ne apără de nimic, ne atrage doar într-un conflict care nu este al nostru. Pacea României se garantează prin neutralitate, nu prin slugărnicie față de interese străine.',
+                date: '2024-11-20',
+                sourceUrl: 'https://tiktok.com',
+                topic: 'Securitate',
+                impact: 'high',
+                bias: 'right',
+                factCheck: {
+                    text: 'Scutul de la Deveselu reprezintă una dintre componentele esențiale terestre (Aegis Ashore) ale sistemului defensiv anti-rachetă dezvoltat de NATO în Europa. Oficialii Alianței, cât și Pentagonul, au explicat în repetate rânduri la nivel internațional scopul strict defensiv al bazei.',
+                    sources: [
+                        { label: 'NATO - Deveselu', url: 'https://shape.nato.int/resources/site9316/general/factsheets/Aegis_Ashore_Romania_Factsheet_EN.pdf' }
+                    ]
+                }
+            },
+            {
+                id: 'cg-statement-2',
+                text: 'Fiecare om din această țară trebuie să aibă asigurat un pilon sfânt: Hrană. Apă. Energie. Sistemul politic ne-a vândut bogățiile timp de 35 de ani, iar eu vă spun că a venit timpul să ne luăm țara și demnitatea înapoi!',
+                date: '2024-11-15',
+                sourceUrl: 'https://tiktok.com',
+                topic: 'Suveranism',
+                impact: 'high',
+                bias: 'right'
+            }
+        ]
     }
 ];
