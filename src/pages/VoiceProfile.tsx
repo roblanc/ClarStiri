@@ -142,9 +142,14 @@ const VoiceProfile = () => {
                                                         Sursa <ExternalLink className="w-3 h-3" />
                                                     </StyledLink>
                                                 ) : (
-                                                    <span className="text-[11px] text-muted-foreground/70 inline-flex items-center gap-1 font-medium uppercase tracking-wide">
-                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')}
-                                                    </span>
+                                                    <StyledLink
+                                                        href={statement.sourceUrl}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase text-muted-foreground"
+                                                    >
+                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')} <ExternalLink className="w-3 h-3" />
+                                                    </StyledLink>
                                                 )}
                                             </footer>
                                         </blockquote>
