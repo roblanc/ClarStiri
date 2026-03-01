@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { PUBLIC_FIGURES, Statement } from "@/data/publicFigures";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2, Target, Zap, AlertTriangle } from "lucide-react";
+import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2, Target, Zap, AlertTriangle, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { StyledLink } from "@/components/ui/styled-link";
@@ -252,6 +252,54 @@ const VoiceProfile = () => {
                                 ))}
                             </div>
                         </details>
+                    </div>
+                </div>
+
+                {/* Secțiune nouă: Influenceri Similari / Sugerați */}
+                <div className="mt-20 pt-10 border-t border-border/40">
+                    <h2 className="text-xl md:text-2xl font-anthropic font-bold mb-8 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-primary" /> Profile Similare Analizate
+                    </h2>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                        {PUBLIC_FIGURES.filter(f => f.id !== figure.id)
+                            .sort((a, b) => Math.abs(a.bias.score - figure.bias.score) - Math.abs(b.bias.score - figure.bias.score))
+                            .slice(0, 4)
+                            .map(suggested => (
+                                <Link
+                                    key={suggested.id}
+                                    to={`/voce/${suggested.slug}`}
+                                    className="group flex flex-col h-full items-center text-center py-6 px-2 hover:opacity-80 transition-all duration-300 bg-card rounded-md border border-border/40 shadow-sm"
+                                >
+                                    <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
+                                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden transition-all shadow-sm p-[3px] border border-border/40 group-hover:border-primary/20">
+                                            <div className="w-full h-full rounded-full overflow-hidden bg-muted/20">
+                                                <img
+                                                    src={suggested.image}
+                                                    alt={suggested.name}
+                                                    className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background shadow-sm
+                                            ${suggested.bias.leaning.includes('left') ? 'bg-blue-500' :
+                                                suggested.bias.leaning.includes('right') ? 'bg-red-500' : 'bg-purple-500'}`}
+                                        />
+                                    </div>
+
+                                    <div className="flex flex-col flex-1 w-full justify-between items-center">
+                                        <div className="mb-2 w-full">
+                                            <h3 className="font-bold text-lg sm:text-[19px] transition-colors leading-tight mb-1 font-anthropic truncate">
+                                                {suggested.name}
+                                            </h3>
+                                        </div>
+                                        <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground mt-1">
+                                            {suggested.bias.leaning.replace('-', ' ')}
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
                     </div>
                 </div>
             </main>
