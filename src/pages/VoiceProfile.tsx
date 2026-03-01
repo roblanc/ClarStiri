@@ -4,7 +4,6 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles, Loader2, Target, Zap, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
-import { useQuery } from "@tanstack/react-query";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,21 +12,6 @@ import { Progress } from "@/components/ui/progress";
 const VoiceProfile = () => {
     const { slug } = useParams();
     const figure = PUBLIC_FIGURES.find(f => f.slug === slug);
-
-    const { data: dynamicData, isLoading: isLoadingDynamic } = useQuery({
-        queryKey: ['voice-analysis', figure?.name],
-        queryFn: async () => {
-            if (!figure) return null;
-            const res = await fetch(`/api/analyze-voice?name=${encodeURIComponent(figure.name)}&slug=${figure.slug}`);
-            if (!res.ok) {
-                console.error('API Error');
-                return null;
-            }
-            return res.json() as Promise<{ statements: Statement[] }>;
-        },
-        enabled: !!figure,
-        staleTime: 1000 * 60 * 60 * 24, // 24 hours cache
-    });
 
     if (!figure) {
         return (
@@ -43,9 +27,7 @@ const VoiceProfile = () => {
         );
     }
 
-    const displayStatements = dynamicData?.statements && dynamicData.statements.length > 0
-        ? dynamicData.statements
-        : figure.statements;
+    const displayStatements = figure.statements;
 
 
     const score = figure.bias.score;
@@ -132,18 +114,13 @@ const VoiceProfile = () => {
                     <div className="lg:col-span-2 space-y-8">
                         <section className="bg-primary/5 p-6 rounded-2xl border border-primary/10">
                             <h3 className="text-lg font-bold mb-3 flex items-center">
-                                <Sparkles className="w-5 h-5 mr-2 text-primary" /> Analiză Voice
+                                <Sparkles className="w-5 h-5 mr-2 text-primary" /> Profil Public
                             </h3>
                             <p className="text-muted-foreground leading-relaxed text-sm md:text-base">{figure.description}</p>
                         </section>
 
                         <div className="flex items-center justify-between mb-2">
                             <h2 className="text-2xl font-serif font-bold">Verdicte & Declarații</h2>
-                            {isLoadingDynamic && (
-                                <Badge variant="secondary" className="animate-pulse flex items-center gap-1">
-                                    <Loader2 className="w-3 h-3 animate-spin" /> Actualizare AI
-                                </Badge>
-                            )}
                         </div>
 
                         <div className="space-y-4">
