@@ -696,15 +696,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 impact: 'medium',
                 bias: 'right'
             },
-            {
-                id: 'db-ig-auto-73',
-                text: `00:24 m 34 v Dana Budeanu c Chiar acum •`,
-                date: '2026-03-01',
-                sourceUrl: 'https://www.instagram.com/danajustlove/',
-                topic: 'Politică',
-                impact: 'medium',
-                bias: 'right'
-            },
+
             {
                 id: 'db-ig-auto-74',
                 text: `08:31 8 •00l 100 < v Dana Budeanu e 2m • Patrick André de Hillerin e 51m • Din punctul meu de vedere, materialul jurnalistic al recorder s-a oprit în minutul 12 și 15 secunde, când am observat în colțul din stânga sus al ecranului mențiunea "INTERVIU RECONSTITUIT". Din acel moment nu mai este vorba despre un material jurnalistic, despre un documentar, ci despre orice altceva. Poate fi o piesă de teatru în care un actor recită ceva ce i s-a dat să recite, poate fi orice, dar material jurnalistic nu este, îmi pare rău. ulube Search Q NTERVIU RECONST + Create O recorder Trimite un cadou ire judecătorul de drepturi și libertăți 12:15 / 2:00:09 cc`,

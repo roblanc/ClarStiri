@@ -121,8 +121,14 @@ const VoiceProfile = () => {
                                         </p>
                                         <div className="flex items-center justify-between mt-4">
                                             <div className="flex items-center gap-2">
-                                                <div className={`w-1.5 h-1.5 rounded-full ${statement.bias === 'right' ? 'bg-red-500' : statement.bias === 'left' ? 'bg-blue-500' : 'bg-purple-500'}`} />
-                                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">{statement.bias}</span>
+                                                <div className={`w-1.5 h-1.5 rounded-full ${statement.bias.includes('right') ? 'bg-red-500' : statement.bias.includes('left') ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                                                <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
+                                                    {statement.bias === 'left' ? 'Stânga' :
+                                                        statement.bias === 'right' ? 'Dreapta' :
+                                                            statement.bias === 'center' ? 'Centru' :
+                                                                statement.bias === 'center-left' ? 'Centru-Stânga' :
+                                                                    statement.bias === 'center-right' ? 'Centru-Dreapta' : statement.bias}
+                                                </span>
                                             </div>
                                             {statement.articleUrl ? (
                                                 <a
