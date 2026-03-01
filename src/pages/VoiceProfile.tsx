@@ -94,118 +94,140 @@ const VoiceProfile = () => {
 
                     {/* Coloana Dreaptă: Declarații și Analiză */}
                     <div className="lg:col-span-2 space-y-8">
-                        <section className="mb-12">
+                        <section className="space-y-12 mb-12">
                             <p className="leading-relaxed text-foreground font-anthropic text-xl md:text-2xl pt-2">{figure.description}</p>
-                        </section>
 
-                        <div className="flex items-center justify-between mb-2">
-                            <h2 className="text-2xl font-anthropic font-bold">Verdicte & Declarații</h2>
-                        </div>
+                            {figure.contextNotes && figure.contextNotes.length > 0 && (
+                                <div className="p-6 bg-muted/30 border border-border/40 rounded-sm">
+                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-4">Note de Context</h3>
+                                    <ul className="space-y-3">
+                                        {figure.contextNotes.map((note, i) => (
+                                            <li key={i} className="text-sm text-foreground/80 leading-relaxed font-anthropic flex gap-3 pb-2 border-b border-border/20 last:border-0 last:pb-0">
+                                                <span className="text-primary mt-1 opacity-50 text-[10px]">■</span>
+                                                <span className="flex-1">{note}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
 
-                        <div className="space-y-4">
-                            {displayStatements.map((statement, idx) => (
-                                <div key={statement.id || idx} className="py-10 border-b border-border/30 last:border-0 group">
-                                    <div className="flex flex-col gap-4">
-                                        <div className="flex items-center flex-wrap gap-x-3 gap-y-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
-                                            <span>{statement.topic}</span>
-                                            <span className="opacity-50">•</span>
-                                            <span>{statement.date}</span>
-                                            {statement.impact === 'high' && (
-                                                <>
-                                                    <span className="opacity-50">•</span>
-                                                    <span className="text-red-500 flex items-center"><Zap className="inline w-3 h-3 mr-0.5" /> Impact Major</span>
-                                                </>
-                                            )}
-                                        </div>
-                                        <blockquote className="border-l-4 border-primary/20 pl-6 py-2 my-4 group-hover:border-primary/50 transition-colors">
-                                            <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-[22px] md:text-3xl selection:bg-primary/20">
-                                                "{statement.text}"
-                                            </p>
-                                            <footer className="flex items-center justify-between mt-6">
-                                                <div className="flex items-center gap-2">
-                                                    <div className={`w-1.5 h-1.5 rounded-full ${statement.bias.includes('right') ? 'bg-red-500' : statement.bias.includes('left') ? 'bg-blue-500' : 'bg-purple-500'}`} />
-                                                    <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
-                                                        {statement.bias === 'left' ? 'Stânga' :
-                                                            statement.bias === 'right' ? 'Dreapta' :
-                                                                statement.bias === 'center' ? 'Centru' :
-                                                                    statement.bias === 'center-left' ? 'Centru-Stânga' :
-                                                                        statement.bias === 'center-right' ? 'Centru-Dreapta' : statement.bias}
-                                                    </span>
-                                                </div>
-                                                {statement.articleUrl ? (
-                                                    <StyledLink
-                                                        href={statement.articleUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
-                                                    >
-                                                        Sursa <ExternalLink className="w-3 h-3" />
-                                                    </StyledLink>
-                                                ) : (
-                                                    <StyledLink
-                                                        href={statement.sourceUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase text-muted-foreground"
-                                                    >
-                                                        {new URL(statement.sourceUrl).hostname.replace('www.', '')} <ExternalLink className="w-3 h-3" />
-                                                    </StyledLink>
-                                                )}
-                                            </footer>
-                                        </blockquote>
-
-                                        {statement.factCheck && (
-                                            <div className="mt-[-8px] mb-4 ml-6 p-4 bg-primary/5 border border-primary/10 rounded-sm">
-                                                <div className="flex items-center gap-2 mb-2">
-                                                    <AlertTriangle className="w-3.5 h-3.5 text-primary" />
-                                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Context / Fact-Check</span>
-                                                </div>
-                                                <p className="text-sm leading-relaxed text-foreground/80 mb-3 font-anthropic">
-                                                    {statement.factCheck.text}
-                                                </p>
-                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                                                    {statement.factCheck.sources.map((src, i) => (
-                                                        <StyledLink key={i} href={src.url} target="_blank" rel="noopener noreferrer" className="text-[10px] items-center inline-flex gap-1 uppercase tracking-wide">
-                                                            {src.label} <ExternalLink className="w-2.5 h-2.5" />
-                                                        </StyledLink>
-                                                    ))}
-                                                </div>
-                                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8 border-t border-border/40">
+                                <div>
+                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Ținte Predilecte</h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {figure.targets.length > 0 ? (
+                                            figure.targets.map((target) => (
+                                                <span key={target} className="text-xs font-medium border border-border/40 px-3 py-1.5 rounded-full text-foreground/80">{target}</span>
+                                            ))
+                                        ) : (
+                                            <span className="text-xs text-muted-foreground font-anthropic italic">Nimeni în special</span>
                                         )}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
 
-                        {/* Secțiune nouă: Ținte & Retorică */}
-                        <section className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-12 border-t border-border/40">
-                            <div>
-                                <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Ținte Predilecte</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {figure.targets.length > 0 ? (
-                                        figure.targets.map((target) => (
-                                            <span key={target} className="text-xs font-medium border border-border/40 px-3 py-1.5 rounded-full text-foreground/80">{target}</span>
-                                        ))
-                                    ) : (
-                                        <span className="text-xs text-muted-foreground font-anthropic italic">Nimeni în special</span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Tonul Discursului</h3>
-                                <div className="space-y-4 max-w-sm">
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="font-medium text-foreground/80">Agresivitate verbală</span>
-                                        <span className="font-anthropic italic text-lg">{figure.rhetoric.aggressiveness}%</span>
-                                    </div>
-                                    <div className="flex justify-between items-center text-sm">
-                                        <span className="font-medium text-foreground/80">Ironie / Sarcasm</span>
-                                        <span className="font-anthropic italic text-lg">{figure.rhetoric.irony}%</span>
+                                <div>
+                                    <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-6">Tonul Discursului</h3>
+                                    <div className="space-y-4 max-w-sm">
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="font-medium text-foreground/80">Agresivitate verbală</span>
+                                            <span className="font-anthropic italic text-lg">{figure.rhetoric.aggressiveness}%</span>
+                                        </div>
+                                        <div className="flex justify-between items-center text-sm">
+                                            <span className="font-medium text-foreground/80">Ironie / Sarcasm</span>
+                                            <span className="font-anthropic italic text-lg">{figure.rhetoric.irony}%</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </section>
+
+                        <details className="group [&_summary::-webkit-details-marker]:hidden border-t border-border/40" open>
+                            <summary className="flex items-center justify-between cursor-pointer list-none py-8 hover:opacity-80 transition-opacity">
+                                <h2 className="text-2xl font-anthropic font-bold">
+                                    Verdicte & Declarații <span className="text-muted-foreground text-xl italic ml-2">({displayStatements.length})</span>
+                                </h2>
+                                <div className="w-8 h-8 rounded-full border border-border/40 flex items-center justify-center group-open:rotate-180 transition-transform duration-300">
+                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+                            </summary>
+
+                            <div className="space-y-4 animate-in fade-in duration-500 pb-12">
+                                {displayStatements.map((statement, idx) => (
+                                    <div key={statement.id || idx} className="py-10 border-b border-border/30 last:border-0 group">
+                                        <div className="flex flex-col gap-4">
+                                            <div className="flex items-center flex-wrap gap-x-3 gap-y-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                                                <span>{statement.topic}</span>
+                                                <span className="opacity-50">•</span>
+                                                <span>{statement.date}</span>
+                                                {statement.impact === 'high' && (
+                                                    <>
+                                                        <span className="opacity-50">•</span>
+                                                        <span className="text-red-500 flex items-center"><Zap className="inline w-3 h-3 mr-0.5" /> Impact Major</span>
+                                                    </>
+                                                )}
+                                            </div>
+                                            <blockquote className="border-l-4 border-primary/20 pl-6 py-2 my-4 group-hover:border-primary/50 transition-colors">
+                                                <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-[22px] md:text-3xl selection:bg-primary/20">
+                                                    "{statement.text}"
+                                                </p>
+                                                <footer className="flex items-center justify-between mt-6">
+                                                    <div className="flex items-center gap-2">
+                                                        <div className={`w-1.5 h-1.5 rounded-full ${statement.bias.includes('right') ? 'bg-red-500' : statement.bias.includes('left') ? 'bg-blue-500' : 'bg-purple-500'}`} />
+                                                        <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
+                                                            {statement.bias === 'left' ? 'Stânga' :
+                                                                statement.bias === 'right' ? 'Dreapta' :
+                                                                    statement.bias === 'center' ? 'Centru' :
+                                                                        statement.bias === 'center-left' ? 'Centru-Stânga' :
+                                                                            statement.bias === 'center-right' ? 'Centru-Dreapta' : statement.bias}
+                                                        </span>
+                                                    </div>
+                                                    {statement.articleUrl ? (
+                                                        <StyledLink
+                                                            href={statement.articleUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
+                                                        >
+                                                            Sursa <ExternalLink className="w-3 h-3" />
+                                                        </StyledLink>
+                                                    ) : (
+                                                        <StyledLink
+                                                            href={statement.sourceUrl}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase text-muted-foreground"
+                                                        >
+                                                            {new URL(statement.sourceUrl).hostname.replace('www.', '')} <ExternalLink className="w-3 h-3" />
+                                                        </StyledLink>
+                                                    )}
+                                                </footer>
+                                            </blockquote>
+
+                                            {statement.factCheck && (
+                                                <div className="mt-[-8px] mb-4 ml-6 p-4 bg-primary/5 border border-primary/10 rounded-sm">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <AlertTriangle className="w-3.5 h-3.5 text-primary" />
+                                                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Context / Fact-Check</span>
+                                                    </div>
+                                                    <p className="text-sm leading-relaxed text-foreground/80 mb-3 font-anthropic">
+                                                        {statement.factCheck.text}
+                                                    </p>
+                                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                                        {statement.factCheck.sources.map((src, i) => (
+                                                            <StyledLink key={i} href={src.url} target="_blank" rel="noopener noreferrer" className="text-[10px] items-center inline-flex gap-1 uppercase tracking-wide">
+                                                                {src.label} <ExternalLink className="w-2.5 h-2.5" />
+                                                            </StyledLink>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </details>
                     </div>
                 </div>
             </main>
