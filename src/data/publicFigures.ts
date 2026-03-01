@@ -7,6 +7,10 @@ export interface Statement {
     topic: string; // ex: "Politica", "Social"
     bias?: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
     impact: 'high' | 'medium' | 'low';
+    factCheck?: {
+        text: string;
+        sources: { label: string; url: string }[];
+    };
 }
 
 export interface PublicFigure {
@@ -109,7 +113,14 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 sourceUrl: 'https://www.instagram.com/danajustlove/',
                 topic: 'Religie / Social',
                 impact: 'medium',
-                bias: 'center-right'
+                bias: 'center-right',
+                factCheck: {
+                    text: 'Referința la "Brand" este legată de actorul Russell Brand. În urma unei investigații jurnalistice (The Times, Channel 4), acesta a fost acuzat de agresiune sexuală, viol și abuz emoțional de mai multe femei. După acest scandal mediatic care i-a demonetizat canalele, Brand și-a schimbat discursul și a anunțat convertirea la creștinism, acțiune catalogată de observatorii media drept o încercare strategică de atragere a audiențelor conservatoare și de PR.',
+                    sources: [
+                        { label: 'The Times', url: 'https://www.thetimes.co.uk/article/russell-brand-rape-sexual-assault-allegations-q3gcrpmcm' },
+                        { label: 'BBC News', url: 'https://www.bbc.com/news/entertainment-arts-66838848' }
+                    ]
+                }
             },
             {
                 id: 'db-ig-img-3',

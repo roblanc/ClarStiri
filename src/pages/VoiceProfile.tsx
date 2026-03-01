@@ -153,6 +153,25 @@ const VoiceProfile = () => {
                                                 )}
                                             </footer>
                                         </blockquote>
+
+                                        {statement.factCheck && (
+                                            <div className="mt-[-8px] mb-4 ml-6 p-4 bg-primary/5 border border-primary/10 rounded-sm">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <AlertTriangle className="w-3.5 h-3.5 text-primary" />
+                                                    <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">Context / Fact-Check</span>
+                                                </div>
+                                                <p className="text-sm leading-relaxed text-foreground/80 mb-3 font-anthropic">
+                                                    {statement.factCheck.text}
+                                                </p>
+                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                                                    {statement.factCheck.sources.map((src, i) => (
+                                                        <StyledLink key={i} href={src.url} target="_blank" rel="noopener noreferrer" className="text-[10px] items-center inline-flex gap-1 uppercase tracking-wide">
+                                                            {src.label} <ExternalLink className="w-2.5 h-2.5" />
+                                                        </StyledLink>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
