@@ -98,7 +98,7 @@ const VoiceProfile = () => {
                             <p className="leading-relaxed text-foreground font-anthropic text-xl md:text-2xl pt-2">{figure.description}</p>
 
                             {figure.contextNotes && figure.contextNotes.length > 0 && (
-                                <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                                <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm">
                                     <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
                                         <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
                                             Note de Context
@@ -122,7 +122,7 @@ const VoiceProfile = () => {
                                 </details>
                             )}
 
-                            <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                            <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm">
                                 <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
                                     <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
                                         Profil Analitic <span className="text-muted-foreground text-sm xl:text-lg font-normal ml-2">(Ținte & Retorică)</span>
@@ -166,7 +166,7 @@ const VoiceProfile = () => {
                             </details>
                         </section>
 
-                        <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm" open>
+                        <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm">
                             <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
                                 <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
                                     Verdicte & Declarații <span className="text-muted-foreground text-sm xl:text-lg font-normal ml-2">({displayStatements.length} declarații)</span>
