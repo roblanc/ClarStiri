@@ -75,40 +75,38 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
               <span>Distribuție Acoperire</span>
             </div>
 
-            {/* Elegant thin bar without interior text */}
-            <div className="flex flex-col w-full gap-2.5">
-              <div className="flex h-1.5 sm:h-2 w-full rounded-full overflow-hidden bg-secondary/50 border border-border/5">
-                {story.bias.left > 0 && (
-                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.left}%`, backgroundColor: '#3b82f6' }} />
-                )}
-                {story.bias.center > 0 && (
-                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.center}%`, backgroundColor: '#9ca3af' }} />
-                )}
-                {story.bias.right > 0 && (
-                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.right}%`, backgroundColor: '#ef4444' }} />
-                )}
+            {/* Ground News aesthetic bar layout */}
+            <div className="flex flex-col w-full gap-1.5">
+              {/* Labels Row ABOVE the bar */}
+              <div className="flex justify-between items-end w-full text-[11px] uppercase tracking-wide font-bold">
+                <div className="flex-1 flex justify-start">
+                  {story.bias.left > 0 && (
+                    <span className="text-blue-600 dark:text-blue-500">
+                      Stânga {Math.round(story.bias.left)}%
+                    </span>
+                  )}
+                </div>
+                <div className="flex-1 flex justify-center">
+                  {story.bias.center > 0 && (
+                    <span className="text-muted-foreground">
+                      Centru {Math.round(story.bias.center)}%
+                    </span>
+                  )}
+                </div>
+                <div className="flex-1 flex justify-end">
+                  {story.bias.right > 0 && (
+                    <span className="text-red-700 dark:text-red-500">
+                      Dreapta {Math.round(story.bias.right)}%
+                    </span>
+                  )}
+                </div>
               </div>
 
-              {/* Labels Row */}
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] uppercase tracking-wide font-bold">
-                {story.bias.left > 0 && (
-                  <span className="text-blue-500 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
-                    Stânga {Math.round(story.bias.left)}%
-                  </span>
-                )}
-                {story.bias.center > 0 && (
-                  <span className="text-muted-foreground flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-muted-foreground shrink-0" />
-                    Centru {Math.round(story.bias.center)}%
-                  </span>
-                )}
-                {story.bias.right > 0 && (
-                  <span className="text-red-500 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
-                    Dreapta {Math.round(story.bias.right)}%
-                  </span>
-                )}
+              {/* Solid Thick Bar */}
+              <div className="flex h-2.5 sm:h-3 w-full rounded-[3px] overflow-hidden shadow-sm border border-border/20">
+                {story.bias.left > 0 && <div className="h-full transition-all duration-500" style={{ width: `${story.bias.left}%`, backgroundColor: '#1d4ed8' }} />}
+                {story.bias.center > 0 && <div className="h-full transition-all duration-500 bg-white dark:bg-[#e2e8f0]" style={{ width: `${story.bias.center}%` }} />}
+                {story.bias.right > 0 && <div className="h-full transition-all duration-500" style={{ width: `${story.bias.right}%`, backgroundColor: '#7f1d1d' }} />}
               </div>
             </div>
 
