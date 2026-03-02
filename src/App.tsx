@@ -19,6 +19,7 @@ const VoiceProfile = lazy(() => import("./pages/VoiceProfile"));
 const Barometer = lazy(() => import("./pages/Barometer"));
 const Despre = lazy(() => import("./pages/Despre"));
 const Contact = lazy(() => import("./pages/Contact"));
+const SearchPage = lazy(() => import("./pages/SearchPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const IndexEditorial = lazy(() => import("./pages/IndexEditorial"));
 
@@ -59,6 +60,7 @@ const App = () => (
                 <Route path="/surse/:id" element={<SourceDetail />} />
                 <Route path="/despre" element={<Despre />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/cauta" element={<SearchPage />} />
                 <Route path="/categorie/:slug" element={<CategoryPage />} />
                 <Route path="/barometru" element={<Barometer />} />
                 <Route path="/voci" element={<Navigate to="/barometru" replace />} />

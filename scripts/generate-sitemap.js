@@ -14,6 +14,7 @@ const STATIC_ROUTES = [
   '/contact',
   '/surse',
   '/barometru',
+  '/cauta',
 ];
 
 const CATEGORIES = [

@@ -25,9 +25,11 @@ export function Header() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      if (location.pathname !== "/") {
-        navigate("/");
+    const trimmed = query.trim();
+    if (trimmed) {
+      const target = `/cauta?q=${encodeURIComponent(trimmed)}`;
+      if (location.pathname !== "/cauta" || !window.location.search.includes(`q=${encodeURIComponent(trimmed)}`)) {
+        navigate(target);
       }
     }
   };

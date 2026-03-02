@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
+import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import {
   MainFeedSkeleton,
 } from "@/components/Skeleton";
@@ -15,27 +16,30 @@ const PLACEHOLDER_IMAGE = "/default-news.png";
 
 const BATCH = 20;
 
+const normalizeSearchText = (text: string) =>
+  text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
 const Index = () => {
   const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
   const [visible, setVisible] = useState(BATCH);
   const { query } = useSearchStore();
+  const normalizedQuery = normalizeSearchText(query || "");
+  const hasSearchQuery = normalizedQuery.length > 0;
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
     let filtered = stories || [];
 
-    const normalize = (text: string) =>
-      text.toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
-
-    if (query && query.trim().length > 0) {
-      const q = normalize(query);
+    if (hasSearchQuery) {
+      const q = normalizedQuery;
       filtered = filtered.filter(s => {
-        const titleMatch = normalize(s.title).includes(q);
-        const descMatch = normalize(s.description || "").includes(q);
-        const sourceMatch = s.sources.some(src => normalize(src.source.name).includes(q));
+        const titleMatch = normalizeSearchText(s.title).includes(q);
+        const descMatch = normalizeSearchText(s.description || "").includes(q);
+        const sourceMatch = s.sources.some(src => normalizeSearchText(src.source.name).includes(q));
 
         return titleMatch || descMatch || sourceMatch;
       });
@@ -58,7 +62,20 @@ const Index = () => {
         bias: s.source.bias,
       })),
     })) || [];
-  }, [stories, query]);
+  }, [stories, hasSearchQuery, normalizedQuery]);
+
+  const matchedVoices = useMemo(() => {
+    if (!hasSearchQuery) return [];
+
+    return PUBLIC_FIGURES.filter((figure) => {
+      const inName = normalizeSearchText(figure.name).includes(normalizedQuery);
+      const inRole = normalizeSearchText(figure.role).includes(normalizedQuery);
+      const inDesc = normalizeSearchText(figure.description).includes(normalizedQuery);
+      const inTargets = figure.targets.some((target) => normalizeSearchText(target).includes(normalizedQuery));
+
+      return inName || inRole || inDesc || inTargets;
+    });
+  }, [hasSearchQuery, normalizedQuery]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,8 +138,45 @@ const Index = () => {
           </div>
         )}
 
+        {/* Voice Search Results */}
+        {!isLoading && hasSearchQuery && matchedVoices.length > 0 && (
+          <section className="mb-8 border border-border bg-card p-5 md:p-6">
+            <div className="flex items-center justify-between mb-4 gap-3">
+              <h2 className="font-serif text-xl text-foreground">
+                Voci Relevante ({matchedVoices.length})
+              </h2>
+              <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
+                Vezi Barometru
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {matchedVoices.slice(0, 6).map((figure) => (
+                <Link
+                  key={figure.id}
+                  to={`/voce/${figure.slug}`}
+                  className="flex items-center gap-3 border border-border p-3 hover:bg-muted/40 transition-colors"
+                >
+                  <img
+                    src={figure.image}
+                    alt={figure.name}
+                    className="w-12 h-12 rounded-full object-cover border border-border/50"
+                    loading="lazy"
+                  />
+                  <div className="min-w-0">
+                    <p className="font-semibold text-foreground truncate">{figure.name}</p>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground truncate">
+                      {figure.role}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* No Search Results */}
-        {!isLoading && stories?.length && convertedStories.length === 0 && (
+        {!isLoading && stories?.length && hasSearchQuery && convertedStories.length === 0 && matchedVoices.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 border border-border bg-card rounded-none">
             <SearchX className="w-12 h-12 text-muted-foreground mb-4" />
             <p className="font-serif text-2xl mb-2 text-foreground">Niciun rezultat</p>
