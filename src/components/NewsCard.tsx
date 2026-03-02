@@ -66,66 +66,90 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   }
 
   return (
-    <Link to={`/stire/${news.id}`} className="block h-full group">
-      <article className="flex flex-col h-full">
-        {/* The Card Box (Image + Title) */}
-        <div className="flex flex-row md:flex-col md:bg-card md:border md:border-border overflow-hidden md:rounded-none group-hover:bg-muted/30 md:group-hover:bg-secondary/5 transition-colors">
-          <div className="flex-1 py-1 pr-4 md:p-5 flex flex-col justify-start md:justify-center min-h-[100px] md:min-h-[140px] order-1 md:order-2">
-            {/* Category shown above title on mobile only to match screenshot positioning */}
-            <div className="text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] text-primary/70 mb-1.5 md:mb-2">
-              {news.category || "Actualitate"}
-            </div>
+    <Link to={`/stire/${news.id}`} className="block h-full group relative overflow-hidden rounded-xl bg-black min-h-[360px] md:min-h-[420px] shadow-sm">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <NewsImage
+          src={getThumbnailUrl(news.image)}
+          seed={news.title}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+        />
+        {/* Dark Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 transition-opacity" />
+      </div>
 
-            <h3
-              className={cn(
-                "font-title font-bold text-foreground group-hover:text-primary transition-colors line-clamp-3",
-                news.title.length > 100
-                  ? "text-[16px] md:text-[19px] leading-[1.3]"
-                  : "text-[18px] md:text-[22px] leading-[1.2]"
-              )}
+      {blindspotLabel && (
+        <div className="absolute top-3 left-3 z-10">
+          <BiasBadge
+            type={news.blindspot as 'left' | 'right'}
+            label={blindspotLabel}
+            className="rounded-sm shadow-xl bg-background/90 backdrop-blur-sm border-none scale-90 origin-top-left"
+          />
+        </div>
+      )}
+
+      {/* Content attached to bottom */}
+      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 flex flex-col justify-end z-20">
+
+        {/* Badges Row */}
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          {news.timeAgo && !news.timeAgo.includes('INVALID') && (
+            <span className="bg-[#e6d5b8] text-black text-[11px] md:text-[12px] font-bold px-2 py-0.5 rounded-sm tracking-wide">
+              Trending
+            </span>
+          )}
+          {news.category && (
+            <span className="bg-[#1a1a1a]/90 backdrop-blur-md text-white/90 text-[11px] md:text-[12px] font-bold px-2 py-0.5 rounded-sm tracking-wide">
+              {news.category}
+            </span>
+          )}
+          <span className="bg-white/95 text-black text-[11px] md:text-[12px] font-bold px-2 py-0.5 rounded-sm tracking-wide shadow-sm">
+            {news.sourcesCount} surse
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3
+          className={cn(
+            "font-title font-bold text-white group-hover:text-gray-200 transition-colors line-clamp-4 shadow-sm mb-4",
+            news.title.length > 90
+              ? "text-[20px] md:text-[24px] leading-[1.2]"
+              : "text-[22px] md:text-[28px] leading-[1.15]"
+          )}
+        >
+          {news.title}
+        </h3>
+
+        {/* Inline Bias Bar (Ground-News Style) */}
+        <div className="w-full flex h-6 md:h-7 text-[11px] md:text-[13px] font-bold tracking-tight text-white rounded-sm overflow-hidden shadow-sm">
+          {news.bias.left > 0 && (
+            <div
+              className={`h-full flex items-center px-2 overflow-hidden ${news.bias.left > news.bias.right && news.bias.left > news.bias.center ? 'justify-center' : 'justify-start'}`}
+              style={{ width: `${news.bias.left}%`, backgroundColor: '#1d4ed8' }} // Ground News Blue
             >
-              {news.title}
-            </h3>
-
-            {/* Mobile Only Metadata & Bias: Only under the text, not the image */}
-            <div className="md:hidden mt-4">
-              <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-2.5">
-                <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
-              </div>
-              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
-              {/* Added a subtle line only on mobile */}
-              <div className="mt-5 border-b border-border/30 w-full" />
+              {(news.bias.left > 8) && <span className="truncate">S {news.bias.left}%</span>}
             </div>
-          </div>
-
-          <div className="w-28 h-20 md:w-full md:h-56 relative overflow-hidden md:border-b border-border order-2 md:order-1 flex-shrink-0 self-center md:self-auto">
-            <NewsImage
-              src={getThumbnailUrl(news.image)}
-              seed={news.title}
-              loading="lazy"
-              decoding="async"
-              className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-            />
-            {blindspotLabel && (
-              <div className="absolute top-1 left-1 md:top-3 md:left-3">
-                <BiasBadge
-                  type={news.blindspot as 'left' | 'right'}
-                  label={blindspotLabel}
-                  className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60 scale-[0.6] md:scale-100 origin-top-left"
-                />
-              </div>
-            )}
-          </div>
+          )}
+          {news.bias.center > 0 && (
+            <div
+              className="h-full flex items-center justify-center px-2 text-black overflow-hidden"
+              style={{ width: `${news.bias.center}%`, backgroundColor: '#ffffff' }} // Ground News White
+            >
+              {(news.bias.center > 8) && <span className="truncate">C {news.bias.center}%</span>}
+            </div>
+          )}
+          {news.bias.right > 0 && (
+            <div
+              className={`h-full flex items-center px-2 overflow-hidden ${news.bias.right > news.bias.left && news.bias.right > news.bias.center ? 'justify-center' : 'justify-end'}`}
+              style={{ width: `${news.bias.right}%`, backgroundColor: '#7f1d1d' }} // Ground News Dark Red
+            >
+              {(news.bias.right > 8) && <span className="truncate">D {news.bias.right}%</span>}
+            </div>
+          )}
         </div>
-
-        {/* Desktop Only Seamless Info Area */}
-        <div className="hidden md:block mt-4 px-1">
-          <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
-            <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
-          </div>
-          <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
-        </div>
-      </article>
+      </div>
     </Link>
   );
 }
