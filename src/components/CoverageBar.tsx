@@ -13,38 +13,28 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   const pRight = Math.round((bias.right / total) * 100);
 
   return (
-    <div className={cn("flex flex-col w-full", className)}>
-      {/* Ground-News Style Bar */}
-      <div className="flex h-[22px] w-full text-[10px] sm:text-[11px] font-bold tracking-tight rounded-[3px] overflow-hidden shadow-sm border border-border/20">
+    <div className={cn("flex flex-col w-full gap-2", className)}>
+      {/* Elegant thin bar without interior text */}
+      <div className="flex h-1.5 sm:h-2 w-full rounded-full overflow-hidden bg-secondary/50 border border-border/5">
         {pLeft > 0 && (
-          <div
-            className={cn("h-full flex items-center px-1.5 overflow-hidden text-white transition-all", pLeft >= pRight && pLeft >= pCenter ? 'justify-center' : 'justify-start')}
-            style={{ width: `${pLeft}%`, backgroundColor: '#1d4ed8' }} // Ground News Blue
-          >
-            {(pLeft > 10) && <span className="truncate">S {pLeft}%</span>}
-          </div>
+          <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${pLeft}%`, backgroundColor: '#3b82f6' }} />
         )}
         {pCenter > 0 && (
-          <div
-            className="h-full flex items-center justify-center px-1.5 text-black overflow-hidden transition-all"
-            style={{ width: `${pCenter}%`, backgroundColor: '#ffffff' }} // Ground News White
-          >
-            {(pCenter > 10) && <span className="truncate">C {pCenter}%</span>}
-          </div>
+          <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${pCenter}%`, backgroundColor: '#9ca3af' }} />
         )}
         {pRight > 0 && (
-          <div
-            className={cn("h-full flex items-center px-1.5 overflow-hidden text-white transition-all", pRight >= pLeft && pRight >= pCenter ? 'justify-center' : 'justify-end')}
-            style={{ width: `${pRight}%`, backgroundColor: '#7f1d1d' }} // Ground News Dark Red
-          >
-            {(pRight > 10) && <span className="truncate">D {pRight}%</span>}
-          </div>
+          <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${pRight}%`, backgroundColor: '#ef4444' }} />
         )}
       </div>
 
-      {/* Sources Count */}
-      <div className="flex justify-end mt-1.5">
-        <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+      {/* Legend & Count row underneath */}
+      <div className="flex items-center justify-between font-bold tracking-tight w-full mt-0.5">
+        <div className="flex flex-wrap gap-x-3 gap-y-1 text-[10px] sm:text-[11px] uppercase tracking-wide">
+          {pLeft > 0 && <span className="text-blue-500 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-blue-500" />Stânga {pLeft}%</span>}
+          {pCenter > 0 && <span className="text-muted-foreground flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-muted-foreground" />Centru {pCenter}%</span>}
+          {pRight > 0 && <span className="text-red-500 flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-red-500" />Dreapta {pRight}%</span>}
+        </div>
+        <span className="text-[9px] uppercase tracking-widest text-muted-foreground/60 shrink-0 ml-2 mt-auto">
           {sourcesCount} SURSE
         </span>
       </div>

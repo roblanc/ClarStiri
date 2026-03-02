@@ -71,36 +71,45 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
           </div>
 
           <div className="space-y-4 mt-6">
-            <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
+            <div className="flex justify-between items-end text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 mt-4">
               <span>Distribuție Acoperire</span>
             </div>
 
-            {/* Ground-News Style Bar pentru Featured */}
-            <div className="w-full flex h-[26px] text-[12px] font-bold tracking-tight rounded-[3px] overflow-hidden shadow-sm border border-border/20">
-              {story.bias.left > 0 && (
-                <div
-                  className={`h-full flex items-center px-2 overflow-hidden text-white transition-all ${story.bias.left >= story.bias.right && story.bias.left >= story.bias.center ? 'justify-center' : 'justify-start'}`}
-                  style={{ width: `${story.bias.left}%`, backgroundColor: '#1d4ed8' }}
-                >
-                  {(story.bias.left > 8) && <span className="truncate">S {story.bias.left}%</span>}
-                </div>
-              )}
-              {story.bias.center > 0 && (
-                <div
-                  className="h-full flex items-center justify-center px-2 text-black overflow-hidden transition-all"
-                  style={{ width: `${story.bias.center}%`, backgroundColor: '#ffffff' }}
-                >
-                  {(story.bias.center > 8) && <span className="truncate">C {story.bias.center}%</span>}
-                </div>
-              )}
-              {story.bias.right > 0 && (
-                <div
-                  className={`h-full flex items-center px-2 overflow-hidden text-white transition-all ${story.bias.right >= story.bias.left && story.bias.right >= story.bias.center ? 'justify-center' : 'justify-end'}`}
-                  style={{ width: `${story.bias.right}%`, backgroundColor: '#7f1d1d' }}
-                >
-                  {(story.bias.right > 8) && <span className="truncate">D {story.bias.right}%</span>}
-                </div>
-              )}
+            {/* Elegant thin bar without interior text */}
+            <div className="flex flex-col w-full gap-2.5">
+              <div className="flex h-1.5 sm:h-2 w-full rounded-full overflow-hidden bg-secondary/50 border border-border/5">
+                {story.bias.left > 0 && (
+                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.left}%`, backgroundColor: '#3b82f6' }} />
+                )}
+                {story.bias.center > 0 && (
+                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.center}%`, backgroundColor: '#9ca3af' }} />
+                )}
+                {story.bias.right > 0 && (
+                  <div className="h-full transition-all duration-500 ease-in-out" style={{ width: `${story.bias.right}%`, backgroundColor: '#ef4444' }} />
+                )}
+              </div>
+
+              {/* Labels Row */}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] uppercase tracking-wide font-bold">
+                {story.bias.left > 0 && (
+                  <span className="text-blue-500 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                    Stânga {Math.round(story.bias.left)}%
+                  </span>
+                )}
+                {story.bias.center > 0 && (
+                  <span className="text-muted-foreground flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-muted-foreground shrink-0" />
+                    Centru {Math.round(story.bias.center)}%
+                  </span>
+                )}
+                {story.bias.right > 0 && (
+                  <span className="text-red-500 flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-red-500 shrink-0" />
+                    Dreapta {Math.round(story.bias.right)}%
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="flex items-center justify-between pt-4">
