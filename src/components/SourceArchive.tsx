@@ -36,6 +36,7 @@ const MONTH_NAMES = [
 export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
   const [groupedItems, setGroupedItems] = useState<GroupedArchive>({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshingWayback, setIsRefreshingWayback] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedYears, setExpandedYears] = useState<Record<string, boolean>>({});
   const [expandedMonths, setExpandedMonths] = useState<Record<string, boolean>>({});
@@ -44,25 +45,24 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
   const cleanDomain = domain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
 
   useEffect(() => {
+    let cancelled = false;
+
+    const addToGroup = (target: GroupedArchive, entry: ArchiveEntry) => {
+      if (!target[entry.year]) target[entry.year] = {};
+      if (!target[entry.year][entry.month]) target[entry.year][entry.month] = [];
+      if (!target[entry.year][entry.month].some(e => e.url === entry.url)) {
+        target[entry.year][entry.month].push(entry);
+      }
+    };
+
     const fetchFullHistory = async () => {
       setIsLoading(true);
       setError(null);
-      
       const grouped: GroupedArchive = {};
 
-      const addToGroup = (entry: ArchiveEntry) => {
-        if (!grouped[entry.year]) grouped[entry.year] = {};
-        if (!grouped[entry.year][entry.month]) grouped[entry.year][entry.month] = [];
-        // Evităm duplicatele pe URL
-        if (!grouped[entry.year][entry.month].some(e => e.url === entry.url)) {
-          grouped[entry.year][entry.month].push(entry);
-        }
-      };
-
       try {
-        // 1. Încercăm să încărcăm arhiva LOCALĂ (JSON)
+        // 1) Load local archive first and render immediately
         try {
-          // Vite specific import trick for dynamic JSON
           const localData = await import(`../data/archives/${sourceId}.json`);
           const localEntries = (localData?.default ?? []) as LocalArchiveItem[];
           if (Array.isArray(localEntries)) {
@@ -71,7 +71,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
               if (!isNaN(date.getTime())) {
                 const year = date.getFullYear().toString();
                 const monthName = MONTH_NAMES[date.getMonth()];
-                addToGroup({
+                addToGroup(grouped, {
                   url: item.url,
                   title: item.title,
                   displayDate: date.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short', year: 'numeric' }),
@@ -86,12 +86,20 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
           console.log(`No local archive for ${sourceId}`);
         }
 
-        // 2. Interogăm Wayback Machine pentru istoric adițional
+        if (!cancelled) {
+          setGroupedItems(grouped);
+          setIsLoading(false);
+          const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+          if (years.length > 0) setExpandedYears({ [years[0]]: true });
+        }
+
+        // 2) Fetch Wayback in background and merge results progressively
+        setIsRefreshingWayback(true);
         const wbUrl = `https://web.archive.org/cdx/search/cdx?url=${cleanDomain}/*&output=json&limit=150&collapse=urlkey&filter=statuscode:200&filter=mimetype:text/html`;
         const response = await fetch(wbUrl);
-        
+
         if (response.ok) {
-          const data = await response.json();
+          const data = (await response.json()) as string[][];
           if (data.length > 1) {
             const rows = data.slice(1);
             rows.forEach((row: string[]) => {
@@ -107,7 +115,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
               let title = originalUrl.split('/').pop()?.replace(/-/g, ' ').replace(/\.html?$/, '') || originalUrl;
               if (title.length < 5) title = originalUrl;
 
-              addToGroup({
+              addToGroup(grouped, {
                 url: originalUrl,
                 timestamp,
                 title: title.charAt(0).toUpperCase() + title.slice(1),
@@ -120,22 +128,33 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
           }
         }
 
-        setGroupedItems(grouped);
-        
-        // Auto-expand latest
-        const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
-        if (years.length > 0) setExpandedYears({ [years[0]]: true });
+        if (!cancelled) {
+          setGroupedItems(grouped);
+          const years = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+          if (years.length > 0) {
+            setExpandedYears(prev => (Object.keys(prev).length ? prev : { [years[0]]: true }));
+          }
+        }
 
       } catch (err) {
         console.error(err);
-        // Chiar dacă e eroare, poate avem date locale
-        setGroupedItems(grouped);
+        if (!cancelled) {
+          setError('Nu am putut încărca indexul extern Wayback. Se afișează arhiva disponibilă local.');
+          setGroupedItems(grouped);
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) {
+          setIsLoading(false);
+          setIsRefreshingWayback(false);
+        }
       }
     };
 
     fetchFullHistory();
+
+    return () => {
+      cancelled = true;
+    };
   }, [sourceId, cleanDomain]);
 
   const toggleYear = (year: string) => {
@@ -164,6 +183,11 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
         <div className="flex items-center gap-2">
           <Archive className="w-5 h-5 text-primary" />
           <h3 className="font-bold text-foreground text-lg">Arhivă Evolutivă</h3>
+          {isRefreshingWayback && (
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground animate-pulse">
+              actualizăm indexul...
+            </span>
+          )}
         </div>
         
         <div className="relative">
@@ -180,7 +204,14 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
 
       {sortedYears.length === 0 ? (
         <div className="p-8 text-center bg-card border border-border rounded-xl">
-          <p className="text-sm text-muted-foreground">Nu am găsit înregistrări istorice pentru acest domeniu.</p>
+          <p className="text-sm text-muted-foreground">
+            {isRefreshingWayback
+              ? 'Se caută înregistrări în Wayback...'
+              : 'Nu am găsit înregistrări istorice pentru acest domeniu.'}
+          </p>
+          {error && (
+            <p className="text-xs text-amber-700 mt-2">{error}</p>
+          )}
         </div>
       ) : (
         <div className="space-y-3">
