@@ -1,50 +1,52 @@
+import { cn } from "@/lib/utils";
+
 interface CoverageBarProps {
   bias: { left: number; center: number; right: number };
   sourcesCount: number;
   className?: string;
 }
 
-const COLORS = {
-  left: '#3b82f6', // Brighter blue for dark background
-  center: '#9ca3af', // Brighter gray
-  right: '#ef4444', // Brighter red
-} as const;
-
 export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarProps) {
   const total = bias.left + bias.center + bias.right || 1;
+  const pLeft = Math.round((bias.left / total) * 100);
+  const pCenter = Math.round((bias.center / total) * 100);
+  const pRight = Math.round((bias.right / total) * 100);
 
   return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
-      {/* Segmented bar */}
-      <div className="flex h-1.5 rounded-full overflow-hidden bg-secondary/50">
-        {bias.left > 0 && (
+    <div className={cn("flex flex-col w-full", className)}>
+      {/* Ground-News Style Bar */}
+      <div className="flex h-[22px] w-full text-[10px] sm:text-[11px] font-bold tracking-tight rounded-[3px] overflow-hidden shadow-sm border border-border/20">
+        {pLeft > 0 && (
           <div
-            className="h-full"
-            style={{ width: `${(bias.left / total) * 100}%`, backgroundColor: COLORS.left }}
-          />
+            className={cn("h-full flex items-center px-1.5 overflow-hidden text-white transition-all", pLeft >= pRight && pLeft >= pCenter ? 'justify-center' : 'justify-start')}
+            style={{ width: `${pLeft}%`, backgroundColor: '#1d4ed8' }} // Ground News Blue
+          >
+            {(pLeft > 10) && <span className="truncate">S {pLeft}%</span>}
+          </div>
         )}
-        {bias.center > 0 && (
+        {pCenter > 0 && (
           <div
-            className="h-full"
-            style={{ width: `${(bias.center / total) * 100}%`, backgroundColor: COLORS.center }}
-          />
+            className="h-full flex items-center justify-center px-1.5 text-black overflow-hidden transition-all"
+            style={{ width: `${pCenter}%`, backgroundColor: '#ffffff' }} // Ground News White
+          >
+            {(pCenter > 10) && <span className="truncate">C {pCenter}%</span>}
+          </div>
         )}
-        {bias.right > 0 && (
+        {pRight > 0 && (
           <div
-            className="h-full"
-            style={{ width: `${(bias.right / total) * 100}%`, backgroundColor: COLORS.right }}
-          />
+            className={cn("h-full flex items-center px-1.5 overflow-hidden text-white transition-all", pRight >= pLeft && pRight >= pCenter ? 'justify-center' : 'justify-end')}
+            style={{ width: `${pRight}%`, backgroundColor: '#7f1d1d' }} // Ground News Dark Red
+          >
+            {(pRight > 10) && <span className="truncate">D {pRight}%</span>}
+          </div>
         )}
       </div>
 
-      {/* Labels row */}
-      <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-tight">
-        <span style={{ color: COLORS.left }}>Stânga {bias.left}%</span>
-        <span className="text-muted-foreground/30">·</span>
-        <span className="text-muted-foreground">Centru {bias.center}%</span>
-        <span className="text-muted-foreground/30">·</span>
-        <span style={{ color: COLORS.right }}>Dreapta {bias.right}%</span>
-        <span className="text-muted-foreground/60 ml-auto">{sourcesCount} surse</span>
+      {/* Sources Count */}
+      <div className="flex justify-end mt-1.5">
+        <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60">
+          {sourcesCount} SURSE
+        </span>
       </div>
     </div>
   );
