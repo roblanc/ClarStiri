@@ -22,6 +22,12 @@ interface SourceArchiveProps {
   domain: string;
 }
 
+interface LocalArchiveItem {
+  title: string;
+  url: string;
+  date: string;
+}
+
 const MONTH_NAMES = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
   'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'
@@ -58,8 +64,9 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
         try {
           // Vite specific import trick for dynamic JSON
           const localData = await import(`../data/archives/${sourceId}.json`);
-          if (localData && localData.default) {
-            localData.default.forEach((item: any) => {
+          const localEntries = (localData?.default ?? []) as LocalArchiveItem[];
+          if (Array.isArray(localEntries)) {
+            localEntries.forEach((item) => {
               const date = new Date(item.date);
               if (!isNaN(date.getTime())) {
                 const year = date.getFullYear().toString();

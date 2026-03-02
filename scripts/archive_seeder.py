@@ -2,10 +2,9 @@ import json
 import os
 import xml.etree.ElementTree as ET
 import urllib.request
-from datetime import datetime
 
-# Path to the project
-BASE_DIR = "/Users/romica/Library/Mobile Documents/com~apple~CloudDocs/01 Projects/GitHub/ClarStiri"
+# Resolve project path from script location (works in CI and local runs)
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ARCHIVE_DIR = os.path.join(BASE_DIR, "src/data/archives")
 
 def fetch_rss(url):

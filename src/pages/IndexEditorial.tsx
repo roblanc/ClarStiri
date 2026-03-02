@@ -11,8 +11,19 @@ import { MainFeedSkeleton } from "@/components/Skeleton";
 const PLACEHOLDER_IMAGE = "/default-news.png";
 const ARCHIVE_BATCH = 6;
 
+interface EditorialStory {
+  id: string;
+  title: string;
+  image: string;
+  bias: { left: number; center: number; right: number };
+  category: string;
+  sourcesCount: number;
+  timeAgo: string;
+  description: string;
+}
+
 // ─── Card mare featured (stânga sus) ─────────────────────────────────────────
-function FeaturedCard({ story }: { story: any }) {
+function FeaturedCard({ story }: { story: EditorialStory }) {
   return (
     <Link to={`/stire/${story.id}`} className="block h-full group">
       <article className="border border-border h-full flex flex-col bg-card">
@@ -52,7 +63,7 @@ function FeaturedCard({ story }: { story: any }) {
 }
 
 // ─── Card capsulă (dreapta sus) ───────────────────────────────────────────────
-function CapsuleCard({ story, index }: { story: any; index: number }) {
+function CapsuleCard({ story, index }: { story: EditorialStory; index: number }) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="border border-border bg-card flex flex-col h-full">
@@ -91,7 +102,7 @@ function CapsuleCard({ story, index }: { story: any; index: number }) {
 }
 
 // ─── Card arhivă (rândul de jos) ──────────────────────────────────────────────
-function ArchiveCard({ story }: { story: any }) {
+function ArchiveCard({ story }: { story: EditorialStory }) {
   return (
     <Link to={`/stire/${story.id}`} className="block group">
       <article className="border border-border bg-card h-full flex flex-col">

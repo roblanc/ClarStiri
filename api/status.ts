@@ -4,6 +4,17 @@ import { setCorsHeaders } from './cors.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     setCorsHeaders(req, res);
+
+    const statusSecret = process.env.STATUS_SECRET || process.env.CRON_SECRET;
+    if (process.env.NODE_ENV === 'production') {
+        if (!statusSecret) {
+            return res.status(503).json({ error: 'Status endpoint is disabled' });
+        }
+        if (req.headers.authorization !== `Bearer ${statusSecret}`) {
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+    }
+
     const out: Record<string, unknown> = {};
 
     // Vercel region

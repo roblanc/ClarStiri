@@ -69,7 +69,6 @@ export function NewsImage({
       style={style}
       loading={loading}
       decoding={decoding}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {...(fetchPriority ? { fetchPriority } : {})}
       onError={() => setFailed(true)}
     />

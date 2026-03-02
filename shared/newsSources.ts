@@ -55,6 +55,16 @@ export const NEWS_SOURCES_BASE = [
   { id: 'actualitate', name: 'Actualitate.net', url: 'https://actualitate.net', rssUrl: 'https://actualitate.net/feed/', bias: 'center', factuality: 'mixed', category: 'independent' },
   { id: 'factual', name: 'Factual.ro', url: 'https://www.factual.ro', rssUrl: 'https://www.factual.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'jurnalul', name: 'Jurnalul.ro', url: 'https://jurnalul.ro', rssUrl: 'https://jurnalul.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'realitatea', name: 'Realitatea Plus', url: 'https://www.realitatea.net', rssUrl: 'https://www.realitatea.net/feed/', bias: 'right', factuality: 'mixed', category: 'mainstream' },
+  { id: 'b1tv', name: 'B1 TV', url: 'https://www.b1tv.ro', rssUrl: 'https://www.b1tv.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
+
+export const BIAS_WEIGHT_MAP: Record<SourceBias, { left: number; center: number; right: number }> = {
+  left: { left: 100, center: 0, right: 0 },
+  'center-left': { left: 60, center: 40, right: 0 },
+  center: { left: 0, center: 100, right: 0 },
+  'center-right': { left: 0, center: 40, right: 60 },
+  right: { left: 0, center: 0, right: 100 },
+};

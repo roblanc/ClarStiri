@@ -30,9 +30,13 @@ async function fetchAllNews(): Promise<RSSNewsItem[]> {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Verify this is a cron request from Vercel
-    const authHeader = req.headers['authorization'];
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        if (process.env.CRON_SECRET && process.env.NODE_ENV === 'production') {
+    const cronSecret = process.env.CRON_SECRET;
+    if (process.env.NODE_ENV === 'production' && !cronSecret) {
+        return res.status(500).json({ error: 'CRON_SECRET is not configured in production' });
+    }
+    if (cronSecret) {
+        const authHeader = req.headers['authorization'];
+        if (authHeader !== `Bearer ${cronSecret}`) {
             return res.status(401).json({ error: 'Unauthorized' });
         }
     }

@@ -4,12 +4,10 @@ import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
-import { useBiasComparison } from "@/hooks/useBiasComparison";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
 import { useState } from "react";
-import { NEWS_SOURCES } from "@/types/news";
 
 // Placeholder image
 const PLACEHOLDER_IMAGE = "/default-news.png";
@@ -79,12 +77,6 @@ const StoryDetail = () => {
 
   // Găsește povestea cu ID-ul din URL
   const currentStory = stories?.find(s => s.id === id);
-
-  // Hook pentru bias comparison cu AI
-  const biasComparison = useBiasComparison(
-    currentStory?.title || '',
-    currentStory?.sources || []
-  );
 
   // Grupează sursele după bias
   const groupedSources = currentStory?.sources.reduce((acc, source) => {

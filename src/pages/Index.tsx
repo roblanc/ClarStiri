@@ -58,7 +58,7 @@ const Index = () => {
         bias: s.source.bias,
       })),
     })) || [];
-  }, [stories]);
+  }, [stories, query]);
 
   return (
     <div className="min-h-screen bg-background">
