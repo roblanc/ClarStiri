@@ -26,8 +26,8 @@ export function NewsListItem({ story }: NewsListItemProps) {
         <div className="flex gap-4 mb-3">
           <div className="flex-1 min-w-0">
             {story.category && (
-              <p className="text-xs text-muted-foreground mb-1.5">
-                {story.category} {story.location && `· ${story.location}`}
+              <p className="text-xs text-muted-foreground mb-1.5 font-medium uppercase tracking-wider">
+                {story.category} {story.location && `· ${story.location}`} <span className="opacity-50 mx-1">•</span> {story.sourcesCount} SURSE
               </p>
             )}
             <h3 className="font-semibold text-foreground leading-snug group-hover:underline line-clamp-3">

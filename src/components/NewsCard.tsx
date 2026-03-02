@@ -71,9 +71,13 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         {/* The Card Box (Image + Title) */}
         <div className="flex flex-row md:flex-col md:bg-card md:border md:border-border overflow-hidden md:rounded-none group-hover:bg-muted/30 md:group-hover:bg-secondary/5 transition-colors">
           <div className="flex-1 py-1 pr-4 md:p-5 flex flex-col justify-start md:justify-center min-h-[100px] md:min-h-[140px] order-1 md:order-2">
-            {/* Category shown above title on mobile only to match screenshot positioning */}
-            <div className="text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] text-primary/70 mb-1.5 md:mb-2">
-              {news.category || "Actualitate"}
+            {/* Top metadata row (Category • Time • Sources) */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground mb-1.5 md:mb-2">
+              <span className="text-primary/70">{news.category || "Actualitate"}</span>
+              <span className="opacity-40">•</span>
+              <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
+              <span className="opacity-40">•</span>
+              <span>{news.sourcesCount} surse</span>
             </div>
 
             <h3
@@ -89,9 +93,6 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
             {/* Mobile Only Metadata & Bias: Only under the text, not the image */}
             <div className="md:hidden mt-4">
-              <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-2.5">
-                <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
-              </div>
               <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
               {/* Added a subtle line only on mobile */}
               <div className="mt-5 border-b border-border/30 w-full" />
@@ -120,9 +121,6 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
         {/* Desktop Only Seamless Info Area */}
         <div className="hidden md:block mt-4 px-1">
-          <div className="flex items-center gap-x-2 text-[9px] font-bold tracking-[0.15em] text-muted-foreground uppercase opacity-70 mb-3">
-            <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
-          </div>
           <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
         </div>
       </article>

@@ -53,12 +53,12 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
         {/* Conținut */}
         <div className="lg:w-2/5 p-6 lg:p-8 flex flex-col justify-between bg-card text-card-foreground">
           <div>
-            <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs mb-3">
-              <span className="font-bold text-slate-900 dark:text-slate-200 uppercase">
-                {story.category || "Reuters"}
-              </span>
-              <span>•</span>
-              <span>{story.timeAgo || "2 hours ago"}</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] md:text-[11px] font-black uppercase tracking-[0.15em] text-muted-foreground mb-3">
+              <span className="text-primary/80">{story.category || "Actualitate"}</span>
+              <span className="opacity-40">•</span>
+              <span>{story.timeAgo || "Acum"}</span>
+              <span className="opacity-40">•</span>
+              <span>{story.sourcesCount} surse</span>
             </div>
             <h2 className="text-2xl lg:text-3xl font-bold leading-tight mb-4 group-hover:text-primary transition-colors">
               {story.title}
@@ -126,9 +126,6 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
                         size="sm"
                       />
                     )}
-                    <span className="text-xs text-muted-foreground font-medium">
-                      {story.sourcesCount} surse analizate
-                    </span>
                   </div>
                 )}
               </div>

@@ -33,13 +33,6 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
         {pCenter > 0 && <div className="h-full bg-white dark:bg-[#e2e8f0] transition-all duration-500" style={{ width: `${pCenter}%` }} />}
         {pRight > 0 && <div className="h-full bg-[#7f1d1d] transition-all duration-500" style={{ width: `${pRight}%` }} />}
       </div>
-
-      {/* Information Row (Sources Count) */}
-      <div className="flex justify-end mt-1.5 w-full">
-        <span className="text-[9px] uppercase font-bold tracking-widest text-muted-foreground/60">
-          {sourcesCount} SURSE
-        </span>
-      </div>
     </div>
   );
 }
