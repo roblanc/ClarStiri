@@ -522,7 +522,7 @@ const StoryDetail = () => {
               <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2025 thesite.ro
+              © 2026 thesite.ro
             </p>
           </div>
         </div>

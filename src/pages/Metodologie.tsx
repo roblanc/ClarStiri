@@ -202,7 +202,7 @@ export default function Metodologie() {
                         <p className="text-foreground mb-4 font-medium text-lg">
                             Un <strong>"Subiect Ignorat"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
                         </p>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-100 dark:border-blue-900">
                                 <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
@@ -227,7 +227,7 @@ export default function Metodologie() {
                         <p className="text-muted-foreground mb-4">
                             Aceste fenomene apar adesea atunci când un subiect este inconfortabil pentru o anumită ideologie sau când o temă este folosită ca instrument politic doar de o anumită tabără.
                         </p>
-                        
+
                         <div className="bg-muted/50 p-4 rounded-lg">
                             <p className="text-sm font-semibold mb-2">Algoritmul nostru:</p>
                             <p className="text-sm text-muted-foreground">
@@ -330,7 +330,7 @@ export default function Metodologie() {
                             <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            © 2025 thesite.ro
+                            © 2026 thesite.ro
                         </p>
                     </div>
                 </div>

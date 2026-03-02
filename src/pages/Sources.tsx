@@ -200,17 +200,38 @@ export default function Sources() {
             {/* How it's calculated */}
             <div>
               <h3 className="font-semibold text-foreground mb-3">Cum se calculează distribuția de bias?</h3>
-              <p className="text-sm text-muted-foreground mb-3">
+              <p className="text-sm text-muted-foreground mb-4">
                 Pentru fiecare subiect de știre, agregăm sursele care l-au acoperit și calculăm o distribuție procentuală pe trei axe (Stânga, Centru, Dreapta) folosind ponderi fixe:
               </p>
-              <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-2 font-mono">
-                <div className="flex justify-between"><span className="text-blue-600 font-semibold">Stânga</span><span className="text-muted-foreground">→ 100% Stânga</span></div>
-                <div className="flex justify-between"><span className="text-blue-400 font-semibold">Centru-Stânga</span><span className="text-muted-foreground">→ 60% Stânga, 40% Centru</span></div>
-                <div className="flex justify-between"><span className="text-neutral-500 font-semibold">Centru</span><span className="text-muted-foreground">→ 100% Centru</span></div>
-                <div className="flex justify-between"><span className="text-red-400 font-semibold">Centru-Dreapta</span><span className="text-muted-foreground">→ 40% Centru, 60% Dreapta</span></div>
-                <div className="flex justify-between"><span className="text-red-600 font-semibold">Dreapta</span><span className="text-muted-foreground">→ 100% Dreapta</span></div>
+
+              <div className="overflow-hidden rounded-lg border border-border">
+                <table className="w-full text-sm text-left">
+                  <tbody className="divide-y divide-border">
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-3 font-semibold text-blue-600">Stânga</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right w-full">→ 100% Stânga</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-blue-400">Centru-Stânga</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right w-full">→ 60% Stânga, 40% Centru</td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-3 font-semibold text-neutral-500">Centru</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right w-full">→ 100% Centru</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-3 font-semibold text-red-400 whitespace-nowrap">Centru-Dreapta</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right w-full">→ 40% Centru, 60% Dreapta</td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-3 font-semibold text-red-600">Dreapta</td>
+                      <td className="px-4 py-3 text-muted-foreground text-right w-full">→ 100% Dreapta</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <p className="text-xs text-muted-foreground mt-3">
+
+              <p className="text-xs text-muted-foreground mt-4">
                 Exemplu: o știre acoperită de 2 surse de centru-stânga și 1 sursă de dreapta va avea distribuția: 40% Stânga · 27% Centru · 33% Dreapta.
               </p>
             </div>
