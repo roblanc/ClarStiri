@@ -3,12 +3,13 @@ import { Search, X, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/hooks/useSearchStore";
 
 export function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { query, setQuery, clearQuery } = useSearchStore();
@@ -33,6 +34,48 @@ export function Header() {
       }
     }
   };
+
+  useEffect(() => {
+    if (searchOpen) {
+      requestAnimationFrame(() => searchInputRef.current?.focus());
+    }
+  }, [searchOpen]);
+
+  useEffect(() => {
+    const isEditableTarget = (target: EventTarget | null) => {
+      if (!(target instanceof HTMLElement)) return false;
+      const tag = target.tagName.toLowerCase();
+      return tag === "input" || tag === "textarea" || target.isContentEditable;
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const inEditable = isEditableTarget(event.target);
+      const isCmdCtrlK = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
+      const isSlash = event.key === "/";
+      const isEscape = event.key === "Escape";
+
+      if (isCmdCtrlK) {
+        event.preventDefault();
+        setSearchOpen(true);
+        return;
+      }
+
+      if (isSlash && !inEditable) {
+        event.preventDefault();
+        setSearchOpen(true);
+        return;
+      }
+
+      if (isEscape && searchOpen) {
+        event.preventDefault();
+        setSearchOpen(false);
+        clearQuery();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [searchOpen, clearQuery]);
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all">
@@ -80,6 +123,7 @@ export function Header() {
               >
                 <div className="relative flex items-center">
                   <Input
+                    ref={searchInputRef}
                     type="search"
                     placeholder="CAUTĂ..."
                     value={query}

@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), '../../.env.local'))
 
 # Configurare API-uri
-GEMINI_API_KEY = os.getenv('GEMINI_API_KEY') or os.getenv('VITE_GEMINI_API_KEY')
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 REDIS_URL = os.getenv('UPSTASH_REDIS_REST_URL')
 REDIS_TOKEN = os.getenv('UPSTASH_REDIS_REST_TOKEN')
 

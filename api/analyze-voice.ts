@@ -36,6 +36,9 @@ interface GeminiResult {
     statements?: unknown;
 }
 
+const ANALYZE_RATE_LIMIT_WINDOW_SEC = 60;
+const ANALYZE_RATE_LIMIT_MAX_REQUESTS = 20;
+
 function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === 'object' && value !== null;
 }
@@ -107,6 +110,34 @@ function sortArticlesByDateDesc(articles: FeedArticle[]): FeedArticle[] {
         const safeB = Number.isNaN(timeB) ? 0 : timeB;
         return safeB - safeA;
     });
+}
+
+function getClientIp(req: VercelRequest): string {
+    const forwarded = req.headers['x-forwarded-for'];
+    if (typeof forwarded === 'string' && forwarded.trim()) {
+        return forwarded.split(',')[0].trim();
+    }
+    if (Array.isArray(forwarded) && forwarded.length > 0) {
+        return forwarded[0].split(',')[0].trim();
+    }
+    return 'unknown';
+}
+
+async function enforceRateLimit(redis: Redis | null, req: VercelRequest): Promise<boolean> {
+    if (!redis) return true;
+
+    try {
+        const ip = getClientIp(req);
+        const key = `ratelimit:analyze-voice:${ip}`;
+        const hits = await redis.incr(key);
+        if (hits === 1) {
+            await redis.expire(key, ANALYZE_RATE_LIMIT_WINDOW_SEC);
+        }
+        return hits <= ANALYZE_RATE_LIMIT_MAX_REQUESTS;
+    } catch (error) {
+        console.error('Rate limit check failed:', error);
+        return true;
+    }
 }
 
 async function loadAugmentedStatements(redis: Redis | null, slug: string | undefined): Promise<VoiceStatement[]> {
@@ -241,10 +272,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     setCorsHeaders(req, res);
 
     if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'GET') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
 
     const { name, slug } = req.query;
     if (!name || typeof name !== 'string') {
         return res.status(400).json({ error: 'Missing name parameter' });
+    }
+    const safeName = name.trim();
+    if (!safeName || safeName.length > 120) {
+        return res.status(400).json({ error: 'Invalid name parameter' });
     }
 
     let redis: Redis | null = null;
@@ -258,13 +296,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('Redis init failed:', error);
     }
 
+    const isAllowed = await enforceRateLimit(redis, req);
+    if (!isAllowed) {
+        return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
+    }
+
     try {
         const safeSlug = typeof slug === 'string' ? slug : undefined;
         const augmentedStatements = await loadAugmentedStatements(redis, safeSlug);
 
         const [googleArticles, internalArticles] = await Promise.all([
-            fetchGoogleNews(name),
-            fetchInternalNews(name),
+            fetchGoogleNews(safeName),
+            fetchInternalNews(safeName),
         ]);
 
         const uniqueArticles = Array.from(
@@ -272,12 +315,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         );
 
         const articles = sortArticlesByDateDesc(uniqueArticles).slice(0, 15);
-        const aiStatements = await generateStatementsWithGemini(name, articles);
+        const aiStatements = await generateStatementsWithGemini(safeName, articles);
 
         const statements = dedupeStatements([...augmentedStatements, ...aiStatements]);
         return res.status(200).json({ statements });
     } catch (error) {
         console.error('Error analyzing voice:', error);
-        return res.status(500).json({ error: 'Failed to analyze voice', details: String(error) });
+        const isDevelopment = process.env.NODE_ENV !== 'production';
+        return res.status(500).json({
+            error: 'Failed to analyze voice',
+            ...(isDevelopment ? { details: String(error) } : {}),
+        });
     }
 }

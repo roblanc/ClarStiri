@@ -12,6 +12,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     setCorsHeaders(req, res);
 
     if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'GET') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
 
     const url = req.query.url as string;
     if (!url) return res.status(400).json({ error: 'Missing url parameter' });
@@ -52,6 +55,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
         return res.status(200).send(content);
     } catch (error) {
-        return res.status(500).json({ error: 'Proxy failed', detail: error instanceof Error ? error.message : 'unknown' });
+        const isDevelopment = process.env.NODE_ENV !== 'production';
+        return res.status(500).json({
+            error: 'Proxy failed',
+            ...(isDevelopment ? { detail: error instanceof Error ? error.message : 'unknown' } : {}),
+        });
     }
 }

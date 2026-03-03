@@ -8,12 +8,13 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
  *  1. The value of the SITE_URL environment variable (production domain)
  *  2. Any localhost origin (development)
  *
- * Falls back to '*' only when SITE_URL is not configured, so behaviour is
- * unchanged for existing deployments that haven't set the variable yet.
+ * Falls back to '*' only in development when SITE_URL is not configured.
+ * In production, unknown origins are blocked.
  */
 export function setCorsHeaders(req: VercelRequest, res: VercelResponse): void {
     const origin = req.headers.origin as string | undefined;
     const siteUrl = process.env.SITE_URL;
+    const isProduction = process.env.NODE_ENV === 'production';
 
     const isLocalhost = origin ? /^https?:\/\/localhost(:\d+)?$/.test(origin) : false;
     const isAllowedOrigin = origin && siteUrl && origin === siteUrl;
@@ -21,13 +22,13 @@ export function setCorsHeaders(req: VercelRequest, res: VercelResponse): void {
     if (isAllowedOrigin || isLocalhost) {
         res.setHeader('Access-Control-Allow-Origin', origin as string);
         res.setHeader('Vary', 'Origin');
-    } else if (!siteUrl) {
-        // SITE_URL not yet configured — keep existing behaviour
+    } else if (!siteUrl && !isProduction) {
+        // Keep permissive behaviour only in development.
         res.setHeader('Access-Control-Allow-Origin', '*');
     }
-    // If SITE_URL is set and origin doesn't match, no ACAO header is set,
-    // which causes browsers to block cross-origin requests from unknown sites.
+    // In production, if SITE_URL is missing or doesn't match, we intentionally
+    // do not set ACAO, so browsers block unknown cross-origin requests.
 
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 }

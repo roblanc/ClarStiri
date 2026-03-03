@@ -16,7 +16,7 @@
 - **Fișiere noi:**
   - `src/services/geminiService.ts`
   - `src/hooks/useBiasComparison.ts`
-  - `.env.local` (VITE_GEMINI_API_KEY)
+  - `.env.local` (GEMINI_API_KEY server-side)
 
 #### 📖 Pagina Metodologie
 - **Rută nouă:** `/metodologie`

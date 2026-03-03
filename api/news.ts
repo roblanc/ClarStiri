@@ -45,6 +45,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     setCorsHeaders(req, res);
 
     if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'GET') {
+        return res.status(405).json({ success: false, error: 'Method not allowed' });
+    }
 
     // Redis init inside handler — prevents module-level crash if env vars are missing
     let redis: Redis | null = null;
@@ -161,12 +164,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
     } catch (error) {
         console.error('Error in news API:', error);
+        const isDevelopment = process.env.NODE_ENV !== 'production';
         return res.status(500).json({
             success: false,
             error: 'Failed to fetch news',
-            message: error instanceof Error ? error.message : 'Unknown error',
-            name: error instanceof Error ? error.name : undefined,
-            stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined,
+            ...(isDevelopment
+                ? {
+                    message: error instanceof Error ? error.message : 'Unknown error',
+                    name: error instanceof Error ? error.name : undefined,
+                    stack: error instanceof Error ? error.stack : undefined,
+                }
+                : {}),
         });
     }
 }
