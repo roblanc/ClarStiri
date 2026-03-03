@@ -286,7 +286,7 @@ export async function fetchAllNews(): Promise<RSSNewsItem[]> {
     // Prioritizează sursele cele mai rapide/fiabile - extinse pentru încărcare mai rapidă
     const priorityIds = [
         'digi24', 'hotnews', 'g4media', 'mediafax', 'agerpres',
-        'libertatea', 'protv', 'adevarul', 'recorder', 'observator'
+        'libertatea', 'protv', 'adevarul', 'recorder', 'observator', 'realitatea'
     ];
     const prioritySources = NEWS_SOURCES.filter(s => priorityIds.includes(s.id));
     const otherSources = NEWS_SOURCES.filter(s => !priorityIds.includes(s.id));
