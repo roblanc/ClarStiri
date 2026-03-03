@@ -1062,36 +1062,46 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'right',
             score: 85,
-            description: 'Jurnalistă TV, fostă consilieră a lui Liviu Dragnea și Viorica Dăncilă. Actualmente, prezintă o abordare puternic critică față de guvernările actuale, promovând un naționalism suveranist și teoretizând conceptul de "stat paralel". A susținut asumat candidatura lui Călin Georgescu și promovează sistematic ideile sale politice ca moderator TV.'
+            description: 'Jurnalistă TV cu un profil puternic suveranist și antieuropean. Fostă consilieră a lui Liviu Dragnea și Viorica Dăncilă, s-a reinventat ca voce critică a "statului paralel". Promovează ideea că România este o colonie și susține necesitatea unei schimbări radicale, fiind una dintre principalele platforme media pentru Călin Georgescu și mișcările de dreapta populistă.'
         },
-        description: 'Anca Alexandrescu s-a remarcat ca o forță invizibilă a comunicării politice de tip PSD timp de ani de zile (fiind alături de lideri grei precum Adrian Năstase sau Liviu Dragnea). După căderea ultimului lider, Alexandrescu s-a reinventat spectaculos ca front-woman la canalul Realitatea Plus, conducând emisiunea „Culisele Statului Paralel”. Pe tot parcursul anului 2025 și 2026 a evoluat vertiginos spre mesajul „suveranist” și de revoltă împotriva sistemului euro-atlantic, sprijinind campaniile pro-AUR și Georgescu. Anul acesta și-a prefigurat chiar un parcurs politic propriu.',
+        description: 'Anca Alexandrescu este realizatoarea emisiunii „Culisele Statului Paralel” la Realitatea Plus. După o carieră lungă în culisele comunicării PSD, a devenit una dintre cele mai influente figuri ale noului val suveranist. În 2025-2026, discursul său s-a radicalizat, atacând sistematic instituțiile europene, NATO și ceea ce numește „dictatura globalistă”. A vehiculat public ideea propriei candidaturi la prezidențiale pentru a reprezenta polul suveranist.',
         socialLinks: {
             facebook: 'https://www.facebook.com/AncaAlexandrescuRealitatea',
         },
-        targets: ['Politicieni din arcul guvernamental clasic', 'Sistemul (Statul Paralel)', 'Oficialii instituțiilor UE', 'Klaus Iohannis'],
-        rhetoric: { aggressiveness: 90, irony: 70 },
+        targets: ['Statul Paralel', 'Bruxelles / UE', 'NATO', 'Klaus Iohannis', 'Marcel Ciolacu', 'ONG-urile globaliste'],
+        rhetoric: { aggressiveness: 88, irony: 60 },
         contextNotes: [
-            'Pe rând, consilieră / responsabilă de comunicare pentru cele mai controversate personalități ale PSD: Adrian Năstase (Guvernul Năstase), Victor Ponta, Liviu Dragnea (eminența cenușie din umbră), Viorica Dăncilă (ca premier).',
-            'Realizatoarea emisiunii "Culisele Statului Paralel" a adus postului Realitatea Plus sancțiuni, inclusiv o suspendare recentă (2026) dictată de CNA din cauză că modera emisiuni în timp ce candida pentru Primărie (unde a obținut locul 2, susținută masiv de aparatul lui Călin Georgescu).',
-            'Postul Realitatea este platforma prin care s-a transformat dintr-un jucător de culise într-un influencer media de calibru pentru electoratul antisistem românesc.'
+            'A fost unul dintre cei mai apropiați colaboratori ai lui Liviu Dragnea în perioada de apogeu a acestuia în PSD.',
+            'Emisiunea sa este considerată principala tribună de promovare pentru Călin Georgescu în media tradițională.',
+            'Promovează frecvent teorii conform cărora România este condusă prin interpuși de către puteri externe.',
+            'În decembrie 2024, a anunțat că ar putea candida la prezidențiale ca alternativă suveranistă.'
         ],
         statements: [
             {
-                id: 'aa-statement-1',
-                text: 'Toate problemele țării pleacă de la sistemul ocult pe care politicienii aserviți îl servesc! Băsiștii s-au reprofilat, dar statul paralel a rămas să jefuiască resursele.',
+                id: 'aa-2026-02-15',
+                text: 'Viitorul este suveranismul! Globalismul este mort, nu mai există, s-a terminat cu această dictatură care vrea să ne șteargă identitatea.',
                 date: '2026-02-15',
-                sourceUrl: 'https://realitatea.net',
-                topic: 'Sistem',
-                impact: 'medium',
+                sourceUrl: 'https://www.realitatea.net',
+                topic: 'Suveranism',
+                impact: 'high',
                 bias: 'right'
             },
             {
-                id: 'aa-statement-2',
-                text: 'S-au speriat liderii mondiali de suveraniști! Dacă îți iubești țara acum, ești automat catalogat ca extremist de presa aservită.',
-                date: '2026-02-28',
-                sourceUrl: 'https://realitatea.net',
-                topic: 'Suveranism',
+                id: 'aa-2026-01-20',
+                text: 'Sistemul vrea să-l elimine pe Călin Georgescu pentru că se tem de el. Este sub o presiune inadmisibilă din partea tuturor instituțiilor de forță.',
+                date: '2026-01-20',
+                sourceUrl: 'https://www.realitatea.net',
+                topic: 'Politică',
                 impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'aa-2025-12-10',
+                text: 'Liderii de la Bruxelles sunt pur și simplu speriați de valul suveranist care vine peste ei. Nu mai pot controla popoarele cu directive absurde.',
+                date: '2025-12-10',
+                sourceUrl: 'https://www.realitatea.net',
+                topic: 'UE',
+                impact: 'medium',
                 bias: 'right'
             }
         ]
@@ -1105,44 +1115,47 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'right',
             score: 95,
-            description: 'Figură proeminentă a curentului ultranaționalist, suveranist și antieuropean. Discursul său capătă frecvent accente de extremă dreapta, mistice, mesianice și este critic cu adresa NATO și UE. În timpul scurtei dar intensei sale ascensiuni politice din 2024, a minimalizat asistența vestică și a avut un discurs adesea considerat de experți ca fiind pro-rus.'
+            description: 'Figură centrală a curentului ultranaționalist și mistic-conservator. Promovează neutralitatea României, ieșirea din structurile euro-atlantice în formatul actual și o întoarcere la valori ancestrale, cu accente legionare și mesianice.'
         },
-        description: 'Călin Georgescu a generat un șoc masiv în politica românească spre finalul anului 2024, reușind, din poziția de candidat independent susținut exclusiv de o vastă campanie pe TikTok și de o rețea de influenceri suveraniști, să câștige primul tur al alegerilor prezidențiale. Ascensiunea sa a fost însă urmată de o decizie fără precedent a Curții Constituționale de a anula scrutinul din cauza suspiciunilor majore de manipulare cibernetică coordonată și acțiuni ale unui actor statal străin. În urma presiunilor publice și anchetelor demarate de Parchetul General, Georgescu și-a anunțat în luna mai 2025 retragerea din politica activă, declarându-se un simplu „observator” al vieții sociale.',
+        description: 'Călin Georgescu a produs cel mai mare șoc electoral post-decembrist în 2024, câștigând primul tur al prezidențialelor printr-o campanie exclusiv digitală. Retragerea sa formală din politica de partid în mai 2025 nu i-a diminuat influența în mediile online, unde continuă să fie perceput ca un „lider spiritual” al rezistenței anti-sistem. Discursul său îmbină teme ecologiste radicale cu misticism ortodox și critici virulente la adresa ordinii mondiale.',
         socialLinks: {
             tiktok: 'https://tiktok.com/@calingc',
             youtube: 'https://youtube.com/calingeorgescu'
         },
-        targets: ['Sistemul Euro-Atlantic (NATO/UE)', 'Clasa Politică Tradițională (PNL/PSD)', 'Corporatismul Globalist', 'Scutul de la Deveselu'],
-        rhetoric: { aggressiveness: 40, irony: 20 },
+        targets: ['Sistemul', 'NATO / UE', 'Deveselu', 'Partidele Tradiționale', 'Globalismul', 'Marile Corporații'],
+        rhetoric: { aggressiveness: 35, irony: 15 },
         contextNotes: [
-            'Fost Raportor Special ONU privind deșeurile toxice și propunere repetată de premier din partea partidului AUR (înainte de a se distanța de George Simion și a candida independent).',
-            'Victoria sa surprinzătoare din turul 1 al prezidențialelor din anul 2024 (22.9%) a declanșat o criză națională și constituțională de proporții, culminând cu anularea alegerilor prin hotărârea CCR (decembrie 2024).',
-            'Campania sa, derulată cu sloganuri precum „Hrană-Apă-Energie”, s-a bazat masiv pe mesaje algoritmice pe rețeaua chineză TikTok și a prezentat repetat elemente de misticism, conservatorism ortodox și simpatie declarată față de figuri legionare istorice (precum Corneliu Zelea Codreanu).',
-            'Pe 26 mai 2025, în contextul mai multor anchete penale ce implicau finanțarea obscure a campaniei, s-a retras oficial din peisajul politic, invocând dorința de a nu face parte din „stricăciunea sistemului partinic”.'
+            'Victoria sa din primul tur (2024) a fost invalidată de CCR în urma unor suspiciuni de manipulare cibernetică masivă pe TikTok.',
+            'A promovat programul „Hrană, Apă, Energie” ca soluție de autarhie economică a României.',
+            'În mai 2025, și-a anunțat retragerea oficială din viața politică activă, preferând un rol de „observator”.',
+            'Este acuzat de critici că promovează interesele strategice ale Rusiei prin discursul său despre neutralitate.'
         ],
         statements: [
             {
-                id: 'cg-statement-1',
-                text: 'Scutul de la Deveselu este o rușine diplomatică! Nu ne apără de nimic, ne atrage doar într-un conflict care nu este al nostru. Pacea României se garantează prin neutralitate, nu prin slugărnicie față de interese străine.',
-                date: '2024-11-20',
-                sourceUrl: 'https://tiktok.com',
-                topic: 'Securitate',
+                id: 'cg-2025-05-15',
+                text: 'Mă retrag din circul politic oficial. Nu voi face parte din niciun partid, pentru că sistemul este atât de putred încât nu poate fi reformat din interior.',
+                date: '2025-05-15',
+                sourceUrl: 'https://www.g4media.ro',
+                topic: 'Politică',
                 impact: 'high',
-                bias: 'right',
-                factCheck: {
-                    text: 'Scutul de la Deveselu reprezintă una dintre componentele esențiale terestre (Aegis Ashore) ale sistemului defensiv anti-rachetă dezvoltat de NATO în Europa. Oficialii Alianței, cât și Pentagonul, au explicat în repetate rânduri la nivel internațional scopul strict defensiv al bazei.',
-                    sources: [
-                        { label: 'NATO - Deveselu', url: 'https://shape.nato.int/resources/site9316/general/factsheets/Aegis_Ashore_Romania_Factsheet_EN.pdf' }
-                    ]
-                }
+                bias: 'right'
             },
             {
-                id: 'cg-statement-2',
-                text: 'Fiecare om din această țară trebuie să aibă asigurat un pilon sfânt: Hrană. Apă. Energie. Sistemul politic ne-a vândut bogățiile timp de 35 de ani, iar eu vă spun că a venit timpul să ne luăm țara și demnitatea înapoi!',
-                date: '2024-11-15',
-                sourceUrl: 'https://tiktok.com',
-                topic: 'Suveranism',
+                id: 'cg-2024-11-20',
+                text: 'România are nevoie de Hrană, Apă, Energie. Suntem o țară bogată transformată în colonie. Nu avem nevoie de scuturi antirachetă, ci de liniște și suveranitate.',
+                date: '2024-11-20',
+                sourceUrl: 'https://www.youtube.com/calingeorgescu',
+                topic: 'Suveranitate',
                 impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2025-12-05',
+                text: 'Cei care mă atacă sunt ultimii oameni ai unui sistem care agonizează. Ei nu înțeleg că poporul s-a trezit și nu mai poate fi mințit.',
+                date: '2025-12-05',
+                sourceUrl: 'https://www.iamnews.ro',
+                topic: 'Social',
+                impact: 'medium',
                 bias: 'right'
             }
         ]
@@ -1156,46 +1169,65 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'center',
             score: 0,
-            description: 'Radu Banciu este cunoscut pentru un discurs „anti-sistem” universal, atacând cu aceeași virulență atât partidele de guvernământ (PSD/PNL), cât și opoziția sau noile curente politice. Poziționarea sa nu este una ideologică tradițională, ci mai degrabă o formă de cinism jurnalistic care vizează incompetența, corupția și mediocritatea clasei politice și a societății românești în ansamblu.'
+            description: 'Radu Banciu practică un cinism jurnalistic agresiv care vizează mediocritatea și incompetența trans-partinică. Nu se aliniază ideologic, atacând cu aceeași virulență suveraniștii, progresiștii și partidele tradiționale. Discursul său este unul de revoltă culturală și socială mai degrabă decât una politică propriu-zisă.'
         },
-        description: 'Jurnalist cu o carieră de peste 30 de ani, Radu Banciu s-a remarcat prin emisiuni de tip „revista presei” (Lumea lui Banciu) și comentarii sportive incisive. Din 2024, activează în trustul iAM Media, unde realizează emisiunile „Prea Mult Banciu” și „iAM Banciu”. Stilul său este marcat de un vocabular bogat, digresiuni culturale și o critică necruțătoare la adresa derapajelor din viața publică.',
+        description: 'Cu o carieră începută în presa sportivă și consacrată în emisiuni de tip pamflet (Lumea lui Banciu), Radu Banciu este una dintre cele mai controversate voci media. Din 2024, prin proiectele „Prea Mult Banciu” și „iAM Banciu”, a continuat să critice derapajele societății românești pe care o descrie frecvent ca fiind în declin moral și intelectual. Stilul său este caracterizat de monologuri lungi, referințe culturale franceze și un dispreț afișat față de clasa politică.',
         socialLinks: {
             youtube: 'https://www.youtube.com/@iAMnewsro',
             website: 'https://iamnews.ro'
         },
-        targets: ['PSD', 'PNL', 'AUR', 'George Simion', 'Marcel Ciolacu', 'Mediocritatea', 'Clasa Politică', 'Sportivii români'],
-        rhetoric: { aggressiveness: 95, irony: 98 },
+        targets: ['PSD', 'PNL', 'AUR', 'George Simion', 'Marcel Ciolacu', 'Nicușor Dan', 'Călin Georgescu', 'Mocofanii', 'Fătălăii'],
+        rhetoric: { aggressiveness: 96, irony: 99 },
         contextNotes: [
-            'A fost amendat de numeroase ori de CNA pentru limbajul folosit în cadrul emisiunii „Lumea lui Banciu” de la B1 TV.',
-            'Este un fin cunoscător al culturii franceze și al fotbalului internațional.',
-            'Se autodefinește ca un observator detașat, refuzând înregimentarea politică sau simpatia pentru figuri publice.'
+            'A lucrat timp de 9 ani la B1 TV, unde emisiunea sa a fost un fenomen de audiență și controversă.',
+            'Este renumit pentru atacurile la adresa sportivilor români pe care îi consideră supraevaluați.',
+            'Se consideră un „franțuzit” exilat într-o societate balcanică pe care o analizează cu detașare rece.',
+            'În 2025-2026 s-a mutat pe platforme digitale unde are libertate totală de exprimare, fără restricțiile CNA.'
         ],
         statements: [
             {
-                id: 'rb-2025-12-31',
-                text: '2025? Un an grețos, așa cum am mai văzut până acum.',
-                date: '2025-12-31',
+                id: 'rb-2026-02-26',
+                text: 'Politica românească este pur și simplu revanșa oamenilor fără carte. Nu e vorba de ideologie aici, ci de dorința mediocrității de a se răzbuna pe cei care chiar au citit ceva în viața asta.',
+                date: '2026-02-26',
                 sourceUrl: 'https://iamnews.ro',
-                topic: 'Social',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'center'
+            },
+            {
+                id: 'rb-2026-02-13',
+                text: 'Întâi vom ajunge pe Marte și abia apoi vom afla din ce trăiau cu adevărat politicienii noștri. Până atunci, stăm și ascultăm gogomăniile lor de dimineața până seara.',
+                date: '2026-02-13',
+                sourceUrl: 'https://iamnews.ro',
+                topic: 'Politică',
                 impact: 'medium',
                 bias: 'center'
             },
             {
-                id: 'rb-2025-01-15',
-                text: 'N-are cum să fie Căcărău președintele României în 2025.',
-                date: '2025-01-15',
+                id: 'rb-2025-12-19',
+                text: '2025 a fost un an grețos, exact cum mă așteptam. O revărsare de mizerie, incompetență și promisiuni deșarte pentru mulțimea de mocofani care stă cu gura căscată.',
+                date: '2025-12-19',
                 sourceUrl: 'https://iamnews.ro',
-                topic: 'Politică',
+                topic: 'Social',
                 impact: 'high',
                 bias: 'center'
             },
             {
-                id: 'rb-2026-01-10',
-                text: 'Politica românească este revanșa oamenilor fără carte. Nu există nicio diferență între ei, toți sunt uniți de aceeași mediocritate sclipitoare.',
-                date: '2026-01-10',
+                id: 'rb-2025-12-15',
+                text: 'Măresc impozitele pe case din 2026 și mocofanul de român stă tot în casă. N-a ieșit niciodată în stradă pentru ce contează cu adevărat, doar pentru fofârlicile lor politice.',
+                date: '2025-12-15',
+                sourceUrl: 'https://iamsport.ro',
+                topic: 'Economie',
+                impact: 'medium',
+                bias: 'center'
+            },
+            {
+                id: 'rb-2025-12-03',
+                text: 'L-ați văzut pe Georgescu? Discursul lui e de ultimul om. O adunătură de misticism de doi bani pentru niște oameni care n-au deschis o carte de istorie în viața lor.',
+                date: '2025-12-03',
                 sourceUrl: 'https://iamnews.ro',
-                topic: 'Politică',
-                impact: 'high',
+                topic: 'Social',
+                impact: 'medium',
                 bias: 'center'
             }
         ]
