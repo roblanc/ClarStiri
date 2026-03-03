@@ -1058,7 +1058,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'anca-alexandrescu',
         name: 'Anca Alexandrescu',
         role: 'Realizator TV / Fost Consilier Politic',
-        image: '/images/voices/anca-alexandrescu.jpg',
+        image: '/images/voices/anca-alexandrescu.webp',
         bias: {
             leaning: 'right',
             score: 85,
@@ -1101,7 +1101,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'calin-georgescu',
         name: 'Călin Georgescu',
         role: 'Fost Candidat Prezidențial (Independent)',
-        image: '/images/voices/calin-georgescu.jpg',
+        image: '/images/voices/calin-georgescu.webp',
         bias: {
             leaning: 'right',
             score: 95,
@@ -1144,6 +1144,59 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 topic: 'Suveranism',
                 impact: 'high',
                 bias: 'right'
+            }
+        ]
+    },
+    {
+        id: 'radu-banciu',
+        slug: 'radu-banciu',
+        name: 'Radu Banciu',
+        role: 'Jurnalist / Realizator TV',
+        image: '/images/voices/radu-banciu.jpg',
+        bias: {
+            leaning: 'center',
+            score: 0,
+            description: 'Radu Banciu este cunoscut pentru un discurs „anti-sistem” universal, atacând cu aceeași virulență atât partidele de guvernământ (PSD/PNL), cât și opoziția sau noile curente politice. Poziționarea sa nu este una ideologică tradițională, ci mai degrabă o formă de cinism jurnalistic care vizează incompetența, corupția și mediocritatea clasei politice și a societății românești în ansamblu.'
+        },
+        description: 'Jurnalist cu o carieră de peste 30 de ani, Radu Banciu s-a remarcat prin emisiuni de tip „revista presei” (Lumea lui Banciu) și comentarii sportive incisive. Din 2024, activează în trustul iAM Media, unde realizează emisiunile „Prea Mult Banciu” și „iAM Banciu”. Stilul său este marcat de un vocabular bogat, digresiuni culturale și o critică necruțătoare la adresa derapajelor din viața publică.',
+        socialLinks: {
+            youtube: 'https://www.youtube.com/@iAMnewsro',
+            website: 'https://iamnews.ro'
+        },
+        targets: ['PSD', 'PNL', 'AUR', 'George Simion', 'Marcel Ciolacu', 'Mediocritatea', 'Clasa Politică', 'Sportivii români'],
+        rhetoric: { aggressiveness: 95, irony: 98 },
+        contextNotes: [
+            'A fost amendat de numeroase ori de CNA pentru limbajul folosit în cadrul emisiunii „Lumea lui Banciu” de la B1 TV.',
+            'Este un fin cunoscător al culturii franceze și al fotbalului internațional.',
+            'Se autodefinește ca un observator detașat, refuzând înregimentarea politică sau simpatia pentru figuri publice.'
+        ],
+        statements: [
+            {
+                id: 'rb-2025-12-31',
+                text: '2025? Un an grețos, așa cum am mai văzut până acum.',
+                date: '2025-12-31',
+                sourceUrl: 'https://iamnews.ro',
+                topic: 'Social',
+                impact: 'medium',
+                bias: 'center'
+            },
+            {
+                id: 'rb-2025-01-15',
+                text: 'N-are cum să fie Căcărău președintele României în 2025.',
+                date: '2025-01-15',
+                sourceUrl: 'https://iamnews.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'center'
+            },
+            {
+                id: 'rb-2026-01-10',
+                text: 'Politica românească este revanșa oamenilor fără carte. Nu există nicio diferență între ei, toți sunt uniți de aceeași mediocritate sclipitoare.',
+                date: '2026-01-10',
+                sourceUrl: 'https://iamnews.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'center'
             }
         ]
     }
