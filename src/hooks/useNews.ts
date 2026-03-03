@@ -4,6 +4,26 @@ import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
 import { useEffect, useState, useMemo } from 'react';
 
+const NEWS_QUERY_TIMEOUT_MS = 45000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const timeoutId = window.setTimeout(() => {
+            reject(new Error(`News query timeout after ${timeoutMs}ms`));
+        }, timeoutMs);
+
+        promise
+            .then((result) => {
+                window.clearTimeout(timeoutId);
+                resolve(result);
+            })
+            .catch((error) => {
+                window.clearTimeout(timeoutId);
+                reject(error);
+            });
+    });
+}
+
 /**
  * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch.
  * Tratează un array gol ca eșec (cache Redis gol / cron încă nu a rulat).
@@ -31,7 +51,18 @@ export function useAggregatedNews(limit = 20) {
 
     const query = useQuery<AggregatedStory[], Error>({
         queryKey: ['aggregatedNews', limit],
-        queryFn: () => fetchNewsWithFallback(limit),
+        queryFn: async () => {
+            try {
+                return await withTimeout(fetchNewsWithFallback(limit), NEWS_QUERY_TIMEOUT_MS);
+            } catch (error) {
+                const cached = getCachedAggregatedNews(limit);
+                if (cached && cached.length > 0) {
+                    console.warn('⚠️ News query timed out/failed; serving cached aggregated news');
+                    return cached;
+                }
+                throw error;
+            }
+        },
         staleTime: 15 * 60 * 1000, // 15 minute (mai lung pentru viteză)
         gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
         refetchOnWindowFocus: false,

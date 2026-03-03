@@ -7,10 +7,10 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
+import StoryDetail from "./pages/StoryDetail";
 
 // Lazy load pages for better code splitting
 const Index = lazy(() => import("./pages/Index"));
-const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const Metodologie = lazy(() => import("./pages/Metodologie"));
 const Sources = lazy(() => import("./pages/Sources"));
 const SourceDetail = lazy(() => import("./pages/SourceDetail"));
