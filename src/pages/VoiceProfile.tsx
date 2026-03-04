@@ -122,6 +122,76 @@ const VoiceProfile = () => {
                                 </details>
                             )}
 
+                            {figure.externalAnalyses && figure.externalAnalyses.length > 0 && (
+                                <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm border-l-4 border-l-primary/40">
+                                    <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-primary/5 hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-primary/10 rounded-full">
+                                                <Quote className="w-5 h-5 text-primary" />
+                                            </div>
+                                            <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">
+                                                Perspective Critice <span className="text-muted-foreground text-sm xl:text-lg font-normal ml-2">(Analiză externă)</span>
+                                            </h2>
+                                        </div>
+                                        <div className="w-6 h-6 shrink-0 relative flex items-center justify-center text-primary ml-4">
+                                            <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300"></div>
+                                            <div className="absolute w-4 h-[2px] bg-current rounded-full transition-transform duration-300 rotate-90 group-open:rotate-0"></div>
+                                        </div>
+                                    </summary>
+
+                                    <div className="animate-in fade-in duration-500 bg-card">
+                                        {figure.externalAnalyses.map((analysis, idx) => (
+                                            <div key={idx} className="p-8 space-y-8 border-b border-border/40 last:border-0">
+                                                <div className="flex items-start gap-4">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 mb-2">
+                                                            <span className="text-xs font-bold uppercase tracking-widest text-primary">Analiză de la</span>
+                                                            <Link to={`/voce/${analysis.authorId}`} className="text-sm font-bold hover:underline font-anthropic">{analysis.authorName}</Link>
+                                                        </div>
+                                                        <p className="text-lg font-medium leading-relaxed font-anthropic italic text-foreground/90">
+                                                            "{analysis.summary}"
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                                                    {analysis.sections.map((section, sIdx) => (
+                                                        <div key={sIdx} className="space-y-3">
+                                                            <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground/80 border-b border-border/20 pb-2">
+                                                                {section.title}
+                                                            </h3>
+                                                            {Array.isArray(section.content) ? (
+                                                                <ul className="space-y-2">
+                                                                    {section.content.map((item, iIdx) => (
+                                                                        <li key={iIdx} className="text-sm leading-relaxed text-foreground/80 flex gap-2">
+                                                                            <span className="text-primary/40">•</span>
+                                                                            <span>{item}</span>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            ) : (
+                                                                <p className="text-sm leading-relaxed text-foreground/80">
+                                                                    {section.content}
+                                                                </p>
+                                                            )}
+                                                            {section.sources && section.sources.length > 0 && (
+                                                                <div className="flex flex-wrap gap-3 mt-4">
+                                                                    {section.sources.map((src, srcIdx) => (
+                                                                        <StyledLink key={srcIdx} href={src.url} target="_blank" rel="noopener noreferrer" className="text-[10px] items-center inline-flex gap-1 uppercase tracking-wide">
+                                                                            {src.label} <ExternalLink className="w-2.5 h-2.5" />
+                                                                        </StyledLink>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </details>
+                            )}
+
                             <details className="group [&_summary::-webkit-details-marker]:hidden mt-8 rounded-md bg-card border border-border overflow-hidden shadow-sm">
                                 <summary className="flex items-center justify-between cursor-pointer list-none p-6 bg-muted/20 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors">
                                     <h2 className="text-xl md:text-2xl font-anthropic font-bold text-foreground">

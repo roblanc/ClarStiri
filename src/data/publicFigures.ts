@@ -13,6 +13,19 @@ export interface Statement {
     };
 }
 
+export interface AnalysisSection {
+    title: string;
+    content: string | string[];
+    sources?: { label: string; url: string }[];
+}
+
+export interface ExternalAnalysis {
+    authorId: string;
+    authorName: string;
+    summary: string;
+    sections: AnalysisSection[];
+}
+
 export interface PublicFigure {
     id: string;
     slug: string;
@@ -38,6 +51,7 @@ export interface PublicFigure {
     };
     description: string;
     contextNotes?: string[];  // Extra factual or behavioral notes about the figure
+    externalAnalyses?: ExternalAnalysis[];
     statements: Statement[];
 }
 
@@ -1132,6 +1146,51 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
             'În 2026, se află sub control judiciar strict, fiind investigat pentru constituirea unei organizații cu caracter fascist și propagandă legionară.',
             'Promovează ideea că resursele naturale ale României (apă, pământ, energie) au frecvențe spirituale vindecătoare și nu pot fi privatizate.',
             'Afirmă că globalismul este o formă de „sclavie digitală” și că transumanismul urmărește distrugerea ființei umane create de Dumnezeu.'
+        ],
+        externalAnalyses: [
+            {
+                authorId: 'dana-budeanu',
+                authorName: 'Dana Budeanu',
+                summary: 'Dana Budeanu exprimă o critică vehementă și detaliată la adresa lui Călin Georgescu, concentrată pe susținerea sa artificială prin boți, originea sa dubioasă și ideile sale retrograde.',
+                sections: [
+                    {
+                        title: 'Cronologie declarații cheie',
+                        content: [
+                            'Noiembrie 2024: Explică succesul TikTok ca fenomen artificial.',
+                            'Ianuarie 2025: Îl numește „măscărici / creație a serviciilor secrete”, imposibil de susținut fără finanțare masivă.',
+                            'Februarie 2025: Ironizează apelul la boicotarea supermarketurilor, afirmând că Georgescu „trăiește pe altă planetă”.',
+                            'Martie 2025: Atac principal pe tema „boților”, după apelul lui Georgescu la mobilizarea susținătorilor în stradă.'
+                        ]
+                    },
+                    {
+                        title: 'Argumentul boților vs. susținători reali',
+                        content: [
+                            'Budeanu susține că popularitatea lui Georgescu este 70% artificială (boți/AI).',
+                            '„Din toată prezența de pe social media, doar 30% sunt oameni cu identitate. Restul sunt ferme de boți, entități, AI-uri.”',
+                            'Reacție la apelul lui Georgescu: „Păi pe cine vrei fizic? Ăia sunt niște entități... cum să iasă în stradă? Tu nu îi ai real, nu există.”'
+                        ]
+                    },
+                    {
+                        title: 'Critică asupra originii și finanțării',
+                        content: [
+                            'Consideră ascensiunea sa imposibilă pe cale organică: „De unde a răsărit? Nefinanțat, neorganizat? Nu există... nici Donald Trump n-a putut, care e miliardar.”',
+                            'Îl etichetează drept o „o creație a serviciilor secrete” apărută brusc pentru a destabiliza scena politică.'
+                        ]
+                    },
+                    {
+                        title: 'Opinie despre ideologie',
+                        content: [
+                            'Susține că ideile lui Georgescu nu reprezintă un suveranism real, ci o „rupere de civilizație” și un discurs anti-progres economic.',
+                            '„Populația la fiecare 4 ani crede că câștigă ceva, apoi vede că n-a câștigat nimic.”'
+                        ],
+                        sources: [
+                            { label: 'Antena 3 CNN - Martie 2025', url: 'https://www.antena3.ro/politica/alegeri-prezidentiale-2025/dana-budeanu-dupa-ce-calin-georgescu-si-a-certat-sustinatorii-ca-nu-ies-in-strada-tu-nu-ii-ai-pe-aia-reali-unde-sa-ii-chemi-738444.html' },
+                            { label: 'Adevărul - Ironii la adresa lui Călin Georgescu', url: 'https://adevarul.ro/stiri-interne/evenimente/dana-budeanu-ironii-la-adresa-lui-calin-2426921.html' },
+                            { label: 'YouTube - Dana Budeanu explică succesul TikTok', url: 'https://www.youtube.com/watch?v=dKn4T8cOC4Y' }
+                        ]
+                    }
+                ]
+            }
         ],
         statements: [
             {
