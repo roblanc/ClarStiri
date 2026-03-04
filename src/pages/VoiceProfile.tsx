@@ -263,7 +263,7 @@ const VoiceProfile = () => {
                                                 )}
                                             </div>
                                             <blockquote className="border-l-4 border-primary/20 pl-6 py-2 my-4 group-hover:border-primary/50 transition-colors">
-                                                <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-[22px] md:text-3xl selection:bg-primary/20">
+                                                <p className="font-medium text-foreground leading-[1.4] transition-colors italic font-anthropic text-xl md:text-2xl selection:bg-primary/20">
                                                     "{statement.text}"
                                                 </p>
                                                 <footer className="flex items-center justify-between mt-6">
