@@ -1145,7 +1145,9 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
             'Consideră că pandemia a fost un experiment de control social („Marea Resetare”) menit să instaleze un guvern mondial și o monedă unică.',
             'În 2026, se află sub control judiciar strict, fiind investigat pentru constituirea unei organizații cu caracter fascist și propagandă legionară.',
             'Promovează ideea că resursele naturale ale României (apă, pământ, energie) au frecvențe spirituale vindecătoare și nu pot fi privatizate.',
-            'Afirmă că globalismul este o formă de „sclavie digitală” și că transumanismul urmărește distrugerea ființei umane create de Dumnezeu.'
+            'Afirmă că globalismul este o formă de „sclavie digitală” și că transumanismul urmărește distrugerea ființei umane create de Dumnezeu.',
+            'Susține că piramidele din Egipt sunt, în realitate, centre de energie cosmică neutilizate, a căror adevărată natură este ascunsă de „știința oficială”.',
+            'A generat un val de critici internaționale după ce l-a numit pe directorul general al OMS, Tedros Ghebreyesus, „sclav” și „cioroi de casă” al oligarhiei globaliste.'
         ],
         externalAnalyses: [
             {
@@ -1226,6 +1228,51 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 date: '2025-02-28',
                 sourceUrl: 'https://www.youtube.com/calingeorgescu',
                 topic: 'Geo-Politică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2024-09-15',
+                text: 'Nanocipurile din băuturile carbogazoase intră în tine ca într-un laptop. Alimentele din supermarket sunt instrumente de control biologic prin nanotehnologie. Totul este regizat de la Davos.',
+                date: '2024-09-15',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Conspirații / Sănătate',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2023-06-20',
+                text: 'M-am întâlnit cu ființe non-umane chiar în clădirea ONU. Ei sunt printre noi, dar sistemul vă ține ochii închiși cu minciuni oficiale. Extraterestrul nu e o poveste, e o realitate administrată de elită.',
+                date: '2023-06-20',
+                sourceUrl: 'https://newsweek.ro',
+                topic: 'Misticism / Extraterestri',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2025-11-10',
+                text: 'Nimeni nu a văzut vreodată cum arată acest Covid. Este o invenție menită să distrugă suveranitatea și să impună controlul prin frică. Decât un vaccin, mai bine o scufundare în apă rece în zori de zi.',
+                date: '2025-11-10',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Sănătate / Pandemie',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2024-07-20',
+                text: 'Tentativa de asasinat a lui Trump? Un PR hollywoodian ieftin. Acești oameni joacă teatru la scară globală pentru a vă fura atenția și a valida un lider care oricum nu mai e ce a fost.',
+                date: '2024-07-20',
+                sourceUrl: 'https://www.euractiv.ro',
+                topic: 'Geo-Politică',
+                impact: 'medium',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2025-03-20',
+                text: 'Cea mai slabă alianță de pe pământ este NATO. Este un castel de cărți de joc care se va prăbuși mâine dacă Rusia decide că s-a săturat de provocări. Nu ne apără nimeni, suntem doar carne de tun.',
+                date: '2025-03-20',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Securitate',
                 impact: 'high',
                 bias: 'right'
             },
