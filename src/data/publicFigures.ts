@@ -803,23 +803,35 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         bias: {
             leaning: 'center-left',
             score: -35,
-            description: 'Realizator România TV, promovează teme populiste și este frecvent critic la adresa reformiștilor radicali și a austerității.'
+            description: 'Realizator principal la România TV, practică un jurnalism de tip populist-agresiv, axat pe protecția „omului de rând” împotriva a ceea ce numește „terorism fiscal” și „austeritate sadică”. Se poziționează ca un critic acerb al reformiștilor tehnocrați și al instituțiilor de forță, folosind o retorică adesea aliniată cu narativele suveraniste și anti-sistem.'
         },
-        description: 'Moderator la România TV, Victor Ciutacu este cunoscut pentru stilul său incisiv și pentru campaniile media împotriva politicilor de dreapta dure.',
+        description: 'Victor Ciutacu este ancora de prime-time a postului România TV, unde moderează emisiunea „Punctul Culminant”. Notoriu pentru limbajul său nevărat și campaniile media tăioase, Ciutacu s-a transformat dintr-un jurnalist politic clasic într-o voce care pendulează între senzaționalism și critică socială dură. În ultimii ani (2025-2026), a devenit principalul opozant mediatic al măsurilor economice de tip „Bolojan”, pe care le descrie ca fiind un atac direct la adresa buzunarului cetățeanului și a suveranității naționale.',
         socialLinks: {
-            facebook: 'https://facebook.com/victorciutacu'
+            facebook: 'https://facebook.com/victorciutacu',
+            youtube: 'https://www.youtube.com/@RomaniaTVOficial'
         },
-        targets: ['Ilie Bolojan', 'PNL', 'Austeritatea', 'Reformiștii'],
-        rhetoric: { aggressiveness: 70, irony: 65 },
+        targets: ['Ilie Bolojan', 'PNL', 'Austeritatea', 'Reformiștii', 'Statul Paralel', 'USR', 'DNA', 'Bruxelles / UE', 'Sectorul ONG / Soros'],
+        rhetoric: { aggressiveness: 85, irony: 75 },
         contextNotes: [
             'S-a afirmat la Jurnalul Național și Antena 3, iar în ultimii ani a devenit ancora principală a postului România TV, preluând zona de prime-time.',
             'Stilul său este direct, adesea conflictual, și are o istorie lungă de contre publice dure cu figuri ale opoziției, activiști civici și jurnaliști independenți.',
-            'Postul pe care îl reprezintă (România TV) are frecvent derapaje sancționate de CNA, promovând narative senzaționaliste sau pro-PSD/suveraniste.'
+            'Postul pe care îl reprezintă (România TV) are frecvent derapaje sancționate de CNA, promovând narative senzaționaliste sau pro-PSD/suveraniste.',
+            'Îl numește constant pe premierul Ilie Bolojan „Vampirul austerității” sau „Sadicul de la Oradea”.',
+            'În 2025, a demascat existența unor „grupuri secrete” din guvern care ar lucra la legi fiscale menite să spolieze populația.'
         ],
         statements: [
             {
+                id: 'vc-2025-11-20',
+                text: 'Lumea s-a săturat să fie spoliată ca să cumpere gușații din guvern armament de miliarde. În timp ce voi tăiați scutirile pentru persoanele cu handicap, vă plimbați cu avioane private și semnați cecuri în alb pentru războaiele altora.',
+                date: '2025-11-20',
+                sourceUrl: 'https://www.romaniatv.net',
+                topic: 'Economie / Apărare',
+                impact: 'high',
+                bias: 'left'
+            },
+            {
                 id: 'vc-s1',
-                text: 'Vlădica boierește, opinca pătimește.',
+                text: 'Vlădica boierește, opinca pătimește. Aceasta este singura doctrină a lui Ilie Bolojan. Omul acesta are o licărire de satisfacție în ochi ori de câte ori mai anunță o tăiere sau un impozit nou.',
                 date: '2025-06-24',
                 sourceUrl: 'https://www.romaniatv.net',
                 articleUrl: 'https://www.romaniatv.net/victor-ciutacu-dupa-primele-masuri-ale-lui-mesia-bolojan-vladica-boiereste-opinca-patimeste_8998057.html',
@@ -828,14 +840,32 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'left'
             },
             {
+                id: 'vc-2025-12-05',
+                text: 'Domnule Bolojan, oi fi eu urât, dar nu și prost. Știm exact unde vă întâlniți cu penalii voștri la guvern să mai coaceți o OUG de noapte. Terorismul fiscal nu e guvernare, e jaf cu legea în mână.',
+                date: '2025-12-05',
+                sourceUrl: 'https://www.romaniatv.net',
+                topic: 'Politică / Justiție',
+                impact: 'high',
+                bias: 'center-left'
+            },
+            {
                 id: 'vc-s2',
-                text: 'Achită fraierii nota de plată!',
+                text: 'Fraierii achită nota de plată! În timp ce Bolojan petrece pe la sindrofiile liberalilor scăpați de pușcărie prin prescripție, românul de rând nu mai are bani nici de benzină.',
                 date: '2025-07-10',
                 sourceUrl: 'https://www.romaniatv.net',
                 articleUrl: 'https://www.romaniatv.net/exclusiv-victor-ciutacu-dupa-ce-ilie-bolojan-a-anuntat-masuri-dure-de-austeritate-achita-fraierii-nota-de-plata_9013519.html',
                 topic: 'Economie / Austeritate',
                 impact: 'high',
                 bias: 'left'
+            },
+            {
+                id: 'vc-2026-01-15',
+                text: 'Statul Paralel nu a murit, s-a reinventat sub fustele Bruxelles-ului. Suntem conduși prin directive de niște oameni pe care nu i-am votat și care ne vor doar piață de desfacere și sclavi pe plantație.',
+                date: '2026-01-15',
+                sourceUrl: 'https://www.romaniatv.net',
+                topic: 'UE / Suveranitate',
+                impact: 'high',
+                bias: 'right'
             }
         ]
     },
