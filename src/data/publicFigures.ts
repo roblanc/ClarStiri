@@ -1117,45 +1117,66 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
             score: 95,
             description: 'Figură centrală a curentului ultranaționalist și mistic-conservator. Promovează neutralitatea României, ieșirea din structurile euro-atlantice în formatul actual și o întoarcere la valori ancestrale, cu accente legionare și mesianice.'
         },
-        description: 'Călin Georgescu a produs cel mai mare șoc electoral post-decembrist în 2024, câștigând primul tur al prezidențialelor printr-o campanie exclusiv digitală. Retragerea sa formală din politica de partid în mai 2025 nu i-a diminuat influența în mediile online, unde continuă să fie perceput ca un „lider spiritual” al rezistenței anti-sistem. Discursul său îmbină teme ecologiste radicale cu misticism ortodox și critici virulente la adresa ordinii mondiale.',
+        description: 'Călin Georgescu a produs cel mai mare șoc electoral post-decembrist în 2024, printr-o campanie digitală de o eficiență fără precedent. Retragerea sa formală din politica de partid în 2025 a marcat tranziția către o postură de „conducător spiritual” al poporului, discursul său devenind un hibrid între ortodoxie arhaică, misticism oriental și o critică feroce la adresa ordinii mondiale. Deși se prezintă ca un „om al tăcerii”, mesajele sale au declanșat crize de securitate națională și anchete penale pentru instigare împotriva ordinii constituționale și promovarea unor figuri istorice condamnate.',
         socialLinks: {
             tiktok: 'https://tiktok.com/@calingc',
             youtube: 'https://youtube.com/calingeorgescu'
         },
-        targets: ['Sistemul', 'NATO / UE', 'Deveselu', 'Partidele Tradiționale', 'Globalismul', 'Marile Corporații'],
-        rhetoric: { aggressiveness: 35, irony: 15 },
+        targets: ['Oligarhia Globalistă', 'NATO / UE', 'Klaus Schwab / WEF', 'Organizațiile Internaționale', 'Sistemul Partinic', 'Marile Corporații', 'Digitalizarea / Transumanismul'],
+        rhetoric: { aggressiveness: 45, irony: 25 },
         contextNotes: [
-            'Victoria sa din primul tur (2024) a fost invalidată de CCR în urma unor suspiciuni de manipulare cibernetică masivă pe TikTok.',
-            'A promovat programul „Hrană, Apă, Energie” ca soluție de autarhie economică a României.',
-            'În mai 2025, și-a anunțat retragerea oficială din viața politică activă, preferând un rol de „observator”.',
-            'Este acuzat de critici că promovează interesele strategice ale Rusiei prin discursul său despre neutralitate.'
+            'Victoria sa surprinzătoare a dus la anularea alegerilor prin hotărâre CCR, invocând ingerințe ale unui actor statal străin și manipulare algoritmică.',
+            'Amestecă doctrina creștin-ortodoxă cu învățături mistice din curente New Age și filozofi precum Osho sau G.I. Gurdjieff, vizând „trezirea conștiinței”.',
+            'A generat un scandal imens prin încercarea de a-i reabilita pe Corneliu Zelea Codreanu și Ion Antonescu, numindu-i „eroi” care au luptat pentru moralitate.',
+            'Consideră că pandemia a fost un experiment de control social („Marea Resetare”) menit să instaleze un guvern mondial și o monedă unică.',
+            'În 2026, se află sub control judiciar strict, fiind investigat pentru constituirea unei organizații cu caracter fascist și propagandă legionară.',
+            'Promovează ideea că resursele naturale ale României (apă, pământ, energie) au frecvențe spirituale vindecătoare și nu pot fi privatizate.',
+            'Afirmă că globalismul este o formă de „sclavie digitală” și că transumanismul urmărește distrugerea ființei umane create de Dumnezeu.'
         ],
         statements: [
             {
                 id: 'cg-2025-05-15',
-                text: 'Mă retrag din circul politic oficial. Nu voi face parte din niciun partid, pentru că sistemul este atât de putred încât nu poate fi reformat din interior.',
+                text: 'Mă retrag din circul politic oficial. Partidul meu este poporul român. Sistemul este atât de putred încât nu poate fi reformat, el trebuie lăsat să se prăbușească sub propria greutate a minciunii.',
                 date: '2025-05-15',
-                sourceUrl: 'https://www.g4media.ro',
+                sourceUrl: 'https://www.realitatea.net',
                 topic: 'Politică',
                 impact: 'high',
                 bias: 'right'
             },
             {
                 id: 'cg-2024-11-20',
-                text: 'România are nevoie de Hrană, Apă, Energie. Suntem o țară bogată transformată în colonie. Nu avem nevoie de scuturi antirachetă, ci de liniște și suveranitate.',
+                text: 'Hrană, Apă, Energie – acesta este pilonul sfânt. Apa sacră din Carpați este un dar cosmic care ne va vindeca trupul și sufletul. Nu avem nevoie de stăpâni străini pentru a ne administra bogățiile.',
                 date: '2024-11-20',
-                sourceUrl: 'https://www.youtube.com/calingeorgescu',
-                topic: 'Suveranitate',
+                sourceUrl: 'https://www.bursa.ro',
+                topic: 'Suveranitate / Misticism',
                 impact: 'high',
                 bias: 'right'
             },
             {
-                id: 'cg-2025-12-05',
-                text: 'Cei care mă atacă sunt ultimii oameni ai unui sistem care agonizează. Ei nu înțeleg că poporul s-a trezit și nu mai poate fi mințit.',
-                date: '2025-12-05',
-                sourceUrl: 'https://www.iamnews.ro',
-                topic: 'Social',
-                impact: 'medium',
+                id: 'cg-2022-02-10',
+                text: 'Corneliu Zelea Codreanu și Ion Antonescu au fost oameni care au făcut și fapte bune. S-au luptat pentru moralitatea ființei umane într-o epocă a decadenței. Istoria pe care o învățați azi este o mistificare.',
+                date: '2022-02-10',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Istorie',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2025-02-28',
+                text: 'Vă vorbesc despre Marea Resetare a lui Klaus Schwab. Este un eșec al oligarhiei globaliste care se teme. Ei vă vor sclavi digitali, fără proprietate, fără suflet. Dar poporul s-a trezit la viață.',
+                date: '2025-02-28',
+                sourceUrl: 'https://www.youtube.com/calingeorgescu',
+                topic: 'Geo-Politică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'cg-2026-03-01',
+                text: 'Benzina va fi 15 lei și veți fi fericiți, vă spun ei. Totul este o economie de cazino, o iluzie creată să vă fure munca. România mai are doar o șansă: întoarcerea la tăcere și la Dumnezeu.',
+                date: '2026-03-01',
+                sourceUrl: 'https://www.ziarulprofit.ro',
+                topic: 'Economie / Social',
+                impact: 'high',
                 bias: 'right'
             }
         ]
