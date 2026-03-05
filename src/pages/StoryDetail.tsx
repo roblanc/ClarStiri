@@ -44,11 +44,31 @@ const getBiasLabel = (bias: string) => {
   return labels[bias] || 'Centru';
 };
 
+const toValidDate = (value: unknown): Date | null => {
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (typeof value === "string" || typeof value === "number") {
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? null : parsed;
+  }
+
+  return null;
+};
+
 // Componenta logo sursă cu fallback la inițiale
 function SourceLogo({ source }: { source: { name: string; bias: string; url?: string; logo?: string } }) {
   const [failed, setFailed] = useState(false);
   // Use Google favicon service as primary, clearbit logo as fallback
-  const domain = source.url ? new URL(source.url).hostname : '';
+  let domain = '';
+  if (source.url) {
+    try {
+      domain = new URL(source.url).hostname;
+    } catch {
+      domain = '';
+    }
+  }
   const faviconUrl = domain ? `https://www.google.com/s2/favicons?domain=${domain}&sz=64` : '';
 
   if (!faviconUrl || failed) {
@@ -142,6 +162,7 @@ const StoryDetail = () => {
     : currentStory.bias.left > currentStory.bias.right
       ? 'Stânga'
       : 'Dreapta';
+  const storyPublishedAt = toValidDate(currentStory.publishedAt) ?? new Date();
 
   return (
     <div className="min-h-screen bg-background">
@@ -152,8 +173,8 @@ const StoryDetail = () => {
         title: currentStory.title,
         description: currentStory.description || '',
         image: currentStory.image || PLACEHOLDER_IMAGE,
-        datePublished: currentStory.publishedAt.toISOString(),
-        dateModified: currentStory.publishedAt.toISOString(),
+        datePublished: storyPublishedAt.toISOString(),
+        dateModified: storyPublishedAt.toISOString(),
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
         publisherLogo: 'https://thesite.ro/ethics-logo.png',

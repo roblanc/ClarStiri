@@ -2,9 +2,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews } from '@/services/newsService';
 import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 const NEWS_QUERY_TIMEOUT_MS = 45000;
+
+function normalizeStoryDates(stories: AggregatedStory[]): AggregatedStory[] {
+    return stories.map((story) => ({
+        ...story,
+        publishedAt: story.publishedAt instanceof Date ? story.publishedAt : new Date(story.publishedAt),
+    }));
+}
 
 function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
     return new Promise((resolve, reject) => {
@@ -84,7 +91,10 @@ export function useAggregatedNews(limit = 20) {
     const cachedLocal = useMemo(() => {
         try {
             const saved = localStorage.getItem(`last_news_${limit}`);
-            if (saved) return JSON.parse(saved).data as AggregatedStory[];
+            if (saved) {
+                const parsed = JSON.parse(saved).data as AggregatedStory[] | undefined;
+                if (parsed?.length) return normalizeStoryDates(parsed);
+            }
         } catch (e) { return undefined; }
         return undefined;
     }, [limit]);
