@@ -1065,41 +1065,6 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         ]
     },
     {
-        id: 'selly',
-        slug: 'selly',
-        name: 'Selly',
-        role: 'Influencer / Content Creator',
-        image: 'https://www.masteringthemusicbusiness.ro/wp-content/uploads/2025/02/fb_selly.jpg',
-        bias: {
-            leaning: 'center',
-            score: 5,
-            description: 'Reprezentant al noii generații, concentrat pe educație și antreprenoriat. Critică sistemul de învățământ învechit.'
-        },
-        description: 'Andrei Șelaru (Selly) este cel mai mare creator de conținut din România, folosindu-și platforma pentru a pune presiune pe reformarea educației.',
-        socialLinks: {
-            youtube: 'https://youtube.com/selly',
-            instagram: 'https://instagram.com/selly'
-        },
-        targets: ['Sistemul de Învățământ', 'Politicienii', 'Birocrația Educațională'],
-        rhetoric: { aggressiveness: 25, irony: 45 },
-        contextNotes: [
-            'Creator de conținut și antreprenor, reprezentant influent pentru publicul "Gen Z".',
-            'Are un număr imens de urmăritori pe YouTube (peste 3 milioane) și un istoric de ieșiri publice bine documentate în care a criticat sever anacronismele și deficiențele sistemului de învățământ din România.',
-            'Deși nu are orientare partinică, impactul său social în rândul tinerilor îl face o voce urmărită chiar și de politicieni.'
-        ],
-        statements: [
-            {
-                id: 'selly-s1',
-                text: 'Educația nu a fost niciodată o prioritate reală în România. Avem 31 de miniștri în 30 de ani și o școală care te învață orice, mai puțin cum să supraviețuiești în 2026.',
-                date: '2026-02-27',
-                sourceUrl: 'https://www.euronews.ro',
-                topic: 'Educație',
-                impact: 'medium',
-                bias: 'center'
-            }
-        ]
-    },
-    {
         id: 'anca-alexandrescu',
         slug: 'anca-alexandrescu',
         name: 'Anca Alexandrescu',
