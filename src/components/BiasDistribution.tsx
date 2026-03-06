@@ -1,6 +1,7 @@
 import { RSSNewsItem, NewsSource } from "@/types/news";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface BiasDistributionProps {
     sources: RSSNewsItem[];
@@ -40,13 +41,23 @@ const SourceLogo = ({
     };
 
     // Folosim favicon-ul de pe site-ul sursei
-    const faviconUrl = source.url ? `https://www.google.com/s2/favicons?domain=${new URL(source.url).hostname}&sz=64` : null;
+    let faviconUrl: string | null = null;
+    try {
+        faviconUrl = source.url ? `https://www.google.com/s2/favicons?domain=${new URL(source.url).hostname}&sz=64` : null;
+    } catch {
+        faviconUrl = null;
+    }
+
+    const commonClasses = `${sizeClasses[size]} rounded-full overflow-hidden ring-2 ring-offset-1 ring-offset-background ${getBiasRingColor(source.bias)} bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform cursor-pointer`;
+    const sourceHref = `/surse/${source.id}`;
 
     if (faviconUrl && !imageError) {
         return (
-            <div
-                className={`${sizeClasses[size]} rounded-full overflow-hidden ring-2 ring-offset-1 ring-offset-background ${getBiasRingColor(source.bias)} bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform cursor-pointer`}
-                title={source.name}
+            <Link
+                to={sourceHref}
+                className={commonClasses}
+                title={`Vezi profilul sursei ${source.name}`}
+                aria-label={`Vezi profilul sursei ${source.name}`}
             >
                 <img
                     src={faviconUrl}
@@ -54,18 +65,20 @@ const SourceLogo = ({
                     className="w-full h-full object-contain p-0.5"
                     onError={() => setImageError(true)}
                 />
-            </div>
+            </Link>
         );
     }
 
     // Fallback cu inițiale
     return (
-        <div
+        <Link
+            to={sourceHref}
             className={`${sizeClasses[size]} rounded-full ${getBiasBgColor(source.bias)} flex items-center justify-center ring-2 ring-offset-1 ring-offset-background ${getBiasRingColor(source.bias)} shadow-sm hover:scale-110 transition-transform cursor-pointer`}
-            title={source.name}
+            title={`Vezi profilul sursei ${source.name}`}
+            aria-label={`Vezi profilul sursei ${source.name}`}
         >
             <span className="font-bold text-white drop-shadow-sm">{source.name.substring(0, 2).toUpperCase()}</span>
-        </div>
+        </Link>
     );
 };
 

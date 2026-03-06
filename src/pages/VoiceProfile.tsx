@@ -5,6 +5,7 @@ import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Sparkles,
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { StyledLink } from "@/components/ui/styled-link";
+import { getStatementEvidence, getStatementEvidenceBadgeClass } from "@/utils/statementEvidence";
 
 
 
@@ -27,6 +28,7 @@ const VoiceProfile = () => {
     }
 
     const displayStatements = figure.statements;
+    const weakStatementsCount = displayStatements.filter((statement) => getStatementEvidence(statement).strength === "weak").length;
 
 
     const score = figure.bias.score;
@@ -248,13 +250,33 @@ const VoiceProfile = () => {
                             </summary>
 
                             <div className="space-y-4 animate-in fade-in duration-500 p-6 pt-0 border-t border-border/40 pb-8 bg-card">
-                                {displayStatements.map((statement, idx) => (
+                                {weakStatementsCount > 0 && (
+                                    <div className="mt-6 mb-2 p-4 bg-amber-50 border border-amber-200 rounded-sm">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <AlertTriangle className="w-4 h-4 text-amber-700" />
+                                            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-700">
+                                                Verificare surse
+                                            </span>
+                                        </div>
+                                        <p className="text-sm leading-relaxed text-amber-900 font-anthropic">
+                                            {weakStatementsCount} dintre aceste declarații au doar trimiteri către homepage-ul publicației sau către profilul/canalul autorului, nu către o dovadă directă a citatului. Ele trebuie tratate ca declarații în curs de verificare.
+                                        </p>
+                                    </div>
+                                )}
+                                {displayStatements.map((statement, idx) => {
+                                    const evidence = getStatementEvidence(statement);
+
+                                    return (
                                     <div key={statement.id || idx} className="py-10 border-b border-border/30 last:border-0 group">
                                         <div className="flex flex-col gap-4">
                                             <div className="flex items-center flex-wrap gap-x-3 gap-y-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
                                                 <span>{statement.topic}</span>
                                                 <span className="opacity-50">•</span>
                                                 <span>{statement.date}</span>
+                                                <span className="opacity-50">•</span>
+                                                <span className={`px-2 py-0.5 rounded-full border ${getStatementEvidenceBadgeClass(evidence.strength)}`}>
+                                                    {evidence.badgeLabel}
+                                                </span>
                                                 {statement.impact === 'high' && (
                                                     <>
                                                         <span className="opacity-50">•</span>
@@ -267,27 +289,42 @@ const VoiceProfile = () => {
                                                     "{statement.text}"
                                                 </p>
                                                 <footer className="flex items-center justify-end mt-6">
-                                                    {statement.articleUrl ? (
-                                                        <StyledLink
-                                                            href={statement.articleUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase"
-                                                        >
-                                                            Sursa <ExternalLink className="w-3 h-3" />
-                                                        </StyledLink>
-                                                    ) : (
-                                                        <StyledLink
-                                                            href={statement.sourceUrl}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="text-[11px] inline-flex items-center gap-1 tracking-wide uppercase text-muted-foreground"
-                                                        >
-                                                            {new URL(statement.sourceUrl).hostname.replace('www.', '')} <ExternalLink className="w-3 h-3" />
-                                                        </StyledLink>
-                                                    )}
+                                                    <StyledLink
+                                                        href={evidence.href}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className={`text-[11px] inline-flex items-center gap-1 tracking-wide uppercase ${
+                                                            evidence.strength === "weak" ? "text-amber-700" : ""
+                                                        }`}
+                                                    >
+                                                        {evidence.linkLabel}: {evidence.hostLabel} <ExternalLink className="w-3 h-3" />
+                                                    </StyledLink>
                                                 </footer>
                                             </blockquote>
+
+                                            {evidence.note && (
+                                                <div className={`mt-[-8px] mb-2 ml-6 p-4 rounded-sm border ${
+                                                    evidence.strength === "weak"
+                                                        ? "bg-rose-50 border-rose-200"
+                                                        : "bg-amber-50 border-amber-200"
+                                                }`}>
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <AlertTriangle className={`w-3.5 h-3.5 ${
+                                                            evidence.strength === "weak" ? "text-rose-700" : "text-amber-700"
+                                                        }`} />
+                                                        <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${
+                                                            evidence.strength === "weak" ? "text-rose-700" : "text-amber-700"
+                                                        }`}>
+                                                            Calitatea dovezii
+                                                        </span>
+                                                    </div>
+                                                    <p className={`text-sm leading-relaxed font-anthropic ${
+                                                        evidence.strength === "weak" ? "text-rose-900" : "text-amber-900"
+                                                    }`}>
+                                                        {evidence.note}
+                                                    </p>
+                                                </div>
+                                            )}
 
                                             {statement.factCheck && (
                                                 <div className="mt-[-8px] mb-4 ml-6 p-4 bg-primary/5 border border-primary/10 rounded-sm">
@@ -309,7 +346,7 @@ const VoiceProfile = () => {
                                             )}
                                         </div>
                                     </div>
-                                ))}
+                                )})}
                             </div>
                         </details>
                     </div>

@@ -120,7 +120,7 @@ const getCachedStories = (): AggregatedStory[] => {
 };
 
 // Componenta logo sursă cu fallback la inițiale
-function SourceLogo({ source }: { source: { name: string; bias: string; url?: string; logo?: string } }) {
+function SourceLogo({ source }: { source: { id: string; name: string; bias: string; url?: string; logo?: string } }) {
   const [failed, setFailed] = useState(false);
   // Use Google favicon service as primary, clearbit logo as fallback
   let domain = '';
@@ -135,19 +135,31 @@ function SourceLogo({ source }: { source: { name: string; bias: string; url?: st
 
   if (!faviconUrl || failed) {
     return (
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${getBiasColor(source.bias)}`}>
+      <Link
+        to={`/surse/${source.id}`}
+        className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${getBiasColor(source.bias)} hover:scale-105 transition-transform`}
+        title={`Vezi profilul sursei ${source.name}`}
+        aria-label={`Vezi profilul sursei ${source.name}`}
+      >
         {source.name.substring(0, 2).toUpperCase()}
-      </div>
+      </Link>
     );
   }
 
   return (
-    <img
-      src={faviconUrl}
-      alt={source.name}
-      className="w-10 h-10 rounded-full object-cover border border-border shrink-0 bg-white"
-      onError={() => setFailed(true)}
-    />
+    <Link
+      to={`/surse/${source.id}`}
+      className="w-10 h-10 rounded-full shrink-0 bg-white hover:scale-105 transition-transform"
+      title={`Vezi profilul sursei ${source.name}`}
+      aria-label={`Vezi profilul sursei ${source.name}`}
+    >
+      <img
+        src={faviconUrl}
+        alt={source.name}
+        className="w-10 h-10 rounded-full object-cover border border-border shrink-0 bg-white"
+        onError={() => setFailed(true)}
+      />
+    </Link>
   );
 }
 

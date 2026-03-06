@@ -4,6 +4,8 @@ export interface Statement {
     date: string;
     sourceUrl: string;      // homepage-ul publicației (ex: https://www.hotnews.ro)
     articleUrl?: string;    // URL-ul articolului specific, dacă există
+    verificationStatus?: 'verified' | 'secondary' | 'profile_only' | 'unverified';
+    evidenceNote?: string;
     topic: string; // ex: "Politica", "Social"
     bias?: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
     impact: 'high' | 'medium' | 'low';
@@ -1347,6 +1349,8 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 text: 'Politica românească este pur și simplu revanșa oamenilor fără carte. Nu e vorba de ideologie aici, ci de dorința mediocrității de a se răzbuna pe cei care chiar au citit ceva în viața asta.',
                 date: '2026-02-26',
                 sourceUrl: 'https://iamnews.ro',
+                verificationStatus: 'unverified',
+                evidenceNote: 'Nu am găsit o sursă publică directă sau un articol specific care să reproducă exact acest citat. Linkul existent indică doar platforma iAMnews, nu dovada exactă a declarației.',
                 topic: 'Politică',
                 impact: 'high',
                 bias: 'center'
