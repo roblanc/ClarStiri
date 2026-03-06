@@ -88,6 +88,12 @@ const Barometer = () => {
                                     <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground/80 line-clamp-1">
                                         {figure.role}
                                     </p>
+                                    <div className="mt-2">
+                                        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full border text-[9px] font-black uppercase tracking-[0.12em] ${getBiasBadgeClass(figure.bias.score)}`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${getBiasColor(figure.bias.score)}`} />
+                                            Bias Politic: {getBiasLabel(figure.bias.score)}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div className="mt-auto pt-3 border-t border-muted/30">
@@ -138,6 +144,18 @@ function getBiasTextColor(score: number): string {
     if (score <= -15) return 'text-blue-500';
     if (score >= 15) return 'text-red-500';
     return 'text-purple-500';
+}
+
+function getBiasLabel(score: number): string {
+    if (score <= -15) return 'Stânga';
+    if (score >= 15) return 'Dreapta';
+    return 'Centru';
+}
+
+function getBiasBadgeClass(score: number): string {
+    if (score <= -15) return 'bg-blue-50 text-blue-700 border-blue-200';
+    if (score >= 15) return 'bg-red-50 text-red-700 border-red-200';
+    return 'bg-purple-50 text-purple-700 border-purple-200';
 }
 
 export default Barometer;

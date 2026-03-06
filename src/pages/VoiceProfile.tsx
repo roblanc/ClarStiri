@@ -33,10 +33,8 @@ const VoiceProfile = () => {
 
     const score = figure.bias.score;
     const biasColor = score < -15 ? 'bg-blue-500' : score > 15 ? 'bg-red-500' : 'bg-purple-500';
-    const biasLabel = figure.bias.leaning === 'left' ? 'Stânga' :
-        figure.bias.leaning === 'right' ? 'Dreapta' :
-            figure.bias.leaning === 'center-left' ? 'Centru-Stânga' :
-                figure.bias.leaning === 'center-right' ? 'Centru-Dreapta' : 'Centru';
+    const biasLabel = getBiasLabel(figure.bias.leaning);
+    const biasBadgeClass = getBiasBadgeClass(figure.bias.leaning);
 
     return (
         <div className="min-h-screen bg-background">
@@ -64,6 +62,15 @@ const VoiceProfile = () => {
 
                             <h1 className="text-3xl font-anthropic font-bold mb-2">{figure.name}</h1>
                             <p className="text-primary font-medium mb-4">{figure.role}</p>
+                            <div className="flex flex-wrap items-center gap-2 mb-6">
+                                <span className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-bold uppercase tracking-[0.15em] ${biasBadgeClass}`}>
+                                    <span className={`w-2 h-2 rounded-full ${biasColor}`} />
+                                    Bias Politic: {biasLabel}
+                                </span>
+                                <span className="text-xs text-muted-foreground font-anthropic">
+                                    scor {score > 0 ? `+${score}` : score}
+                                </span>
+                            </div>
 
                             <div className="flex gap-3 mb-6">
                                 {figure.socialLinks.instagram && (
@@ -84,7 +91,7 @@ const VoiceProfile = () => {
                             </div>
 
                             <div className="pt-6 border-t border-border/40">
-                                <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-3">Înclinație Ideologică</h3>
+                                <h3 className="text-xs uppercase font-bold tracking-widest text-muted-foreground mb-3">Bias Politic</h3>
                                 <div className="flex items-baseline gap-2 mb-3">
                                     <span className="text-xl font-anthropic font-bold">{biasLabel}</span>
                                     <span className="text-sm text-muted-foreground font-anthropic italic">({score > 0 ? `+${score}` : score})</span>
@@ -405,3 +412,17 @@ const VoiceProfile = () => {
 };
 
 export default VoiceProfile;
+
+function getBiasLabel(leaning: 'left' | 'center-left' | 'center' | 'center-right' | 'right'): string {
+    if (leaning === 'left') return 'Stânga';
+    if (leaning === 'center-left') return 'Centru-Stânga';
+    if (leaning === 'center-right') return 'Centru-Dreapta';
+    if (leaning === 'right') return 'Dreapta';
+    return 'Centru';
+}
+
+function getBiasBadgeClass(leaning: 'left' | 'center-left' | 'center' | 'center-right' | 'right'): string {
+    if (leaning === 'left' || leaning === 'center-left') return 'bg-blue-50 text-blue-700 border-blue-200';
+    if (leaning === 'right' || leaning === 'center-right') return 'bg-red-50 text-red-700 border-red-200';
+    return 'bg-purple-50 text-purple-700 border-purple-200';
+}
