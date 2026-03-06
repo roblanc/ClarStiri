@@ -12,7 +12,7 @@ const CORS_PROXIES = [
 
 // Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
-const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v3_ultra';
+const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v4_ultra';
 const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
 
 // Timeout pentru fetch (în milisecunde)

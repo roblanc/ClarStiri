@@ -6,6 +6,11 @@ import { useEffect, useMemo } from 'react';
 import { decodeHtmlEntities } from '../../shared/htmlEntities';
 
 const NEWS_QUERY_TIMEOUT_MS = 45000;
+const LAST_NEWS_CACHE_VERSION = 'v2';
+
+function getLastNewsCacheKey(limit: number): string {
+    return `last_news_${LAST_NEWS_CACHE_VERSION}_${limit}`;
+}
 
 function normalizeStories(stories: AggregatedStory[]): AggregatedStory[] {
     return stories.map((story) => ({
@@ -96,7 +101,7 @@ export function useAggregatedNews(limit = 20) {
     // Sincronizare cu LocalStorage pentru încărcare INSTANT la revenire
     useEffect(() => {
         if (normalizedQueryData && normalizedQueryData.length > 0) {
-            localStorage.setItem(`last_news_${limit}`, JSON.stringify({
+            localStorage.setItem(getLastNewsCacheKey(limit), JSON.stringify({
                 data: normalizedQueryData,
                 ts: Date.now()
             }));
@@ -106,9 +111,9 @@ export function useAggregatedNews(limit = 20) {
     // Încercăm să luăm datele din localStorage ca placeholder
     const cachedLocal = useMemo(() => {
         try {
-            const saved = localStorage.getItem(`last_news_${limit}`);
-            if (saved) {
-                const parsed = JSON.parse(saved).data as AggregatedStory[] | undefined;
+            const payload = localStorage.getItem(getLastNewsCacheKey(limit));
+            if (payload) {
+                const parsed = JSON.parse(payload).data as AggregatedStory[] | undefined;
                 if (parsed?.length) return normalizeStories(parsed);
             }
         } catch (e) { return undefined; }

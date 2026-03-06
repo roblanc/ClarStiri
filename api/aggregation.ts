@@ -134,93 +134,99 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
 }
 
 // Clusterizare avansată Ground News style
-export function findSimilarStories(news: RSSNewsItem[], threshold = 0.22, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
-    const stopwords = new Set(['care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci']);
+export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
+    const stopwords = new Set([
+        'care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele',
+        'și', 'sau', 'dar', 'iar', 'încă', 'tot', 'mai', 'chiar', 'atât', 'încât', 'deci', 'însă', 'ori', 'fie', 'nici',
+        'un', 'o', 'unui', 'unei', 'unor', 'niște', 'al', 'ai', 'ale', 'lor', 'lui', 'ei', 'nostru', 'vostru', 'său', 'sa',
+        'pe', 'la', 'în', 'din', 'de', 'cu', 'spre', 'prin', 'sub', 'peste', 'între', 'fără', 'contra', 'asupra', 'împotriva',
+        'cine', 'ce', 'care', 'cineva', 'ceva', 'oricine', 'orice', 'nimeni', 'nimic', 'unde', 'când', 'cum', 'cât', 'câți', 'câte',
+        'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'mie', 'ție', 'îi', 'îl', 'le', 'ne', 'vă', 'l-a', 's-a'
+    ]);
 
-    // Sort cronologic descrescator
-    const sortedNews = [...news].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+    const genericEntities = new Set([
+        'foto', 'video', 'romania', 'astazi', 'ieri', 'maine', 'azi', 'update', 'breaking', 'news',
+        'bucuresti', 'echipa', 'oficial', 'surse', 'ziua', 'lumea', 'omul', 'femeia', 'copilul',
+        'tara', 'guvernul', 'premierul', 'presedintele'
+    ]);
 
-    // Funcție pentru extragere entități potențiale (Cuvinte care încep cu literă mare în titlul original)
     const extractEntities = (title: string) => {
-        const words = title.split(/\s+/);
-        return words
+        return title.split(/\s+/)
             .filter(w => w.length > 3 && /^[A-Z]/.test(w))
-            .map(w => normalizeTitle(w));
+            .map(w => normalizeTitle(w))
+            .filter(w => !genericEntities.has(w));
     };
 
-    const itemData = sortedNews.map(item => {
+    const itemData = news.map(item => {
         const normalized = normalizeTitle(item.title);
         const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
-        
-        // Generăm bigrame (perechi de cuvinte) pentru context
         const bigrams = [];
-        for (let i = 0; i < words.length - 1; i++) {
-            bigrams.push(`${words[i]}_${words[i+1]}`);
-        }
 
-        const entities = extractEntities(item.title);
+        for (let i = 0; i < words.length - 1; i++) {
+            bigrams.push(`${words[i]}_${words[i + 1]}`);
+        }
 
         return {
             item,
             tokens: new Set(words),
             bigrams: new Set(bigrams),
-            entities: new Set(entities),
+            entities: new Set(extractEntities(item.title)),
             time: new Date(item.pubDate).getTime(),
         };
     });
 
     const groups: RSSNewsItem[][] = [];
-    const processed = new Set<number>();
+    const processed = new Set<string>();
 
     itemData.forEach((dataI, i) => {
-        if (processed.has(i)) return;
+        if (processed.has(dataI.item.id)) return;
 
         const group: RSSNewsItem[] = [dataI.item];
-        processed.add(i);
+        processed.add(dataI.item.id);
 
         for (let j = i + 1; j < itemData.length; j++) {
-            if (processed.has(j)) continue;
-            
             const dataJ = itemData[j];
-
-            // Verificare fereastră timp
+            if (processed.has(dataJ.item.id)) continue;
+            if (dataI.item.source.id === dataJ.item.source.id) continue;
             if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
 
-            // Calcul similitudine hibridă
-            
-            // 1. Similitudine Cuvinte (Jaccard)
             const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
-            const unionWords = new Set([...dataI.tokens, ...dataJ.tokens]);
-            const wordScore = intersectWords.size / (unionWords.size || 1);
+            const wordScore = intersectWords.size / (Math.min(dataI.tokens.size, dataJ.tokens.size) || 1);
 
-            // 2. Similitudine Entități (Pondere dublă)
             const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
-            const entityScore = intersectEntities.size > 0 ? 
-                intersectEntities.size / (Math.min(dataI.entities.size, dataJ.entities.size) || 1) : 0;
+            const entityScore = intersectEntities.size > 0
+                ? intersectEntities.size / (Math.max(dataI.entities.size, dataJ.entities.size) || 1)
+                : 0;
 
-            // 3. Similitudine Bigrame (Context)
             const intersectBigrams = new Set([...dataI.bigrams].filter(x => dataJ.bigrams.has(x)));
-            const bigramScore = intersectBigrams.size > 0 ? 
-                intersectBigrams.size / (Math.min(dataI.bigrams.size, dataJ.bigrams.size) || 1) : 0;
+            const bigramScore = intersectBigrams.size > 0
+                ? intersectBigrams.size / (Math.max(dataI.bigrams.size, dataJ.bigrams.size) || 1)
+                : 0;
 
-            // Scorul final combinat
-            // Entitățile comune sunt cel mai puternic semnal
-            const finalScore = (wordScore * 0.4) + (entityScore * 0.4) + (bigramScore * 0.2);
+            let finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
 
-            // Dacă avem entități critice comune (ex: nume proprii rare), pragul e mai jos
-            const hasSharedEntities = intersectEntities.size >= 1;
-            const effectiveThreshold = hasSharedEntities ? threshold * 0.8 : threshold;
+            if (dataI.entities.size > 0 && dataJ.entities.size > 0) {
+                const uniqueToI = [...dataI.entities].filter(e => !dataJ.entities.has(e));
+                const uniqueToJ = [...dataJ.entities].filter(e => !dataI.entities.has(e));
+
+                if (uniqueToI.length >= 1 && uniqueToJ.length >= 1 && intersectEntities.size === 0) {
+                    finalScore *= 0.5;
+                }
+            }
+
+            const hasSignificantOverlap = intersectEntities.size >= 2 ||
+                (intersectEntities.size === 1 && wordScore > 0.4);
+            const effectiveThreshold = hasSignificantOverlap ? threshold * 0.8 : threshold;
 
             if (finalScore >= effectiveThreshold) {
                 group.push(dataJ.item);
-                processed.add(j);
+                processed.add(dataJ.item.id);
             }
         }
 
         groups.push(group);
     });
 
-    // Curățare duplicate surse
     return groups.map(group => {
         const seen = new Set<string>();
         return group.filter(item => {

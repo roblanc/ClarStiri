@@ -80,9 +80,9 @@ const normalizeCachedStoryDate = (story: AggregatedStory): AggregatedStory => {
 
 const getCachedStories = (): AggregatedStory[] => {
   const cacheKeys = [
-    "last_news_60",
-    "last_news_120",
-    "clarstiri_aggregated_cache_v3_ultra",
+    "last_news_v2_60",
+    "last_news_v2_120",
+    "clarstiri_aggregated_cache_v4_ultra",
   ];
 
   const allStories: AggregatedStory[] = [];
