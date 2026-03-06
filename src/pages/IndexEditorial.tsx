@@ -7,6 +7,7 @@ import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MainFeedSkeleton } from "@/components/Skeleton";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 const PLACEHOLDER_IMAGE = "/default-news.png";
 const ARCHIVE_BATCH = 6;
@@ -25,7 +26,7 @@ interface EditorialStory {
 // ─── Card mare featured (stânga sus) ─────────────────────────────────────────
 function FeaturedCard({ story }: { story: EditorialStory }) {
   return (
-    <Link to={`/stire/${story.id}`} className="block h-full group">
+    <Link to={buildStoryHref(story.id, story.title)} className="block h-full group">
       <article className="border border-border h-full flex flex-col bg-card">
         <div className="px-3 py-1.5 bg-primary border-b border-border">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-primary-foreground">
@@ -65,7 +66,7 @@ function FeaturedCard({ story }: { story: EditorialStory }) {
 // ─── Card capsulă (dreapta sus) ───────────────────────────────────────────────
 function CapsuleCard({ story, index }: { story: EditorialStory; index: number }) {
   return (
-    <Link to={`/stire/${story.id}`} className="block group">
+    <Link to={buildStoryHref(story.id, story.title)} className="block group">
       <article className="border border-border bg-card flex flex-col h-full">
         <div className="px-3 py-1.5 border-b border-border flex items-center justify-between">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
@@ -104,7 +105,7 @@ function CapsuleCard({ story, index }: { story: EditorialStory; index: number })
 // ─── Card arhivă (rândul de jos) ──────────────────────────────────────────────
 function ArchiveCard({ story }: { story: EditorialStory }) {
   return (
-    <Link to={`/stire/${story.id}`} className="block group">
+    <Link to={buildStoryHref(story.id, story.title)} className="block group">
       <article className="border border-border bg-card h-full flex flex-col">
         <div className="px-3 py-1.5 border-b border-border">
           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">

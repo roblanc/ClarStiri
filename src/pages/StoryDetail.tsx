@@ -1,10 +1,11 @@
 import { NewsSchema } from "@/components/NewsSchema";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
 import type { AggregatedStory } from "@/types/news";
+import { normalizeStorySlug, toStorySlug } from "@/utils/storyRoute";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
@@ -141,13 +142,42 @@ function SourceLogo({ source }: { source: { name: string; bias: string; url?: st
 
 const StoryDetail = () => {
   const { id } = useParams();
+  const [searchParams] = useSearchParams();
   const { data: stories, isLoading } = useAggregatedNews(120);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const cachedStories = useMemo(() => getCachedStories(), []);
+  const slugFromUrl = normalizeStorySlug(searchParams.get("s") || "");
+  const storiesPool = useMemo(() => {
+    const map = new Map<string, AggregatedStory>();
+    [...(stories || []), ...cachedStories].forEach((story) => {
+      if (!map.has(story.id)) {
+        map.set(story.id, story);
+      }
+    });
+    return Array.from(map.values());
+  }, [stories, cachedStories]);
 
-  // Găsește povestea cu ID-ul din URL
-  const currentStory = stories?.find(s => s.id === id) || cachedStories.find(s => s.id === id);
+  // Găsește povestea după ID; fallback după slug stabil din titlu
+  const currentStory = useMemo(() => {
+    if (id) {
+      const byId = storiesPool.find((story) => story.id === id);
+      if (byId) return byId;
+    }
+
+    if (slugFromUrl) {
+      const bySlug = storiesPool.find((story) => toStorySlug(story.title) === slugFromUrl);
+      if (bySlug) return bySlug;
+
+      const slugPrefix = slugFromUrl.split("-").slice(0, 6).join("-");
+      if (slugPrefix) {
+        const bySlugPrefix = storiesPool.find((story) => toStorySlug(story.title).startsWith(slugPrefix));
+        if (bySlugPrefix) return bySlugPrefix;
+      }
+    }
+
+    return undefined;
+  }, [id, slugFromUrl, storiesPool]);
 
   // Grupează sursele după bias
   const groupedSources = currentStory?.sources.reduce((acc, source) => {

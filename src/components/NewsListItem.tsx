@@ -3,6 +3,7 @@ import { SourceFaviconGroup } from "./SourceFavicon";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { CoverageBar } from "./CoverageBar";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 interface NewsListItemProps {
   story: {
@@ -20,7 +21,7 @@ interface NewsListItemProps {
 
 export function NewsListItem({ story }: NewsListItemProps) {
   return (
-    <Link to={`/stire/${story.id}`} className="block group">
+    <Link to={buildStoryHref(story.id, story.title)} className="block group">
       <article className="py-5 px-4 border-b border-border last:border-b-0 hover:bg-muted/50 transition-colors">
         {/* Top row: Category, Title, Image */}
         <div className="flex gap-4 mb-3">

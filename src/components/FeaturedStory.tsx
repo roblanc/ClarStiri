@@ -3,6 +3,7 @@ import { SourceFaviconGroup } from "./SourceFavicon";
 import { getFeaturedImageUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { EyeOff, AlertTriangle } from "lucide-react";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 interface FeaturedStoryProps {
   story: {
@@ -30,7 +31,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
   const blindspotLabel = getBlindspotLabel(story.blindspot);
 
   return (
-    <Link to={`/stire/${story.id}`} className="block group mb-12">
+    <Link to={buildStoryHref(story.id, story.title)} className="block group mb-12">
       <div className="relative flex flex-col lg:flex-row bg-card rounded-none overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-border">
 
         {/* Imagine */}

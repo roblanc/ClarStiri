@@ -6,6 +6,7 @@ import { useSearchStore } from "@/hooks/useSearchStore";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import { SOURCE_CATALOG } from "@/data/sourceCatalog";
 import { CATEGORIES } from "@/utils/categories";
+import { buildStoryHref } from "@/utils/storyRoute";
 import { SearchX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -94,7 +95,7 @@ export default function SearchPage() {
           id: `story-${story.id}`,
           title: story.title,
           subtitle: `${story.sourcesCount} surse · ${story.timeAgo}`,
-          href: `/stire/${story.id}`,
+          href: buildStoryHref(story.id, story.title),
           kind: "story" as const,
           score,
         };

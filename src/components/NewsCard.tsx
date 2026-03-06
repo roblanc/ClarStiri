@@ -5,6 +5,7 @@ import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 export interface NewsItem {
   id: string;
@@ -39,7 +40,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
   if (variant === 'compact') {
     return (
-      <Link to={`/stire/${news.id}`} className="block">
+      <Link to={buildStoryHref(news.id, news.title)} className="block">
         <article className="news-card p-4">
           <div className="flex gap-4">
             <div className="w-24 h-24 flex-shrink-0 border border-border overflow-hidden">
@@ -66,7 +67,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   }
 
   return (
-    <Link to={`/stire/${news.id}`} className="block h-full group">
+    <Link to={buildStoryHref(news.id, news.title)} className="block h-full group">
       <article className="flex flex-col h-full">
         {/* The Card Box (Image + Title) */}
         <div className="flex flex-row md:flex-col md:bg-card md:border md:border-border overflow-hidden md:rounded-none group-hover:bg-muted/30 md:group-hover:bg-secondary/5 transition-colors">

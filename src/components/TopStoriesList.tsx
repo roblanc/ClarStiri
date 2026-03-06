@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { BiasBar } from "./BiasBar";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 interface TopStoriesListProps {
   stories: Array<{
@@ -17,7 +18,7 @@ export function TopStoriesList({ stories }: TopStoriesListProps) {
         return (
           <Link
             key={story.id}
-            to={`/stire/${story.id}`}
+            to={buildStoryHref(story.id, story.title)}
             className="block py-3 border-b border-border last:border-b-0 group"
           >
             <h4 className="font-semibold text-sm text-foreground leading-snug mb-2 group-hover:underline line-clamp-2">

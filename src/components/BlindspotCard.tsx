@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
 import { getSmallImageUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
+import { buildStoryHref } from "@/utils/storyRoute";
 
 interface BlindspotCardProps {
   story: {
@@ -16,7 +17,7 @@ interface BlindspotCardProps {
 
 export function BlindspotCard({ story }: BlindspotCardProps) {
   return (
-    <Link to={`/stire/${story.id}`} className="block group">
+    <Link to={buildStoryHref(story.id, story.title)} className="block group">
       <article className="rounded-lg border border-border overflow-hidden bg-card">
         <div className="relative">
           <NewsImage
