@@ -2,10 +2,12 @@ import json
 import os
 import xml.etree.ElementTree as ET
 import urllib.request
+from email.utils import parsedate_to_datetime
 
 # Resolve project path from script location (works in CI and local runs)
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ARCHIVE_DIR = os.path.join(BASE_DIR, "src/data/archives")
+MAX_ARTICLES_PER_SOURCE = 500
 
 def fetch_rss(url):
     try:
@@ -37,6 +39,15 @@ def parse_rss(xml_string):
     except Exception as e:
         print(f"Error parsing XML: {e}")
         return []
+
+def parse_timestamp(value):
+    if not value:
+        return 0
+
+    try:
+        return int(parsedate_to_datetime(value).timestamp())
+    except Exception:
+        return 0
 
 # Sources from your project (subset for seeding)
 SOURCES = [
@@ -76,14 +87,31 @@ def main():
                         existing = json.load(f)
                 
                 # Combine and deduplicate by URL
-                seen_urls = {a['url'] for a in existing}
-                new_articles = [a for a in articles if a['url'] not in seen_urls]
-                
-                combined = existing + new_articles
-                # Sort by date (naive string sort usually works for RSS pubDate)
-                
+                by_url = {}
+                for article in existing + articles:
+                    url = article.get("url")
+                    if not url:
+                        continue
+
+                    current = by_url.get(url)
+                    if current is None or parse_timestamp(article.get("date", "")) >= parse_timestamp(current.get("date", "")):
+                        by_url[url] = {
+                            "title": article.get("title", "").strip(),
+                            "url": url,
+                            "date": article.get("date", "").strip(),
+                        }
+
+                combined = sorted(
+                    by_url.values(),
+                    key=lambda article: parse_timestamp(article.get("date", "")),
+                    reverse=True,
+                )[:MAX_ARTICLES_PER_SOURCE]
+
+                existing_urls = {a['url'] for a in existing if a.get('url')}
+                new_articles = [a for a in combined if a['url'] not in existing_urls]
+
                 with open(file_path, 'w', encoding='utf-8') as f:
-                    json.dump(combined, f, ensure_ascii=False, indent=2)
+                    json.dump(combined, f, ensure_ascii=False, separators=(',', ':'))
                 print(f"  Added {len(new_articles)} new articles to {src['id']}.json")
 
 if __name__ == "__main__":

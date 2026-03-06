@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ExternalLink, History, Loader2, Calendar, ChevronRight, ChevronDown, Archive, Search } from 'lucide-react';
+import { History, Loader2, Calendar, ChevronRight, ChevronDown, Archive, Search } from 'lucide-react';
 
 interface ArchiveEntry {
   url: string;
@@ -28,6 +28,14 @@ interface LocalArchiveItem {
   date: string;
 }
 
+interface WaybackArchiveResponse {
+  success: boolean;
+  data?: Array<{
+    timestamp: string;
+    original: string;
+  }>;
+}
+
 const MONTH_NAMES = [
   'Ianuarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Iunie',
   'Iulie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'
@@ -41,8 +49,6 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
   const [expandedYears, setExpandedYears] = useState<Record<string, boolean>>({});
   const [expandedMonths, setExpandedMonths] = useState<Record<string, boolean>>({});
   const [searchQuery, setSearchQuery] = useState('');
-
-  const cleanDomain = domain.replace(/^(https?:\/\/)?(www\.)?/, '').replace(/\/$/, '');
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +65,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
       setIsLoading(true);
       setError(null);
       const grouped: GroupedArchive = {};
+      let hasLocalEntries = false;
 
       try {
         // 1) Load local archive first and render immediately
@@ -82,6 +89,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
               }
             });
           }
+          hasLocalEntries = localEntries.length > 0;
         } catch (e) {
           console.log(`No local archive for ${sourceId}`);
         }
@@ -95,37 +103,39 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
 
         // 2) Fetch Wayback in background and merge results progressively
         setIsRefreshingWayback(true);
-        const wbUrl = `https://web.archive.org/cdx/search/cdx?url=${cleanDomain}/*&output=json&limit=150&collapse=urlkey&filter=statuscode:200&filter=mimetype:text/html`;
-        const response = await fetch(wbUrl);
+        const response = await fetch(`/api/archive?domain=${encodeURIComponent(domain)}`);
 
-        if (response.ok) {
-          const data = (await response.json()) as string[][];
-          if (data.length > 1) {
-            const rows = data.slice(1);
-            rows.forEach((row: string[]) => {
-              const timestamp = row[1];
-              const originalUrl = row[2];
-              
-              const year = timestamp.substring(0, 4);
-              const monthIdx = parseInt(timestamp.substring(4, 6)) - 1;
-              const monthName = MONTH_NAMES[monthIdx];
-              const day = timestamp.substring(6, 8);
+        if (!response.ok) {
+          throw new Error(`Archive API responded with ${response.status}`);
+        }
 
-              // Generăm un titlu din URL dacă nu e deja în arhiva locală
-              let title = originalUrl.split('/').pop()?.replace(/-/g, ' ').replace(/\.html?$/, '') || originalUrl;
-              if (title.length < 5) title = originalUrl;
+        const payload = await response.json() as WaybackArchiveResponse;
+        if (!payload.success) {
+          throw new Error('Archive API returned an unsuccessful response');
+        }
 
-              addToGroup(grouped, {
-                url: originalUrl,
-                timestamp,
-                title: title.charAt(0).toUpperCase() + title.slice(1),
-                displayDate: `${day} ${monthName} ${year}`,
-                year,
-                month: monthName,
-                source: 'wayback'
-              });
+        const captures = payload.data ?? [];
+        if (captures.length > 0) {
+          captures.forEach(({ timestamp, original: originalUrl }) => {
+            const year = timestamp.substring(0, 4);
+            const monthIdx = parseInt(timestamp.substring(4, 6)) - 1;
+            const monthName = MONTH_NAMES[monthIdx];
+            const day = timestamp.substring(6, 8);
+
+            // Generăm un titlu din URL dacă nu e deja în arhiva locală
+            let title = originalUrl.split('/').pop()?.replace(/-/g, ' ').replace(/\.html?$/, '') || originalUrl;
+            if (title.length < 5) title = originalUrl;
+
+            addToGroup(grouped, {
+              url: originalUrl,
+              timestamp,
+              title: title.charAt(0).toUpperCase() + title.slice(1),
+              displayDate: `${day} ${monthName} ${year}`,
+              year,
+              month: monthName,
+              source: 'wayback'
             });
-          }
+          });
         }
 
         if (!cancelled) {
@@ -139,7 +149,11 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
       } catch (err) {
         console.error(err);
         if (!cancelled) {
-          setError('Nu am putut încărca indexul extern Wayback. Se afișează arhiva disponibilă local.');
+          setError(
+            hasLocalEntries
+              ? 'Indexul extern Wayback nu a răspuns. Se afișează doar arhiva disponibilă local.'
+              : 'Nu am putut încărca indexul extern Wayback momentan.',
+          );
           setGroupedItems(grouped);
         }
       } finally {
@@ -155,7 +169,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
     return () => {
       cancelled = true;
     };
-  }, [sourceId, cleanDomain]);
+  }, [sourceId, domain]);
 
   const toggleYear = (year: string) => {
     setExpandedYears(prev => ({ ...prev, [year]: !prev[year] }));
@@ -201,6 +215,10 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
           />
         </div>
       </div>
+
+      {error && sortedYears.length > 0 && (
+        <p className="px-1 text-xs text-amber-700">{error}</p>
+      )}
 
       {sortedYears.length === 0 ? (
         <div className="p-8 text-center bg-card border border-border rounded-xl">

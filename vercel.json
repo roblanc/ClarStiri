@@ -13,6 +13,9 @@
         "api/image.ts": {
             "maxDuration": 15
         },
+        "api/archive.ts": {
+            "maxDuration": 15
+        },
         "api/status.ts": {
             "maxDuration": 15
         }
