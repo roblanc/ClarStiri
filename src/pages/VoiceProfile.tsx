@@ -18,8 +18,8 @@ const VoiceProfile = () => {
                 <Header />
                 <div className="container mx-auto px-4 py-8 text-center">
                     <h1 className="text-2xl font-bold mb-4">Profilul nu a fost găsit</h1>
-                    <Link to="/voci">
-                        <Button>Înapoi la Barometru</Button>
+                    <Link to="/influenceri">
+                        <Button>Înapoi la Influenceri</Button>
                     </Link>
                 </div>
             </div>
@@ -46,7 +46,7 @@ const VoiceProfile = () => {
             </Helmet>
 
             <main className="container mx-auto px-4 py-8 max-w-5xl">
-                <Link to="/voci" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
+                <Link to="/influenceri" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
                     <ArrowLeft className="w-4 h-4 mr-1" /> Înapoi la listă
                 </Link>
 

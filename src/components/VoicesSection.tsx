@@ -16,7 +16,7 @@ export function VoicesSection() {
                         </p>
                     </div>
                     <Link
-                        to="/voci"
+                        to="/influenceri"
                         className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:opacity-50 transition-colors flex items-center gap-1"
                     >
                         Vezi toți

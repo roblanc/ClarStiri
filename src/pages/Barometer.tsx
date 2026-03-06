@@ -2,19 +2,33 @@ import { Header } from "@/components/Header";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import { Link } from "react-router-dom";
 import { Users, Target, Search } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useState, useMemo } from "react";
 
 const Barometer = () => {
-    const [searchQuery, setSearchOpen] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const safeFigures = useMemo(() => {
+        return PUBLIC_FIGURES.filter((figure) =>
+            typeof figure?.id === "string" &&
+            typeof figure?.slug === "string" &&
+            typeof figure?.name === "string" &&
+            typeof figure?.role === "string" &&
+            figure.bias &&
+            typeof figure.bias.score === "number" &&
+            typeof figure.bias.leaning === "string"
+        );
+    }, []);
 
     const filteredFigures = useMemo(() => {
-        return PUBLIC_FIGURES.filter(f =>
-            f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            f.role.toLowerCase().includes(searchQuery.toLowerCase())
+        const normalizedQuery = searchQuery.toLowerCase().trim();
+
+        return safeFigures.filter(f =>
+            normalizedQuery === "" ||
+            f.name.toLowerCase().includes(normalizedQuery) ||
+            f.role.toLowerCase().includes(normalizedQuery)
         );
-    }, [searchQuery]);
+    }, [safeFigures, searchQuery]);
 
     return (
         <div className="min-h-screen bg-background">
@@ -38,7 +52,7 @@ const Barometer = () => {
                             placeholder="Caută o voce..."
                             className="pl-10 h-11 rounded-xl bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary"
                             value={searchQuery}
-                            onChange={(e) => setSearchOpen(e.target.value)}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                         />
                     </div>
                 </div>

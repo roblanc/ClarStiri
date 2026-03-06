@@ -24,7 +24,7 @@ interface SearchResult {
 const STATIC_PAGES = [
   { id: "page-home", title: "Prima pagină", subtitle: "Fluxul principal de știri", href: "/" },
   { id: "page-surse", title: "Surse", subtitle: "Profiluri și metodologie de evaluare", href: "/surse" },
-  { id: "page-barometru", title: "Influenceri", subtitle: "Voci publice și profiluri", href: "/barometru" },
+  { id: "page-barometru", title: "Influenceri", subtitle: "Voci publice și profiluri", href: "/influenceri" },
   { id: "page-metodologie", title: "Metodologie", subtitle: "Cum agregăm și analizăm bias-ul", href: "/metodologie" },
   { id: "page-despre", title: "Despre", subtitle: "Despre proiect", href: "/despre" },
   { id: "page-contact", title: "Contact", subtitle: "Date de contact", href: "/contact" },

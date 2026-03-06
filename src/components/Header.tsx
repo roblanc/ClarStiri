@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Search, X, Users } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -16,7 +16,7 @@ export function Header() {
 
   const navLinks = [
     { to: "/surse", label: "Surse" },
-    { to: "/barometru", label: "Influenceri" },
+    { to: "/influenceri", label: "Influenceri" },
   ];
 
   const handleSearchClose = () => {

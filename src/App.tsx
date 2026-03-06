@@ -3,10 +3,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
+import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import StoryDetail from "./pages/StoryDetail";
 
 // Lazy load pages for better code splitting
@@ -43,6 +44,34 @@ const PageLoader = () => (
   </div>
 );
 
+const RoutedApp = () => {
+  const location = useLocation();
+
+  return (
+    <AppErrorBoundary key={`${location.pathname}${location.search}`}>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/stire/:id" element={<StoryDetail />} />
+          <Route path="/metodologie" element={<Metodologie />} />
+          <Route path="/surse" element={<Sources />} />
+          <Route path="/surse/:id" element={<SourceDetail />} />
+          <Route path="/despre" element={<Despre />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/cauta" element={<SearchPage />} />
+          <Route path="/categorie/:slug" element={<CategoryPage />} />
+          <Route path="/influenceri" element={<Barometer />} />
+          <Route path="/barometru" element={<Navigate to="/influenceri" replace />} />
+          <Route path="/voci" element={<Navigate to="/influenceri" replace />} />
+          <Route path="/voce/:slug" element={<VoiceProfile />} />
+          <Route path="/test" element={<IndexEditorial />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+    </AppErrorBoundary>
+  );
+};
+
 const App = () => (
   <ThemeProvider>
     <HelmetProvider>
@@ -51,24 +80,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/stire/:id" element={<StoryDetail />} />
-                <Route path="/metodologie" element={<Metodologie />} />
-                <Route path="/surse" element={<Sources />} />
-                <Route path="/surse/:id" element={<SourceDetail />} />
-                <Route path="/despre" element={<Despre />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/cauta" element={<SearchPage />} />
-                <Route path="/categorie/:slug" element={<CategoryPage />} />
-                <Route path="/barometru" element={<Barometer />} />
-                <Route path="/voci" element={<Navigate to="/barometru" replace />} />
-                <Route path="/voce/:slug" element={<VoiceProfile />} />
-                <Route path="/test" element={<IndexEditorial />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <RoutedApp />
           </BrowserRouter>
         </TooltipProvider>
       </QueryClientProvider>

@@ -145,8 +145,8 @@ const Index = () => {
               <h2 className="font-serif text-xl text-foreground">
                 Voci Relevante ({matchedVoices.length})
               </h2>
-              <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-                Vezi Barometru
+              <Link to="/influenceri" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
+                Vezi Influenceri
               </Link>
             </div>
 
@@ -223,7 +223,7 @@ const Index = () => {
           <nav className="flex items-center justify-center gap-6 mb-8">
             <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Surse</Link>
             <span className="w-1 h-1 bg-border rounded-full"></span>
-            <Link to="/barometru" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Barometru</Link>
+            <Link to="/influenceri" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Influenceri</Link>
           </nav>
 
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
