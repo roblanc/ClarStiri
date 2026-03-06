@@ -4,10 +4,11 @@ import { Header } from "@/components/Header";
 import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
+import type { AggregatedStory } from "@/types/news";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 // Placeholder image
 const PLACEHOLDER_IMAGE = "/default-news.png";
@@ -57,6 +58,55 @@ const toValidDate = (value: unknown): Date | null => {
   return null;
 };
 
+const normalizeCachedStoryDate = (story: AggregatedStory): AggregatedStory => {
+  const publishedAt = toValidDate(story.publishedAt) ?? new Date();
+  return {
+    ...story,
+    publishedAt,
+  };
+};
+
+const getCachedStories = (): AggregatedStory[] => {
+  const cacheKeys = [
+    "last_news_60",
+    "last_news_120",
+    "clarstiri_aggregated_cache_v3_ultra",
+  ];
+
+  const allStories: AggregatedStory[] = [];
+
+  for (const key of cacheKeys) {
+    const raw = localStorage.getItem(key);
+    if (!raw) continue;
+
+    try {
+      const parsed = JSON.parse(raw);
+      const candidates = Array.isArray(parsed?.data)
+        ? parsed.data
+        : Array.isArray(parsed?.stories)
+          ? parsed.stories
+          : [];
+
+      for (const story of candidates) {
+        if (story?.id) {
+          allStories.push(normalizeCachedStoryDate(story as AggregatedStory));
+        }
+      }
+    } catch {
+      // Ignore malformed cache entries and continue with others
+    }
+  }
+
+  const dedup = new Map<string, AggregatedStory>();
+  allStories.forEach((story) => {
+    if (!dedup.has(story.id)) {
+      dedup.set(story.id, story);
+    }
+  });
+
+  return Array.from(dedup.values());
+};
+
 // Componenta logo sursă cu fallback la inițiale
 function SourceLogo({ source }: { source: { name: string; bias: string; url?: string; logo?: string } }) {
   const [failed, setFailed] = useState(false);
@@ -91,12 +141,13 @@ function SourceLogo({ source }: { source: { name: string; bias: string; url?: st
 
 const StoryDetail = () => {
   const { id } = useParams();
-  const { data: stories, isLoading } = useAggregatedNews(60);
+  const { data: stories, isLoading } = useAggregatedNews(120);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const cachedStories = useMemo(() => getCachedStories(), []);
 
   // Găsește povestea cu ID-ul din URL
-  const currentStory = stories?.find(s => s.id === id);
+  const currentStory = stories?.find(s => s.id === id) || cachedStories.find(s => s.id === id);
 
   // Grupează sursele după bias
   const groupedSources = currentStory?.sources.reduce((acc, source) => {
