@@ -3,13 +3,23 @@ import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews
 import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
 import { AggregatedStory, RSSNewsItem } from '@/types/news';
 import { useEffect, useMemo } from 'react';
+import { decodeHtmlEntities } from '../../shared/htmlEntities';
 
 const NEWS_QUERY_TIMEOUT_MS = 45000;
 
-function normalizeStoryDates(stories: AggregatedStory[]): AggregatedStory[] {
+function normalizeStories(stories: AggregatedStory[]): AggregatedStory[] {
     return stories.map((story) => ({
         ...story,
+        title: decodeHtmlEntities(story.title),
+        description: decodeHtmlEntities(story.description || ''),
+        mainCategory: decodeHtmlEntities(story.mainCategory || ''),
         publishedAt: story.publishedAt instanceof Date ? story.publishedAt : new Date(story.publishedAt),
+        sources: story.sources.map((source) => ({
+            ...source,
+            title: decodeHtmlEntities(source.title),
+            description: decodeHtmlEntities(source.description || ''),
+            category: decodeHtmlEntities(source.category || '') || undefined,
+        })),
     }));
 }
 
@@ -77,15 +87,20 @@ export function useAggregatedNews(limit = 20) {
         retry: 1,
     });
 
+    const normalizedQueryData = useMemo(
+        () => (query.data?.length ? normalizeStories(query.data) : undefined),
+        [query.data]
+    );
+
     // Sincronizare cu LocalStorage pentru încărcare INSTANT la revenire
     useEffect(() => {
-        if (query.data && query.data.length > 0) {
+        if (normalizedQueryData && normalizedQueryData.length > 0) {
             localStorage.setItem(`last_news_${limit}`, JSON.stringify({
-                data: query.data,
+                data: normalizedQueryData,
                 ts: Date.now()
             }));
         }
-    }, [query.data, limit]);
+    }, [normalizedQueryData, limit]);
 
     // Încercăm să luăm datele din localStorage ca placeholder
     const cachedLocal = useMemo(() => {
@@ -93,7 +108,7 @@ export function useAggregatedNews(limit = 20) {
             const saved = localStorage.getItem(`last_news_${limit}`);
             if (saved) {
                 const parsed = JSON.parse(saved).data as AggregatedStory[] | undefined;
-                if (parsed?.length) return normalizeStoryDates(parsed);
+                if (parsed?.length) return normalizeStories(parsed);
             }
         } catch (e) { return undefined; }
         return undefined;
@@ -101,9 +116,9 @@ export function useAggregatedNews(limit = 20) {
 
     return {
         ...query,
-        data: query.data || cachedLocal,
+        data: normalizedQueryData || cachedLocal,
         isLoading: query.isLoading && !cachedLocal,
-        isRefreshing: query.isFetching && !!query.data,
+        isRefreshing: query.isFetching && !!normalizedQueryData,
     };
 }
 

@@ -10,6 +10,7 @@ import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Sear
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
 import { useMemo, useState } from "react";
+import { decodeHtmlEntities } from "../../shared/htmlEntities";
 
 // Placeholder image
 const PLACEHOLDER_IMAGE = "/default-news.png";
@@ -63,7 +64,16 @@ const normalizeCachedStoryDate = (story: AggregatedStory): AggregatedStory => {
   const publishedAt = toValidDate(story.publishedAt) ?? new Date();
   return {
     ...story,
+    title: decodeHtmlEntities(story.title),
+    description: decodeHtmlEntities(story.description || ""),
+    mainCategory: decodeHtmlEntities(story.mainCategory || ""),
     publishedAt,
+    sources: story.sources.map((source) => ({
+      ...source,
+      title: decodeHtmlEntities(source.title),
+      description: decodeHtmlEntities(source.description || ""),
+      category: decodeHtmlEntities(source.category || "") || undefined,
+    })),
   };
 };
 

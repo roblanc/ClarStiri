@@ -4,6 +4,7 @@ import {
     NEWS_SOURCES_BASE,
     type BaseNewsSource,
 } from '../shared/newsSources.js';
+import { decodeHtmlEntities } from '../shared/htmlEntities.js';
 
 // Tipuri
 export type NewsSource = BaseNewsSource;
@@ -148,10 +149,13 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
             return (m?.[1] || m?.[2] || '').trim();
         };
 
-        const title = getTagContent('title');
-        const description = getTagContent('description').replace(/<[^>]*>/g, '').substring(0, 500);
+        const title = decodeHtmlEntities(getTagContent('title'));
+        const description = decodeHtmlEntities(
+            getTagContent('description').replace(/<[^>]*>/g, '')
+        ).substring(0, 500);
         const link = getTagContent('link');
         const pubDate = getTagContent('pubDate');
+        const category = decodeHtmlEntities(getTagContent('category')) || undefined;
 
         // Filter out weather, horoscope news, etc.
         if (shouldFilterNews(title, description)) {
@@ -179,7 +183,7 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
                 pubDate,
                 imageUrl,
                 source,
-                category: getTagContent('category') || undefined,
+                category,
                 biasAnalysis: biasAnalysis.confidence > 0.1 ? biasAnalysis : undefined,
             });
             index++;

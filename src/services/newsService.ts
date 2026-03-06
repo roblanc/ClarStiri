@@ -1,5 +1,6 @@
 import { RSSNewsItem, AggregatedStory, NEWS_SOURCES, BIAS_WEIGHT_MAP, NewsSource } from '@/types/news';
 import { createStoryIdFromSources } from '@/utils/storyId';
+import { decodeHtmlEntities } from '../../shared/htmlEntities';
 
 // CORS proxies - folosim mai multe pentru redundanță și viteză
 // Format: ${proxy}${encodeURIComponent(url)} — toți trebuie să accepte ?url=<encoded>
@@ -154,7 +155,9 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
 
         // Extrage categoria
         const categoryEl = item.querySelector('category');
-        const category = categoryEl?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
+        const category = decodeHtmlEntities(
+            categoryEl?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || ''
+        );
 
         // Extrage imaginea din enclosure sau media:content
         let imageUrl = item.querySelector('enclosure')?.getAttribute('url') || '';
@@ -193,25 +196,6 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     });
 
     return newsItems;
-}
-
-// Mapare statică a celor mai frecvente HTML entities — fără DOM overhead
-const HTML_ENTITIES: Record<string, string> = {
-    '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'",
-    '&apos;': "'", '&nbsp;': ' ', '&mdash;': '—', '&ndash;': '–',
-    '&laquo;': '«', '&raquo;': '»', '&icirc;': 'î', '&Icirc;': 'Î',
-    '&acirc;': 'â', '&Acirc;': 'Â', '&scedil;': 'ș', '&Scedil;': 'Ș',
-    '&tcedil;': 'ț', '&Tcedil;': 'Ț', '&atilde;': 'ã', '&Atilde;': 'Ã',
-    '&hellip;': '…', '&rsquo;': '\'', '&lsquo;': '\'', '&rdquo;': '"', '&ldquo;': '"',
-};
-const ENTITY_RE = /&[a-zA-Z#][a-zA-Z0-9]{1,6};/g;
-
-/**
- * Decodează HTML entities (&quot;, &amp;, &icirc;, etc.) fără overhead DOM
- */
-function decodeHtmlEntities(text: string): string {
-    if (!text) return '';
-    return text.replace(ENTITY_RE, match => HTML_ENTITIES[match] ?? match);
 }
 
 /**
