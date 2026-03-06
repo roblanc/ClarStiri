@@ -10,6 +10,9 @@
         "api/rss.ts": {
             "maxDuration": 10
         },
+        "api/image.ts": {
+            "maxDuration": 15
+        },
         "api/status.ts": {
             "maxDuration": 15
         }

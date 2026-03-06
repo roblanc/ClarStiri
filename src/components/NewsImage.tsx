@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Newspaper } from 'lucide-react';
+import { getImageProxyUrl } from '@/utils/imageOptimizer';
 
 function hashCode(str: string): number {
   let hash = 0;
@@ -46,7 +47,15 @@ export function NewsImage({
   decoding = 'async',
   fetchPriority,
 }: NewsImageProps) {
+  const [displaySrc, setDisplaySrc] = useState(src);
   const [failed, setFailed] = useState(!src);
+  const [didTryProxyFallback, setDidTryProxyFallback] = useState(false);
+
+  useEffect(() => {
+    setDisplaySrc(src);
+    setFailed(!src);
+    setDidTryProxyFallback(false);
+  }, [src]);
 
   const [c1, c2] = GRADIENTS[hashCode(seed || src) % GRADIENTS.length];
 
@@ -61,16 +70,29 @@ export function NewsImage({
     );
   }
 
+  const handleError = () => {
+    if (!didTryProxyFallback) {
+      const proxyUrl = getImageProxyUrl(displaySrc);
+      if (proxyUrl && proxyUrl !== displaySrc) {
+        setDisplaySrc(proxyUrl);
+        setDidTryProxyFallback(true);
+        return;
+      }
+    }
+
+    setFailed(true);
+  };
+
   return (
     <img
-      src={src}
+      src={displaySrc}
       alt={alt}
       className={className}
       style={style}
       loading={loading}
       decoding={decoding}
       {...(fetchPriority ? { fetchPriority } : {})}
-      onError={() => setFailed(true)}
+      onError={handleError}
     />
   );
 }

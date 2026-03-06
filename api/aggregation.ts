@@ -21,6 +21,30 @@ async function fetchOgImage(url: string): Promise<string> {
     }
 }
 
+function pickPrimarySource(sources: RSSNewsItem[]): RSSNewsItem {
+    return sources.reduce((latest, current) => {
+        return new Date(current.pubDate).getTime() > new Date(latest.pubDate).getTime() ? current : latest;
+    });
+}
+
+export async function resolveStoryImageFromSources(sources: RSSNewsItem[]): Promise<string | undefined> {
+    if (sources.length === 0) return undefined;
+
+    const primary = pickPrimarySource(sources);
+    const imageSource = sources.find(s => s.imageUrl) || primary;
+    let resolvedImage = imageSource.imageUrl;
+
+    if (!resolvedImage) {
+        const candidateUrls = [primary.link, ...sources.map(s => s.link)].filter(Boolean);
+        for (const url of candidateUrls.slice(0, 3)) {
+            resolvedImage = await fetchOgImage(url);
+            if (resolvedImage) break;
+        }
+    }
+
+    return resolvedImage;
+}
+
 export interface AggregatedStory {
     id: string;
     title: string; // The aggregated title
@@ -254,20 +278,8 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
         taskIndex++;
 
         const promise = async () => {
-            const primary = sources.reduce((earliest, current) => {
-                return new Date(current.pubDate).getTime() > new Date(earliest.pubDate).getTime() ? current : earliest;
-            });
-
-            const imageSource = sources.find(s => s.imageUrl) || primary;
-            let resolvedImage = imageSource.imageUrl;
-            if (!resolvedImage) {
-                // Încearcă să extragă og:image de la sursa primară
-                const candidateUrls = [primary.link, ...sources.map(s => s.link)].filter(Boolean);
-                for (const url of candidateUrls.slice(0, 3)) {
-                    resolvedImage = await fetchOgImage(url);
-                    if (resolvedImage) break;
-                }
-            }
+            const primary = pickPrimarySource(sources);
+            const resolvedImage = await resolveStoryImageFromSources(sources);
 
             // Generate Title via LLM only for top stories; rest use best-source fallback.
             const aggregatedTitle = useLlm

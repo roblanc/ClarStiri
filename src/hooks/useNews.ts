@@ -20,6 +20,7 @@ function normalizeStories(stories: AggregatedStory[]): AggregatedStory[] {
             description: decodeHtmlEntities(source.description || ''),
             category: decodeHtmlEntities(source.category || '') || undefined,
         })),
+        image: story.image || story.sources.find((source) => source.imageUrl)?.imageUrl,
     }));
 }
 

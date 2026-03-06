@@ -5,7 +5,7 @@ import {
     NEWS_SOURCES,
     fetchRSSFeed
 } from './shared.js';
-import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo } from './aggregation.js';
+import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo, resolveStoryImageFromSources } from './aggregation.js';
 import { setCorsHeaders } from './cors.js';
 
 // Cache key și durata
@@ -26,19 +26,21 @@ async function fetchAllNews(): Promise<RSSNewsItem[]> {
 }
 
 /** Fallback: when aggregation produces 0 groups, return top articles as individual stories */
-function buildFallbackStories(allNews: RSSNewsItem[], limit: number): AggregatedStory[] {
-    return allNews.slice(0, limit).map(item => ({
-        id: `single-${item.id}`,
-        title: item.title,
-        description: item.description,
-        image: item.imageUrl,
-        sources: [item],
-        sourcesCount: 1,
-        bias: calculateBiasDistribution([item]),
-        mainCategory: item.category || 'Actualitate',
-        publishedAt: item.pubDate,
-        timeAgo: getTimeAgo(item.pubDate),
-    }));
+async function buildFallbackStories(allNews: RSSNewsItem[], limit: number): Promise<AggregatedStory[]> {
+    return Promise.all(
+        allNews.slice(0, limit).map(async (item) => ({
+            id: `single-${item.id}`,
+            title: item.title,
+            description: item.description,
+            image: await resolveStoryImageFromSources([item]),
+            sources: [item],
+            sourcesCount: 1,
+            bias: calculateBiasDistribution([item]),
+            mainCategory: item.category || 'Actualitate',
+            publishedAt: item.pubDate,
+            timeAgo: getTimeAgo(item.pubDate),
+        }))
+    );
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -100,7 +102,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             if (isStale && redis) {
                 fetchAllNews().then(async news => {
                     const agg = await aggregateNewsBuildTopics(news, MIN_SOURCES_THRESHOLD);
-                    const toStore = agg.length > 0 ? agg : buildFallbackStories(news, 50);
+                    const toStore = agg.length > 0 ? agg : await buildFallbackStories(news, 50);
                     if (toStore.length > 0 && redis) {
                         try {
                             await Promise.all([
@@ -137,7 +139,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Fallback: if aggregation produced nothing but we have articles, show them individually
         if (aggregated.length === 0 && allNews.length > 0) {
             console.log('Aggregation returned 0, using individual article fallback');
-            aggregated = buildFallbackStories(allNews, limit);
+            aggregated = await buildFallbackStories(allNews, limit);
         }
 
         if (aggregated.length > 0 && redis) {

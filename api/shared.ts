@@ -133,6 +133,30 @@ export async function fetchWithTimeout(url: string, timeout: number): Promise<Re
     }
 }
 
+function extractFirstImageFromHtml(html: string): string {
+    if (!html) return '';
+
+    const imgMatch = html.match(/<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/i);
+    return decodeHtmlEntities(imgMatch?.[1] || '');
+}
+
+function extractImageUrl(itemXml: string, rawDescription: string, rawContentEncoded: string): string {
+    const patterns = [
+        /<enclosure[^>]+url=["']([^"']+)["']/i,
+        /<media:content[^>]+url=["']([^"']+)["']/i,
+        /<media:thumbnail[^>]+url=["']([^"']+)["']/i,
+        /<media:thumbnail[^>]+href=["']([^"']+)["']/i,
+    ];
+
+    for (const pattern of patterns) {
+        const match = itemXml.match(pattern);
+        const candidate = decodeHtmlEntities(match?.[1] || '');
+        if (candidate) return candidate;
+    }
+
+    return extractFirstImageFromHtml(rawDescription) || extractFirstImageFromHtml(rawContentEncoded);
+}
+
 export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     const items: RSSNewsItem[] = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
@@ -149,9 +173,11 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
             return (m?.[1] || m?.[2] || '').trim();
         };
 
+        const rawDescription = getTagContent('description');
+        const rawContentEncoded = getTagContent('content:encoded');
         const title = decodeHtmlEntities(getTagContent('title'));
         const description = decodeHtmlEntities(
-            getTagContent('description').replace(/<[^>]*>/g, '')
+            rawDescription.replace(/<[^>]*>/g, '')
         ).substring(0, 500);
         const link = getTagContent('link');
         const pubDate = getTagContent('pubDate');
@@ -163,14 +189,7 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
         }
 
         // Extract image
-        let imageUrl = '';
-        const enclosureMatch = itemXml.match(/enclosure[^>]+url=["']([^"']+)["']/i);
-        if (enclosureMatch) imageUrl = enclosureMatch[1];
-
-        if (!imageUrl) {
-            const mediaMatch = itemXml.match(/media:content[^>]+url=["']([^"']+)["']/i);
-            if (mediaMatch) imageUrl = mediaMatch[1];
-        }
+        const imageUrl = extractImageUrl(itemXml, rawDescription, rawContentEncoded);
 
         if (title && link) {
             const biasAnalysis = quickBiasAnalysis(title, description);

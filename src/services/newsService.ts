@@ -144,6 +144,7 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     items.forEach((item, index) => {
         const rawTitle = item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const rawDescription = item.querySelector('description')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
+        const rawContentEncoded = item.querySelector('content\\:encoded')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
         const link = item.querySelector('link')?.textContent?.trim() || '';
         const pubDate = item.querySelector('pubDate')?.textContent?.trim() ||
             item.querySelector('published')?.textContent?.trim() ||
@@ -167,9 +168,14 @@ function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
         }
         // Fallback: caută în description pentru taguri img
         if (!imageUrl && rawDescription) {
-            const imgMatch = rawDescription.match(/<img[^>]+src=["']([^"']+)["']/i);
+            const imgMatch = rawDescription.match(/<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/i);
             imageUrl = imgMatch?.[1] || '';
         }
+        if (!imageUrl && rawContentEncoded) {
+            const contentImgMatch = rawContentEncoded.match(/<img[^>]+(?:src|data-src|data-lazy-src)=["']([^"']+)["']/i);
+            imageUrl = contentImgMatch?.[1] || '';
+        }
+        imageUrl = decodeHtmlEntities(imageUrl);
 
         // Decode HTML entities din titlu și descriere
         const title = decodeHtmlEntities(rawTitle);

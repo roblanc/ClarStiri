@@ -25,6 +25,10 @@ interface OptimizeOptions {
     fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
 }
 
+function isExternalHttpUrl(url: string): boolean {
+    return url.startsWith('http://') || url.startsWith('https://');
+}
+
 /**
  * Verifică dacă un URL este o imagine externă care trebuie optimizată
  */
@@ -33,11 +37,40 @@ function shouldOptimize(url: string): boolean {
 
     // Nu optimiza imagini deja optimize sau locale
     if (url.includes('wsrv.nl')) return false;
+    if (url.startsWith('/api/image')) return false;
     if (url.startsWith('/')) return false;
     if (url.startsWith('data:')) return false;
 
     // Optimizează doar imagini externe HTTP(S)
-    return url.startsWith('http://') || url.startsWith('https://');
+    return isExternalHttpUrl(url);
+}
+
+function extractOriginalImageUrl(url: string): string {
+    if (!url) return '';
+
+    if (url.startsWith('/api/image')) {
+        return url;
+    }
+
+    if (url.includes('wsrv.nl')) {
+        try {
+            const parsed = new URL(url);
+            return parsed.searchParams.get('url') || '';
+        } catch {
+            return '';
+        }
+    }
+
+    return isExternalHttpUrl(url) ? url : '';
+}
+
+export function getImageProxyUrl(url: string | undefined): string {
+    const originalUrl = extractOriginalImageUrl(url || '');
+    if (!originalUrl || originalUrl.startsWith('/api/image')) {
+        return originalUrl;
+    }
+
+    return `/api/image?url=${encodeURIComponent(originalUrl)}`;
 }
 
 /**
