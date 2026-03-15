@@ -63,6 +63,7 @@ export interface AggregatedStory {
 export function getTimeAgo(pubDate: string): string {
     const now = new Date();
     const published = new Date(pubDate);
+    if (isNaN(published.getTime())) return '';
     const diffMs = now.getTime() - published.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
@@ -285,7 +286,9 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
 
         const promise = async () => {
             const primary = pickPrimarySource(sources);
-            const resolvedImage = await resolveStoryImageFromSources(sources);
+            // OG image fetching deferred to /api/story (lazy, per-story, cached).
+            // Using only images already embedded in RSS feeds keeps aggregation fast.
+            const resolvedImage = sources.find(s => s.imageUrl)?.imageUrl;
 
             // Generate Title via LLM only for top stories; rest use best-source fallback.
             const aggregatedTitle = useLlm

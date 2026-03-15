@@ -76,7 +76,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground mb-1.5 md:mb-2">
               <span className="text-primary/70">{news.category || "Actualitate"}</span>
               <span className="opacity-40">•</span>
-              <span>{(news.timeAgo && !news.timeAgo.includes('INVALID')) ? news.timeAgo : "Acum"}</span>
+              <span>{(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo : "Acum"}</span>
               <span className="opacity-40">•</span>
               <span>{news.sourcesCount} surse</span>
             </div>
