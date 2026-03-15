@@ -2,16 +2,15 @@ name: Refresh News Cache
 
 on:
   schedule:
-    - cron: '*/30 * * * *'  # la fiecare 30 minute
-  workflow_dispatch:          # permite rulare manuală din GitHub UI
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # permite rulare manuală din GitHub UI
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger news refresh
+      - name: Trigger cache refresh
         run: |
-          curl -s -X GET \
-            "https://clarstiri.vercel.app/api/cron/refresh-news" \
+          curl -s -f \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            --fail-with-body
+            https://clarstiri.ro/api/cron/refresh-news
