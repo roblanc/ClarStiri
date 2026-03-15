@@ -13,4 +13,4 @@ jobs:
         run: |
           curl -s -f \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            https://clarstiri.ro/api/cron/refresh-news
+            https://thesite.ro/api/cron/refresh-news
