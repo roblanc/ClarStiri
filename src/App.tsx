@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
-import StoryDetail from "./pages/StoryDetail";
+const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 
 // Lazy load pages for better code splitting
 const Index = lazy(() => import("./pages/Index"));

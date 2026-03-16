@@ -1,33 +1,10 @@
-/* Fonturi: doar subseturile latin + latin-ext (română) — elimină greek, cyrillic, vietnamese */
-@import '@fontsource/ibm-plex-sans/latin-400.css';
-@import '@fontsource/ibm-plex-sans/latin-ext-400.css';
-@import '@fontsource/ibm-plex-sans/latin-500.css';
-@import '@fontsource/ibm-plex-sans/latin-ext-500.css';
-@import '@fontsource/ibm-plex-sans/latin-600.css';
-@import '@fontsource/ibm-plex-sans/latin-ext-600.css';
-@import '@fontsource/ibm-plex-sans/latin-700.css';
-@import '@fontsource/ibm-plex-sans/latin-ext-700.css';
-@import '@fontsource/playfair-display/latin-400.css';
-@import '@fontsource/playfair-display/latin-ext-400.css';
-@import '@fontsource/playfair-display/latin-500.css';
-@import '@fontsource/playfair-display/latin-ext-500.css';
-@import '@fontsource/playfair-display/latin-600.css';
-@import '@fontsource/playfair-display/latin-ext-600.css';
-@import '@fontsource/playfair-display/latin-700.css';
-@import '@fontsource/playfair-display/latin-ext-700.css';
-@import '@fontsource/playfair-display/latin-400-italic.css';
-@import '@fontsource/playfair-display/latin-ext-400-italic.css';
-
-@import '@fontsource/newsreader/latin-400.css';
-@import '@fontsource/newsreader/latin-ext-400.css';
-@import '@fontsource/newsreader/latin-500.css';
-@import '@fontsource/newsreader/latin-ext-500.css';
-@import '@fontsource/newsreader/latin-600.css';
-@import '@fontsource/newsreader/latin-ext-600.css';
-@import '@fontsource/newsreader/latin-700.css';
-@import '@fontsource/newsreader/latin-ext-700.css';
-@import '@fontsource/newsreader/latin-400-italic.css';
-@import '@fontsource/newsreader/latin-ext-400-italic.css';
+/* Variable fonts — single woff2 per family, all weights, font-display:swap built-in.
+   unicode-range per @font-face means the browser only downloads the subsets it needs. */
+@import '@fontsource-variable/ibm-plex-sans/wght.css';
+@import '@fontsource-variable/playfair-display/wght.css';
+@import '@fontsource-variable/playfair-display/wght-italic.css';
+@import '@fontsource-variable/newsreader/wght.css';
+@import '@fontsource-variable/newsreader/wght-italic.css';
 
 @tailwind base;
 @tailwind components;

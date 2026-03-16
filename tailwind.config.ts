@@ -19,10 +19,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
-        serif: ["Playfair Display", "Georgia", "serif"],
+        sans: ["IBM Plex Sans Variable", "IBM Plex Sans", "system-ui", "sans-serif"],
+        serif: ["Playfair Display Variable", "Playfair Display", "Georgia", "serif"],
         title: ["VICE Grotesk", "Helvetica", "Arial", "sans-serif"],
-        anthropic: ["Newsreader", "Georgia", "serif"],
+        anthropic: ["Newsreader Variable", "Newsreader", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
