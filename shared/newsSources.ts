@@ -56,6 +56,8 @@ export const NEWS_SOURCES_BASE = [
   { id: 'factual', name: 'Factual.ro', url: 'https://www.factual.ro', rssUrl: 'https://www.factual.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'jurnalul', name: 'Jurnalul.ro', url: 'https://jurnalul.ro', rssUrl: 'https://jurnalul.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
   { id: 'realitatea', name: 'Realitatea Plus', url: 'https://www.realitatea.net', rssUrl: 'https://www.realitatea.net/rss', bias: 'right', factuality: 'mixed', category: 'mainstream' },
+  { id: 'aktual24', name: 'Aktual24', url: 'https://www.aktual24.ro', rssUrl: 'https://www.aktual24.ro/feed/', bias: 'right', factuality: 'mixed', category: 'independent' },
+  { id: 'redactia', name: 'Redacția', url: 'https://redactia.ro', rssUrl: 'https://redactia.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'independent' },
   { id: 'b1tv', name: 'B1 TV', url: 'https://www.b1tv.ro', rssUrl: 'https://www.b1tv.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
 ] as const satisfies readonly BaseNewsSource[];
 
