@@ -5,15 +5,13 @@ import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
 import type { AggregatedStory } from "@/types/news";
-import { normalizeStorySlug, toStorySlug } from "@/utils/storyRoute";
+import { normalizeStorySlug, toStorySlug, buildStoryHref } from "@/utils/storyRoute";
 import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
 import { useMemo, useState } from "react";
 import { decodeHtmlEntities } from "../../shared/htmlEntities";
-
-// Placeholder image
-const PLACEHOLDER_IMAGE = "/default-news.png";
+import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 
 // Mapare bias text pentru filtre
 const BIAS_LABELS = {
@@ -282,7 +280,7 @@ const StoryDetail = () => {
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
         publisherLogo: 'https://thesite.ro/ethics-logo.png',
-        url: `https://thesite.ro/stire/${currentStory.id}`
+        url: `https://thesite.ro${buildStoryHref(currentStory.id, currentStory.title)}`
       }} />
 
       <main className="container mx-auto px-4 py-6 overflow-x-hidden">

@@ -10,9 +10,7 @@ import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import {
   MainFeedSkeleton,
 } from "@/components/Skeleton";
-
-// Placeholder imagine când nu avem una
-const PLACEHOLDER_IMAGE = "/default-news.png";
+import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 
 const BATCH = 20;
 

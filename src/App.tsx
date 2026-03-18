@@ -22,7 +22,6 @@ const Despre = lazy(() => import("./pages/Despre"));
 const Contact = lazy(() => import("./pages/Contact"));
 const SearchPage = lazy(() => import("./pages/SearchPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const IndexEditorial = lazy(() => import("./pages/IndexEditorial"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,7 +63,6 @@ const RoutedApp = () => {
           <Route path="/barometru" element={<Navigate to="/influenceri" replace />} />
           <Route path="/voci" element={<Navigate to="/influenceri" replace />} />
           <Route path="/voce/:slug" element={<VoiceProfile />} />
-          <Route path="/test" element={<IndexEditorial />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
