@@ -63,17 +63,26 @@ function sectionTitle(kind: ResultKind): string {
 }
 
 export default function SearchPage() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const urlQuery = searchParams.get("q") || "";
   const { query, setQuery, clearQuery } = useSearchStore();
   const { data: stories = [], isLoading } = useAggregatedNews(100);
 
+  // URL → store: la navigare directă sau link shared
   useEffect(() => {
     const trimmed = urlQuery.trim();
     if (trimmed && trimmed !== query) {
       setQuery(trimmed);
     }
-  }, [urlQuery, query, setQuery]);
+  }, [urlQuery]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // store → URL: ține URL-ul în sync când userul tastează în Header
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed !== urlQuery) {
+      setSearchParams(trimmed ? { q: trimmed } : {}, { replace: true });
+    }
+  }, [query]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const normalizedQuery = normalize(query || "");
 

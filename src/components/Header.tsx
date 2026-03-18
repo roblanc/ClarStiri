@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,11 +8,22 @@ import { cn } from "@/lib/utils";
 import { useSearchStore } from "@/hooks/useSearchStore";
 
 export function Header() {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const isSearchPage = useLocation().pathname === "/cauta";
+  const [searchOpen, setSearchOpen] = useState(isSearchPage);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { query, setQuery, clearQuery } = useSearchStore();
+
+  // Pe /cauta: ține search bar deschis și populează din URL la prima randare
+  useEffect(() => {
+    if (isSearchPage) {
+      setSearchOpen(true);
+      const urlQ = searchParams.get("q") || "";
+      if (urlQ && !query) setQuery(urlQ);
+    }
+  }, [isSearchPage]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navLinks = [
     { to: "/surse", label: "Surse" },
@@ -20,8 +31,13 @@ export function Header() {
   ];
 
   const handleSearchClose = () => {
-    setSearchOpen(false);
-    clearQuery();
+    if (isSearchPage) {
+      // Pe pagina de căutare: golește query dar lasă bara deschisă
+      clearQuery();
+    } else {
+      setSearchOpen(false);
+      clearQuery();
+    }
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -68,8 +84,12 @@ export function Header() {
 
       if (isEscape && searchOpen) {
         event.preventDefault();
-        setSearchOpen(false);
-        clearQuery();
+        if (isSearchPage) {
+          clearQuery();
+        } else {
+          setSearchOpen(false);
+          clearQuery();
+        }
       }
     };
 

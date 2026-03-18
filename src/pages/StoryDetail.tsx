@@ -6,7 +6,7 @@ import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
 import type { AggregatedStory } from "@/types/news";
 import { normalizeStorySlug, toStorySlug, buildStoryHref } from "@/utils/storyRoute";
-import { ArrowLeft, Share2, Bookmark, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowLeft, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
 import { useMemo, useState } from "react";
@@ -564,10 +564,6 @@ const StoryDetail = () => {
                   className="w-full justify-start"
                   showLabel={true}
                 />
-                <Button variant="outline" className="w-full justify-start">
-                  <Bookmark className="w-4 h-4 mr-2" />
-                  Salvează pentru mai târziu
-                </Button>
               </div>
             </div>
 
