@@ -141,7 +141,7 @@ function StoryPoster({
       id={elementId || `studio-poster-${variant}`}
       data-screenshot-target="story-poster"
       className={[
-        "relative overflow-hidden rounded-[2rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
+        "relative overflow-hidden rounded-[1rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
         isBreaking
           ? "border-[#b22d2d]/60 bg-[#7e1f1f]"
           : isTabloid
