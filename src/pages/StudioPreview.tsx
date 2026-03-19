@@ -184,7 +184,7 @@ function StoryPoster({
             {story.category.toUpperCase()}
           </span>
           <span className="rounded-full bg-white/88 px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900">
-            {story.sourcesCount} sources
+            {story.sourcesCount} surse
           </span>
         </div>
 
@@ -192,12 +192,12 @@ function StoryPoster({
           <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-white/65">thesite.ro</p>
           <p className="text-[11px] font-medium text-white/85">
             {isBreaking
-              ? "Breaking layout"
+              ? "Layout de breaking"
               : isComparison
-                ? "Comparison layout"
+                ? "Layout comparativ"
                 : isTabloid
-                  ? "News poster"
-                  : "Private preview"}
+                  ? "Poster de știre"
+                  : "Previzualizare privată"}
           </p>
         </div>
       </div>
@@ -209,14 +209,14 @@ function StoryPoster({
               thesite.ro
             </p>
             <div className="rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
-              Editorial poster
+              Poster editorial
             </div>
           </div>
         )}
 
         <div className="mb-4 flex flex-wrap gap-2">
           <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
-            Trending
+            În trend
           </span>
           <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
             {story.location}
@@ -225,20 +225,20 @@ function StoryPoster({
 
         <h2
           className={[
-            "max-w-[14ch] text-[2.5rem] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-[3rem]",
-            isTabloid ? "max-w-[13ch] font-serif text-[2.15rem] sm:text-[2.7rem]" : "",
+            "max-w-[14ch] text-[2.1rem] font-semibold leading-[0.96] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-[2.5rem]",
+            isTabloid ? "max-w-[13ch] font-serif text-[1.9rem] sm:text-[2.4rem]" : "",
           ].join(" ")}
         >
           {story.title}
         </h2>
 
         {story.description && (
-          <p className="mt-3 max-w-[42ch] text-sm leading-relaxed text-white/78 line-clamp-2">
+          <p className="mt-2 max-w-[42ch] text-[12px] leading-relaxed text-white/76 line-clamp-1 sm:text-sm sm:line-clamp-2">
             {story.description}
           </p>
         )}
 
-        <div className={isTabloid ? "mt-5 rounded-[1.5rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-5"}>
+        <div className={isTabloid ? "mt-4 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-4"}>
           {isComparison ? (
             <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
@@ -265,7 +265,7 @@ function StoryPoster({
                 <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
               </div>
               <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500">
-                <span>{story.sourcesCount} sources</span>
+                <span>{story.sourcesCount} surse</span>
                 <span>{story.category}</span>
               </div>
             </>
@@ -303,14 +303,14 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
       <div className="mb-5 flex items-center justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-            instagram pack
+            Pachet Instagram
           </p>
           <h2 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
             Trei screenshot-uri gata de comparat
           </h2>
         </div>
         <div className="hidden rounded-full border border-border bg-muted/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground md:block">
-          3 variations
+          3 variante
         </div>
       </div>
 
@@ -400,13 +400,13 @@ const StudioPreview = () => {
         <section className="mb-10 md:mb-14">
           <div className="mb-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
             <span className="rounded-full border border-border bg-card px-3 py-1 text-foreground">
-              Private preview
+              Previzualizare privată
             </span>
             <span className="rounded-full border border-border/60 bg-card px-3 py-1">
-              layout lab
+              laborator de layout
             </span>
             <span className="rounded-full border border-border/60 bg-card px-3 py-1">
-              screenshot-ready
+              gata de captură
             </span>
           </div>
 
@@ -427,7 +427,7 @@ const StudioPreview = () => {
                 <div className="rounded-[1.5rem] border border-border bg-card p-4 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.35)]">
                   <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                     <Sparkles className="h-3.5 w-3.5" />
-                    Poster
+                    Cadru
                   </div>
                   <p className="text-sm leading-relaxed text-foreground">
                     Un singur cadru clar, bun pentru Instagram și pentru share.
@@ -445,7 +445,7 @@ const StudioPreview = () => {
                 <div className="rounded-[1.5rem] border border-border bg-card p-4 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.35)]">
                   <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                     <ImageIcon className="h-3.5 w-3.5" />
-                    Capture
+                    Captură
                   </div>
                   <p className="text-sm leading-relaxed text-foreground">
                     Ușor de țintit din script, fără rupe layout-ul public.
@@ -458,7 +458,7 @@ const StudioPreview = () => {
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                    reference poster
+                    Poster de referință
                   </p>
                   <p className="mt-1 text-sm text-foreground">
                     Format 4:5, bun pentru export.
