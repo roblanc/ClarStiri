@@ -43,35 +43,33 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="block h-full group">
         <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.9rem] border border-[#d8d1c3] bg-[#f4efe5] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1">
-          <div className="flex h-full flex-col sm:block">
-            <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4/5]">
-              <NewsImage
-                src={getThumbnailUrl(news.image)}
-                seed={news.title}
-                loading="lazy"
-                decoding="async"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-              />
+          <div className="relative aspect-[4/5] overflow-hidden">
+            <NewsImage
+              src={getThumbnailUrl(news.image)}
+              seed={news.title}
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            />
 
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_48%,rgba(0,0,0,0.22)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.48)_100%)]" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.12)_36%,rgba(0,0,0,0.32)_62%,rgba(0,0,0,0.88)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.48)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
-              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-                <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
-                  {news.sourcesCount} surse
-                </span>
+            <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
+              <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
+                {news.sourcesCount} surse
+              </span>
 
-                {blindspotLabel ? (
-                  <BiasBadge
-                    type={news.blindspot as 'left' | 'right'}
-                    label={blindspotLabel}
-                    className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
-                  />
-                ) : null}
-              </div>
+              {blindspotLabel ? (
+                <BiasBadge
+                  type={news.blindspot as 'left' | 'right'}
+                  label={blindspotLabel}
+                  className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
+                />
+              ) : null}
             </div>
 
-            <div className="bg-black px-4 pb-4 pt-4 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] sm:px-5 sm:pb-4 sm:pt-10">
+            <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-20 sm:px-5 sm:pb-4 sm:pt-10">
               <h3
                 className={[
                   "w-full max-w-none font-anthropic font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
@@ -82,7 +80,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               </h3>
 
               <div className="mt-3.5">
-                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 sm:text-[9px] sm:tracking-[0.22em]">
+                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[9px] sm:tracking-[0.22em]">
                   <span>Stânga {Math.round(news.bias.left)}%</span>
                   <span>Centru {Math.round(news.bias.center)}%</span>
                   <span>Dreapta {Math.round(news.bias.right)}%</span>

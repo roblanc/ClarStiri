@@ -149,8 +149,7 @@ function StoryPoster({
             : "border-border/60 bg-zinc-950",
       ].join(" ")}
     >
-      <div className="flex flex-col sm:aspect-[4/5] sm:block">
-        <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4/5]">
+      <div className="relative aspect-[4/5] overflow-hidden">
           <NewsImage
             src={getThumbnailUrl(story.image)}
             seed={story.title}
@@ -171,10 +170,10 @@ function StoryPoster({
             className={[
               "absolute inset-0",
               isBreaking
-                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.08)_0%,rgba(66,9,9,0.22)_54%,rgba(0,0,0,0.42)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.06)_0%,rgba(66,9,9,0.18)_34%,rgba(0,0,0,0.38)_60%,rgba(0,0,0,0.9)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
                 : isTabloid
-                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.16)_40%,rgba(0,0,0,0.45)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
-                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.16)_54%,rgba(0,0,0,0.38)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
+                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_34%,rgba(0,0,0,0.36)_58%,rgba(0,0,0,0.92)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
+                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_34%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.88)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
             ].join(" ")}
           />
 
@@ -191,8 +190,7 @@ function StoryPoster({
               </span>
             </div>
           </div>
-        </div>
-        <div className="bg-black px-4 pb-4 pt-4 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] sm:px-5 sm:pb-4 sm:pt-10">
+        <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-20 sm:px-5 sm:pb-4 sm:pt-10">
           {isTabloid && (
             <div className="mb-2.5 flex items-end justify-between gap-3">
               <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
