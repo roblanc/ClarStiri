@@ -3,7 +3,7 @@ import { BiasBadge } from "./BiasBadge";
 import { CoverageBar } from "./CoverageBar";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buildStoryHref } from "@/utils/storyRoute";
 import { getPosterTitleSizing } from "@/utils/posterTypography";
@@ -42,8 +42,54 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-y border-x-0 border-[#d8d1c3] bg-[#f4efe5] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1rem] md:border">
-          <div className="relative aspect-[40/43] overflow-hidden md:aspect-[16/17]">
+        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-b border-border/40 md:border-[#d8d1c3] bg-background md:bg-[#f4efe5] md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1rem] md:border">
+          
+          {/* Mobile Layout */}
+          <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
+            <div className="flex items-center w-full mb-3">
+              <div className="w-[6px] h-[6px] bg-[#fbbf24] mr-2 shrink-0" />
+              <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#1d4ed8] shrink-0">
+                {news.category || "ACTUALITATE"}
+              </span>
+              <div className="flex-1 border-t border-border/60 mx-3" />
+              <span className="text-[12px] font-bold text-foreground flex items-center gap-1.5 shrink-0">
+                {(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo.replace(/Acum /i, '') : "11:30"}
+                <MessageSquare className="w-3.5 h-3.5" />
+              </span>
+            </div>
+
+            <div className="flex gap-4 mb-4">
+              <h3 className="flex-1 font-title font-bold text-[18px] leading-[1.3] text-foreground">
+                {news.title}
+              </h3>
+              
+              <div className="w-[124px] h-[82px] shrink-0 rounded-[6px] overflow-hidden relative shadow-sm border border-border/40">
+                <NewsImage
+                  src={getThumbnailUrl(news.image)}
+                  seed={news.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                />
+                {blindspotLabel && (
+                  <div className="absolute top-1 left-1">
+                    <BiasBadge
+                      type={news.blindspot as 'left' | 'right'}
+                      label={blindspotLabel}
+                      className="rounded-sm border-none shadow-sm backdrop-blur-md bg-background/80 scale-[0.6] origin-top-left px-1.5 py-0.5"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-auto">
+              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
+            </div>
+          </div>
+
+          {/* Desktop/Tablet - Poster Layout */}
+          <div className="hidden md:block relative aspect-[40/43] md:aspect-[16/17] overflow-hidden">
             <NewsImage
               src={getThumbnailUrl(news.image)}
               seed={news.title}
