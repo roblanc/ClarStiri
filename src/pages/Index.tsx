@@ -187,7 +187,7 @@ const Index = () => {
                 <img
                   src="/logo_full.png"
                   alt="ClarStiri Investigator Logo"
-                  className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert transform scale-125"
+                  className="w-full h-auto object-contain mix-blend-darken dark:mix-blend-lighten dark:invert transform scale-125"
                 />
               </div>
 
@@ -205,7 +205,7 @@ const Index = () => {
               <img
                 src="/logo_full.png"
                 alt="ClarStiri Investigator Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none"
+                className="w-full h-auto object-contain mix-blend-darken dark:mix-blend-lighten dark:invert pointer-events-none"
               />
             </div>
           </div>
