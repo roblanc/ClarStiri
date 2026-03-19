@@ -179,8 +179,8 @@ const Index = () => {
       <main className="mx-auto w-full max-w-[1240px] px-4 py-6 md:px-6 md:py-10">
 
         {/* Editorial Hero Greeting */}
-        <section className="mb-12 md:mb-20 relative pt-4 md:pt-0">
-          <div className="md:flex md:items-center md:justify-start md:gap-16 lg:gap-24 xl:gap-32">
+        <section className="mb-10 md:mb-12 relative pt-4 md:pt-0">
+          <div className="md:flex md:items-center md:justify-start md:gap-12 lg:gap-16 xl:gap-24">
             <div className="block">
               {/* Image - Adjusted margins to avoid header overlap */}
               <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
@@ -191,21 +191,21 @@ const Index = () => {
                 />
               </div>
 
-              <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.1] font-bold tracking-tight">
+              <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl leading-[1.15] font-bold tracking-tight">
                 Citești.<br />Compari.<br />Decizi.
               </h1>
 
-              <p className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl block mt-6 md:mt-8 leading-relaxed font-sans max-w-xl">
+              <p className="text-muted-foreground text-sm sm:text-base md:text-md lg:text-lg block mt-5 md:mt-6 leading-relaxed font-sans max-w-md">
                 Ieși din propria bulă informațională. Comparăm automat peste 40 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
               </p>
             </div>
 
             {/* Desktop Image */}
-            <div className="hidden md:block shrink-0 w-96 lg:w-[32rem]">
+            <div className="hidden md:block shrink-0 w-80 lg:w-[24rem]">
               <img
                 src="/logo_full.png"
                 alt="ClarStiri Investigator Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none transform scale-110"
+                className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none"
               />
             </div>
           </div>
