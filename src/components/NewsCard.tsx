@@ -92,17 +92,11 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                 {news.title}
               </h3>
 
-              {news.description && (
-                <p className="mt-2 max-w-[42ch] text-[12px] leading-relaxed text-white/74 line-clamp-1 sm:text-sm sm:line-clamp-2">
-                  {news.description}
-                </p>
-              )}
-
               <div className="mt-4 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10">
                 <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
-                  <span>L {Math.round(news.bias.left)}%</span>
-                  <span>C {Math.round(news.bias.center)}%</span>
-                  <span>R {Math.round(news.bias.right)}%</span>
+                  <span>Stânga {Math.round(news.bias.left)}%</span>
+                  <span>Centru {Math.round(news.bias.center)}%</span>
+                  <span>Dreapta {Math.round(news.bias.right)}%</span>
                 </div>
                 <div className="flex h-3 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
                   {news.bias.left > 0 && (

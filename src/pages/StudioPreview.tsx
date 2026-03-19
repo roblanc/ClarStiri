@@ -114,7 +114,7 @@ const DEMO_STORIES: StudioStory[] = [
     location: "Online",
     sourcesCount: 8,
     timeAgo: "Acum 47 min",
-    description: "Folosește aceeași ierarhie ca Ground News, dar adaptată la structura ta actuală.",
+    description: "Un exemplu tehnic, bun pentru a testa contrastul și compoziția.",
     sources: [],
   },
 ];
@@ -232,19 +232,13 @@ function StoryPoster({
           {story.title}
         </h2>
 
-        {story.description && (
-          <p className="mt-2 max-w-[42ch] text-[12px] leading-relaxed text-white/76 line-clamp-1 sm:text-sm sm:line-clamp-2">
-            {story.description}
-          </p>
-        )}
-
         <div className={isTabloid ? "mt-4 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-4"}>
           {isComparison ? (
             <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
-                <span>L {left}%</span>
-                <span>C {center}%</span>
-                <span>R {right}%</span>
+                <span>Stânga {left}%</span>
+                <span>Centru {center}%</span>
+                <span>Dreapta {right}%</span>
               </div>
               <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
                 <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
@@ -255,9 +249,9 @@ function StoryPoster({
           ) : isTabloid ? (
             <>
               <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
-                <span>L {left}%</span>
-                <span>C {center}%</span>
-                <span>R {right}%</span>
+                <span>Stânga {left}%</span>
+                <span>Centru {center}%</span>
+                <span>Dreapta {right}%</span>
               </div>
               <div className="flex h-3 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
                 <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
@@ -272,9 +266,9 @@ function StoryPoster({
           ) : (
             <>
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
-                <span>L {left}%</span>
-                <span>C {center}%</span>
-                <span>R {right}%</span>
+                <span>Stânga {left}%</span>
+                <span>Centru {center}%</span>
+                <span>Dreapta {right}%</span>
               </div>
 
               <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
