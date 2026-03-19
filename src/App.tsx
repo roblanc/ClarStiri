@@ -9,6 +9,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
+const StudioPreview = lazy(() => import("./pages/StudioPreview"));
 
 // Lazy load pages for better code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -51,6 +52,7 @@ const RoutedApp = () => {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/studio" element={<StudioPreview />} />
           <Route path="/stire/:id" element={<StoryDetail />} />
           <Route path="/metodologie" element={<Metodologie />} />
           <Route path="/surse" element={<Sources />} />
