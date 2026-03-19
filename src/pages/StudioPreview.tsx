@@ -213,8 +213,8 @@ function StoryPoster({
 
         <h2
           className={[
-            "max-w-[13.5ch] text-[clamp(1.08rem,1.45vw,1.7rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-            isTabloid ? "max-w-[12.5ch] font-serif text-[clamp(1.08rem,1.5vw,1.75rem)]" : "",
+            "w-full max-w-none text-[clamp(1.08rem,1.45vw,1.7rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+            isTabloid ? "font-serif text-[clamp(1.08rem,1.5vw,1.75rem)]" : "",
           ].join(" ")}
         >
           {story.title}
