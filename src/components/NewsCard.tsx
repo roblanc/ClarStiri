@@ -41,7 +41,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="block h-full group">
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-zinc-900/80 bg-black shadow-[0_24px_60px_-30px_rgba(0,0,0,0.45)] transition-transform duration-300 hover:-translate-y-1">
+        <article className="group relative flex h-full flex-col overflow-hidden rounded-[1.9rem] border border-[#d8d1c3] bg-[#f4efe5] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1">
           <div className="relative aspect-[4/5] overflow-hidden">
             <NewsImage
               src={getThumbnailUrl(news.image)}
@@ -51,18 +51,13 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.2)_30%,rgba(0,0,0,0.55)_62%,rgba(0,0,0,0.88)_100%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.1),transparent_32%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.48)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
             <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <div className="flex flex-wrap gap-2">
-                <span className="rounded-full bg-amber-200/92 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-zinc-900 backdrop-blur-sm">
-                  {news.category || "Actualitate"}
-                </span>
-                <span className="rounded-full bg-black/45 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 backdrop-blur-sm">
-                  {news.sourcesCount} surse
-                </span>
-              </div>
+              <span className="rounded-full bg-black/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
+                {news.sourcesCount} surse
+              </span>
 
               {blindspotLabel ? (
                 <BiasBadge
@@ -70,16 +65,11 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                   label={blindspotLabel}
                   className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
                 />
-              ) : (
-                <div className="rounded-2xl border border-white/15 bg-white/8 px-3 py-2 text-right backdrop-blur-md">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-white/65">thesite.ro</p>
-                  <p className="text-[11px] font-medium text-white/85">Previzualizare privată</p>
-                </div>
-              )}
+              ) : null}
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-              <div className="mb-4 flex flex-wrap gap-2">
+            <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] px-4 pb-4 pt-8 sm:px-5 sm:pb-4 sm:pt-10">
+              <div className="mb-2.5 flex flex-wrap gap-2">
                 <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
                   În trend
                 </span>
@@ -88,17 +78,17 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                 </span>
               </div>
 
-              <h3 className="max-w-[15ch] font-serif text-[clamp(1.35rem,1.8vw,2rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+              <h3 className="max-w-[13.5ch] font-serif text-[clamp(1.08rem,1.45vw,1.68rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance">
                 {news.title}
               </h3>
 
-              <div className="mt-4 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+              <div className="mt-3.5">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.22em] text-white/55">
                   <span>Stânga {Math.round(news.bias.left)}%</span>
                   <span>Centru {Math.round(news.bias.center)}%</span>
                   <span>Dreapta {Math.round(news.bias.right)}%</span>
                 </div>
-                <div className="flex h-3 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
+                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/12">
                   {news.bias.left > 0 && (
                     <div className="h-full bg-[#2f5fa6]" style={{ width: `${news.bias.left}%` }} />
                   )}
@@ -108,10 +98,6 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                   {news.bias.right > 0 && (
                     <div className="h-full bg-[#9a2f2f]" style={{ width: `${news.bias.right}%` }} />
                   )}
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500">
-                  <span>{news.sourcesCount} surse</span>
-                  <span>{news.category || "Actualitate"}</span>
                 </div>
               </div>
             </div>

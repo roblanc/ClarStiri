@@ -188,23 +188,11 @@ function StoryPoster({
           </span>
         </div>
 
-        <div className="rounded-2xl border border-white/15 bg-white/8 px-3 py-2 text-right backdrop-blur-md">
-          <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-white/65">thesite.ro</p>
-          <p className="text-[11px] font-medium text-white/85">
-            {isBreaking
-              ? "Layout de breaking"
-              : isComparison
-                ? "Layout comparativ"
-                : isTabloid
-                  ? "Poster de știre"
-                  : "Previzualizare privată"}
-          </p>
-        </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+      <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] px-4 pb-4 pt-8 sm:px-5 sm:pb-4 sm:pt-10">
         {isTabloid && (
-          <div className="mb-4 flex items-end justify-between gap-3">
+          <div className="mb-2.5 flex items-end justify-between gap-3">
             <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
               thesite.ro
             </p>
@@ -214,7 +202,7 @@ function StoryPoster({
           </div>
         )}
 
-        <div className="mb-4 flex flex-wrap gap-2">
+        <div className="mb-2.5 flex flex-wrap gap-2">
           <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
             În trend
           </span>
@@ -225,14 +213,14 @@ function StoryPoster({
 
         <h2
           className={[
-            "max-w-[14ch] text-[2.1rem] font-semibold leading-[0.96] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-[2.5rem]",
-            isTabloid ? "max-w-[13ch] font-serif text-[1.9rem] sm:text-[2.4rem]" : "",
+            "max-w-[13.5ch] text-[clamp(1.08rem,1.45vw,1.7rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+            isTabloid ? "max-w-[12.5ch] font-serif text-[clamp(1.08rem,1.5vw,1.75rem)]" : "",
           ].join(" ")}
         >
           {story.title}
         </h2>
 
-        <div className={isTabloid ? "mt-4 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-4"}>
+        <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
           {isComparison ? (
             <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
@@ -240,7 +228,7 @@ function StoryPoster({
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
               </div>
-              <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
+              <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
                 <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
                 <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
                 <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
@@ -253,7 +241,7 @@ function StoryPoster({
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
               </div>
-              <div className="flex h-3 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
+              <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
                 <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
                 <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
                 <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
@@ -569,12 +557,12 @@ const StudioPreview = () => {
 
         {displayStories.length > 0 && (
           <section className="py-8 md:py-10">
-            <div className="mb-5 flex items-center justify-between gap-4 border-t border-border/60 pt-4">
+            <div className="mb-5 flex items-center justify-between gap-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
                   Feed curat
                 </p>
-                <h2 className="mt-1 text-[clamp(1.5rem,2vw,2rem)] font-semibold tracking-tight text-foreground">
+                <h2 className="mt-1 text-[clamp(1.3rem,1.8vw,1.9rem)] font-semibold tracking-tight text-foreground">
                   Știri cu aceeași structură, dar cu prezentare mai bună
                 </h2>
               </div>
@@ -583,7 +571,7 @@ const StudioPreview = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {displayStories.slice(0, visible).map((news) => (
                 <NewsCard key={news.id} variant="poster" news={news} />
               ))}
