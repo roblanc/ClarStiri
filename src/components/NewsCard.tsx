@@ -42,19 +42,18 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-b border-border/40 md:border-[#d8d1c3] bg-background md:bg-[#f4efe5] md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1rem] md:border">
+        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#d8d1c3] bg-background md:bg-[#f4efe5] md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1rem] md:border">
           
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
             <div className="flex items-center w-full mb-3">
               <div className="w-[6px] h-[6px] bg-[#fbbf24] mr-2 shrink-0" />
               <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#1d4ed8] shrink-0">
-                {news.category || "ACTUALITATE"}
+                {news.category || "ACTUALITATE"} <span className="text-muted-foreground/60 mx-1 font-normal">•</span> {news.sourcesCount} SURSE
               </span>
               <div className="flex-1 border-t border-border/60 mx-3" />
-              <span className="text-[12px] font-bold text-foreground flex items-center gap-1.5 shrink-0">
+              <span className="text-[12px] font-bold text-foreground shrink-0 flex items-center gap-1.5">
                 {(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo.replace(/Acum /i, '') : "11:30"}
-                <MessageSquare className="w-3.5 h-3.5" />
               </span>
             </div>
 
