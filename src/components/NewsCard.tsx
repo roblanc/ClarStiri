@@ -72,7 +72,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-20 sm:px-5 sm:pb-4 sm:pt-10">
               <h3
                 className={[
-                  "w-full max-w-none font-anthropic font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+                  "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
                   getPosterTitleSizing(news.title),
                 ].join(" ")}
               >

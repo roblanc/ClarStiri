@@ -204,8 +204,8 @@ function StoryPoster({
 
           <h2
             className={[
-              "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance font-anthropic",
-              isTabloid ? "font-anthropic" : "",
+              "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+              isTabloid ? "font-title" : "",
               getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
             ].join(" ")}
           >
