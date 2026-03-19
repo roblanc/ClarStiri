@@ -56,7 +56,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
             <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <span className="rounded-full bg-black/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
+              <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
                 {news.sourcesCount} surse
               </span>
 
@@ -70,18 +70,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             </div>
 
             <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] px-4 pb-4 pt-8 sm:px-5 sm:pb-4 sm:pt-10">
-              <div className="mb-2.5 flex flex-wrap gap-2">
-                <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
-                  În trend
-                </span>
-                <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
-                  {news.location || "România"}
-                </span>
-              </div>
-
               <h3
                 className={[
-                  "w-full max-w-none font-serif font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+                  "w-full max-w-none font-anthropic font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
                   getPosterTitleSizing(news.title),
                 ].join(" ")}
               >

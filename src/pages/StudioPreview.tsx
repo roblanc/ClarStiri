@@ -179,12 +179,12 @@ function StoryPoster({
       <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
         <div className="flex flex-wrap gap-2">
           <span className={[
-            "rounded-full px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900",
+            "rounded-full px-2.5 py-0.5 text-[9px] font-semibold tracking-tight text-zinc-900",
             isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
           ].join(" ")}>
             {story.category.toUpperCase()}
           </span>
-          <span className="rounded-full bg-white/88 px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900">
+          <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[9px] font-semibold tracking-tight text-zinc-900">
             {story.sourcesCount} surse
           </span>
         </div>
@@ -203,19 +203,10 @@ function StoryPoster({
           </div>
         )}
 
-        <div className="mb-2.5 flex flex-wrap gap-2">
-          <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
-            În trend
-          </span>
-          <span className="rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/90 backdrop-blur-sm">
-            {story.location}
-          </span>
-        </div>
-
         <h2
           className={[
-            "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-            isTabloid ? "font-serif" : "",
+            "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance font-anthropic",
+            isTabloid ? "font-anthropic" : "",
             getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
           ].join(" ")}
         >
