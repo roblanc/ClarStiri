@@ -222,30 +222,26 @@ const Index = () => {
                   .bubble {
                     position: absolute;
                     transform: translate(-50%, -50%);
-                    border-radius: 50%;
-                    overflow: hidden;
                     display: flex;
-                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    background-color: white;
-                    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.15), 0 3px 5px -2px rgba(0, 0, 0, 0.1);
-                    border: 1px solid rgba(0,0,0,0.04);
-                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                     cursor: default;
                   }
                   .bubble:hover {
                     transform: translate(-50%, -50%) scale(1.15);
                     z-index: 50 !important;
-                    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.25);
                   }
                   .bubble img {
                     width: 100%;
                     height: 100%;
                     object-fit: contain;
-                    border-radius: 50%;
+                    mix-blend-mode: multiply;
                     filter: grayscale(100%) contrast(1.1) opacity(0.8);
                     transition: filter 0.4s ease, opacity 0.4s ease;
+                  }
+                  .dark .bubble img {
+                    mix-blend-mode: screen;
                   }
                   .bubble:hover img {
                     filter: grayscale(0%) contrast(1) opacity(1);
