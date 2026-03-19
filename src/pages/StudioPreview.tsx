@@ -36,7 +36,7 @@ interface StudioStory {
   sources: Array<{ name: string; url: string; bias?: string }>;
 }
 
-type PosterVariant = "editorial" | "breaking" | "comparison";
+type PosterVariant = "editorial" | "breaking" | "comparison" | "tabloid";
 
 const DEMO_STORIES: StudioStory[] = [
   {
@@ -133,6 +133,7 @@ function StoryPoster({
   const right = Math.round(story.bias.right);
   const isBreaking = variant === "breaking";
   const isComparison = variant === "comparison";
+  const isTabloid = variant === "tabloid";
 
   return (
     <div
@@ -140,7 +141,11 @@ function StoryPoster({
       data-screenshot-target="story-poster"
       className={[
         "relative aspect-[4/5] overflow-hidden rounded-[2rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
-        isBreaking ? "border-[#b22d2d]/60 bg-[#7e1f1f]" : "border-border/60 bg-zinc-950",
+        isBreaking
+          ? "border-[#b22d2d]/60 bg-[#7e1f1f]"
+          : isTabloid
+            ? "border-[#1a1a1a]/70 bg-black"
+            : "border-border/60 bg-zinc-950",
       ].join(" ")}
     >
       <NewsImage
@@ -151,7 +156,11 @@ function StoryPoster({
         decoding="async"
         className={[
           "absolute inset-0 h-full w-full object-cover",
-          isBreaking ? "grayscale contrast-125 brightness-[0.62]" : "grayscale contrast-110 brightness-[0.72]",
+          isBreaking
+            ? "grayscale contrast-125 brightness-[0.62]"
+            : isTabloid
+              ? "contrast-110 brightness-[0.66]"
+              : "grayscale contrast-110 brightness-[0.72]",
         ].join(" ")}
       />
 
@@ -160,6 +169,8 @@ function StoryPoster({
           "absolute inset-0",
           isBreaking
             ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+            : isTabloid
+              ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
             : "bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
         ].join(" ")}
       />
@@ -180,12 +191,29 @@ function StoryPoster({
         <div className="rounded-2xl border border-white/15 bg-white/8 px-3 py-2 text-right backdrop-blur-md">
           <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-white/65">thesite.ro</p>
           <p className="text-[11px] font-medium text-white/85">
-            {isBreaking ? "Breaking layout" : isComparison ? "Comparison layout" : "Private preview"}
+            {isBreaking
+              ? "Breaking layout"
+              : isComparison
+                ? "Comparison layout"
+                : isTabloid
+                  ? "News poster"
+                  : "Private preview"}
           </p>
         </div>
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
+        {isTabloid && (
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
+              thesite.ro
+            </p>
+            <div className="rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
+              Editorial poster
+            </div>
+          </div>
+        )}
+
         <div className="mb-4 flex flex-wrap gap-2">
           <span className="rounded-full bg-black/65 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85 backdrop-blur-sm">
             Trending
@@ -195,7 +223,12 @@ function StoryPoster({
           </span>
         </div>
 
-        <h2 className="max-w-[14ch] text-[2.5rem] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-[3rem]">
+        <h2
+          className={[
+            "max-w-[14ch] text-[2.5rem] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] sm:text-[3rem]",
+            isTabloid ? "max-w-[13ch] font-serif text-[2.15rem] sm:text-[2.7rem]" : "",
+          ].join(" ")}
+        >
           {story.title}
         </h2>
 
@@ -205,7 +238,7 @@ function StoryPoster({
           </p>
         )}
 
-        <div className="mt-5">
+        <div className={isTabloid ? "mt-5 rounded-[1.5rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-5"}>
           {isComparison ? (
             <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
@@ -219,6 +252,23 @@ function StoryPoster({
                 <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
               </div>
             </div>
+          ) : isTabloid ? (
+            <>
+              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+                <span>L {left}%</span>
+                <span>C {center}%</span>
+                <span>R {right}%</span>
+              </div>
+              <div className="flex h-3 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
+                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
+                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+              </div>
+              <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+                <span>{story.sourcesCount} sources</span>
+                <span>{story.category}</span>
+              </div>
+            </>
           ) : (
             <>
               <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
@@ -245,6 +295,7 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
     { story: stories[0], variant: "editorial" as const },
     { story: stories[1], variant: "breaking" as const },
     { story: stories[2], variant: "comparison" as const },
+    { story: stories[3], variant: "tabloid" as const },
   ].filter((item) => Boolean(item.story));
 
   return (
@@ -263,7 +314,7 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-2 2xl:grid-cols-4">
         {items.map(({ story, variant }) => (
           <div key={`${story.id}-${variant}`} className="space-y-3">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
