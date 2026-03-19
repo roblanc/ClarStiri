@@ -141,7 +141,7 @@ function StoryPoster({
       id={elementId || `studio-poster-${variant}`}
       data-screenshot-target="story-poster"
       className={[
-        "relative aspect-[4/5] overflow-hidden rounded-[2rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
+        "relative overflow-hidden rounded-[2rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
         isBreaking
           ? "border-[#b22d2d]/60 bg-[#7e1f1f]"
           : isTabloid
@@ -149,116 +149,118 @@ function StoryPoster({
             : "border-border/60 bg-zinc-950",
       ].join(" ")}
     >
-      <NewsImage
-        src={getThumbnailUrl(story.image)}
-        seed={story.title}
-        loading="eager"
-        fetchPriority="high"
-        decoding="async"
-        className={[
-          "absolute inset-0 h-full w-full object-cover",
-          isBreaking
-            ? "grayscale contrast-125 brightness-[0.62]"
-            : isTabloid
-              ? "contrast-110 brightness-[0.66]"
-              : "grayscale contrast-110 brightness-[0.72]",
-        ].join(" ")}
-      />
+      <div className="flex flex-col sm:aspect-[4/5] sm:block">
+        <div className="relative aspect-[4/3] overflow-hidden sm:aspect-[4/5]">
+          <NewsImage
+            src={getThumbnailUrl(story.image)}
+            seed={story.title}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            className={[
+              "absolute inset-0 h-full w-full object-cover",
+              isBreaking
+                ? "grayscale contrast-125 brightness-[0.62]"
+                : isTabloid
+                  ? "contrast-110 brightness-[0.66]"
+                  : "grayscale contrast-110 brightness-[0.72]",
+            ].join(" ")}
+          />
 
-      <div
-        className={[
-          "absolute inset-0",
-          isBreaking
-            ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
-            : isTabloid
-              ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
-            : "bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
-        ].join(" ")}
-      />
+          <div
+            className={[
+              "absolute inset-0",
+              isBreaking
+                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.08)_0%,rgba(66,9,9,0.22)_54%,rgba(0,0,0,0.42)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+                : isTabloid
+                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.16)_40%,rgba(0,0,0,0.45)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
+                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.08)_0%,rgba(0,0,0,0.16)_54%,rgba(0,0,0,0.38)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
+            ].join(" ")}
+          />
 
-      <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
-        <div className="flex flex-wrap gap-2">
-          <span className={[
-            "rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]",
-            isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
-          ].join(" ")}>
-            {story.category.toUpperCase()}
-          </span>
-          <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]">
-            {story.sourcesCount} surse
-          </span>
-        </div>
-
-      </div>
-
-      <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] px-4 pb-4 pt-8 sm:px-5 sm:pb-4 sm:pt-10">
-        {isTabloid && (
-          <div className="mb-2.5 flex items-end justify-between gap-3">
-            <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
-              thesite.ro
-            </p>
-            <div className="rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
-              Poster editorial
+          <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
+            <div className="flex flex-wrap gap-2">
+              <span className={[
+                "rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]",
+                isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
+              ].join(" ")}>
+                {story.category.toUpperCase()}
+              </span>
+              <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]">
+                {story.sourcesCount} surse
+              </span>
             </div>
           </div>
-        )}
-
-        <h2
-          className={[
-            "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance font-anthropic",
-            isTabloid ? "font-anthropic" : "",
-            getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
-          ].join(" ")}
-        >
-          {story.title}
-        </h2>
-
-        <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
-          {isComparison ? (
-            <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-              <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
-                <span>Stânga {left}%</span>
-                <span>Centru {center}%</span>
-                <span>Dreapta {right}%</span>
-              </div>
-              <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
-                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
-                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+        </div>
+        <div className="bg-black px-4 pb-4 pt-4 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.42)_14%,rgba(0,0,0,0.88)_34%,rgba(0,0,0,0.98)_100%)] sm:px-5 sm:pb-4 sm:pt-10">
+          {isTabloid && (
+            <div className="mb-2.5 flex items-end justify-between gap-3">
+              <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
+                thesite.ro
+              </p>
+              <div className="rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
+                Poster editorial
               </div>
             </div>
-          ) : isTabloid ? (
-            <>
-              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500 sm:text-[9px] sm:tracking-[0.24em]">
-                <span>Stânga {left}%</span>
-                <span>Centru {center}%</span>
-                <span>Dreapta {right}%</span>
-              </div>
-              <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
-                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
-                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-              </div>
-              <div className="mt-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[9px] sm:tracking-[0.18em]">
-                <span>{story.sourcesCount} surse</span>
-                <span>{story.category}</span>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
-                <span>Stânga {left}%</span>
-                <span>Centru {center}%</span>
-                <span>Dreapta {right}%</span>
-              </div>
-
-              <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
-                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
-                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-              </div>
-            </>
           )}
+
+          <h2
+            className={[
+              "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance font-anthropic",
+              isTabloid ? "font-anthropic" : "",
+              getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
+            ].join(" ")}
+          >
+            {story.title}
+          </h2>
+
+          <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
+            {isComparison ? (
+              <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
+                <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
+                  <span>Stânga {left}%</span>
+                  <span>Centru {center}%</span>
+                  <span>Dreapta {right}%</span>
+                </div>
+                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
+                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                  <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
+                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+                </div>
+              </div>
+            ) : isTabloid ? (
+              <>
+                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500 sm:text-[9px] sm:tracking-[0.24em]">
+                  <span>Stânga {left}%</span>
+                  <span>Centru {center}%</span>
+                  <span>Dreapta {right}%</span>
+                </div>
+                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
+                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                  <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
+                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+                </div>
+                <div className="mt-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[9px] sm:tracking-[0.18em]">
+                  <span>{story.sourcesCount} surse</span>
+                  <span>{story.category}</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
+                  <span>Stânga {left}%</span>
+                  <span>Centru {center}%</span>
+                  <span>Dreapta {right}%</span>
+                </div>
+
+                <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
+                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                  <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
+                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
