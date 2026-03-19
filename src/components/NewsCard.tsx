@@ -52,7 +52,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.12)_36%,rgba(0,0,0,0.32)_62%,rgba(0,0,0,0.88)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.48)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.2)_46%,rgba(0,0,0,0.46)_64%,rgba(0,0,0,0.78)_82%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.56)_100%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
             <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
@@ -80,7 +80,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               </h3>
 
               <div className="mt-3.5">
-                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[9px] sm:tracking-[0.22em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {Math.round(news.bias.left)}%</span>
                   <span>Centru {Math.round(news.bias.center)}%</span>
                   <span>Dreapta {Math.round(news.bias.right)}%</span>

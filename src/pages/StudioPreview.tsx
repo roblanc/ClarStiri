@@ -170,10 +170,10 @@ function StoryPoster({
             className={[
               "absolute inset-0",
               isBreaking
-                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.06)_0%,rgba(66,9,9,0.18)_34%,rgba(0,0,0,0.38)_60%,rgba(0,0,0,0.9)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.03)_0%,rgba(66,9,9,0.12)_28%,rgba(40,4,4,0.28)_48%,rgba(0,0,0,0.52)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
                 : isTabloid
-                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_34%,rgba(0,0,0,0.36)_58%,rgba(0,0,0,0.92)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
-                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.04)_0%,rgba(0,0,0,0.14)_34%,rgba(0,0,0,0.34)_58%,rgba(0,0,0,0.88)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
+                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.48)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.97)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
+                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.22)_48%,rgba(0,0,0,0.46)_68%,rgba(0,0,0,0.8)_84%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
             ].join(" ")}
           />
 
@@ -215,7 +215,7 @@ function StoryPoster({
           <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
             {isComparison ? (
               <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-                <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
@@ -228,24 +228,24 @@ function StoryPoster({
               </div>
             ) : isTabloid ? (
               <>
-                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500 sm:text-[9px] sm:tracking-[0.24em]">
-                  <span>Stânga {left}%</span>
-                  <span>Centru {center}%</span>
-                  <span>Dreapta {right}%</span>
+              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[8px] sm:tracking-[0.2em]">
+                <span>Stânga {left}%</span>
+                <span>Centru {center}%</span>
+                <span>Dreapta {right}%</span>
                 </div>
                 <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
                   <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
                   <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
                   <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
                 </div>
-                <div className="mt-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[9px] sm:tracking-[0.18em]">
+                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-zinc-500 sm:text-[8px] sm:tracking-[0.16em]">
                   <span>{story.sourcesCount} surse</span>
                   <span>{story.category}</span>
                 </div>
               </>
             ) : (
               <>
-                <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
