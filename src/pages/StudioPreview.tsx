@@ -149,7 +149,7 @@ function StoryPoster({
             : "border-border/60 bg-zinc-950",
       ].join(" ")}
     >
-      <div className="relative aspect-[40/43] overflow-hidden md:aspect-[4/5]">
+      <div className="relative aspect-[40/43] overflow-hidden md:aspect-[16/17]">
           <NewsImage
             src={getThumbnailUrl(story.image)}
             seed={story.title}
