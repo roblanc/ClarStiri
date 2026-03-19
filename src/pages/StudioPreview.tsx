@@ -36,6 +36,8 @@ interface StudioStory {
   sources: Array<{ name: string; url: string; bias?: string }>;
 }
 
+type PosterVariant = "editorial" | "breaking" | "comparison";
+
 const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-1",
@@ -117,16 +119,29 @@ const DEMO_STORIES: StudioStory[] = [
   },
 ];
 
-function StoryPoster({ story }: { story: StudioStory }) {
+function StoryPoster({
+  story,
+  variant = "editorial",
+  elementId,
+}: {
+  story: StudioStory;
+  variant?: PosterVariant;
+  elementId?: string;
+}) {
   const left = Math.round(story.bias.left);
   const center = Math.round(story.bias.center);
   const right = Math.round(story.bias.right);
+  const isBreaking = variant === "breaking";
+  const isComparison = variant === "comparison";
 
   return (
     <div
-      id="studio-poster"
+      id={elementId || `studio-poster-${variant}`}
       data-screenshot-target="story-poster"
-      className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-border/60 bg-zinc-950 text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]"
+      className={[
+        "relative aspect-[4/5] overflow-hidden rounded-[2rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
+        isBreaking ? "border-[#b22d2d]/60 bg-[#7e1f1f]" : "border-border/60 bg-zinc-950",
+      ].join(" ")}
     >
       <NewsImage
         src={getThumbnailUrl(story.image)}
@@ -134,14 +149,27 @@ function StoryPoster({ story }: { story: StudioStory }) {
         loading="eager"
         fetchPriority="high"
         decoding="async"
-        className="absolute inset-0 h-full w-full object-cover grayscale contrast-110 brightness-[0.72]"
+        className={[
+          "absolute inset-0 h-full w-full object-cover",
+          isBreaking ? "grayscale contrast-125 brightness-[0.62]" : "grayscale contrast-110 brightness-[0.72]",
+        ].join(" ")}
       />
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]" />
+      <div
+        className={[
+          "absolute inset-0",
+          isBreaking
+            ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+            : "bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
+        ].join(" ")}
+      />
 
       <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
         <div className="flex flex-wrap gap-2">
-          <span className="rounded-full bg-amber-200/90 px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900">
+          <span className={[
+            "rounded-full px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900",
+            isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
+          ].join(" ")}>
             {story.category.toUpperCase()}
           </span>
           <span className="rounded-full bg-white/88 px-3 py-1 text-[11px] font-semibold tracking-tight text-zinc-900">
@@ -151,7 +179,9 @@ function StoryPoster({ story }: { story: StudioStory }) {
 
         <div className="rounded-2xl border border-white/15 bg-white/8 px-3 py-2 text-right backdrop-blur-md">
           <p className="text-[9px] font-bold uppercase tracking-[0.28em] text-white/65">thesite.ro</p>
-          <p className="text-[11px] font-medium text-white/85">Private preview</p>
+          <p className="text-[11px] font-medium text-white/85">
+            {isBreaking ? "Breaking layout" : isComparison ? "Comparison layout" : "Private preview"}
+          </p>
         </div>
       </div>
 
@@ -176,20 +206,75 @@ function StoryPoster({ story }: { story: StudioStory }) {
         )}
 
         <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
-            <span>L {left}%</span>
-            <span>C {center}%</span>
-            <span>R {right}%</span>
-          </div>
+          {isComparison ? (
+            <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
+              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
+                <span>L {left}%</span>
+                <span>C {center}%</span>
+                <span>R {right}%</span>
+              </div>
+              <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
+                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
+                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
+                <span>L {left}%</span>
+                <span>C {center}%</span>
+                <span>R {right}%</span>
+              </div>
 
-          <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
-            <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-            <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
-            <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-          </div>
+              <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
+                <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
+                <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
+                <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
+  );
+}
+
+function PosterSet({ stories }: { stories: StudioStory[] }) {
+  const items = [
+    { story: stories[0], variant: "editorial" as const },
+    { story: stories[1], variant: "breaking" as const },
+    { story: stories[2], variant: "comparison" as const },
+  ].filter((item) => Boolean(item.story));
+
+  return (
+    <section className="rounded-[2rem] border border-border/70 bg-card/80 p-4 md:p-6">
+      <div className="mb-5 flex items-center justify-between gap-4">
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
+            instagram pack
+          </p>
+          <h2 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
+            Trei screenshot-uri gata de comparat
+          </h2>
+        </div>
+        <div className="hidden rounded-full border border-border bg-muted/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground md:block">
+          3 variations
+        </div>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        {items.map(({ story, variant }) => (
+          <div key={`${story.id}-${variant}`} className="space-y-3">
+            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
+              <span>{variant}</span>
+              <span>{story.category}</span>
+            </div>
+            <StoryPoster story={story} variant={variant} elementId={`studio-pack-poster-${variant}`} />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -318,7 +403,7 @@ const StudioPreview = () => {
               </div>
             </div>
 
-              <div className="rounded-[2rem] border border-border/70 bg-card p-4 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.3)]">
+            <div className="rounded-[2rem] border border-border/70 bg-card p-4 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.3)]">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
@@ -343,6 +428,10 @@ const StudioPreview = () => {
             </div>
           </div>
         </section>
+
+        <div className="mb-8">
+          <PosterSet stories={displayStories} />
+        </div>
 
         {isLoading && !useDemoContent && (
           <div className="space-y-10">
