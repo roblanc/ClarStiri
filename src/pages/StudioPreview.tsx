@@ -289,9 +289,9 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 2xl:grid-cols-4">
+      <div className="grid gap-6 lg:gap-8 lg:grid-cols-2 2xl:grid-cols-4">
         {items.map(({ story, variant }) => (
-          <div key={`${story.id}-${variant}`} className="space-y-3 px-[7%] md:px-[8%] xl:px-[10%]">
+          <div key={`${story.id}-${variant}`} className="space-y-3 px-[7%] md:px-0">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
               <span>{variant}</span>
               <span>{story.category}</span>
