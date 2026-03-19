@@ -41,8 +41,8 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
   if (variant === 'poster') {
     return (
-      <Link to={buildStoryHref(news.id, news.title)} className="block h-full group px-[7%] md:px-0">
-        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-[1.9rem] border border-[#d8d1c3] bg-[#f4efe5] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1">
+      <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
+        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-y border-x-0 border-[#d8d1c3] bg-[#f4efe5] shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1.9rem] md:border">
           <div className="relative aspect-[4/5] overflow-hidden">
             <NewsImage
               src={getThumbnailUrl(news.image)}
