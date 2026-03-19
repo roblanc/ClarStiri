@@ -49,7 +49,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <div className="flex items-center w-full mb-3">
               <div className="w-0 h-0 border-y-[4px] border-y-transparent border-l-[6px] border-l-[#fbbf24] mr-2 shrink-0" />
               <span className="text-[11px] font-extrabold uppercase tracking-wide text-foreground shrink-0">
-                {news.category || "ACTUALITATE"} <span className="text-muted-foreground/60 mx-1 font-normal">•</span> {news.sourcesCount} SURSE
+                {news.category || "ACTUALITATE"} <span className="text-muted-foreground/40 mx-1 font-normal text-[8px]">●</span> <span className="text-red-600 dark:text-red-500">{news.sourcesCount} SURSE</span>
               </span>
               <div className="flex-1 border-b-[2px] border-dotted border-muted-foreground/30 mx-3 translate-y-[-2px]" />
               <span className="text-[12px] font-bold text-foreground shrink-0 flex items-center gap-1.5">
@@ -152,8 +152,8 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <h3 className="font-title font-bold text-[22px] leading-[28px] line-clamp-3 text-foreground">
                 {news.title}
               </h3>
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground mt-3">
-                {news.bias.center}% CENTRU · {news.sourcesCount} SURSE
+              <p className="text-[10px] font-bold uppercase tracking-[0.15em] mt-3">
+                <span className="text-foreground">{news.bias.center}% CENTRU</span> <span className="text-muted-foreground/40 mx-1.5 font-normal text-[8px]">●</span> <span className="text-red-600 dark:text-red-500">{news.sourcesCount} SURSE</span>
               </p>
             </div>
           </div>
@@ -169,12 +169,12 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
         <div className="flex flex-row md:flex-col md:bg-card md:border md:border-border overflow-hidden md:rounded-none group-hover:bg-muted/30 md:group-hover:bg-secondary/5 transition-colors">
           <div className="flex-1 py-1 pr-4 md:p-5 flex flex-col justify-start md:justify-center min-h-[100px] md:min-h-[140px] order-1 md:order-2">
             {/* Top metadata row (Category • Time • Sources) */}
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground mb-1.5 md:mb-2">
-              <span className="text-primary/70">{news.category || "Actualitate"}</span>
-              <span className="opacity-40">•</span>
-              <span>{(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo : "Acum"}</span>
-              <span className="opacity-40">•</span>
-              <span>{news.sourcesCount} surse</span>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] md:text-[9px] font-black uppercase tracking-[0.15em] mb-1.5 md:mb-2">
+              <span className="text-foreground">{news.category || "Actualitate"}</span>
+              <span className="text-muted-foreground/40 text-[8px]">●</span>
+              <span className="text-red-600 dark:text-red-500">{news.sourcesCount} surse</span>
+              <span className="text-muted-foreground/40 text-[8px]">●</span>
+              <span className="text-foreground">{(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo : "Acum"}</span>
             </div>
 
             <h3
