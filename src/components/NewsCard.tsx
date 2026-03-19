@@ -88,7 +88,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                 </span>
               </div>
 
-              <h3 className="max-w-[15ch] font-serif text-[clamp(1.5rem,2.1vw,2.35rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
+              <h3 className="max-w-[15ch] font-serif text-[clamp(1.35rem,1.8vw,2rem)] font-semibold leading-[0.96] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)]">
                 {news.title}
               </h3>
 

@@ -293,7 +293,7 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
   ].filter((item) => Boolean(item.story));
 
   return (
-    <section className="rounded-[2rem] border border-border/70 bg-card/80 p-4 md:p-6">
+    <section className="py-8 md:py-10">
       <div className="mb-5 flex items-center justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
@@ -390,16 +390,16 @@ const StudioPreview = () => {
 
       <Header />
 
-      <main className="container mx-auto px-4 py-6 md:py-10 lg:max-w-[90%] xl:max-w-[85%]">
+      <main className="mx-auto w-full max-w-[1600px] px-4 py-6 md:px-6 md:py-10 lg:px-8">
         <section className="mb-10 md:mb-14">
           <div className="mb-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-            <span className="rounded-full border border-border bg-card px-3 py-1 text-foreground">
+            <span className="rounded-full border border-border/70 bg-background px-3 py-1 text-foreground">
               Previzualizare privată
             </span>
-            <span className="rounded-full border border-border/60 bg-card px-3 py-1">
+            <span className="rounded-full border border-border/60 bg-background px-3 py-1">
               laborator de layout
             </span>
-            <span className="rounded-full border border-border/60 bg-card px-3 py-1">
+            <span className="rounded-full border border-border/60 bg-background px-3 py-1">
               gata de captură
             </span>
           </div>
@@ -407,10 +407,10 @@ const StudioPreview = () => {
           <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
             <div className="space-y-6">
               <div className="max-w-3xl">
-                <h1 className="text-4xl font-semibold tracking-[-0.06em] text-foreground md:text-6xl md:leading-[0.95]">
+                <h1 className="text-[clamp(2.5rem,4.2vw,4.6rem)] font-semibold tracking-[-0.06em] text-foreground leading-[0.95]">
                   Citești. Compari. Postezi.
                 </h1>
-                <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                <p className="mt-5 max-w-2xl text-[clamp(1rem,1.15vw,1.15rem)] leading-relaxed text-muted-foreground">
                   Aceasta este o variantă privată a landing page-ului actual, construită ca să păstreze
                   structura pe care o ai deja, dar să îți dea o compoziție mai bună pentru screenshot-uri,
                   export social și un look mai editorial.
@@ -418,7 +418,7 @@ const StudioPreview = () => {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[1.5rem] border border-border bg-card p-4 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.35)]">
+                <div className="border-t border-border/60 pt-3">
                   <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                     <Sparkles className="h-3.5 w-3.5" />
                     Cadru
@@ -427,7 +427,7 @@ const StudioPreview = () => {
                     Un singur cadru clar, bun pentru Instagram și pentru share.
                   </p>
                 </div>
-                <div className="rounded-[1.5rem] border border-border bg-card p-4 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.35)]">
+                <div className="border-t border-border/60 pt-3">
                   <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                     <Layers3 className="h-3.5 w-3.5" />
                     Structură
@@ -436,7 +436,7 @@ const StudioPreview = () => {
                     Hero, feed, surse și footer rămân, doar sunt compuse mai curat.
                   </p>
                 </div>
-                <div className="rounded-[1.5rem] border border-border bg-card p-4 shadow-[0_12px_30px_-24px_rgba(0,0,0,0.35)]">
+                <div className="border-t border-border/60 pt-3">
                   <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
                     <ImageIcon className="h-3.5 w-3.5" />
                     Captură
@@ -448,17 +448,15 @@ const StudioPreview = () => {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-border/70 bg-card p-4 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.3)]">
-              <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="lg:sticky lg:top-6">
+              <div className="mb-4 flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                    Poster de referință
-                  </p>
-                  <p className="mt-1 text-sm text-foreground">
+                  <p>Poster de referință</p>
+                  <p className="mt-1 text-[11px] font-medium tracking-normal normal-case text-foreground">
                     Format 4:5, bun pentru export.
                   </p>
                 </div>
-                <div className="rounded-full border border-border bg-muted/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
+                <div className="rounded-full border border-border/70 bg-background px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
                   1080 x 1350
                 </div>
               </div>
@@ -474,7 +472,7 @@ const StudioPreview = () => {
           </div>
         </section>
 
-        <div className="mb-8">
+        <div className="mt-8 border-t border-border/60 pt-8 md:mt-10 md:pt-10">
           <PosterSet stories={displayStories} />
         </div>
 
@@ -486,11 +484,11 @@ const StudioPreview = () => {
         )}
 
         {useDemoContent && (
-          <div className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
+          <div className="my-8 border-y border-border/60 py-4 md:my-10">
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                  demo content active
+                  Conținut demo activ
                 </p>
                 <p className="mt-1 text-sm text-foreground">
                   Fluxul RSS nu este disponibil acum, așa că pagina afișează exemple locale cu imagini pentru preview.
@@ -504,7 +502,7 @@ const StudioPreview = () => {
         )}
 
         {!isLoading && !isFetching && !useDemoContent && !stories?.length && (
-          <div className="rounded-[2rem] border border-border bg-card p-8 text-center">
+          <div className="py-10 text-center">
             <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive" />
             <p className="font-semibold text-foreground">Flux gol</p>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
@@ -517,7 +515,7 @@ const StudioPreview = () => {
         )}
 
         {!isLoading && hasSearchQuery && matchedVoices.length > 0 && (
-          <section className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
+          <section className="my-8 border-y border-border/60 py-6 md:my-10">
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="text-xl font-semibold tracking-tight text-foreground">
                 Voci relevante ({matchedVoices.length})
@@ -557,7 +555,7 @@ const StudioPreview = () => {
         )}
 
         {!isLoading && stories?.length && hasSearchQuery && convertedStories.length === 0 && matchedVoices.length === 0 && (
-          <div className="rounded-[2rem] border border-border bg-card p-8 text-center">
+          <div className="py-10 text-center">
             <SearchX className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
             <p className="font-semibold text-foreground">Niciun rezultat</p>
             <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
@@ -570,17 +568,17 @@ const StudioPreview = () => {
         )}
 
         {displayStories.length > 0 && (
-          <section className="rounded-[2rem] border border-border/70 bg-card/80 p-4 md:p-6">
-            <div className="mb-5 flex items-center justify-between gap-4">
+          <section className="py-8 md:py-10">
+            <div className="mb-5 flex items-center justify-between gap-4 border-t border-border/60 pt-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                  curated feed
+                  Feed curat
                 </p>
-                <h2 className="mt-1 text-2xl font-semibold tracking-tight text-foreground">
+                <h2 className="mt-1 text-[clamp(1.5rem,2vw,2rem)] font-semibold tracking-tight text-foreground">
                   Știri cu aceeași structură, dar cu prezentare mai bună
                 </h2>
               </div>
-              <div className="hidden rounded-full border border-border bg-muted/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground md:block">
+              <div className="hidden rounded-full border border-border/70 bg-background px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground md:block">
                 {visible} / {displayStories.length}
               </div>
             </div>
@@ -606,7 +604,7 @@ const StudioPreview = () => {
         )}
       </main>
 
-      <footer className="mt-16 border-t border-border/70 bg-card/80 py-10">
+      <footer className="mt-16 border-t border-border/60 py-10">
         <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center md:flex-row md:text-left">
           <div>
             <p className="text-sm font-semibold text-foreground">
