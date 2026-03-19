@@ -215,7 +215,7 @@ function StoryPoster({
           <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-black/55 p-3 text-white ring-1 ring-white/12 backdrop-blur-sm" : "mt-3.5"}>
             {isComparison ? (
               <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
@@ -228,7 +228,7 @@ function StoryPoster({
               </div>
             ) : isTabloid ? (
               <>
-              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
+              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
                 <span>Stânga {left}%</span>
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
@@ -245,7 +245,7 @@ function StoryPoster({
               </>
             ) : (
               <>
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
@@ -291,7 +291,7 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
 
       <div className="grid gap-6 lg:grid-cols-2 2xl:grid-cols-4">
         {items.map(({ story, variant }) => (
-          <div key={`${story.id}-${variant}`} className="space-y-3 md:px-[8%] xl:px-[10%]">
+          <div key={`${story.id}-${variant}`} className="space-y-3 sm:px-[6%] md:px-[14%] xl:px-[17%]">
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-muted-foreground">
               <span>{variant}</span>
               <span>{story.category}</span>
