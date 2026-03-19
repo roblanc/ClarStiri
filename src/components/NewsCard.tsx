@@ -88,45 +88,47 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           </div>
 
           {/* Desktop/Tablet - Poster Layout */}
-          <div className="hidden md:block relative aspect-[40/43] md:aspect-[16/17] overflow-hidden">
-            <NewsImage
-              src={getThumbnailUrl(news.image)}
-              seed={news.title}
-              loading="lazy"
-              decoding="async"
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-            />
+          <div className="hidden md:flex flex-col h-full overflow-hidden">
+            <div className="relative aspect-[40/43] md:aspect-[16/17] overflow-hidden flex-shrink-0">
+              <NewsImage
+                src={getThumbnailUrl(news.image)}
+                seed={news.title}
+                loading="lazy"
+                decoding="async"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.2)_46%,rgba(0,0,0,0.46)_64%,rgba(0,0,0,0.78)_82%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_24%,rgba(0,0,0,0.26)_46%,rgba(0,0,0,0.56)_66%,rgba(0,0,0,0.84)_84%,rgba(0,0,0,0.98)_100%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.2)_46%,rgba(0,0,0,0.46)_64%,rgba(0,0,0,0.78)_82%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_24%,rgba(0,0,0,0.26)_46%,rgba(0,0,0,0.56)_66%,rgba(0,0,0,0.84)_84%,rgba(0,0,0,0.98)_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
-            <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
-                {news.sourcesCount} surse
-              </span>
+              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
+                <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
+                  {news.sourcesCount} surse
+                </span>
 
-              {blindspotLabel ? (
-                <BiasBadge
-                  type={news.blindspot as 'left' | 'right'}
-                  label={blindspotLabel}
-                  className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
-                />
-              ) : null}
-            </div>
-
-            <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-20 sm:px-5 sm:pb-4 sm:pt-10">
-              <h3
-                className={[
-                  "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-                  getPosterTitleSizing(news.title),
-                ].join(" ")}
-              >
-                {news.title}
-              </h3>
-
-              <div className="mt-3.5">
-                <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
+                {blindspotLabel ? (
+                  <BiasBadge
+                    type={news.blindspot as 'left' | 'right'}
+                    label={blindspotLabel}
+                    className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
+                  />
+                ) : null}
               </div>
+
+              <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-4 pt-20 sm:pt-14">
+                <h3
+                  className={[
+                    "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+                    getPosterTitleSizing(news.title),
+                  ].join(" ")}
+                >
+                  {news.title}
+                </h3>
+              </div>
+            </div>
+            
+            <div className="px-4 pb-4 pt-3 sm:px-5 sm:pb-5 sm:pt-4 bg-background mt-auto flex-1">
+              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
             </div>
           </div>
         </article>
