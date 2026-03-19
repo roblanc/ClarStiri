@@ -180,7 +180,7 @@ const Index = () => {
 
         {/* Editorial Hero Greeting */}
         <section className="mb-12 md:mb-20 relative pt-4 md:pt-0">
-          <div className="md:flex md:items-center md:justify-between md:gap-12">
+          <div className="md:flex md:items-center md:justify-start md:gap-16 lg:gap-24 xl:gap-32">
             <div className="block">
               {/* Image - Adjusted margins to avoid header overlap */}
               <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
@@ -201,7 +201,7 @@ const Index = () => {
             </div>
 
             {/* Desktop Image */}
-            <div className="hidden md:block shrink-0 w-96 md:-mr-12">
+            <div className="hidden md:block shrink-0 w-96 lg:w-[32rem]">
               <img
                 src="/logo_full.png"
                 alt="ClarStiri Investigator Logo"
