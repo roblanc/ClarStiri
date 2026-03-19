@@ -51,7 +51,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#1d4ed8] shrink-0">
                 {news.category || "ACTUALITATE"} <span className="text-muted-foreground/60 mx-1 font-normal">•</span> {news.sourcesCount} SURSE
               </span>
-              <div className="flex-1 border-t border-border/60 mx-3" />
+              <div className="flex-1 border-b-[2px] border-dotted border-muted-foreground/30 mx-3 translate-y-[-2px]" />
               <span className="text-[12px] font-bold text-foreground shrink-0 flex items-center gap-1.5">
                 {(news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid')) ? news.timeAgo.replace(/Acum /i, '') : "11:30"}
               </span>
