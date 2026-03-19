@@ -75,7 +75,12 @@ async def capture(url: str):
         page = await context.new_page()
 
         print(f"Loading homepage...")
-        await page.goto(HOMEPAGE, wait_until="load", timeout=60000)
+        await page.goto(HOMEPAGE, wait_until="domcontentloaded", timeout=60000)
+        try:
+            await page.wait_for_selector("a[href*='/stire/']", timeout=30000)
+            print("Page loaded and news links found.")
+        except Exception:
+            print("Timed out waiting for news links. Proceeding anyway...")
         await asyncio.sleep(2)
 
         # Find the right card — scroll down to load more if needed
