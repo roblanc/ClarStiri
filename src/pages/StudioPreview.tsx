@@ -36,6 +36,87 @@ interface StudioStory {
   sources: Array<{ name: string; url: string; bias?: string }>;
 }
 
+const DEMO_STORIES: StudioStory[] = [
+  {
+    id: "demo-1",
+    title: "Guvernul pregătește un nou pachet pentru transportul public din marile orașe",
+    image: "https://picsum.photos/seed/clarstiri-demo-transport/1200/1500",
+    bias: { left: 22, center: 56, right: 22 },
+    blindspot: "none",
+    category: "Actualitate",
+    location: "România",
+    sourcesCount: 9,
+    timeAgo: "Acum 12 min",
+    description: "Un exemplu de articol scurt, cu un hero clar și o bară de bias care să rămână citibilă în screenshot.",
+    sources: [],
+  },
+  {
+    id: "demo-2",
+    title: "Un nou raport despre energia verde schimbă discursul public înainte de votul din Parlament",
+    image: "https://picsum.photos/seed/clarstiri-demo-energia/1200/1500",
+    bias: { left: 41, center: 37, right: 22 },
+    blindspot: "left",
+    category: "Economie",
+    location: "București",
+    sourcesCount: 7,
+    timeAgo: "Acum 18 min",
+    description: "Layout-ul păstrează feed-ul actual, dar îl face să semene mai mult cu un poster editorial pentru Instagram.",
+    sources: [],
+  },
+  {
+    id: "demo-3",
+    title: "Ce spun sursele din presă despre măsurile de siguranță de la litoral",
+    image: "https://picsum.photos/seed/clarstiri-demo-litoral/1200/1500",
+    bias: { left: 15, center: 68, right: 17 },
+    blindspot: "right",
+    category: "Societate",
+    location: "Constanța",
+    sourcesCount: 11,
+    timeAgo: "Acum 23 min",
+    description: "Un format util pentru capturi în care vrei titlu mare, context scurt și o singură idee dominantă.",
+    sources: [],
+  },
+  {
+    id: "demo-4",
+    title: "Negocierile din coaliție rămân tensionate după discuțiile despre bugetul de anul viitor",
+    image: "https://picsum.photos/seed/clarstiri-demo-politica/1200/1500",
+    bias: { left: 19, center: 49, right: 32 },
+    blindspot: "none",
+    category: "Politică",
+    location: "România",
+    sourcesCount: 13,
+    timeAgo: "Acum 31 min",
+    description: "Bun pentru a testa cum arată cardurile mari pe landing page și cum se exportă în social.",
+    sources: [],
+  },
+  {
+    id: "demo-5",
+    title: "Ploi puternice și avertizări meteo în mai multe județe din sudul țării",
+    image: "https://picsum.photos/seed/clarstiri-demo-meteo/1200/1500",
+    bias: { left: 28, center: 44, right: 28 },
+    blindspot: "none",
+    category: "Mediu",
+    location: "Sudul României",
+    sourcesCount: 6,
+    timeAgo: "Acum 39 min",
+    description: "Un exemplu neutru, cu imagine simplă și contrast bun pentru poster preview.",
+    sources: [],
+  },
+  {
+    id: "demo-6",
+    title: "O schimbare majoră în tehnologie ridică întrebări despre reguli și verificarea informației",
+    image: "https://picsum.photos/seed/clarstiri-demo-tech/1200/1500",
+    bias: { left: 24, center: 52, right: 24 },
+    blindspot: "none",
+    category: "Tehnologie",
+    location: "Online",
+    sourcesCount: 8,
+    timeAgo: "Acum 47 min",
+    description: "Folosește aceeași ierarhie ca Ground News, dar adaptată la structura ta actuală.",
+    sources: [],
+  },
+];
+
 function StoryPoster({ story }: { story: StudioStory }) {
   const left = Math.round(story.bias.left);
   const center = Math.round(story.bias.center);
@@ -153,6 +234,10 @@ const StudioPreview = () => {
     })) as StudioStory[];
   }, [stories, hasSearchQuery, normalizedQuery]);
 
+  const useDemoContent = convertedStories.length === 0;
+  const displayStories = useDemoContent ? DEMO_STORIES : convertedStories;
+  const featuredStory = displayStories[0];
+
   const matchedVoices = useMemo(() => {
     if (!hasSearchQuery) return [];
 
@@ -165,8 +250,6 @@ const StudioPreview = () => {
       return inName || inRole || inDesc || inTargets;
     });
   }, [hasSearchQuery, normalizedQuery]);
-
-  const featuredStory = convertedStories[0];
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,rgba(245,243,239,0.86)_0%,rgba(249,247,243,1)_20%,rgba(255,255,255,1)_100%)] dark:bg-[linear-gradient(180deg,rgba(10,10,12,1)_0%,rgba(13,13,16,1)_100%)]">
@@ -235,7 +318,7 @@ const StudioPreview = () => {
               </div>
             </div>
 
-            <div className="rounded-[2rem] border border-border/70 bg-card p-4 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.3)]">
+              <div className="rounded-[2rem] border border-border/70 bg-card p-4 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.3)]">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
@@ -261,14 +344,32 @@ const StudioPreview = () => {
           </div>
         </section>
 
-        {isLoading && (
+        {isLoading && !useDemoContent && (
           <div className="space-y-10">
             <MainFeedSkeleton />
             <MainFeedSkeleton />
           </div>
         )}
 
-        {!isLoading && !isFetching && !stories?.length && (
+        {useDemoContent && (
+          <div className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
+                  demo content active
+                </p>
+                <p className="mt-1 text-sm text-foreground">
+                  Fluxul RSS nu este disponibil acum, așa că pagina afișează exemple locale cu imagini pentru preview.
+                </p>
+              </div>
+              <Button onClick={() => refetch()} variant="outline" className="rounded-full border-border px-6">
+                Reîncearcă datele
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {!isLoading && !isFetching && !useDemoContent && !stories?.length && (
           <div className="rounded-[2rem] border border-border bg-card p-8 text-center">
             <AlertCircle className="mx-auto mb-4 h-12 w-12 text-destructive" />
             <p className="font-semibold text-foreground">Flux gol</p>
@@ -334,7 +435,7 @@ const StudioPreview = () => {
           </div>
         )}
 
-        {convertedStories.length > 0 && (
+        {displayStories.length > 0 && (
           <section className="rounded-[2rem] border border-border/70 bg-card/80 p-4 md:p-6">
             <div className="mb-5 flex items-center justify-between gap-4">
               <div>
@@ -346,17 +447,17 @@ const StudioPreview = () => {
                 </h2>
               </div>
               <div className="hidden rounded-full border border-border bg-muted/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground md:block">
-                {visible} / {convertedStories.length}
+                {visible} / {displayStories.length}
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {convertedStories.slice(0, visible).map((news) => (
+              {displayStories.slice(0, visible).map((news) => (
                 <NewsCard key={news.id} variant="default" news={news} />
               ))}
             </div>
 
-            {visible < convertedStories.length && (
+            {visible < displayStories.length && (
               <div className="mt-8 flex justify-center">
                 <Button
                   onClick={() => setVisible((value) => value + BATCH)}
