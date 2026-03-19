@@ -223,10 +223,12 @@ const Index = () => {
                     position: absolute;
                     transform: translate(-50%, -50%);
                     border-radius: 50%;
+                    overflow: hidden;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
+                    background-color: white;
                     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
                     border: 1px solid rgba(0,0,0,0.05);
                     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
@@ -237,89 +239,76 @@ const Index = () => {
                     z-index: 50 !important;
                     box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.3);
                   }
+                  .bubble img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border-radius: 50%;
+                  }
                 `}</style>
                 
                 {/* --- CENTER BUBBLE --- */}
-                {/* HotNews */}
-                <div className="bubble top-[50%] left-[50%] z-40 w-[110px] h-[110px] lg:w-[130px] lg:h-[130px] bg-[#1e40af]">
-                  <div className="relative flex items-center justify-center">
-                    <span className="text-[#fbb117] font-black text-6xl lg:text-7xl font-sans tracking-tighter">H</span>
-                    <div className="absolute -left-[2px] bottom-1 w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] bg-[#f97316] rounded-full" />
-                  </div>
+                <div className="bubble top-[50%] left-[50%] z-40 w-[110px] h-[110px] lg:w-[130px] lg:h-[130px]">
+                  <img src="/logos/hotnews.png" alt="HotNews" className="p-1.5" />
                 </div>
 
                 {/* --- RING 1 --- */}
-                {/* Biziday */}
-                <div className="bubble top-[22%] left-[50%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px] bg-[#f97316]">
-                  <span className="text-white font-black text-[18px] lg:text-[22px] tracking-tight font-sans">BIZI</span>
+                <div className="bubble top-[22%] left-[50%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px]">
+                  <img src="/logos/biziday.png" alt="Biziday" className="p-3" />
                 </div>
 
-                {/* Libertatea */}
-                <div className="bubble top-[35%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px] bg-[#e62020]">
-                  <span className="text-white font-black text-[14px] lg:text-[16px] leading-[0.9] tracking-tight font-sans">LIBER</span>
-                  <span className="text-white font-black text-[14px] lg:text-[16px] leading-[0.9] tracking-tight font-sans mt-0.5">TATEA</span>
+                <div className="bubble top-[35%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px]">
+                  <img src="/logos/libertatea.png" alt="Libertatea" className="p-2" />
                 </div>
 
-                {/* Recorder */}
-                <div className="bubble top-[65%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px] bg-[#111827]">
-                  <span className="text-white font-black text-[22px] lg:text-[26px] tracking-tight font-sans">REC</span>
+                <div className="bubble top-[65%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px]">
+                  <img src="/logos/recorder.png" alt="Recorder" />
                 </div>
 
-                {/* Gandul */}
-                <div className="bubble top-[78%] left-[50%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px] bg-white">
-                  <span className="text-black font-serif font-black text-[20px] lg:text-[24px] tracking-tighter">Gândul.</span>
+                <div className="bubble top-[78%] left-[50%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px]">
+                  <img src="/logos/gandul.png" alt="Gandul" className="p-3.5" />
                 </div>
 
-                {/* Adevarul */}
-                <div className="bubble top-[65%] left-[27%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px] bg-[#0d3b26]">
-                  <span className="text-white font-serif font-black text-[38px] lg:text-[46px] leading-none">A</span>
+                <div className="bubble top-[65%] left-[27%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px]">
+                  <img src="/logos/adevarul.png" alt="Adevărul" className="p-2" />
                 </div>
 
-                {/* Digi24 */}
-                <div className="bubble top-[35%] left-[27%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px] bg-[#002fff]">
-                  <span className="text-white font-bold text-[24px] lg:text-[28px] tracking-tight font-sans">DIGI</span>
+                <div className="bubble top-[35%] left-[27%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px]">
+                  <img src="/logos/digi24.png" alt="Digi24" />
                 </div>
 
 
                 {/* --- RING 2 (OUTER SATELLITES) --- */}
-                {/* Ziarul Financiar */}
-                <div className="bubble top-[18%] left-[88%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px] bg-[#fbb117]">
-                  <span className="text-black font-black text-[20px] lg:text-[24px]">ZF</span>
+                <div className="bubble top-[18%] left-[88%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px]">
+                  <img src="/logos/zf.png" alt="Ziarul Financiar" className="p-1" />
                 </div>
 
-                {/* SpotMedia */}
-                <div className="bubble top-[50%] left-[96%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px] bg-[#0f766e]">
-                  <span className="text-white font-black text-[26px] lg:text-[32px]">S</span>
+                <div className="bubble top-[50%] left-[96%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px]">
+                  <img src="/logos/spotmedia.png" alt="SpotMedia" className="p-1.5" />
                 </div>
 
-                {/* Agerpres */}
-                <div className="bubble top-[82%] left-[88%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-[#1e3a8a]">
-                  <span className="text-white font-bold text-[13px] lg:text-[15px]">AGE</span>
+                <div className="bubble top-[82%] left-[88%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px]">
+                  <img src="/logos/agerpres.png" alt="Agerpres" className="p-1" />
                 </div>
 
-                {/* Bursa */}
-                <div className="bubble top-[95%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px] bg-[#475569]">
-                  <span className="text-white font-bold text-[12px] lg:text-[14px]">BUR</span>
+                <div className="bubble top-[95%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px]">
+                  <img src="/logos/bursa.png" alt="Bursa" className="p-2" />
                 </div>
 
-                {/* ProTV */}
-                <div className="bubble top-[82%] left-[12%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px] bg-gradient-to-br from-red-500 to-blue-600">
-                  <span className="text-white font-black text-[16px] lg:text-[18px]">PRO</span>
+                <div className="bubble top-[82%] left-[12%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px]">
+                  <img src="/logos/protv.png" alt="Știrile ProTV" />
                 </div>
 
-                {/* G4Media */}
-                <div className="bubble top-[50%] left-[4%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px] bg-[#7e22ce]">
-                  <span className="text-white font-black text-[22px] lg:text-[26px]">G4</span>
+                <div className="bubble top-[50%] left-[4%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px]">
+                  <img src="/logos/g4media.png" alt="G4Media" className="p-1" />
                 </div>
 
-                {/* Mediafax */}
-                <div className="bubble top-[18%] left-[12%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-[#374151]">
-                  <span className="text-white font-bold text-[14px] lg:text-[16px]">MFX</span>
+                <div className="bubble top-[18%] left-[12%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px]">
+                  <img src="/logos/mediafax.png" alt="Mediafax" className="p-2" />
                 </div>
 
-                {/* Europa FM */}
-                <div className="bubble top-[5%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px] bg-[#0891b2]">
-                  <span className="text-white font-black text-[18px] lg:text-[22px]">FM</span>
+                <div className="bubble top-[5%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px]">
+                  <img src="/logos/europafm.png" alt="Europa FM" className="p-1.5" />
                 </div>
 
               </div>

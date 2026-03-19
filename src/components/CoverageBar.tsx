@@ -30,12 +30,10 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   };
 
   return (
-    <div className={cn("flex flex-col w-full", className)}>
-      <div className="flex h-8 sm:h-9 w-full rounded-[6px] overflow-hidden shadow-sm border border-border/20">
-        {renderSegment(pLeft, "Stânga", "bg-[#28508a]", "text-white", "text-white/80")}
-        {renderSegment(pCenter, "Centru", "bg-white dark:bg-[#e2e8f0] border-x border-border/10", "text-[#1f2937] dark:text-[#0f172a]", "text-[#1f2937]/70 dark:text-[#0f172a]/70")}
-        {renderSegment(pRight, "Dreapta", "bg-[#822727]", "text-white", "text-white/80")}
-      </div>
+    <div className={cn("flex h-8 sm:h-9 w-full rounded-[6px] overflow-hidden shadow-sm border border-border/20", className)}>
+      {renderSegment(pLeft, "Stânga", "bg-[#28508a]", "text-white", "text-white/80")}
+      {renderSegment(pCenter, "Centru", "bg-white dark:bg-[#e2e8f0] border-x border-border/10", "text-[#1f2937] dark:text-[#0f172a]", "text-[#1f2937]/70 dark:text-[#0f172a]/70")}
+      {renderSegment(pRight, "Dreapta", "bg-[#822727]", "text-white", "text-white/80")}
     </div>
   );
 }
