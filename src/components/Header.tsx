@@ -104,13 +104,11 @@ export function Header() {
         <div className="flex items-center justify-between h-14 md:h-16 gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0 group">
-            <div className="relative w-8 h-8 overflow-hidden bg-transparent">
-              <img
-                src="/logo_full.png"
-                alt="ClarStiri Logo"
-                className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none scale-125"
-              />
-            </div>
+            <img
+              src="/logo_full.png"
+              alt="ClarStiri Logo"
+              className="h-10 md:h-12 w-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert pointer-events-none"
+            />
             <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
               thesite.ro
             </span>
