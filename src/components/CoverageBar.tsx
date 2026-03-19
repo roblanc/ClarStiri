@@ -12,24 +12,29 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   const pCenter = Math.round((bias.center / total) * 100);
   const pRight = Math.round((bias.right / total) * 100);
 
+
+  const renderSegment = (percentage: number, label: string, bgClass: string, textClass: string, subtitleClass: string) => {
+    if (percentage <= 0) return null;
+    return (
+      <div className={`h-full ${bgClass} transition-all duration-500 flex items-center justify-center overflow-hidden`} style={{ width: `${percentage}%` }}>
+        {percentage >= 18 ? (
+          <div className={`flex flex-col items-center justify-center leading-none whitespace-nowrap px-1 ${textClass}`}>
+            <span className={`text-[7px] sm:text-[8px] uppercase tracking-[0.1em] font-bold mb-0.5 ${subtitleClass}`}>{label}</span>
+            <span className="text-[11px] sm:text-[12px] font-black tracking-tight">{percentage}%</span>
+          </div>
+        ) : percentage >= 8 ? (
+          <span className={`text-[10px] sm:text-[11px] font-bold whitespace-nowrap ${textClass}`}>{percentage}%</span>
+        ) : null}
+      </div>
+    );
+  };
+
   return (
     <div className={cn("flex flex-col w-full", className)}>
-      <div className="flex h-7 sm:h-8 w-full rounded-[4px] overflow-hidden shadow-sm border border-border/20 text-[10px] sm:text-[11px] font-bold tracking-wide">
-        {pLeft > 0 && (
-          <div className="h-full bg-[#28508a] transition-all duration-500 flex items-center justify-center overflow-hidden" style={{ width: `${pLeft}%` }}>
-            {pLeft >= 12 && <span className="text-white whitespace-nowrap pl-1">S {pLeft}%</span>}
-          </div>
-        )}
-        {pCenter > 0 && (
-          <div className="h-full bg-white dark:bg-[#e2e8f0] transition-all duration-500 flex items-center justify-center overflow-hidden" style={{ width: `${pCenter}%` }}>
-            {pCenter >= 12 && <span className="text-[#1f2937] whitespace-nowrap px-1">C {pCenter}%</span>}
-          </div>
-        )}
-        {pRight > 0 && (
-          <div className="h-full bg-[#822727] transition-all duration-500 flex items-center justify-center overflow-hidden" style={{ width: `${pRight}%` }}>
-            {pRight >= 12 && <span className="text-white whitespace-nowrap pr-1">D {pRight}%</span>}
-          </div>
-        )}
+      <div className="flex h-8 sm:h-9 w-full rounded-[6px] overflow-hidden shadow-sm border border-border/20">
+        {renderSegment(pLeft, "Stânga", "bg-[#28508a]", "text-white", "text-white/80")}
+        {renderSegment(pCenter, "Centru", "bg-white dark:bg-[#e2e8f0] border-x border-border/10", "text-[#1f2937] dark:text-[#0f172a]", "text-[#1f2937]/70 dark:text-[#0f172a]/70")}
+        {renderSegment(pRight, "Dreapta", "bg-[#822727]", "text-white", "text-white/80")}
       </div>
     </div>
   );
