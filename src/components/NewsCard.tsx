@@ -6,6 +6,7 @@ import { NewsImage } from "./NewsImage";
 import { AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buildStoryHref } from "@/utils/storyRoute";
+import { getPosterTitleSizing } from "@/utils/posterTypography";
 
 export interface NewsItem {
   id: string;
@@ -78,7 +79,12 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                 </span>
               </div>
 
-              <h3 className="w-full max-w-none font-serif text-[clamp(1.08rem,1.45vw,1.68rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance">
+              <h3
+                className={[
+                  "w-full max-w-none font-serif font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+                  getPosterTitleSizing(news.title),
+                ].join(" ")}
+              >
                 {news.title}
               </h3>
 

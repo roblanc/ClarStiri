@@ -12,6 +12,7 @@ import { AlertCircle, ArrowUpRight, Image as ImageIcon, Layers3, SearchX, Sparkl
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { NewsImage } from "@/components/NewsImage";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
+import { getPosterTitleSizing } from "@/utils/posterTypography";
 
 const BATCH = 18;
 
@@ -213,8 +214,9 @@ function StoryPoster({
 
         <h2
           className={[
-            "w-full max-w-none text-[clamp(1.08rem,1.45vw,1.7rem)] font-semibold leading-[0.94] tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-            isTabloid ? "font-serif text-[clamp(1.08rem,1.5vw,1.75rem)]" : "",
+            "w-full max-w-none font-semibold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
+            isTabloid ? "font-serif" : "",
+            getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
           ].join(" ")}
         >
           {story.title}
