@@ -180,9 +180,11 @@ const Index = () => {
 
         {/* Editorial Hero Greeting */}
         <section className="mb-10 md:mb-12 relative pt-4 md:pt-0">
-          <div className="md:flex md:items-center md:justify-start md:gap-12 lg:gap-16 xl:gap-24">
-            <div className="block">
-              {/* Image - Adjusted margins to avoid header overlap */}
+          <div className="md:flex md:items-center md:justify-start md:gap-8 lg:gap-16">
+            
+            {/* Left Column (Title, Text, Boy) */}
+            <div className="block flex-1 max-w-[600px]">
+              {/* Mobile Boy Image */}
               <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
                   src="/logo_full.png"
@@ -191,23 +193,58 @@ const Index = () => {
                 />
               </div>
 
-              <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl leading-[1.15] font-bold tracking-tight">
-                Citești.<br />Compari.<br />Decizi.
-              </h1>
+              {/* Desktop Header & Boy Block */}
+              <div className="flex items-center gap-6 lg:gap-8">
+                <h1 className="text-foreground font-serif text-4xl sm:text-5xl md:text-5xl lg:text-7xl leading-[1.15] font-bold tracking-tight">
+                  Citești.<br />Compari.<br />Decizi.
+                </h1>
 
-              <p className="text-muted-foreground text-sm sm:text-base md:text-md lg:text-lg block mt-5 md:mt-6 leading-relaxed font-sans max-w-md">
+                {/* Desktop Inline Boy Card */}
+                <div className="hidden md:flex shrink-0 w-36 h-48 lg:w-44 lg:h-56 bg-background rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-border/80 items-center justify-center p-3 transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
+                  <img
+                    src="/logo_full.png"
+                    alt="ClarStiri Investigator Logo"
+                    className="w-full h-full object-contain mix-blend-darken dark:mix-blend-lighten pointer-events-none"
+                  />
+                </div>
+              </div>
+
+              <p className="text-muted-foreground text-sm sm:text-base md:text-md lg:text-lg block mt-5 md:mt-8 md:max-w-md lg:max-w-lg leading-relaxed font-sans">
                 Ieși din propria bulă informațională. Comparăm automat peste 40 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
               </p>
             </div>
 
-            {/* Desktop Image */}
-            <div className="hidden md:block shrink-0 w-80 lg:w-[24rem]">
-              <img
-                src="/logo_full.png"
-                alt="ClarStiri Investigator Logo"
-                className="w-full h-auto object-contain mix-blend-darken dark:mix-blend-lighten dark:invert pointer-events-none"
-              />
+            {/* Right Column: Desktop Apple Watch Style Logo Cloud */}
+            <div className="hidden md:flex flex-1 justify-center shrink-0 items-center min-h-[350px] lg:min-h-[400px] relative pointer-events-none select-none">
+              <div className="relative w-full max-w-[420px] h-[320px]">
+                
+                {/* Top Center - Libertatea */}
+                <div className="absolute top-[10%] left-[45%] -translate-x-1/2 z-20 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px] rounded-[1.2rem] shadow-xl bg-[#e62020] flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-500">
+                  <span className="text-white font-black text-[15px] lg:text-[17px] leading-[0.9] tracking-tight font-sans">LIBER</span>
+                  <span className="text-white font-black text-[15px] lg:text-[17px] leading-[0.9] tracking-tight font-sans mt-0.5">TATEA</span>
+                </div>
+
+                {/* Far Left - Digi */}
+                <div className="absolute top-[40%] left-[10%] z-10 w-[95px] h-[95px] lg:w-[105px] lg:h-[105px] rounded-[1.2rem] shadow-lg bg-[#002fff] flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
+                  <span className="text-white font-bold text-2xl lg:text-3xl tracking-tight font-sans">DIGI</span>
+                </div>
+
+                {/* Bottom Center - HotNews */}
+                <div className="absolute bottom-[5%] left-[38%] z-30 w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] rounded-[1.3rem] shadow-2xl bg-[#234faf] flex items-center justify-center transform hover:scale-105 hover:-rotate-3 transition-transform duration-500">
+                  <div className="relative flex items-center justify-center">
+                    <span className="text-[#fbb117] font-black text-5xl lg:text-6xl font-sans tracking-tighter">H</span>
+                    <div className="absolute -left-[3px] bottom-1 w-[8px] h-[8px] bg-[#f97316] rounded-full" />
+                  </div>
+                </div>
+
+                {/* Right - Gandul */}
+                <div className="absolute top-[45%] right-[2%] z-40 bg-white rounded-[1rem] shadow-xl px-5 py-3 lg:px-7 lg:py-4 flex items-center justify-center border border-black/5 transform hover:scale-105 transition-transform duration-500">
+                  <span className="text-black font-serif font-black text-[26px] lg:text-[32px] tracking-tighter">Gândul.</span>
+                </div>
+
+              </div>
             </div>
+
           </div>
         </section>
 
