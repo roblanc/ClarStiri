@@ -8,23 +8,23 @@ export function getPosterTitleSizing(title: string, variant: PosterTitleVariant 
 
   if (score > 145) {
     return variant === "tabloid"
-      ? "text-[1.12rem] leading-[0.92] line-clamp-5 sm:text-[clamp(0.95rem,1.02vw,1.08rem)]"
-      : "text-[1.12rem] leading-[0.92] line-clamp-5 sm:text-[clamp(0.95rem,1.02vw,1.08rem)]";
+      ? "text-[1.2rem] leading-[1.01] line-clamp-5 sm:text-[clamp(1.04rem,1.08vw,1.16rem)]"
+      : "text-[1.2rem] leading-[1.01] line-clamp-5 sm:text-[clamp(1.04rem,1.08vw,1.16rem)]";
   }
 
   if (score > 115) {
     return variant === "tabloid"
-      ? "text-[1.2rem] leading-[0.93] line-clamp-5 sm:text-[clamp(1.02rem,1.12vw,1.22rem)]"
-      : "text-[1.2rem] leading-[0.93] line-clamp-5 sm:text-[clamp(1.02rem,1.12vw,1.22rem)]";
+      ? "text-[1.3rem] leading-[1.02] line-clamp-5 sm:text-[clamp(1.1rem,1.2vw,1.3rem)]"
+      : "text-[1.3rem] leading-[1.02] line-clamp-5 sm:text-[clamp(1.1rem,1.2vw,1.3rem)]";
   }
 
   if (score > 85) {
     return variant === "tabloid"
-      ? "text-[1.32rem] leading-[0.94] line-clamp-4 sm:text-[clamp(1.08rem,1.28vw,1.42rem)]"
-      : "text-[1.32rem] leading-[0.94] line-clamp-4 sm:text-[clamp(1.08rem,1.28vw,1.42rem)]";
+      ? "text-[1.44rem] leading-[1.03] line-clamp-4 sm:text-[clamp(1.18rem,1.36vw,1.5rem)]"
+      : "text-[1.44rem] leading-[1.03] line-clamp-4 sm:text-[clamp(1.18rem,1.36vw,1.5rem)]";
   }
 
   return variant === "tabloid"
-    ? "text-[1.48rem] leading-[0.95] line-clamp-4 sm:text-[clamp(1.14rem,1.5vw,1.75rem)]"
-    : "text-[1.48rem] leading-[0.95] line-clamp-4 sm:text-[clamp(1.14rem,1.45vw,1.68rem)]";
+    ? "text-[1.64rem] leading-[1.04] line-clamp-4 sm:text-[clamp(1.26rem,1.58vw,1.86rem)]"
+    : "text-[1.64rem] leading-[1.04] line-clamp-4 sm:text-[clamp(1.26rem,1.52vw,1.78rem)]";
 }
