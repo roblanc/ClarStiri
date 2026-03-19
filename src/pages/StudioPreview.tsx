@@ -170,10 +170,10 @@ function StoryPoster({
             className={[
               "absolute inset-0",
               isBreaking
-                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.03)_0%,rgba(66,9,9,0.12)_28%,rgba(40,4,4,0.28)_48%,rgba(0,0,0,0.52)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(122,23,23,0.16)_0%,rgba(66,9,9,0.42)_42%,rgba(0,0,0,0.78)_100%)]"
+                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.03)_0%,rgba(66,9,9,0.12)_28%,rgba(40,4,4,0.28)_48%,rgba(0,0,0,0.52)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(122,23,23,0.08)_0%,rgba(66,9,9,0.2)_22%,rgba(40,4,4,0.38)_44%,rgba(0,0,0,0.64)_66%,rgba(0,0,0,0.88)_84%,rgba(0,0,0,0.98)_100%)]"
                 : isTabloid
-                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.48)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.97)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.1)_0%,rgba(0,0,0,0.22)_28%,rgba(0,0,0,0.78)_78%,rgba(0,0,0,0.95)_100%)]"
-                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.22)_48%,rgba(0,0,0,0.46)_68%,rgba(0,0,0,0.8)_84%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.14)_0%,rgba(0,0,0,0.24)_44%,rgba(0,0,0,0.7)_100%)]",
+                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.48)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.97)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.16)_22%,rgba(0,0,0,0.34)_44%,rgba(0,0,0,0.64)_66%,rgba(0,0,0,0.9)_84%,rgba(0,0,0,0.99)_100%)]"
+                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.22)_48%,rgba(0,0,0,0.46)_68%,rgba(0,0,0,0.8)_84%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.12)_22%,rgba(0,0,0,0.28)_44%,rgba(0,0,0,0.58)_66%,rgba(0,0,0,0.86)_84%,rgba(0,0,0,0.98)_100%)]",
             ].join(" ")}
           />
 

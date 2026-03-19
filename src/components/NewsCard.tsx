@@ -52,7 +52,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.2)_46%,rgba(0,0,0,0.46)_64%,rgba(0,0,0,0.78)_82%,rgba(0,0,0,0.96)_100%)] sm:bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.12)_38%,rgba(0,0,0,0.3)_72%,rgba(0,0,0,0.56)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.01)_0%,rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.2)_46%,rgba(0,0,0,0.46)_64%,rgba(0,0,0,0.78)_82%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_24%,rgba(0,0,0,0.26)_46%,rgba(0,0,0,0.56)_66%,rgba(0,0,0,0.84)_84%,rgba(0,0,0,0.98)_100%)]" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
             <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
