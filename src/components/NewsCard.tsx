@@ -80,7 +80,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               </h3>
 
               <div className="mt-3.5">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {Math.round(news.bias.left)}%</span>
                   <span>Centru {Math.round(news.bias.center)}%</span>
                   <span>Dreapta {Math.round(news.bias.right)}%</span>

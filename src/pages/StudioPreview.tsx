@@ -212,10 +212,10 @@ function StoryPoster({
             {story.title}
           </h2>
 
-          <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
+          <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-black/55 p-3 text-white ring-1 ring-white/12 backdrop-blur-sm" : "mt-3.5"}>
             {isComparison ? (
               <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
@@ -228,24 +228,24 @@ function StoryPoster({
               </div>
             ) : isTabloid ? (
               <>
-              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[8px] sm:tracking-[0.2em]">
+              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
                 <span>Stânga {left}%</span>
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
                 </div>
-                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-zinc-200 ring-1 ring-black/10">
+                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/12">
                   <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
                   <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
                   <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
                 </div>
-                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-zinc-500 sm:text-[8px] sm:tracking-[0.16em]">
+                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-white/72 sm:text-[8px] sm:tracking-[0.16em]">
                   <span>{story.sourcesCount} surse</span>
                   <span>{story.category}</span>
                 </div>
               </>
             ) : (
               <>
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/62 sm:text-[8px] sm:tracking-[0.2em]">
+                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white/88 sm:text-[8px] sm:tracking-[0.2em]">
                   <span>Stânga {left}%</span>
                   <span>Centru {center}%</span>
                   <span>Dreapta {right}%</span>
