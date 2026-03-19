@@ -13,9 +13,9 @@
 @layer base {
   :root {
     /* thesite.ro Editorial System */
-    /* Beige background, sharp borders, elegant serif */
-    --background: 49.6 31.5% 92.5%;
-    /* Lighter beige */
+    /* White background, sharp borders, elegant serif */
+    --background: 0 0% 100%;
+    /* Pure white */
     --foreground: 0 0% 10%;
     /* Nearly black */
 
@@ -31,15 +31,15 @@
     --primary: 0 0% 15%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 20% 90%;
-    /* Slightly darker beige for hover */
+    --secondary: 0 0% 96%;
+    /* Subtle grey for hover */
     --secondary-foreground: 0 0% 20%;
 
-    --muted: 40 10% 85%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 40%;
     /* #666666 suitable for meta */
 
-    --accent: 40 20% 90%;
+    --accent: 0 0% 96%;
     --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84% 60%;
