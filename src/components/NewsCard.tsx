@@ -125,22 +125,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               </h3>
 
               <div className="mt-3.5">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
-                  <span>Stânga {Math.round(news.bias.left)}%</span>
-                  <span>Centru {Math.round(news.bias.center)}%</span>
-                  <span>Dreapta {Math.round(news.bias.right)}%</span>
-                </div>
-                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/12">
-                  {news.bias.left > 0 && (
-                    <div className="h-full bg-[#2f5fa6]" style={{ width: `${news.bias.left}%` }} />
-                  )}
-                  {news.bias.center > 0 && (
-                    <div className="h-full bg-[#efe9dc]" style={{ width: `${news.bias.center}%` }} />
-                  )}
-                  {news.bias.right > 0 && (
-                    <div className="h-full bg-[#9a2f2f]" style={{ width: `${news.bias.right}%` }} />
-                  )}
-                </div>
+                <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} />
               </div>
             </div>
           </div>
