@@ -1074,6 +1074,88 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     confidence: 'medium',
     lastAnalysed: '2026-02-27',
   },
+
+  aktual24: {
+    id: 'aktual24',
+    currentOwner: 'Independent (Ioan Ovidiu)',
+    ownershipHistory: 'Publicație independentă activă în online, fondată de Ioan Ovidiu.',
+    editorialLine: 'Site de știri cu focus pe politică, investigații și actualitate internă. Ton adesea anti-corupție și critic la adresa marilor partide.',
+    biasRationale: 'Aktual24 are o orientare anti-corupție și critică la adresa sistemului politic tradițional (în special PSD/PNL). Tendința este ușor centru-dreapta / reformistă.',
+    biasScore: 20,
+    confidence: 'low',
+    lastAnalysed: '2026-03-19',
+  },
+
+  redactia: {
+    id: 'redactia',
+    currentOwner: 'Proprietate privată',
+    ownershipHistory: 'Site de știri online generalist, cu focus pe actualitate și click de tip agregator.',
+    editorialLine: 'Știri generale, tabloid și actualitate rapidă. Focus pe trafic și audiență social media.',
+    biasRationale: 'Conținut generalist / agregator fără o linie editorială politică asumată. Factualitatea poate varia în funcție de preluări.',
+    biasScore: 0,
+    confidence: 'low',
+    lastAnalysed: '2026-03-19',
+  },
+
+  cotidianul: {
+    id: 'cotidianul',
+    foundedYear: 1991,
+    founders: ['Ion Rațiu'],
+    currentOwner: 'Cornel Nistorescu',
+    ownershipHistory: 'Fondat în 1991 de Ion Rațiu cu orientare asumată de dreapta / țărănistă. După moartea sa a trecut prin mai multe patronate. În prezent este controlat de jurnalistul Cornel Nistorescu.',
+    editorialLine: 'Publicație zilnică online de știri, analize și editoriale. Ton puternic dictat de opiniile lui Cornel Nistorescu.',
+    biasRationale: 'Sub conducerea actuală, ziarul a adoptat o linie editorială frecvent critică la adresa decidenților pro-europeni, DNA, USR și pro-abordări suveraniste sau naționaliste. Are o tendință clară spre dreapta-suveranistă.',
+    biasScore: 40,
+    confidence: 'medium',
+    lastAnalysed: '2026-03-19',
+  },
+
+  comisarul: {
+    id: 'comisarul',
+    currentOwner: 'Proprietate privată',
+    ownershipHistory: 'Site online de știri, comentarii și sinteze, deseori cu un ton senzaționalist.',
+    editorialLine: 'Abordare agresivă de tip tabloid politic, limbaj colorat și orientare puternic marcată anti-sistem.',
+    biasRationale: 'Site-ul prezintă un jurnalism militant, partizan, cu un limbaj deseori injurios și neprofesionist. Tendința este populistă-dreapta.',
+    biasScore: 45,
+    confidence: 'low',
+    lastAnalysed: '2026-03-19',
+  },
+
+  metropolatv: {
+    id: 'metropolatv',
+    foundedYear: 2020,
+    currentOwner: 'Consiliul Local Voluntari (Florentin Pandele)',
+    ownershipHistory: 'Canal TV lansat de televiziunea Consiliului Local Voluntari, primărie condusă de Florentin Pandele (soțul Gabrielei Firea, lider PSD).',
+    editorialLine: 'Canal de știri, divertisment și talk-show-uri politice. Găzduiește emisiuni ale unor realizatori controversați.',
+    biasRationale: 'Finanțarea publică din Voluntari subordonată lui Florentin Pandele implică legături directe cu PSD, dar și cu zona de conservatorism asumată de grupul condus de familia Pandele/Firea.',
+    biasScore: 60,
+    confidence: 'medium',
+    lastAnalysed: '2026-03-19',
+  },
+
+  romaniajournal: {
+    id: 'romaniajournal',
+    foundedYear: 2014,
+    currentOwner: 'Independent',
+    ownershipHistory: 'Publicație independentă în limba engleză dedicată știrilor din România pentru expații și cititorii străini.',
+    editorialLine: 'Ziar de știri online în limba engleză (politică, economie, societate). Stil și rapoarte bazate adesea pe agregarea agențiilor.',
+    biasRationale: 'Acoperirea are un ton neutru, instituțional, specific publicațiilor destinate străinilor. Nu manifestă parti-pris politic vizibil.',
+    biasScore: 0,
+    confidence: 'medium',
+    lastAnalysed: '2026-03-19',
+  },
+
+  romaniainsider: {
+    id: 'romaniainsider',
+    foundedYear: 2010,
+    currentOwner: 'City Compass Media',
+    ownershipHistory: 'Cea mai citită publicație exclusiv în limba engleză din România, fondată de Corina Chirileasa și Volker Moser.',
+    editorialLine: 'Platformă de știri business, politică și lifestyle în engleză. Calitate editorială ridicată.',
+    biasRationale: 'Fiind dedicată mediului corporate expat și antreprenorilor străini, abordează piața cu un ton economic pro-occidental, centrist, foarte echilibrat politic.',
+    biasScore: 0,
+    confidence: 'high',
+    lastAnalysed: '2026-03-19',
+  },
 };
 
 // ============================================================
