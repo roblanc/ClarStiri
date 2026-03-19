@@ -56,7 +56,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
             <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm">
+              <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
                 {news.sourcesCount} surse
               </span>
 
@@ -80,7 +80,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               </h3>
 
               <div className="mt-3.5">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.22em] text-white/55">
+                <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-white/55 sm:text-[9px] sm:tracking-[0.22em]">
                   <span>Stânga {Math.round(news.bias.left)}%</span>
                   <span>Centru {Math.round(news.bias.center)}%</span>
                   <span>Dreapta {Math.round(news.bias.right)}%</span>

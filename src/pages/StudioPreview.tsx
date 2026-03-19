@@ -179,12 +179,12 @@ function StoryPoster({
       <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
         <div className="flex flex-wrap gap-2">
           <span className={[
-            "rounded-full px-2.5 py-0.5 text-[9px] font-semibold tracking-tight text-zinc-900",
+            "rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]",
             isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
           ].join(" ")}>
             {story.category.toUpperCase()}
           </span>
-          <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[9px] font-semibold tracking-tight text-zinc-900">
+          <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]">
             {story.sourcesCount} surse
           </span>
         </div>
@@ -216,7 +216,7 @@ function StoryPoster({
         <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-white/92 p-3 text-zinc-900 ring-1 ring-black/10" : "mt-3.5"}>
           {isComparison ? (
             <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
+              <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
                 <span>Stânga {left}%</span>
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
@@ -229,7 +229,7 @@ function StoryPoster({
             </div>
           ) : isTabloid ? (
             <>
-              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500 sm:text-[9px] sm:tracking-[0.24em]">
                 <span>Stânga {left}%</span>
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
@@ -239,14 +239,14 @@ function StoryPoster({
                 <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
                 <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
               </div>
-              <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.18em] text-zinc-500">
+              <div className="mt-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500 sm:text-[9px] sm:tracking-[0.18em]">
                 <span>{story.sourcesCount} surse</span>
                 <span>{story.category}</span>
               </div>
             </>
           ) : (
             <>
-              <div className="mb-2 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/65">
+              <div className="mb-2 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.18em] text-white/65 sm:text-[10px] sm:tracking-[0.22em]">
                 <span>Stânga {left}%</span>
                 <span>Centru {center}%</span>
                 <span>Dreapta {right}%</span>
