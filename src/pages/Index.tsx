@@ -4,7 +4,7 @@ import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, SearchX } from "lucide-react";
+import { SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import {
@@ -13,6 +13,87 @@ import {
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 
 const BATCH = 20;
+
+const DEMO_STORIES = [
+  {
+    id: "demo-home-1",
+    title: "Guvernul pregătește un nou pachet pentru transportul public din marile orașe",
+    image: "https://picsum.photos/seed/home-demo-transport/1200/1500",
+    bias: { left: 22, center: 56, right: 22 },
+    blindspot: "none" as const,
+    category: "Actualitate",
+    location: "România",
+    sourcesCount: 9,
+    timeAgo: "Acum 12 min",
+    description: "Un feed demo ca să vezi imediat cum arată cardurile poster pe landing page.",
+    sources: [],
+  },
+  {
+    id: "demo-home-2",
+    title: "Un nou raport despre energia verde schimbă discursul public înainte de votul din Parlament",
+    image: "https://picsum.photos/seed/home-demo-energia/1200/1500",
+    bias: { left: 41, center: 37, right: 22 },
+    blindspot: "left" as const,
+    category: "Economie",
+    location: "București",
+    sourcesCount: 7,
+    timeAgo: "Acum 18 min",
+    description: "Aceeași structură, dar cu o compoziție mai apropiată de un screenshot social.",
+    sources: [],
+  },
+  {
+    id: "demo-home-3",
+    title: "Ce spun sursele din presă despre măsurile de siguranță de la litoral",
+    image: "https://picsum.photos/seed/home-demo-litoral/1200/1500",
+    bias: { left: 15, center: 68, right: 17 },
+    blindspot: "right" as const,
+    category: "Societate",
+    location: "Constanța",
+    sourcesCount: 11,
+    timeAgo: "Acum 23 min",
+    description: "Titlu mare, imagine mare, bară de bias clară la bază.",
+    sources: [],
+  },
+  {
+    id: "demo-home-4",
+    title: "Negocierile din coaliție rămân tensionate după discuțiile despre bugetul de anul viitor",
+    image: "https://picsum.photos/seed/home-demo-politica/1200/1500",
+    bias: { left: 19, center: 49, right: 32 },
+    blindspot: "none" as const,
+    category: "Politică",
+    location: "România",
+    sourcesCount: 13,
+    timeAgo: "Acum 31 min",
+    description: "Un card puțin mai sobru, bun să vezi dacă layout-ul stă bine pe subiecte serioase.",
+    sources: [],
+  },
+  {
+    id: "demo-home-5",
+    title: "Ploi puternice și avertizări meteo în mai multe județe din sudul țării",
+    image: "https://picsum.photos/seed/home-demo-meteo/1200/1500",
+    bias: { left: 28, center: 44, right: 28 },
+    blindspot: "none" as const,
+    category: "Mediu",
+    location: "Sudul României",
+    sourcesCount: 6,
+    timeAgo: "Acum 39 min",
+    description: "Un exemplu neutru, cu contrast bun și imagine simplă.",
+    sources: [],
+  },
+  {
+    id: "demo-home-6",
+    title: "O schimbare majoră în tehnologie ridică întrebări despre reguli și verificarea informației",
+    image: "https://picsum.photos/seed/home-demo-tech/1200/1500",
+    bias: { left: 24, center: 52, right: 24 },
+    blindspot: "none" as const,
+    category: "Tehnologie",
+    location: "Online",
+    sourcesCount: 8,
+    timeAgo: "Acum 47 min",
+    description: "Același mesaj, dar în forma de poster pe care o căutăm.",
+    sources: [],
+  },
+];
 
 const normalizeSearchText = (text: string) =>
   text
@@ -31,6 +112,20 @@ const Index = () => {
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
     let filtered = stories || [];
+
+    if (!filtered.length) {
+      const demoFiltered = hasSearchQuery
+        ? DEMO_STORIES.filter((story) => {
+            const titleMatch = normalizeSearchText(story.title).includes(normalizedQuery);
+            const descMatch = normalizeSearchText(story.description || "").includes(normalizedQuery);
+            const sourceMatch = story.sources.some((src) => normalizeSearchText(src.name).includes(normalizedQuery));
+
+            return titleMatch || descMatch || sourceMatch;
+          })
+        : DEMO_STORIES;
+
+      return demoFiltered;
+    }
 
     if (hasSearchQuery) {
       const q = normalizedQuery;
@@ -61,6 +156,8 @@ const Index = () => {
       })),
     })) || [];
   }, [stories, hasSearchQuery, normalizedQuery]);
+
+  const useDemoContent = !isLoading && !(stories?.length ?? 0);
 
   const matchedVoices = useMemo(() => {
     if (!hasSearchQuery) return [];
@@ -122,17 +219,26 @@ const Index = () => {
           </div>
         )}
 
-        {/* Error / Empty State */}
-        {!isLoading && !isFetching && !stories?.length && (
-          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card rounded-none">
-            <AlertCircle className="w-12 h-12 text-destructive mb-4" />
-            <p className="font-serif text-2xl mb-2 text-foreground">Flux gol</p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8 text-center max-w-md">
-              {error?.message ?? 'Sursele RSS nu au putut fi interpolate. Reveniți.'}
-            </p>
-            <Button onClick={() => refetch()} variant="outline" className="rounded-none border-border font-serif uppercase text-xs tracking-widest px-8">
-              REÎNCEARCĂ
-            </Button>
+        {useDemoContent && (
+          <div className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
+                  demo content active
+                </p>
+                <p className="mt-1 text-sm text-foreground">
+                  Nu am date RSS acum, așa că pagina afișează exemple locale ca să poți evalua cardurile poster.
+                </p>
+                {error?.message && (
+                  <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                    {error.message}
+                  </p>
+                )}
+              </div>
+              <Button onClick={() => refetch()} variant="outline" className="rounded-full border-border px-6">
+                Reîncearcă datele
+              </Button>
+            </div>
           </div>
         )}
 
@@ -192,7 +298,7 @@ const Index = () => {
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {convertedStories.slice(0, visible).map((news) => (
-                <NewsCard key={news.id} variant="default" news={news} />
+                <NewsCard key={news.id} variant="poster" news={news} />
               ))}
             </div>
 
