@@ -176,7 +176,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="mx-auto w-full max-w-[1680px] px-4 py-6 md:px-6 md:py-10">
+      <main className="mx-auto w-full max-w-[1240px] px-4 py-6 md:px-6 md:py-10">
 
         {/* Editorial Hero Greeting */}
         <section className="mb-12 md:mb-20 relative pt-4 md:pt-0">
@@ -296,7 +296,7 @@ const Index = () => {
         {/* Flat Feed - Added gap for better separation on mobile */}
         {convertedStories.length > 0 && (
           <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-7">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-12 px-0 md:px-8 lg:px-12 xl:px-16">
               {convertedStories.slice(0, visible).map((news) => (
                 <NewsCard key={news.id} variant="poster" news={news} />
               ))}
