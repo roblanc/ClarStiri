@@ -47,7 +47,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
             <div className="flex items-center w-full mb-3">
-              <div className="w-[6px] h-[6px] bg-[#fbbf24] mr-2 shrink-0" />
+              <div className="w-0 h-0 border-y-[4px] border-y-transparent border-l-[6px] border-l-[#fbbf24] mr-2 shrink-0" />
               <span className="text-[11px] font-extrabold uppercase tracking-wide text-[#1d4ed8] shrink-0">
                 {news.category || "ACTUALITATE"} <span className="text-muted-foreground/60 mx-1 font-normal">•</span> {news.sourcesCount} SURSE
               </span>
