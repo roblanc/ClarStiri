@@ -215,8 +215,8 @@ const Index = () => {
             </div>
 
             {/* Right Column: Desktop Apple Watch Style Logo Cloud */}
-            <div className="hidden md:flex flex-1 justify-center shrink-0 items-center min-h-[350px] lg:min-h-[400px] relative pointer-events-auto select-none overflow-visible">
-              <div className="relative w-[240px] h-[240px] lg:w-[280px] lg:h-[280px]">
+            <div className="hidden md:flex flex-1 justify-center shrink-0 items-center min-h-[400px] lg:min-h-[500px] relative pointer-events-auto select-none overflow-visible">
+              <div className="relative w-[340px] h-[340px] lg:w-[460px] lg:h-[460px]">
                 
                 <style>{`
                   .bubble {
@@ -258,64 +258,90 @@ const Index = () => {
                 </div>
 
                 {/* --- RING 1 --- */}
-                {/* Angle 270 (Top Center) */}
                 <div className="bubble top-[27%] left-[50%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/biziday.png" alt="Biziday" className="p-1.5" />
                 </div>
-                {/* Angle 330 (Top Right) */}
                 <div className="bubble top-[38%] left-[70%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/libertatea.png" alt="Libertatea" className="p-1.5" />
                 </div>
-                {/* Angle 30 (Bottom Right) */}
                 <div className="bubble top-[62%] left-[70%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/recorder.png" alt="Recorder" />
                 </div>
-                {/* Angle 90 (Bottom Center) */}
                 <div className="bubble top-[73%] left-[50%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/gandul.png" alt="Gandul" className="p-2" />
                 </div>
-                {/* Angle 150 (Bottom Left) */}
                 <div className="bubble top-[62%] left-[30%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/adevarul.png" alt="Adevărul" className="p-1.5" />
                 </div>
-                {/* Angle 210 (Top Left) */}
                 <div className="bubble top-[38%] left-[30%] z-30 w-14 h-14 lg:w-16 lg:h-16">
                   <img src="/logos/digi24.png" alt="Digi24" />
                 </div>
 
-
-                {/* --- RING 2 (OUTER SATELLITES) --- */}
-                {/* Angle 0 (Right Edge) */}
-                <div className="bubble top-[50%] left-[90%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                {/* --- RING 2 --- */}
+                <div className="bubble top-[50%] left-[88%] z-20 w-11 h-11 lg:w-12 lg:h-12">
                   <img src="/logos/spotmedia.png" alt="SpotMedia" className="p-1" />
                 </div>
-                {/* Angle 60 (Bottom Right Far) */}
-                <div className="bubble top-[84%] left-[70%] z-20 w-10 h-10 lg:w-11 lg:h-11">
+                <div className="bubble top-[69%] left-[83%] z-20 w-11 h-11 lg:w-12 lg:h-12">
                   <img src="/logos/zf.png" alt="Ziarul Financiar" className="p-0.5" />
                 </div>
-                {/* Angle 120 (Bottom Left Far) */}
-                <div className="bubble top-[84%] left-[30%] z-20 w-10 h-10 lg:w-11 lg:h-11">
+                <div className="bubble top-[83%] left-[69%] z-20 w-11 h-11 lg:w-12 lg:h-12">
                   <img src="/logos/bursa.png" alt="Bursa" className="p-1" />
                 </div>
-                {/* Angle 180 (Left Edge) */}
-                <div className="bubble top-[50%] left-[10%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                <div className="bubble top-[88%] left-[50%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/protv.png" alt="ProTV" />
+                </div>
+                <div className="bubble top-[83%] left-[31%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/mediafax.png" alt="Mediafax" className="p-1.5" />
+                </div>
+                <div className="bubble top-[69%] left-[17%] z-20 w-11 h-11 lg:w-12 lg:h-12">
                   <img src="/logos/g4media.png" alt="G4Media" className="p-0.5" />
                 </div>
-                {/* Angle 240 (Top Left Far) */}
-                <div className="bubble top-[16%] left-[30%] z-20 w-10 h-10 lg:w-11 lg:h-11">
-                  <img src="/logos/mediafax.png" alt="Mediafax" className="p-1" />
+                <div className="bubble top-[50%] left-[12%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/europafm.png" alt="EuropaFM" className="p-1" />
                 </div>
-                {/* Angle 300 (Top Right Far) */}
-                <div className="bubble top-[16%] left-[70%] z-20 w-10 h-10 lg:w-11 lg:h-11">
-                  <img src="/logos/protv.png" alt="Știrile ProTV" />
+                <div className="bubble top-[31%] left-[17%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/agerpres.png" alt="Agerpres" className="p-1.5" />
+                </div>
+                <div className="bubble top-[17%] left-[31%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/jurnalul.png" alt="Jurnalul" className="p-1" />
+                </div>
+                <div className="bubble top-[12%] left-[50%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/dcnews.png" alt="DCNews" className="p-1" />
+                </div>
+                <div className="bubble top-[17%] left-[69%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/antena3.png" alt="Antena 3" className="p-1" />
+                </div>
+                <div className="bubble top-[31%] left-[83%] z-20 w-11 h-11 lg:w-12 lg:h-12">
+                  <img src="/logos/romaniatv.png" alt="Romania TV" className="p-1" />
                 </div>
 
-                {/* --- EXTRA RING 3 (Tiny) ---  */}
-                <div className="bubble top-[4%] left-[50%] z-10 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/europafm.png" alt="Europa FM" className="p-1" />
+                {/* --- RING 3 (Tiny satellites) --- */}
+                <div className="bubble top-[8%] left-[85%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/capital.png" alt="Capital" className="p-1" />
                 </div>
-                <div className="bubble top-[96%] left-[50%] z-10 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/agerpres.png" alt="Agerpres" className="p-1" />
+                <div className="bubble top-[8%] left-[15%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/profit.png" alt="Profit.ro" className="p-1" />
+                </div>
+                <div className="bubble top-[92%] left-[85%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/stiripesurse.png" alt="Stiripesurse" className="p-1" />
+                </div>
+                <div className="bubble top-[92%] left-[15%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/romanialibera.png" alt="Romania Libera" className="p-1" />
+                </div>
+                <div className="bubble top-[5%] left-[70%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/cotidianul.png" alt="Cotidianul" className="p-1.5" />
+                </div>
+                <div className="bubble top-[5%] left-[30%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/b1tv.png" alt="B1TV" className="p-0.5" />
+                </div>
+                <div className="bubble top-[95%] left-[30%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/realitatea.png" alt="Realitatea" className="p-1" />
+                </div>
+                <div className="bubble top-[95%] left-[70%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/aktual24.png" alt="Aktual24" className="p-1" />
+                </div>
+                <div className="bubble top-[50%] left-[2%] z-10 w-8 h-8 lg:w-9 lg:h-9">
+                  <img src="/logos/ziaruldeiasi.png" alt="Ziarul de Iasi" className="p-1" />
                 </div>
 
               </div>

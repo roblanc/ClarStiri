@@ -42,7 +42,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[1rem] md:border">
+        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[10px] md:border">
           
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
