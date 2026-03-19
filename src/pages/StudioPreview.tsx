@@ -593,7 +593,7 @@ const StudioPreview = () => {
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {displayStories.slice(0, visible).map((news) => (
-                <NewsCard key={news.id} variant="default" news={news} />
+                <NewsCard key={news.id} variant="poster" news={news} />
               ))}
             </div>
 
