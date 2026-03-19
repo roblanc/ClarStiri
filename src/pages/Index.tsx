@@ -189,7 +189,7 @@ const Index = () => {
                 <img
                   src="/logo_full.png"
                   alt="ClarStiri Investigator Logo"
-                  className="w-full h-auto object-contain mix-blend-darken dark:mix-blend-lighten dark:invert transform scale-125"
+                  className="w-full h-auto object-contain dark:invert transform scale-125"
                 />
               </div>
 
@@ -204,7 +204,7 @@ const Index = () => {
                   <img
                     src="/logo_full.png"
                     alt="ClarStiri Investigator Logo"
-                    className="w-full h-full object-contain mix-blend-darken dark:mix-blend-lighten pointer-events-none"
+                    className="w-full h-full object-contain dark:invert pointer-events-none"
                   />
                 </div>
               </div>
@@ -215,31 +215,111 @@ const Index = () => {
             </div>
 
             {/* Right Column: Desktop Apple Watch Style Logo Cloud */}
-            <div className="hidden md:flex flex-1 justify-center shrink-0 items-center min-h-[350px] lg:min-h-[400px] relative pointer-events-none select-none">
-              <div className="relative w-full max-w-[420px] h-[320px]">
+            <div className="hidden md:flex flex-1 justify-center shrink-0 items-center min-h-[400px] lg:min-h-[460px] relative pointer-events-auto select-none overflow-visible">
+              <div className="relative w-full max-w-[420px] aspect-square">
                 
-                {/* Top Center - Libertatea */}
-                <div className="absolute top-[10%] left-[45%] -translate-x-1/2 z-20 w-[90px] h-[90px] lg:w-[100px] lg:h-[100px] rounded-[1.2rem] shadow-xl bg-[#e62020] flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-500">
-                  <span className="text-white font-black text-[15px] lg:text-[17px] leading-[0.9] tracking-tight font-sans">LIBER</span>
-                  <span className="text-white font-black text-[15px] lg:text-[17px] leading-[0.9] tracking-tight font-sans mt-0.5">TATEA</span>
-                </div>
-
-                {/* Far Left - Digi */}
-                <div className="absolute top-[40%] left-[10%] z-10 w-[95px] h-[95px] lg:w-[105px] lg:h-[105px] rounded-[1.2rem] shadow-lg bg-[#002fff] flex items-center justify-center transform hover:scale-105 transition-transform duration-500">
-                  <span className="text-white font-bold text-2xl lg:text-3xl tracking-tight font-sans">DIGI</span>
-                </div>
-
-                {/* Bottom Center - HotNews */}
-                <div className="absolute bottom-[5%] left-[38%] z-30 w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] rounded-[1.3rem] shadow-2xl bg-[#234faf] flex items-center justify-center transform hover:scale-105 hover:-rotate-3 transition-transform duration-500">
+                <style>{`
+                  .bubble {
+                    position: absolute;
+                    transform: translate(-50%, -50%);
+                    border-radius: 50%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+                    border: 1px solid rgba(0,0,0,0.05);
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+                    cursor: default;
+                  }
+                  .bubble:hover {
+                    transform: translate(-50%, -50%) scale(1.15);
+                    z-index: 50 !important;
+                    box-shadow: 0 20px 35px -5px rgba(0, 0, 0, 0.3);
+                  }
+                `}</style>
+                
+                {/* --- CENTER BUBBLE --- */}
+                {/* HotNews */}
+                <div className="bubble top-[50%] left-[50%] z-40 w-[110px] h-[110px] lg:w-[130px] lg:h-[130px] bg-[#1e40af]">
                   <div className="relative flex items-center justify-center">
-                    <span className="text-[#fbb117] font-black text-5xl lg:text-6xl font-sans tracking-tighter">H</span>
-                    <div className="absolute -left-[3px] bottom-1 w-[8px] h-[8px] bg-[#f97316] rounded-full" />
+                    <span className="text-[#fbb117] font-black text-6xl lg:text-7xl font-sans tracking-tighter">H</span>
+                    <div className="absolute -left-[2px] bottom-1 w-[8px] h-[8px] lg:w-[10px] lg:h-[10px] bg-[#f97316] rounded-full" />
                   </div>
                 </div>
 
-                {/* Right - Gandul */}
-                <div className="absolute top-[45%] right-[2%] z-40 bg-white rounded-[1rem] shadow-xl px-5 py-3 lg:px-7 lg:py-4 flex items-center justify-center border border-black/5 transform hover:scale-105 transition-transform duration-500">
-                  <span className="text-black font-serif font-black text-[26px] lg:text-[32px] tracking-tighter">Gândul.</span>
+                {/* --- RING 1 --- */}
+                {/* Biziday */}
+                <div className="bubble top-[22%] left-[50%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px] bg-[#f97316]">
+                  <span className="text-white font-black text-[18px] lg:text-[22px] tracking-tight font-sans">BIZI</span>
+                </div>
+
+                {/* Libertatea */}
+                <div className="bubble top-[35%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px] bg-[#e62020]">
+                  <span className="text-white font-black text-[14px] lg:text-[16px] leading-[0.9] tracking-tight font-sans">LIBER</span>
+                  <span className="text-white font-black text-[14px] lg:text-[16px] leading-[0.9] tracking-tight font-sans mt-0.5">TATEA</span>
+                </div>
+
+                {/* Recorder */}
+                <div className="bubble top-[65%] left-[73%] z-30 w-[90px] h-[90px] lg:w-[105px] lg:h-[105px] bg-[#111827]">
+                  <span className="text-white font-black text-[22px] lg:text-[26px] tracking-tight font-sans">REC</span>
+                </div>
+
+                {/* Gandul */}
+                <div className="bubble top-[78%] left-[50%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px] bg-white">
+                  <span className="text-black font-serif font-black text-[20px] lg:text-[24px] tracking-tighter">Gândul.</span>
+                </div>
+
+                {/* Adevarul */}
+                <div className="bubble top-[65%] left-[27%] z-30 w-[85px] h-[85px] lg:w-[100px] lg:h-[100px] bg-[#0d3b26]">
+                  <span className="text-white font-serif font-black text-[38px] lg:text-[46px] leading-none">A</span>
+                </div>
+
+                {/* Digi24 */}
+                <div className="bubble top-[35%] left-[27%] z-30 w-[95px] h-[95px] lg:w-[110px] lg:h-[110px] bg-[#002fff]">
+                  <span className="text-white font-bold text-[24px] lg:text-[28px] tracking-tight font-sans">DIGI</span>
+                </div>
+
+
+                {/* --- RING 2 (OUTER SATELLITES) --- */}
+                {/* Ziarul Financiar */}
+                <div className="bubble top-[18%] left-[88%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px] bg-[#fbb117]">
+                  <span className="text-black font-black text-[20px] lg:text-[24px]">ZF</span>
+                </div>
+
+                {/* SpotMedia */}
+                <div className="bubble top-[50%] left-[96%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px] bg-[#0f766e]">
+                  <span className="text-white font-black text-[26px] lg:text-[32px]">S</span>
+                </div>
+
+                {/* Agerpres */}
+                <div className="bubble top-[82%] left-[88%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-[#1e3a8a]">
+                  <span className="text-white font-bold text-[13px] lg:text-[15px]">AGE</span>
+                </div>
+
+                {/* Bursa */}
+                <div className="bubble top-[95%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px] bg-[#475569]">
+                  <span className="text-white font-bold text-[12px] lg:text-[14px]">BUR</span>
+                </div>
+
+                {/* ProTV */}
+                <div className="bubble top-[82%] left-[12%] z-20 w-[65px] h-[65px] lg:w-[75px] lg:h-[75px] bg-gradient-to-br from-red-500 to-blue-600">
+                  <span className="text-white font-black text-[16px] lg:text-[18px]">PRO</span>
+                </div>
+
+                {/* G4Media */}
+                <div className="bubble top-[50%] left-[4%] z-20 w-[70px] h-[70px] lg:w-[80px] lg:h-[80px] bg-[#7e22ce]">
+                  <span className="text-white font-black text-[22px] lg:text-[26px]">G4</span>
+                </div>
+
+                {/* Mediafax */}
+                <div className="bubble top-[18%] left-[12%] z-20 w-[60px] h-[60px] lg:w-[70px] lg:h-[70px] bg-[#374151]">
+                  <span className="text-white font-bold text-[14px] lg:text-[16px]">MFX</span>
+                </div>
+
+                {/* Europa FM */}
+                <div className="bubble top-[5%] left-[50%] z-20 w-[55px] h-[55px] lg:w-[65px] lg:h-[65px] bg-[#0891b2]">
+                  <span className="text-white font-black text-[18px] lg:text-[22px]">FM</span>
                 </div>
 
               </div>

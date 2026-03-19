@@ -107,7 +107,7 @@ export function Header() {
             <img
               src="/logo_full.png"
               alt="ClarStiri Logo"
-              className="h-10 md:h-12 w-auto object-contain mix-blend-darken dark:mix-blend-lighten dark:invert pointer-events-none"
+              className="h-10 md:h-12 w-auto object-contain dark:invert pointer-events-none"
             />
             <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
               thesite.ro
