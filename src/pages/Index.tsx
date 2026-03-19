@@ -199,8 +199,8 @@ const Index = () => {
                   Citești.<br />Compari.<br />Decizi.
                 </h1>
 
-                {/* Desktop Inline Boy Card */}
-                <div className="hidden md:flex shrink-0 w-36 h-48 lg:w-44 lg:h-56 bg-background rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-border/80 items-center justify-center p-3 transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
+                {/* Desktop Inline Boy Image (Seamless) */}
+                <div className="hidden md:flex shrink-0 w-40 h-52 lg:w-48 lg:h-64 items-center justify-center transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
                   <img
                     src="/logo_full.png"
                     alt="ClarStiri Investigator Logo"
