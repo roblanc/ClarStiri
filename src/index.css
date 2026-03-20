@@ -148,12 +148,12 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'IBM Plex Sans', system-ui, sans-serif;
-    background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, rgba(0,0,0,0.10) 1px, transparent 1px);
     background-size: 24px 24px;
   }
 
   .dark body {
-    background-image: radial-gradient(circle, rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
   }
 
   h1,
