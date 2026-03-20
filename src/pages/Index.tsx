@@ -173,7 +173,7 @@ const Index = () => {
   }, [hasSearchQuery, normalizedQuery]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header />
 
       <main className="mx-auto w-full max-w-[1240px] px-4 py-6 md:px-6 md:py-10">
