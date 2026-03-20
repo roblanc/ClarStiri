@@ -128,7 +128,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
             </div>
             
             <div className="w-full shrink-0">
-              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} className="!rounded-none !shadow-none h-11 sm:h-12 !border-none" />
+              <CoverageBar bias={news.bias} sourcesCount={news.sourcesCount} className="!rounded-none !shadow-none h-10 md:h-[43px] !border-none" />
             </div>
           </div>
         </article>

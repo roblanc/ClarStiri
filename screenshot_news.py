@@ -101,26 +101,26 @@ async def capture(url: str):
                 await browser.close()
                 sys.exit(1)
         else:
-            print("No story ID found — capturing first card on homepage.")
-            card = page.locator("a[href*='/stire/'] article").first
+            print("No story ID found — capturing top 3 cards on homepage.")
+            cards_locator = page.locator("a[href*='/stire/'] article")
+            count = await cards_locator.count()
+            limit = min(3, count)
+            
+            for i in range(limit):
+                card = cards_locator.nth(i)
+                await card.scroll_into_view_if_needed()
+                await asyncio.sleep(0.5)
+                
+                img_bytes = await card.screenshot()
+                ig_bytes = resize_to_instagram(img_bytes)
+                
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                filename = SCREENSHOTS_DIR / f"card_{i+1}_{timestamp}.png"
+                filename.write_bytes(ig_bytes)
+                print(f"✓ Saved: {filename}")
 
-        # Scroll card into view
-        await card.scroll_into_view_if_needed()
-        await asyncio.sleep(0.5)
-
-        img_bytes = await card.screenshot()
-
-        # Resize to IG format
-        ig_bytes = resize_to_instagram(img_bytes)
-
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        slug = story_id or "card"
-        filename = SCREENSHOTS_DIR / f"{slug}_{timestamp}.png"
-        filename.write_bytes(ig_bytes)
-
-        await browser.close()
-        print(f"✓ Saved: {filename}")
-        return filename
+            await browser.close()
+            return
 
 
 def main():
