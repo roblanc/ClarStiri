@@ -74,6 +74,10 @@ export const NEWS_SOURCES_BASE = [
   { id: 'psnews', name: 'PS News', url: 'https://psnews.ro', rssUrl: 'https://psnews.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'independent' },
   { id: 'zdg', name: 'Ziarul de Gardă', url: 'https://www.zdg.md', rssUrl: 'https://www.zdg.md/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   { id: 'riseproject', name: 'Rise Project', url: 'https://www.riseproject.ro', rssUrl: 'https://www.riseproject.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'buletindebucuresti', name: 'Buletin de București', url: 'https://buletin.de/bucuresti', rssUrl: 'https://buletin.de/bucuresti/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'ziaruldeiasi', name: 'Ziarul de Iași', url: 'https://www.ziaruldeiasi.ro', rssUrl: 'https://www.ziaruldeiasi.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'playtech', name: 'Playtech', url: 'https://playtech.ro', rssUrl: 'https://playtech.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'g4food', name: 'G4Food', url: 'https://g4food.ro', rssUrl: 'https://g4food.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
