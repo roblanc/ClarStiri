@@ -73,8 +73,7 @@ export const NEWS_SOURCES_BASE = [
   { id: 'cancan', name: 'Cancan', url: 'https://www.cancan.ro', rssUrl: 'https://www.cancan.ro/feed', bias: 'center-right', factuality: 'low', category: 'tabloid' },
   { id: 'psnews', name: 'PS News', url: 'https://psnews.ro', rssUrl: 'https://psnews.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'independent' },
   { id: 'zdg', name: 'Ziarul de Gardă', url: 'https://www.zdg.md', rssUrl: 'https://www.zdg.md/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
-  { id: 'gsp', name: 'Gazeta Sporturilor', url: 'https://www.gsp.ro', rssUrl: 'https://www.gsp.ro/rss.xml', bias: 'center', factuality: 'high', category: 'mainstream' },
-  { id: 'prosport', name: 'ProSport', url: 'https://www.prosport.ro', rssUrl: 'https://www.prosport.ro/feed', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'riseproject', name: 'Rise Project', url: 'https://www.riseproject.ro', rssUrl: 'https://www.riseproject.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
