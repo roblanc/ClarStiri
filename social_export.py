@@ -102,7 +102,7 @@ def get_font(size: int, bold: bool = False):
     return ImageFont.load_default()
 
 
-LOGO_PATH = Path(__file__).parent / "public" / "logo_full.png"
+LOGO_PATH = Path(__file__).parent / "public" / "logo_minimal.png"
 
 # Pill design: dark semi-transparent background, white logo + text, top-right
 PILL_BG        = (0, 0, 0, 170)    # negru 67% opacitate
