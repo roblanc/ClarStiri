@@ -153,7 +153,7 @@ export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTim
 
     const extractEntities = (title: string) => {
         return title.split(/\s+/)
-            .filter(w => w.length > 3 && /^[A-Z]/.test(w))
+            .filter(w => w.length > 3 && /^[^\p{L}]*\p{Lu}/u.test(w))
             .map(w => normalizeTitle(w))
             .filter(w => !genericEntities.has(w));
     };
@@ -188,7 +188,6 @@ export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTim
         for (let j = i + 1; j < itemData.length; j++) {
             const dataJ = itemData[j];
             if (processed.has(dataJ.item.id)) continue;
-            if (dataI.item.source.id === dataJ.item.source.id) continue;
             if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
 
             const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
