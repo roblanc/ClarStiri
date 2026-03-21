@@ -1,0 +1,16 @@
+name: Refresh News Cache
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: # permite rulare manuală din GitHub UI
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger cache refresh
+        run: |
+          curl -s -f \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            https://thesite.ro/api/cron/refresh-news
