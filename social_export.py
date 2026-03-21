@@ -103,32 +103,31 @@ def get_font(size: int, bold: bool = False):
 
 
 LOGO_PATH = Path(__file__).parent / "public" / "logo_minimal.png"
+BRAND_FONT = Path(__file__).parent / "public" / "fonts" / "PlayfairDisplay-Italic.ttf"
 
-# Pill design: dark semi-transparent background, white logo + text, top-right
-PILL_BG        = (0, 0, 0, 170)    # negru 67% opacitate
-PILL_TEXT      = (255, 255, 255)
-PILL_FONT_SIZE = 30
-LOGO_HEIGHT    = 36                 # înălțimea logo-ului în pill
-PILL_PAD_X     = 18
-PILL_PAD_Y     = 12
-PILL_GAP       = 10                 # spațiu între logo și text
-PILL_MARGIN    = 20                 # distanță față de marginea cardului
+# Pill design: cream solid background, dark logo + text, top-right
+PILL_BG        = (240, 239, 230, 240)    # Cream, quasi-opac
+PILL_TEXT      = (25, 25, 25)            # Negru
+PILL_PAD_X     = 24                # padding orizontal
+PILL_PAD_Y     = 10                # padding vertical
+PILL_GAP       = 12                # spatiu intre logo si text
+PILL_MARGIN    = 40                # distanta de la extremitatile imaginii
+LOGO_HEIGHT    = 48                # inaltimea setata pentru logo (in pixeli)
 
 
-def _load_logo_white(height: int) -> Optional[Image.Image]:
-    """Încarcă logo-ul și îl face alb (invert) pentru fundal întunecat."""
+def _load_logo_dark(height: int) -> Optional[Image.Image]:
+    """Încarcă logo-ul minimal transparent și îl colorează cu PILL_TEXT."""
     if not LOGO_PATH.exists():
         return None
     try:
         logo = Image.open(LOGO_PATH).convert("RGBA")
-        # Scalează proporțional la înălțimea dorită
         scale = height / logo.height
         logo = logo.resize((int(logo.width * scale), height), Image.LANCZOS)
-        # Inversează canalele RGB (negru → alb), păstrează alpha
+        # Preia canalul alpha original, setand RGB la PILL_TEXT
         r, g, b, a = logo.split()
-        r = r.point(lambda x: 255 - x)
-        g = g.point(lambda x: 255 - x)
-        b = b.point(lambda x: 255 - x)
+        r = r.point(lambda p: PILL_TEXT[0])
+        g = g.point(lambda p: PILL_TEXT[1])
+        b = b.point(lambda p: PILL_TEXT[2])
         return Image.merge("RGBA", (r, g, b, a))
     except Exception:
         return None
@@ -141,16 +140,19 @@ def _scale_to_width(card: Image.Image, target_w: int) -> Image.Image:
 
 
 def _add_brand_tag(card: Image.Image) -> Image.Image:
-    """Pill top-right: [logo] thesite.ro — pe fundal semi-transparent întunecat."""
+    """Pill top-right: [logo] thesite.ro — pe fundal cream luminos."""
     canvas = card.copy().convert("RGBA")
     draw = ImageDraw.Draw(canvas)
     w, h = canvas.size
-
-    font = get_font(PILL_FONT_SIZE, bold=True)
+    try:
+        font = ImageFont.truetype(str(BRAND_FONT), 48)
+    except:
+        font = get_font(38, bold=True)
+    
     bbox = draw.textbbox((0, 0), BRAND_TEXT, font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
 
-    logo = _load_logo_white(LOGO_HEIGHT)
+    logo = _load_logo_dark(LOGO_HEIGHT)
     lw = logo.width if logo else 0
 
     # Dimensiuni pill
