@@ -103,7 +103,7 @@ def get_font(size: int, bold: bool = False):
 
 
 LOGO_PATH = Path(__file__).parent / "public" / "logo_minimal.png"
-BRAND_FONT = Path(__file__).parent / "public" / "fonts" / "PlayfairDisplay-Italic.ttf"
+BRAND_FONT = Path(__file__).parent / "public" / "fonts" / "PlayfairDisplay-BoldItalic.ttf"
 
 # Pill design: cream solid background, dark logo + text, top-right
 PILL_BG        = (240, 239, 230, 240)    # Cream, quasi-opac
