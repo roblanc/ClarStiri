@@ -1,0 +1,192 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getAggregatedNews, fetchAllNews, getCachedAggregatedNews, aggregateNews } from '@/services/newsService';
+import { fetchAggregatedNewsFromAPI } from '@/services/newsApiService';
+import { AggregatedStory, RSSNewsItem } from '@/types/news';
+import { useEffect, useMemo } from 'react';
+import { decodeHtmlEntities } from '../../shared/htmlEntities';
+
+const NEWS_QUERY_TIMEOUT_MS = 45000;
+const LAST_NEWS_CACHE_VERSION = 'v2';
+
+function getLastNewsCacheKey(limit: number): string {
+    return `last_news_${LAST_NEWS_CACHE_VERSION}_${limit}`;
+}
+
+function normalizeStories(stories: AggregatedStory[]): AggregatedStory[] {
+    return stories.map((story) => ({
+        ...story,
+        title: decodeHtmlEntities(story.title),
+        description: decodeHtmlEntities(story.description || ''),
+        mainCategory: decodeHtmlEntities(story.mainCategory || ''),
+        publishedAt: story.publishedAt instanceof Date ? story.publishedAt : new Date(story.publishedAt),
+        sources: story.sources.map((source) => ({
+            ...source,
+            title: decodeHtmlEntities(source.title),
+            description: decodeHtmlEntities(source.description || ''),
+            category: decodeHtmlEntities(source.category || '') || undefined,
+        })),
+        image: story.image || story.sources.find((source) => source.imageUrl)?.imageUrl,
+    }));
+}
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const timeoutId = window.setTimeout(() => {
+            reject(new Error(`News query timeout after ${timeoutMs}ms`));
+        }, timeoutMs);
+
+        promise
+            .then((result) => {
+                window.clearTimeout(timeoutId);
+                resolve(result);
+            })
+            .catch((error) => {
+                window.clearTimeout(timeoutId);
+                reject(error);
+            });
+    });
+}
+
+/**
+ * Funcție care încearcă API-ul serverless, cu fallback la client-side fetch.
+ * Tratează un array gol ca eșec (cache Redis gol / cron încă nu a rulat).
+ */
+async function fetchNewsWithFallback(limit: number): Promise<AggregatedStory[]> {
+    try {
+        const stories = await fetchAggregatedNewsFromAPI(limit);
+        if (stories.length > 0) {
+            console.log('✅ Fetched from API (fast path)');
+            return stories;
+        }
+        // API a returnat [] — Redis gol sau cron-ul încă nu a rulat
+        throw new Error('API returned empty list');
+    } catch (apiError) {
+        console.warn('⚠️ API unavailable or empty, falling back to client-side fetch');
+        return getAggregatedNews(limit);
+    }
+}
+
+/**
+ * Hook pentru a obține știrile agregate cu încărcare rapidă din cache
+ */
+export function useAggregatedNews(limit = 20) {
+    const queryClient = useQueryClient();
+
+    const query = useQuery<AggregatedStory[], Error>({
+        queryKey: ['aggregatedNews', limit],
+        queryFn: async () => {
+            try {
+                return await withTimeout(fetchNewsWithFallback(limit), NEWS_QUERY_TIMEOUT_MS);
+            } catch (error) {
+                const cached = getCachedAggregatedNews(limit);
+                if (cached && cached.length > 0) {
+                    console.warn('⚠️ News query timed out/failed; serving cached aggregated news');
+                    return cached;
+                }
+                throw error;
+            }
+        },
+        staleTime: 15 * 60 * 1000, // 15 minute (mai lung pentru viteză)
+        gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
+        refetchOnWindowFocus: false,
+        refetchInterval: 5 * 60 * 1000,
+        retry: 1,
+    });
+
+    const normalizedQueryData = useMemo(
+        () => (query.data?.length ? normalizeStories(query.data) : undefined),
+        [query.data]
+    );
+
+    // Sincronizare cu LocalStorage pentru încărcare INSTANT la revenire
+    useEffect(() => {
+        if (normalizedQueryData && normalizedQueryData.length > 0) {
+            localStorage.setItem(getLastNewsCacheKey(limit), JSON.stringify({
+                data: normalizedQueryData,
+                ts: Date.now()
+            }));
+        }
+    }, [normalizedQueryData, limit]);
+
+    // Încercăm să luăm datele din localStorage ca placeholder
+    const cachedLocal = useMemo(() => {
+        try {
+            const payload = localStorage.getItem(getLastNewsCacheKey(limit));
+            if (payload) {
+                const parsed = JSON.parse(payload).data as AggregatedStory[] | undefined;
+                if (parsed?.length) return normalizeStories(parsed);
+            }
+        } catch (e) { return undefined; }
+        return undefined;
+    }, [limit]);
+
+    return {
+        ...query,
+        data: normalizedQueryData || cachedLocal,
+        isLoading: query.isLoading && !cachedLocal,
+        isRefreshing: query.isFetching && !!normalizedQueryData,
+    };
+}
+
+/**
+ * Hook pentru a obține toate știrile raw (neagregate)
+ */
+export function useAllNews() {
+    return useQuery<RSSNewsItem[], Error>({
+        queryKey: ['allNews'],
+        queryFn: fetchAllNews,
+        staleTime: 10 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
+        refetchOnWindowFocus: false,
+        retry: 1,
+    });
+}
+
+/**
+ * Hook pentru a obține știrile de top (cele cu cele mai multe surse)
+ */
+export function useTopStories(limit = 5) {
+    const { data: stories, ...rest } = useAggregatedNews(50);
+
+    // Filtrează doar știrile cu mai mult de o sursă și ia primele N
+    const topStories = stories
+        ?.filter(story => story.sourcesCount >= 1)
+        ?.slice(0, limit)
+        ?.map(story => ({
+            id: story.id,
+            title: story.title,
+            bias: story.bias,
+            sourcesCount: story.sourcesCount,
+        }));
+
+    return {
+        data: topStories,
+        ...rest,
+    };
+}
+
+/**
+ * Hook pentru a obține detaliile unei știri specifice
+ */
+export function useStoryDetail(storyId: string) {
+    const { data: stories, ...rest } = useAggregatedNews(50);
+
+    const story = stories?.find(s => s.id === storyId);
+
+    return {
+        data: story,
+        ...rest,
+    };
+}
+
+/**
+ * Hook pentru a forța refresh-ul știrilor
+ */
+export function useRefreshNews() {
+    const queryClient = useQueryClient();
+
+    return () => {
+        queryClient.invalidateQueries({ queryKey: ['aggregatedNews'] });
+        queryClient.invalidateQueries({ queryKey: ['allNews'] });
+    };
+}
