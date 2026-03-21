@@ -458,8 +458,8 @@ def main():
         description="Generează imagini Instagram + TikTok și caption-uri din ClarStiri.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument("--top", type=int, default=5,
-                        help="Top N știri de pe site (default: 5)")
+    parser.add_argument("--top", type=int, default=50,
+                        help="Top N știri de pe site (default: 50, pt. toată pagina)")
     parser.add_argument("--urls", nargs="+", metavar="URL",
                         help="URL-uri specifice de știri (înlocuiește --top)")
     parser.add_argument("--base-url", default="https://www.thesite.ro",
