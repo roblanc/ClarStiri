@@ -1,6 +1,6 @@
 import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP } from './shared.js';
 import { createStoryId } from './storyId.js';
-import { generateAggregatedTitle } from './llm.js';
+import { generateAggregatedTitle, getEmbeddingsBatch } from './llm.js';
 
 async function fetchOgImage(url: string): Promise<string> {
     try {
@@ -126,6 +126,33 @@ function normalizeTitle(title: string): string {
         .trim();
 }
 
+function cosineSimilarity(a: number[], b: number[]): number {
+    let dot = 0, normA = 0, normB = 0;
+    for (let k = 0; k < a.length; k++) {
+        dot += a[k] * b[k];
+        normA += a[k] * a[k];
+        normB += b[k] * b[k];
+    }
+    const denom = Math.sqrt(normA) * Math.sqrt(normB);
+    return denom === 0 ? 0 : dot / denom;
+}
+
+/**
+ * Obține embeddings pentru o listă de titluri, în chunk-uri de 96
+ * pentru a respecta limitele Groq. Returnează null dacă API-ul nu e disponibil.
+ */
+async function getEmbeddingsSafe(titles: string[]): Promise<number[][] | null> {
+    const CHUNK_SIZE = 96;
+    const allEmbeddings: number[][] = [];
+    for (let i = 0; i < titles.length; i += CHUNK_SIZE) {
+        const chunk = titles.slice(i, i + CHUNK_SIZE);
+        const result = await getEmbeddingsBatch(chunk);
+        if (!result) return null; // dacă un chunk eșuează, dezactivăm semantic complet
+        allEmbeddings.push(...result);
+    }
+    return allEmbeddings;
+}
+
 function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 zile
     return news.filter(item => {
@@ -134,8 +161,8 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-// Clusterizare avansată Ground News style
-export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTimeDiffMs = 48 * 60 * 60 * 1000): RSSNewsItem[][] {
+// Clusterizare avansată Ground News style cu semantic fallback
+export async function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTimeDiffMs = 48 * 60 * 60 * 1000): Promise<RSSNewsItem[][]> {
     const stopwords = new Set([
         'care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele',
         'și', 'sau', 'dar', 'iar', 'încă', 'tot', 'mai', 'chiar', 'atât', 'încât', 'deci', 'însă', 'ori', 'fie', 'nici',
@@ -176,6 +203,11 @@ export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTim
         };
     });
 
+    // Calculăm embeddings semantic o singură dată pentru toate titlurile.
+    // Dacă Groq nu e disponibil, embeddings e null și scoring rămâne pur lexical.
+    const normalizedTitles = itemData.map(d => d.item.title);
+    const embeddings = await getEmbeddingsSafe(normalizedTitles);
+
     const groups: RSSNewsItem[][] = [];
     const processed = new Set<string>();
 
@@ -214,6 +246,18 @@ export function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTim
                 }
             }
 
+            // --- Semantic layer ---
+            // Boost: articole semantic similare (>=0.78) dar formulate diferit → merge forțat
+            // Penalizare: overlap lexical ridicat dar conținut semantic diferit (<0.52) → previne merge greșit
+            if (embeddings) {
+                const semantic = cosineSimilarity(embeddings[i], embeddings[j]);
+                if (semantic >= 0.78) {
+                    finalScore = Math.max(finalScore, threshold + 0.05);
+                } else if (semantic < 0.52 && finalScore >= threshold) {
+                    finalScore *= (semantic / 0.52);
+                }
+            }
+
             const hasSignificantOverlap = intersectEntities.size >= 2 ||
                 (intersectEntities.size === 1 && wordScore > 0.4);
             const effectiveThreshold = hasSignificantOverlap ? threshold * 0.8 : threshold;
@@ -249,8 +293,9 @@ async function runInBatches<T>(tasks: Array<() => Promise<T>>, batchSize: number
 }
 
 // Max stories that receive an LLM-generated title per request.
-// Keeps total LLM time ≤ 2 × batch-round × ~2s ≈ 4s, well within Vercel's 10s limit.
-const MAX_LLM_STORIES = 16;
+// llama-3.1-8b-instant e ~0.3-0.5s/call → 30 stories în batch 10 = 3 runde ≈ 1.5s.
+// Embeddings adaugă ~1.5s → total ~3s, bine sub limita Vercel de 10s.
+const MAX_LLM_STORIES = 30;
 
 /**
  * Trimite un semnal către Wayback Machine pentru a arhiva URL-ul.
@@ -271,7 +316,7 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     // Declanșăm arhivarea pentru toate știrile noi găsite în acest run
     recent.forEach(item => triggerWaybackArchive(item.link));
 
-    const storyGroups = findSimilarStories(recent);
+    const storyGroups = await findSimilarStories(recent);
 
     const aggregatedStoryTasks: Array<() => Promise<AggregatedStory>> = [];
     const idCounts = new Map<string, number>();
@@ -363,7 +408,7 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     const noLlmTasks = aggregatedStoryTasks.slice(MAX_LLM_STORIES);
 
     const [llmStories, noLlmStories] = await Promise.all([
-        runInBatches(llmTasks, 8),
+        runInBatches(llmTasks, 10),
         Promise.all(noLlmTasks.map(t => t())),
     ]);
     const aggregatedStories = [...llmStories, ...noLlmStories];

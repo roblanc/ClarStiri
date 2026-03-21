@@ -2,6 +2,8 @@ import { RSSNewsItem } from './shared.js';
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const GROQ_EMBEDDINGS_URL = 'https://api.groq.com/openai/v1/embeddings';
+const GROQ_EMBED_MODEL = 'nomic-embed-text-v1-5';
 const GROQ_MODEL = 'llama-3.1-8b-instant';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -76,6 +78,48 @@ async function callGemini(prompt: string): Promise<string | null> {
     } catch (error) {
         clearTimeout(timeoutId);
         console.error('Gemini call failed:', error);
+        return null;
+    }
+}
+
+/**
+ * Obține embeddings pentru un batch de texte via Groq.
+ * Returnează null dacă API-ul nu e disponibil sau dacă apelul eșuează.
+ * Suportă batch-uri de până la 96 texte.
+ */
+export async function getEmbeddingsBatch(texts: string[]): Promise<number[][] | null> {
+    if (!GROQ_API_KEY || texts.length === 0) return null;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+    try {
+        const response = await fetch(GROQ_EMBEDDINGS_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`,
+            },
+            body: JSON.stringify({
+                model: GROQ_EMBED_MODEL,
+                input: texts,
+            }),
+            signal: controller.signal as RequestInit['signal'],
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+            console.error('Groq embeddings error:', response.status, await response.text());
+            return null;
+        }
+
+        const data = await response.json();
+        const sorted = (data.data as Array<{ index: number; embedding: number[] }>)
+            ?.sort((a, b) => a.index - b.index);
+        return sorted?.map(e => e.embedding) ?? null;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        console.error('Groq embeddings failed:', error);
         return null;
     }
 }
