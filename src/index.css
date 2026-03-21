@@ -1,0 +1,223 @@
+/* Variable fonts — single woff2 per family, all weights, font-display:swap built-in.
+   unicode-range per @font-face means the browser only downloads the subsets it needs. */
+@import '@fontsource-variable/ibm-plex-sans/wght.css';
+@import '@fontsource-variable/playfair-display/wght.css';
+@import '@fontsource-variable/playfair-display/wght-italic.css';
+@import '@fontsource-variable/newsreader/wght.css';
+@import '@fontsource-variable/newsreader/wght-italic.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* thesite.ro Editorial System */
+    /* Warm Cream background #F0EEE6, sharp borders, elegant serif */
+    --background: 48 25.0% 92.2%;
+    /* Requested cream */
+    --foreground: 0 0% 10%;
+    /* Nearly black */
+
+    --card: 0 0% 100%;
+    /* #FFFFFF - Solid white for contrast */
+    --card-foreground: 0 0% 10%;
+    /* Nearly black text */
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+
+    /* Primary - Subtle but dark accent */
+    --primary: 0 0% 15%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 48 20% 88%;
+    /* Subtle grey/cream for hover */
+    --secondary-foreground: 0 0% 20%;
+
+    --muted: 48 15% 86%;
+    --muted-foreground: 0 0% 40%;
+    /* #666666 suitable for meta */
+
+    --accent: 48 20% 88%;
+    --accent-foreground: 0 0% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 5%;
+    /* Solid almost black lines */
+    --input: 0 0% 5%;
+    --ring: 0 0% 10%;
+
+    /* NO ROUNDED CORNERS */
+    --radius: 0rem;
+
+    /* Bias colors - muted editorial variants */
+    --bias-left: 195 60% 50%;
+    /* Muted teal/blue */
+    --bias-center: 0 0% 60%;
+    /* Flat gray */
+    --bias-right: 0 60% 60%;
+    /* Muted brick red */
+
+    /* Badges */
+    --badge-left: 0 0% 100%;
+    --badge-left-foreground: 0 0% 10%;
+    --badge-center: 0 0% 100%;
+    --badge-center-foreground: 0 0% 10%;
+    --badge-right: 0 0% 100%;
+    --badge-right-foreground: 0 0% 10%;
+
+    /* Sidebar */
+    --sidebar-background: 42 33% 94%;
+    --sidebar-foreground: 0 0% 10%;
+    --sidebar-primary: 0 0% 10%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 90%;
+    --sidebar-accent-foreground: 0 0% 10%;
+    --sidebar-border: 0 0% 10%;
+    --sidebar-ring: 0 0% 10%;
+  }
+
+  /* Force dark mode to still retain the editorial stark contrast or a dark charcoal approach */
+  .dark {
+    --background: 0 0% 7%;
+    --foreground: 42 33% 94%;
+    /* Beige text */
+
+    --card: 0 0% 10%;
+    --card-foreground: 42 33% 94%;
+
+    --popover: 0 0% 10%;
+    --popover-foreground: 42 33% 94%;
+
+    --primary: 0 0% 90%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 20%;
+    --accent-foreground: 42 33% 94%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 30%;
+    /* Lighter border for visibility in dark mode */
+    --input: 0 0% 18%;
+    --ring: 0 0% 60%;
+
+    --bias-left: 195 50% 60%;
+    --bias-center: 0 0% 55%;
+    --bias-right: 0 50% 65%;
+
+    --badge-left: 0 0% 10%;
+    --badge-left-foreground: 0 0% 90%;
+    --badge-center: 0 0% 10%;
+    --badge-center-foreground: 0 0% 90%;
+    --badge-right: 0 0% 10%;
+    --badge-right-foreground: 0 0% 90%;
+
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 90%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 30%;
+    --sidebar-ring: 0 0% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background-image: radial-gradient(circle, rgba(0,0,0,0.10) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .dark body {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  /* Links use blue accent */
+  a {
+    @apply transition-colors;
+  }
+}
+
+@layer components {
+  .bias-bar {
+    @apply flex h-2 w-full rounded-full overflow-hidden;
+  }
+
+  .bias-segment-left {
+    background-color: hsl(var(--bias-left));
+  }
+
+  .bias-segment-center {
+    background-color: hsl(var(--bias-center));
+  }
+
+  .bias-segment-right {
+    background-color: hsl(var(--bias-right));
+  }
+
+  .news-card {
+    @apply bg-card overflow-hidden transition-all duration-200 border border-border;
+  }
+
+  .news-card:hover {
+    @apply bg-secondary/50;
+  }
+
+  /* Gold highlight effect */
+  .gold-highlight {
+    background: linear-gradient(to right, hsl(var(--gold) / 0.2), transparent);
+  }
+
+  /* Premium button style */
+  .btn-gold {
+    @apply bg-primary text-primary-foreground hover:opacity-90 transition-opacity;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Text link color */
+  .text-link {
+    color: hsl(var(--blue-link));
+  }
+
+  .text-link:hover {
+    text-decoration: underline;
+  }
+}
