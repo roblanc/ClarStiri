@@ -86,9 +86,9 @@ export function useAggregatedNews(limit = 20) {
                 throw error;
             }
         },
-        staleTime: 15 * 60 * 1000, // 15 minute (mai lung pentru viteză)
+        staleTime: 5 * 60 * 1000,  // 5 minute — mai responsive
         gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
-        refetchOnWindowFocus: false,
+        refetchOnWindowFocus: true,   // refetch când userul revine pe tab (critic pe mobile)
         refetchInterval: 5 * 60 * 1000,
         retry: 1,
     });
