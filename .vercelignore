@@ -1,9 +1,0 @@
-.git
-.git_backup
-.claude
-.agent
-node_modules
-dist
-coverage
-*.log
-.env*

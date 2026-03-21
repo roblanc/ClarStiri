@@ -116,42 +116,54 @@ def draw_brand_tag(canvas: Image.Image, w: int, h: int):
     draw.text((rx + pad, ry + pad), BRAND_TEXT, font=font, fill=BRAND_COLOR)
 
 
-def build_instagram(card_bytes: bytes) -> bytes:
-    card = Image.open(io.BytesIO(card_bytes)).convert("RGBA")
-    canvas = make_dotted_canvas(IG_W, IG_H)
-
-    target_w = IG_W - CARD_MARGIN * 2
+def _scale_to_width(card: Image.Image, target_w: int) -> Image.Image:
     scale = target_w / card.width
     new_h = int(card.height * scale)
-    card = card.resize((target_w, new_h), Image.LANCZOS)
+    return card.resize((target_w, new_h), Image.LANCZOS)
 
-    y = max(CARD_MARGIN, (IG_H - new_h) // 2)
-    canvas.paste(card, (CARD_MARGIN, y), card)
 
-    draw_brand_tag(canvas, IG_W, IG_H)
+def _add_brand_tag(card: Image.Image) -> Image.Image:
+    """Suprapune 'thesite.ro' în colțul de jos-dreapta al cardului."""
+    canvas = card.copy().convert("RGBA")
+    draw = ImageDraw.Draw(canvas)
+    font = get_font(28, bold=True)
+    bbox = draw.textbbox((0, 0), BRAND_TEXT, font=font)
+    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+    pad = 14
+    w, h = canvas.size
+    rx = w - tw - pad * 2 - 18
+    ry = h - th - pad * 2 - 18
+    draw.rounded_rectangle([rx, ry, rx + tw + pad * 2, ry + th + pad * 2],
+                            radius=8, fill=BRAND_BG)
+    draw.text((rx + pad, ry + pad), BRAND_TEXT, font=font, fill=BRAND_COLOR)
+    return canvas
 
+
+def build_instagram(card_bytes: bytes) -> bytes:
+    """Scalează cardul la 1080px lățime (aspect ratio nativ)."""
+    card = Image.open(io.BytesIO(card_bytes)).convert("RGBA")
+    card = _scale_to_width(card, IG_W)
+    card = _add_brand_tag(card)
     out = io.BytesIO()
-    canvas.convert("RGB").save(out, format="PNG", optimize=True)
+    card.convert("RGB").save(out, format="PNG", optimize=True)
     return out.getvalue()
 
 
 def build_tiktok(card_bytes: bytes) -> bytes:
+    """Scalează cardul la 1080px lățime, centrat pe canvas negru 9:16."""
     card = Image.open(io.BytesIO(card_bytes)).convert("RGBA")
-    canvas = make_dotted_canvas(TT_W, TT_H)
-
-    target_w = TT_W - CARD_MARGIN * 2
-    scale = target_w / card.width
-    new_h = int(card.height * scale)
-    card = card.resize((target_w, new_h), Image.LANCZOS)
-
-    # Pe TikTok centrăm ușor mai sus (la ~40% din înălțime) pentru spațiu vizual jos
-    y = max(CARD_MARGIN, int((TT_H - new_h) * 0.42))
-    canvas.paste(card, (CARD_MARGIN, y), card)
-
-    draw_brand_tag(canvas, TT_W, TT_H)
-
+    card = _scale_to_width(card, TT_W)
+    # Dacă cardul e mai scurt decât 9:16, adaugă padding negru sus/jos
+    if card.height < TT_H:
+        canvas = Image.new("RGB", (TT_W, TT_H), (10, 10, 10))
+        y_off = (TT_H - card.height) // 2
+        canvas.paste(card.convert("RGB"), (0, y_off))
+        card = canvas.convert("RGBA")
+    else:
+        card = card.crop((0, 0, TT_W, TT_H))
+    card = _add_brand_tag(card)
     out = io.BytesIO()
-    canvas.convert("RGB").save(out, format="PNG", optimize=True)
+    card.convert("RGB").save(out, format="PNG", optimize=True)
     return out.getvalue()
 
 
