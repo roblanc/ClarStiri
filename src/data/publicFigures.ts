@@ -743,9 +743,9 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Realizator TV',
         image: '/images/voices/Mircea_Badea.jpg',
         bias: {
-            leaning: 'center-left',
-            score: -40,
-            description: 'Cunoscut pentru emisiunea "În gura presei", are o lungă istorie de critică la adresa instituțiilor de forță și a "statului paralel". Recent, este critic la adresa măsurilor de austeritate.'
+            leaning: 'center-right',
+            score: 40,
+            description: 'Voce anti-establishment cu o tradiție solidă de atac la adresa DNA, SRI și a ceea ce numește "statul paralel". Emisiunile de la Antena 3 CNN au promovat constant narative pro-PSD și anti-reformiste, atacând sistematic figuri ale dreptei liberale (Băsescu, Iohannis) și mișcarea #Rezist. Poziționarea sa reală este una naționalist-populistă, de dreapta, mascată uneori de o retorică economic-populistă.'
         },
         description: 'Realizator la Antena 3 CNN, Mircea Badea este una dintre cele mai vocale figuri media, folosind ironia și sarcasmul pentru a analiza derapajele politice și sociale.',
         socialLinks: {
@@ -803,9 +803,9 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Jurnalist TV',
         image: '/images/voices/victor-ciutacu.jpg',
         bias: {
-            leaning: 'center-left',
-            score: -35,
-            description: 'Realizator principal la România TV, practică un jurnalism de tip populist-agresiv, axat pe protecția „omului de rând” împotriva a ceea ce numește „terorism fiscal” și „austeritate sadică”. Se poziționează ca un critic acerb al reformiștilor tehnocrați și al instituțiilor de forță, folosind o retorică adesea aliniată cu narativele suveraniste și anti-sistem.'
+            leaning: 'center-right',
+            score: 45,
+            description: 'Realizator principal la România TV, practică un jurnalism de tip populist-naționalist. Atacă sistematic USR, Bruxelles-ul, DNA, „statul paralel” și orice formă de reformism pro-occidental — tinte clasice ale dreptei naționaliste. Deși îmbracă critica în limbaj economic (anti-austeritate), direcția sa editorială este anti-EU, anti-reformistă și pro-suveranistă, plasându-l clar în spectrul dreptei.'
         },
         description: 'Victor Ciutacu este ancora de prime-time a postului România TV, unde moderează emisiunea „Punctul Culminant”. Notoriu pentru limbajul său nevărat și campaniile media tăioase, Ciutacu s-a transformat dintr-un jurnalist politic clasic într-o voce care pendulează între senzaționalism și critică socială dură. În ultimii ani (2025-2026), a devenit principalul opozant mediatic al măsurilor economice de tip „Bolojan”, pe care le descrie ca fiind un atac direct la adresa buzunarului cetățeanului și a suveranității naționale.',
         socialLinks: {
@@ -878,9 +878,9 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Gazetar / Scriitor',
         image: 'https://hotnews.ro/wp-content/uploads/2025/09/ctp.webp',
         bias: {
-            leaning: 'center-right',
-            score: 30,
-            description: 'Poziții raționale, pro-europene. Critic acerb al populismului și al imposturii academice sau politice.'
+            leaning: 'center-left',
+            score: -40,
+            description: 'Voce liberal-progresistă și pro-occidentală. Critică sistematic PSD, AUR, George Simion, Călin Georgescu și orice formă de naționalism sau populism. Susținător al Nicușor Dan și al orientării pro-europene a României. Perspectiva sa secular-umanistă și anti-naționalistă îl plasează în mod clar în stânga centrului spectrului mediatic românesc.'
         },
         description: 'Unul dintre cei mai respectați gazetari, CTP analizează realitatea prin prisma logicii și a integrității, fără a menaja nicio tabără politică.',
         socialLinks: {
@@ -1291,9 +1291,9 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         role: 'Jurnalist / Realizator TV',
         image: '/images/voices/radu-banciu.jpg',
         bias: {
-            leaning: 'center',
-            score: 0,
-            description: 'Radu Banciu practică un cinism jurnalistic agresiv care vizează mediocritatea și incompetența trans-partinică. Nu se aliniază ideologic, atacând cu aceeași virulență suveraniștii, progresiștii și partidele tradiționale. Discursul său este unul de revoltă culturală și socială mai degrabă decât una politică propriu-zisă.'
+            leaning: 'center-right',
+            score: 20,
+            description: 'Practică un cinism jurnalistic agresiv și se prezintă ca trans-partizan, atacând toate taberele. Totuși, istoricul declarațiilor sale (comentarii anti-minorități, dispreț față de valorile progresiste, orientare culturală conservatoare) și lipsa oricărei critici la adresa conservatorismului cultural îl plasează ușor la dreapta centrului. Nu este suveranist, dar împărtășește premise culturale cu dreapta.'
         },
         description: 'Cu o carieră începută în presa sportivă și consacrată în emisiuni de tip pamflet (Lumea lui Banciu), Radu Banciu este una dintre cele mai controversate voci media. Din 2024, prin proiectele „Prea Mult Banciu” și „iAM Banciu”, a continuat să critice derapajele societății românești pe care o descrie frecvent ca fiind în declin moral și intelectual. Stilul său este caracterizat de monologuri lungi, referințe culturale franceze și un dispreț afișat față de clasa politică.',
         socialLinks: {

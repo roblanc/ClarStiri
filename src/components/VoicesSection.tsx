@@ -52,10 +52,6 @@ export function VoicesSection() {
                             <h3 className="font-title font-bold text-lg text-center leading-tight group-hover:opacity-70 transition-opacity text-foreground">
                                 {figure.name}
                             </h3>
-                            <span className={`mt-2 inline-flex items-center gap-1.5 px-2 py-1 rounded-full border text-[9px] font-black uppercase tracking-[0.12em] ${getBiasBadgeClass(figure.bias.score)}`}>
-                                <span className={`w-1.5 h-1.5 rounded-full ${getScoreColor(figure.bias.score)}`} />
-                                {getBiasLabel(figure.bias.score)}
-                            </span>
                             <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center mt-2 max-w-[120px]">
                                 {figure.role}
                             </p>

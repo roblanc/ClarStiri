@@ -135,7 +135,7 @@ const VoiceProfile = () => {
                                             </div>
                                         </div>
                                         <div className={cn("text-2xl font-anthropic font-bold", biasText)}>
-                                            {score > 0 ? `+${score}` : score}
+                                            {Math.abs(score)}
                                         </div>
                                     </div>
                                     
