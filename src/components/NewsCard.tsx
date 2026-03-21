@@ -42,7 +42,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[10px] md:border">
+        <article data-story-id={news.id} className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[10px] md:border">
           
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
@@ -146,7 +146,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
   if (variant === 'compact') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="block">
-        <article className="news-card p-4">
+        <article data-story-id={news.id} className="news-card p-4">
           <div className="flex gap-4">
             <div className="w-24 h-24 flex-shrink-0 border border-border overflow-hidden">
               <NewsImage
@@ -173,7 +173,7 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
 
   return (
     <Link to={buildStoryHref(news.id, news.title)} className="block h-full group">
-      <article className="flex flex-col h-full">
+      <article data-story-id={news.id} className="flex flex-col h-full">
         {/* The Card Box (Image + Title) */}
         <div className="flex flex-row md:flex-col md:bg-card md:border md:border-border overflow-hidden md:rounded-none group-hover:bg-muted/30 md:group-hover:bg-secondary/5 transition-colors">
           <div className="flex-1 py-1 pr-4 md:p-5 flex flex-col justify-start md:justify-center min-h-[100px] md:min-h-[140px] order-1 md:order-2">

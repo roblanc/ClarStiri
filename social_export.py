@@ -299,16 +299,17 @@ def story_url_from_id(story: dict, base_url: str) -> str:
 # ─── Playwright screenshot ────────────────────────────────────────────────────
 
 async def screenshot_story_card(page, story_id: str) -> Optional[bytes]:
-    selector = f"a[href*='{story_id}'] article"
-    for attempt in range(12):
+    selector = f"article[data-story-id='{story_id}']"
+    for attempt in range(20):
         count = await page.locator(selector).count()
         if count > 0:
             card = page.locator(selector).first
             await card.scroll_into_view_if_needed()
-            await asyncio.sleep(0.8)
+            await asyncio.sleep(1.0)
             return await card.screenshot()
-        await page.evaluate("window.scrollBy(0, 600)")
-        await asyncio.sleep(0.6)
+        await page.evaluate("window.scrollBy(0, 800)")
+        await asyncio.sleep(0.5)
+    print(f"  ✗ Card not found after scrolling: {story_id}")
     return None
 
 
