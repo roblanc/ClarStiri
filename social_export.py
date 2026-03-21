@@ -406,9 +406,7 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
             story_id = story.get("id", f"story-{idx}")
             title = story.get("title", f"Știre {idx}")
             slug = re.sub(r"[^a-z0-9]+", "-", title.lower())[:30].strip("-")
-            folder_name = f"{idx:02d}_{slug}"
-            story_dir = out_root / folder_name
-            story_dir.mkdir(exist_ok=True)
+            file_prefix = f"{idx:02d}_{slug}"
 
             print(f"\n[{idx}/{len(stories)}] {title[:60]}...")
 
@@ -421,9 +419,9 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
             # Build images
             ig_bytes = build_instagram(card_bytes)
             tt_bytes = build_tiktok(card_bytes)
-            (story_dir / "instagram.png").write_bytes(ig_bytes)
-            (story_dir / "tiktok.png").write_bytes(tt_bytes)
-            print(f"  ✓ instagram.png + tiktok.png")
+            (out_root / f"{file_prefix}_instagram.png").write_bytes(ig_bytes)
+            (out_root / f"{file_prefix}_tiktok.png").write_bytes(tt_bytes)
+            print(f"  ✓ {file_prefix}_instagram.png + {file_prefix}_tiktok.png")
 
             # Generate captions
             captions = generate_captions(story, groq_key)
@@ -435,9 +433,9 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
                 f"── INSTAGRAM ──\n{captions['instagram']}\n\n"
                 f"── TIKTOK ──\n{captions['tiktok']}\n\n"
             )
-            (story_dir / "captions.txt").write_text(caption_txt, encoding="utf-8")
+            (out_root / f"{file_prefix}_captions.txt").write_text(caption_txt, encoding="utf-8")
             all_captions.append(caption_txt)
-            print(f"  ✓ captions.txt")
+            print(f"  ✓ {file_prefix}_captions.txt")
 
         await browser.close()
 
