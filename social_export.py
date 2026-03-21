@@ -102,18 +102,36 @@ def get_font(size: int, bold: bool = False):
     return ImageFont.load_default()
 
 
-def draw_brand_tag(canvas: Image.Image, w: int, h: int):
-    """Adaugă 'thesite.ro' în colțul de jos-dreapta."""
-    draw = ImageDraw.Draw(canvas)
-    font = get_font(28, bold=True)
-    bbox = draw.textbbox((0, 0), BRAND_TEXT, font=font)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    pad = 14
-    rx = w - tw - pad * 2 - 24
-    ry = h - th - pad * 2 - 24
-    draw.rounded_rectangle([rx, ry, rx + tw + pad * 2, ry + th + pad * 2],
-                            radius=8, fill=BRAND_BG)
-    draw.text((rx + pad, ry + pad), BRAND_TEXT, font=font, fill=BRAND_COLOR)
+LOGO_PATH = Path(__file__).parent / "public" / "logo_full.png"
+
+# Pill design: dark semi-transparent background, white logo + text, top-right
+PILL_BG        = (0, 0, 0, 170)    # negru 67% opacitate
+PILL_TEXT      = (255, 255, 255)
+PILL_FONT_SIZE = 30
+LOGO_HEIGHT    = 36                 # înălțimea logo-ului în pill
+PILL_PAD_X     = 18
+PILL_PAD_Y     = 12
+PILL_GAP       = 10                 # spațiu între logo și text
+PILL_MARGIN    = 20                 # distanță față de marginea cardului
+
+
+def _load_logo_white(height: int) -> Optional[Image.Image]:
+    """Încarcă logo-ul și îl face alb (invert) pentru fundal întunecat."""
+    if not LOGO_PATH.exists():
+        return None
+    try:
+        logo = Image.open(LOGO_PATH).convert("RGBA")
+        # Scalează proporțional la înălțimea dorită
+        scale = height / logo.height
+        logo = logo.resize((int(logo.width * scale), height), Image.LANCZOS)
+        # Inversează canalele RGB (negru → alb), păstrează alpha
+        r, g, b, a = logo.split()
+        r = r.point(lambda x: 255 - x)
+        g = g.point(lambda x: 255 - x)
+        b = b.point(lambda x: 255 - x)
+        return Image.merge("RGBA", (r, g, b, a))
+    except Exception:
+        return None
 
 
 def _scale_to_width(card: Image.Image, target_w: int) -> Image.Image:
@@ -123,19 +141,49 @@ def _scale_to_width(card: Image.Image, target_w: int) -> Image.Image:
 
 
 def _add_brand_tag(card: Image.Image) -> Image.Image:
-    """Suprapune 'thesite.ro' în colțul de jos-dreapta al cardului."""
+    """Pill top-right: [logo] thesite.ro — pe fundal semi-transparent întunecat."""
     canvas = card.copy().convert("RGBA")
     draw = ImageDraw.Draw(canvas)
-    font = get_font(28, bold=True)
+    w, h = canvas.size
+
+    font = get_font(PILL_FONT_SIZE, bold=True)
     bbox = draw.textbbox((0, 0), BRAND_TEXT, font=font)
     tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    pad = 14
-    w, h = canvas.size
-    rx = w - tw - pad * 2 - 18
-    ry = h - th - pad * 2 - 18
-    draw.rounded_rectangle([rx, ry, rx + tw + pad * 2, ry + th + pad * 2],
-                            radius=8, fill=BRAND_BG)
-    draw.text((rx + pad, ry + pad), BRAND_TEXT, font=font, fill=BRAND_COLOR)
+
+    logo = _load_logo_white(LOGO_HEIGHT)
+    lw = logo.width if logo else 0
+
+    # Dimensiuni pill
+    inner_w = (lw + PILL_GAP if logo else 0) + tw
+    pill_w = inner_w + PILL_PAD_X * 2
+    pill_h = max(LOGO_HEIGHT, th) + PILL_PAD_Y * 2
+
+    # Poziție top-right
+    px = w - pill_w - PILL_MARGIN
+    py = PILL_MARGIN
+
+    # Desenează pill pe un layer separat (pentru transparență)
+    overlay = Image.new("RGBA", canvas.size, (0, 0, 0, 0))
+    ov_draw = ImageDraw.Draw(overlay)
+    ov_draw.rounded_rectangle(
+        [px, py, px + pill_w, py + pill_h],
+        radius=pill_h // 2,
+        fill=PILL_BG,
+    )
+    canvas = Image.alpha_composite(canvas, overlay)
+
+    # Logo
+    cx = px + PILL_PAD_X
+    cy = py + (pill_h - LOGO_HEIGHT) // 2
+    if logo:
+        canvas.paste(logo, (cx, cy), logo)
+        cx += lw + PILL_GAP
+
+    # Text
+    draw2 = ImageDraw.Draw(canvas)
+    ty = py + (pill_h - th) // 2 - bbox[1]
+    draw2.text((cx, ty), BRAND_TEXT, font=font, fill=PILL_TEXT)
+
     return canvas
 
 
