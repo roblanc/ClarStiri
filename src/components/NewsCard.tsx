@@ -102,9 +102,16 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_20%,rgba(255,255,255,0.07),transparent_30%)]" />
 
               <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-                <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
-                  {news.sourcesCount} surse
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
+                    {news.sourcesCount} surse
+                  </span>
+                  {news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid') && (
+                    <span className="rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-semibold text-white/75 backdrop-blur-sm sm:text-[9px]">
+                      {news.timeAgo}
+                    </span>
+                  )}
+                </div>
 
                 {blindspotLabel ? (
                   <BiasBadge

@@ -37,7 +37,7 @@ const Barometer = () => {
             <main className="container mx-auto px-4 py-8 md:py-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 flex items-center gap-3">
+                        <h1 className="text-4xl md:text-5xl font-anthropic font-bold mb-4 flex items-center gap-3">
                             <Target className="w-10 h-10 text-primary" />
                             Influenceri & Jurnaliști
                         </h1>
@@ -82,7 +82,7 @@ const Barometer = () => {
 
                             <div className="flex flex-col flex-1 w-full">
                                 <div className="mb-3 min-h-[56px] flex flex-col justify-center">
-                                    <h3 className="font-serif font-bold text-base sm:text-lg group-hover:text-primary transition-colors leading-tight mb-1 line-clamp-1">
+                                    <h3 className="font-anthropic font-bold text-base sm:text-lg group-hover:text-primary transition-colors leading-tight mb-1 line-clamp-1">
                                         {figure.name}
                                     </h3>
                                     <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground/80 line-clamp-1">
@@ -126,7 +126,7 @@ const Barometer = () => {
                 {filteredFigures.length === 0 && (
                     <div className="text-center py-24 bg-muted/20 rounded-3xl border-2 border-dashed border-muted">
                         <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-20" />
-                        <p className="text-muted-foreground font-serif text-xl">Nu am găsit nicio voce pentru "{searchQuery}"</p>
+                        <p className="text-muted-foreground font-anthropic text-xl">Nu am găsit nicio voce pentru "{searchQuery}"</p>
                     </div>
                 )}
             </main>
