@@ -64,6 +64,17 @@ export const NEWS_SOURCES_BASE = [
   { id: 'metropolatv', name: 'Metropola TV', url: 'https://www.metropolatv.ro', rssUrl: 'https://www.metropolatv.ro/feed/', bias: 'right', factuality: 'mixed', category: 'mainstream' },
   { id: 'romaniajournal', name: 'Romania Journal', url: 'https://www.romaniajournal.ro', rssUrl: 'https://www.romaniajournal.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'romaniainsider', name: 'Romania Insider', url: 'https://www.romania-insider.com', rssUrl: 'https://www.romania-insider.com/rss.xml', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'economedia', name: 'Economedia', url: 'https://economedia.ro', rssUrl: 'https://economedia.ro/feed', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'cursdeguvernare', name: 'Curs de Guvernare', url: 'https://cursdeguvernare.ro', rssUrl: 'https://cursdeguvernare.ro/feed', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'edupedu', name: 'Edupedu', url: 'https://www.edupedu.ro', rssUrl: 'https://www.edupedu.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'rfi', name: 'RFI România', url: 'https://www.rfi.fr/ro', rssUrl: 'https://www.rfi.fr/ro/rss', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'alephnews', name: 'Aleph News', url: 'https://alephnews.ro', rssUrl: 'https://alephnews.ro/feed', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'fanatik', name: 'Fanatik', url: 'https://www.fanatik.ro', rssUrl: 'https://www.fanatik.ro/feed', bias: 'center-right', factuality: 'mixed', category: 'tabloid' },
+  { id: 'cancan', name: 'Cancan', url: 'https://www.cancan.ro', rssUrl: 'https://www.cancan.ro/feed', bias: 'center-right', factuality: 'low', category: 'tabloid' },
+  { id: 'psnews', name: 'PS News', url: 'https://psnews.ro', rssUrl: 'https://psnews.ro/feed/', bias: 'center-right', factuality: 'mixed', category: 'independent' },
+  { id: 'zdg', name: 'Ziarul de Gardă', url: 'https://www.zdg.md', rssUrl: 'https://www.zdg.md/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'gsp', name: 'Gazeta Sporturilor', url: 'https://www.gsp.ro', rssUrl: 'https://www.gsp.ro/rss.xml', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'prosport', name: 'ProSport', url: 'https://www.prosport.ro', rssUrl: 'https://www.prosport.ro/feed', bias: 'center', factuality: 'high', category: 'mainstream' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
