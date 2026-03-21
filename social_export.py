@@ -346,6 +346,12 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
         await page.goto(base_url, wait_until="networkidle", timeout=60000)
         await asyncio.sleep(4)
 
+        # Elimină border-radius doar în sesiunea headless — site-ul live rămâne neschimbat
+        await page.add_style_tag(content="""
+            article[data-story-id],
+            article[data-story-id] * { border-radius: 0 !important; }
+        """)
+
         for idx, story in enumerate(stories, 1):
             story_id = story.get("id", f"story-{idx}")
             title = story.get("title", f"Știre {idx}")
