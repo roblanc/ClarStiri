@@ -1,0 +1,213 @@
+import { RSSNewsItem, NewsSource } from "@/types/news";
+import { ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+interface BiasDistributionProps {
+    sources: RSSNewsItem[];
+    bias: {
+        left: number;
+        center: number;
+        right: number;
+    };
+}
+
+// Componenta pentru logo-ul sursei
+const SourceLogo = ({
+    source,
+    size = 'md'
+}: {
+    source: NewsSource;
+    size?: 'sm' | 'md' | 'lg';
+}) => {
+    const [imageError, setImageError] = useState(false);
+
+    const sizeClasses = {
+        sm: 'w-6 h-6 text-[8px]',
+        md: 'w-8 h-8 text-[10px]',
+        lg: 'w-10 h-10 text-xs',
+    };
+
+    const getBiasRingColor = (bias: string) => {
+        if (bias === 'left' || bias === 'center-left') return 'ring-blue-400';
+        if (bias === 'right' || bias === 'center-right') return 'ring-red-400';
+        return 'ring-gray-400';
+    };
+
+    const getBiasBgColor = (bias: string) => {
+        if (bias === 'left' || bias === 'center-left') return 'bg-gradient-to-br from-blue-500 to-blue-600';
+        if (bias === 'right' || bias === 'center-right') return 'bg-gradient-to-br from-red-500 to-red-600';
+        return 'bg-gradient-to-br from-gray-400 to-gray-500';
+    };
+
+    // Folosim favicon-ul de pe site-ul sursei
+    let faviconUrl: string | null = null;
+    try {
+        faviconUrl = source.url ? `https://www.google.com/s2/favicons?domain=${new URL(source.url).hostname}&sz=64` : null;
+    } catch {
+        faviconUrl = null;
+    }
+
+    const commonClasses = `${sizeClasses[size]} rounded-full overflow-hidden ring-2 ring-offset-1 ring-offset-background ${getBiasRingColor(source.bias)} bg-white flex items-center justify-center shadow-sm hover:scale-110 transition-transform cursor-pointer`;
+    const sourceHref = `/surse/${source.id}`;
+
+    if (faviconUrl && !imageError) {
+        return (
+            <Link
+                to={sourceHref}
+                className={commonClasses}
+                title={`Vezi profilul sursei ${source.name}`}
+                aria-label={`Vezi profilul sursei ${source.name}`}
+            >
+                <img
+                    src={faviconUrl}
+                    alt={source.name}
+                    className="w-full h-full object-contain p-0.5"
+                    onError={() => setImageError(true)}
+                />
+            </Link>
+        );
+    }
+
+    // Fallback cu inițiale
+    return (
+        <Link
+            to={sourceHref}
+            className={`${sizeClasses[size]} rounded-full ${getBiasBgColor(source.bias)} flex items-center justify-center ring-2 ring-offset-1 ring-offset-background ${getBiasRingColor(source.bias)} shadow-sm hover:scale-110 transition-transform cursor-pointer`}
+            title={`Vezi profilul sursei ${source.name}`}
+            aria-label={`Vezi profilul sursei ${source.name}`}
+        >
+            <span className="font-bold text-white drop-shadow-sm">{source.name.substring(0, 2).toUpperCase()}</span>
+        </Link>
+    );
+};
+
+export function BiasDistribution({ sources, bias }: BiasDistributionProps) {
+    // Grupează sursele după bias
+    const leftSources = sources.filter(s => s.source.bias === 'left' || s.source.bias === 'center-left');
+    const centerSources = sources.filter(s => s.source.bias === 'center');
+    const rightSources = sources.filter(s => s.source.bias === 'right' || s.source.bias === 'center-right');
+
+    // Numărul maxim de logouri de afișat per categorie
+    const MAX_VISIBLE = 6;
+
+    const renderSourceGrid = (
+        sources: RSSNewsItem[],
+        maxVisible: number,
+        biasType: 'left' | 'center' | 'right'
+    ) => {
+        const visible = sources.slice(0, maxVisible);
+        const remaining = sources.length - maxVisible;
+
+        return (
+            <div className="flex flex-wrap gap-1.5">
+                {visible.map((source) => (
+                    <SourceLogo key={source.id} source={source.source} size="md" />
+                ))}
+                {remaining > 0 && (
+                    <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold border-2 ${biasType === 'left' ? 'border-blue-300 text-blue-600 bg-blue-50' :
+                            biasType === 'right' ? 'border-red-300 text-red-600 bg-red-50' :
+                                'border-gray-300 text-gray-600 bg-gray-50'
+                            }`}
+                    >
+                        +{remaining}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    return (
+        <div className="bg-card rounded-lg border border-border p-4">
+            <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-foreground">Distribuție Bias</h3>
+                <ExternalLink className="w-4 h-4 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-4">
+                • {Math.max(bias.left, bias.center, bias.right)}% din surse sunt de{' '}
+                {bias.center >= bias.left && bias.center >= bias.right ? 'Centru' :
+                    bias.left > bias.right ? 'Stânga' : 'Dreapta'}
+            </p>
+
+            {/* Bias Bar cu labels direct pe bară */}
+            <div className="mb-6">
+                <div className="h-7 rounded overflow-hidden flex text-xs font-medium">
+                    {bias.left > 0 && (
+                        <div
+                            className="bg-bias-left flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
+                            style={{ width: `${bias.left}%` }}
+                        >
+                            {bias.left >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.left >= 15 ? `S ${bias.left}%` : `${bias.left}%`}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                    {bias.center > 0 && (
+                        <div
+                            className="bg-bias-center flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
+                            style={{ width: `${bias.center}%` }}
+                        >
+                            {bias.center >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.center >= 15 ? `C ${bias.center}%` : `${bias.center}%`}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                    {bias.right > 0 && (
+                        <div
+                            className="bg-bias-right flex items-center justify-center text-white transition-all duration-300 overflow-hidden"
+                            style={{ width: `${bias.right}%` }}
+                        >
+                            {bias.right >= 13 && (
+                                <span className="truncate px-0.5">
+                                    {bias.right >= 15 ? `D ${bias.right}%` : `${bias.right}%`}
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Source Logos Grid - Responsive (1 col on mobile, 3 cols on desktop) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-border">
+                {/* Coloana Stânga */}
+                {leftSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-blue-600 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm" />
+                            Stânga ({leftSources.length})
+                        </div>
+                        {renderSourceGrid(leftSources, MAX_VISIBLE, 'left')}
+                    </div>
+                )}
+
+                {/* Coloana Centru */}
+                {centerSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-gray-500 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-gray-400 shadow-sm" />
+                            Centru ({centerSources.length})
+                        </div>
+                        {renderSourceGrid(centerSources, MAX_VISIBLE, 'center')}
+                    </div>
+                )}
+
+                {/* Coloana Dreapta */}
+                {rightSources.length > 0 && (
+                    <div className="space-y-3">
+                        <div className="text-xs text-red-600 font-bold uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm" />
+                            Dreapta ({rightSources.length})
+                        </div>
+                        {renderSourceGrid(rightSources, MAX_VISIBLE, 'right')}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
