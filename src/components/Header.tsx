@@ -106,7 +106,7 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0 group">
             <img
-              src="/logo_full.png"
+              src="/hero-illustration-headphones.png"
               alt="ClarStiri Logo"
               className="h-10 md:h-12 w-auto object-contain dark:invert pointer-events-none"
             />
