@@ -233,7 +233,7 @@ const Index = () => {
               </div>
 
               <p className="text-muted-foreground text-sm sm:text-base md:text-md lg:text-lg block mt-5 md:mt-8 md:max-w-md lg:max-w-lg leading-relaxed font-sans">
-                Ieși din propria bulă informațională. Comparăm automat peste 40 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
+                Ieși din propria bulă informațională. Comparăm automat peste 70 de publicații din România pentru ca tu să primești imaginea completă, nu doar varianta lor.
               </p>
             </div>
 
