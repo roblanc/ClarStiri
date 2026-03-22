@@ -32,8 +32,8 @@
   :root {
     /* thesite.ro Editorial System */
     /* Warm Cream background #F0EEE6, sharp borders, elegant serif */
-    --background: 48 25.0% 92.2%;
-    /* Requested cream */
+    --background: 0 0% 100%;
+    /* Pure white */
     --foreground: 0 0% 10%;
     /* Nearly black */
 
@@ -49,15 +49,15 @@
     --primary: 0 0% 15%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 48 20% 88%;
-    /* Subtle grey/cream for hover */
+    --secondary: 0 0% 96%;
+    /* Subtle grey for hover */
     --secondary-foreground: 0 0% 20%;
 
-    --muted: 48 15% 86%;
+    --muted: 0 0% 94%;
     --muted-foreground: 0 0% 40%;
     /* #666666 suitable for meta */
 
-    --accent: 48 20% 88%;
+    --accent: 0 0% 96%;
     --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84% 60%;
