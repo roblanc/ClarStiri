@@ -440,28 +440,30 @@ const StoryDetail = () => {
               </div>
 
               {/* Articles List */}
-              <div className="space-y-4">
+              <div className="flex flex-col mt-2">
                 {filteredArticles.map((article, index) => (
                   <article
                     key={article.id}
-                    className="bg-card rounded-lg border border-border p-4 hover:shadow-md transition-shadow"
+                    className="py-6 border-b border-border/40 last:border-0 first:pt-4 group"
                   >
                     <div className="flex items-start gap-4">
                       {/* Source Logo */}
                       <SourceLogo source={article.source} />
 
-                      <div className="flex-1 min-w-0">
+                      <div className="flex-1 min-w-0 pt-0.5">
                         {/* Source Name and Badges */}
-                        <div className="flex items-center gap-2 mb-2 flex-wrap">
-                          <span className="font-medium text-foreground">{article.source.name}</span>
-                          <span className={`px-2 py-0.5 text-xs rounded-full border ${getBiasBadgeStyle(article.source.bias)}`}>
+                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                          <span className="font-semibold text-foreground text-sm">{article.source.name}</span>
+                          <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full border ${getBiasBadgeStyle(article.source.bias)}`}>
                             {getBiasLabel(article.source.bias)}
                           </span>
                         </div>
 
                         {/* Article Title */}
-                        <h3 className="font-semibold text-foreground mb-2 leading-tight">
-                          {article.title}
+                        <h3 className="font-serif text-lg font-bold text-foreground mb-1.5 leading-snug group-hover:text-primary transition-colors">
+                          <a href={article.link} target="_blank" rel="noopener noreferrer">
+                            {article.title}
+                          </a>
                         </h3>
 
                         {/* Article Description */}
