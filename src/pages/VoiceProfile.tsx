@@ -221,24 +221,24 @@ const VoiceProfile = () => {
                 <Tabs defaultValue={defaultTab}>
                     <TabsList className="mb-8 h-auto p-1 bg-muted/40 rounded-xl flex flex-wrap gap-1 w-full justify-start">
                         {displayStatements.length > 0 && (
-                            <TabsTrigger value="declaratii" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5">
+                            <TabsTrigger value="declaratii" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 data-[state=active]:bg-editorial data-[state=active]:text-white group">
                                 <MessageSquareQuote className="w-3.5 h-3.5" />
                                 Declarații
-                                <span className="ml-1 text-[9px] bg-foreground/10 px-1.5 py-0.5 rounded-full">{displayStatements.length}</span>
+                                <span className="ml-1 text-[9px] bg-foreground/10 group-data-[state=active]:bg-white/20 px-1.5 py-0.5 rounded-full transition-colors">{displayStatements.length}</span>
                             </TabsTrigger>
                         )}
                         {hasContext && (
-                            <TabsTrigger value="context" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5">
+                            <TabsTrigger value="context" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 data-[state=active]:bg-editorial data-[state=active]:text-white">
                                 <BookOpen className="w-3.5 h-3.5" />
                                 Context
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="profil" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5">
+                        <TabsTrigger value="profil" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 data-[state=active]:bg-editorial data-[state=active]:text-white">
                             <Target className="w-3.5 h-3.5" />
                             Profil Analitic
                         </TabsTrigger>
                         {hasAnalyses && (
-                            <TabsTrigger value="analize" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5">
+                            <TabsTrigger value="analize" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 data-[state=active]:bg-editorial data-[state=active]:text-white">
                                 <BrainCircuit className="w-3.5 h-3.5" />
                                 Perspective Critice
                             </TabsTrigger>
@@ -291,7 +291,7 @@ const VoiceProfile = () => {
                                             {/* Quote */}
                                             <div className="px-6 py-5">
                                                 <blockquote className="relative">
-                                                    <Quote className="absolute -left-1 -top-2 w-7 h-7 text-primary/10 rotate-180" />
+                                                    <Quote className="absolute -left-1 -top-2 w-7 h-7 text-editorial/20 rotate-180" />
                                                     <p className="relative z-10 text-xl md:text-2xl font-minimalist font-medium leading-relaxed text-foreground pl-4">
                                                         "{statement.text}"
                                                     </p>

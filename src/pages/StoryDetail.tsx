@@ -79,6 +79,7 @@ const normalizeCachedStoryDate = (story: AggregatedStory): AggregatedStory => {
 
 const getCachedStories = (): AggregatedStory[] => {
   const cacheKeys = [
+    "last_news_v2_100",
     "last_news_v2_60",
     "last_news_v2_120",
     "clarstiri_aggregated_cache_v4_ultra",
@@ -165,7 +166,7 @@ function SourceLogo({ source }: { source: { id: string; name: string; bias: stri
 const StoryDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const { data: stories, isLoading } = useAggregatedNews(120);
+  const { data: stories, isLoading } = useAggregatedNews(100);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const cachedStories = useMemo(() => getCachedStories(), []);

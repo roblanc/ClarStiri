@@ -188,7 +188,7 @@ export function getStatementEvidence(statement: Statement): StatementEvidence {
 }
 
 export function getStatementEvidenceBadgeClass(strength: StatementEvidenceStrength): string {
-  if (strength === "strong") return "bg-emerald-100 text-emerald-700 border-emerald-200";
+  if (strength === "strong") return "bg-editorial/10 text-editorial border-editorial/30";
   if (strength === "medium") return "bg-amber-100 text-amber-800 border-amber-200";
   return "bg-rose-100 text-rose-700 border-rose-200";
 }
