@@ -12,6 +12,7 @@ import {
   MainFeedSkeleton,
 } from "@/components/Skeleton";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { Helmet } from "react-helmet-async";
 
 const BATCH = 20;
 
@@ -173,8 +174,29 @@ const Index = () => {
     });
   }, [hasSearchQuery, normalizedQuery]);
 
+  const searchTitle = hasSearchQuery
+    ? `„${query}" — Căutare | thesite.ro`
+    : "thesite.ro | Știri din toate perspectivele";
+  const searchDesc = hasSearchQuery
+    ? `Rezultate pentru „${query}" — știri românești din surse multiple, analizate pe axa stânga–centru–dreapta.`
+    : "Agregator de știri românești. Aceeași poveste, perspective multiple — analizate pe axa stânga–centru–dreapta.";
+
   return (
     <div className="min-h-screen">
+      <Helmet>
+        <title>{searchTitle}</title>
+        <meta name="description" content={searchDesc} />
+        <link rel="canonical" href="https://thesite.ro" />
+        {hasSearchQuery && <meta name="robots" content="noindex, follow" />}
+        <meta property="og:title" content={searchTitle} />
+        <meta property="og:description" content={searchDesc} />
+        <meta property="og:url" content="https://thesite.ro" />
+        <meta property="og:image" content="https://thesite.ro/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={searchTitle} />
+        <meta name="twitter:description" content={searchDesc} />
+        <meta name="twitter:image" content="https://thesite.ro/og-image.png" />
+      </Helmet>
       <Header />
 
       <main className="mx-auto w-full max-w-[1240px] px-4 py-6 md:px-6 md:py-10">

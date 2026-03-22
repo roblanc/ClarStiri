@@ -72,9 +72,19 @@ const FORBIDDEN_KEYWORDS = [
     'look-ul', 'tinuta', 'rochie de', 'stilul lui', 'stilul ei',
     'cel mai frumos', 'cea mai frumoasa', 'miss romania', 'miss univers',
     'cel mai sexy', 'cea mai sexy',
-    // Sport entertainment (nu știri de politică sportivă)
-    'golul lui', 'golul saptamanii', 'transferul lui',
-    'meciul de', 'scor final', 'meci amical',
+    // Sport — rezultate, transferuri, meciuri, cluburi, competiții
+    'golul lui', 'golul saptamanii', 'transferul lui', 'meciul de', 'scor final', 'meci amical',
+    'fotbal', 'fotbalist', 'echipa nationala', 'nationala romaniei', 'liga 1', 'liga i',
+    'champions league', 'europa league', 'conference league', 'premier league', 'la liga',
+    'serie a', 'bundesliga', 'ligue 1', 'cupa romaniei', 'supercupa',
+    'fcsb', 'steaua', 'dinamo', 'rapid', 'cfr cluj', 'universitatea craiova', 'u craiova',
+    'antrenorul', 'portarul', 'fundasul', 'mijlocasul', 'atacantul', 'golgheter', 'marcator',
+    'etapa a', 'clasament liga', 'play-off', 'play-out', 'retrogradare', 'promovare',
+    'tenis', 'simona halep', 'irina begu', 'atp', 'wta', 'roland garros', 'wimbledon',
+    'baschet', 'handbal', 'volei', 'rugby', 'atletism', 'inot', 'gimnastica',
+    'formula 1', 'motogp', 'ciclism', 'box', 'mma', 'arte martiale',
+    'jocurile olimpice', 'olimpiada', 'medalie olimpica', 'campionat mondial', 'campionat european',
+    'cupa mondiala', 'world cup', 'euro 2024', 'euro 2025', 'euro 2026',
     // Clickbait / Dezvoltare personală
     'te va surprinde', 'nu vei crede', 'nimeni nu stia',
     'secretul pe care', 'metoda garantata', 'rezultate uimitoare',
@@ -91,7 +101,9 @@ const FORBIDDEN_URL_SEGMENTS = [
     '/retete', '/recipe', '/beauty', '/frumusete', '/moda', '/fashion',
     '/horoscop', '/zodiac', '/astrologie', '/meteo', '/vreme',
     '/showbiz', '/vedete', '/monden', '/cancan', '/entertainment',
-    '/sport/fotbal/stiri', '/auto', '/travel', '/calatorii',
+    '/sport', '/fotbal', '/tenis', '/baschet', '/handbal', '/rugby', '/atletism',
+    '/olimpic', '/olimpiada', '/formula1', '/f1', '/motogp',
+    '/auto', '/travel', '/calatorii',
     '/fun', '/viral', '/bizar', '/curiozitati',
 ];
 

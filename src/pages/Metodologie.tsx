@@ -90,7 +90,7 @@ export default function Metodologie() {
                             thesite.ro este un agregator de știri care colectează articole de la <strong>{NEWS_SOURCES.length} surse media românești</strong> și le grupează pe subiecte, oferindu-ți o perspectivă completă asupra modului în care diferite publicații acoperă aceleași evenimente.
                         </p>
                         <p className="text-muted-foreground">
-                            Inspirat de platforme precum Ground News, scopul nostru este să te ajutăm să înțelegi ce povești sunt acoperite - și de cine - pentru a-ți forma o opinie mai informată.
+                            Scopul nostru este să te ajutăm să înțelegi ce povești sunt acoperite — și de cine — pentru a-ți forma o opinie mai informată.
                         </p>
                     </div>
                 </section>

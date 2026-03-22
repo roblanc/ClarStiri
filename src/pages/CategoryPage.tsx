@@ -5,6 +5,7 @@ import { NewsListItem } from "@/components/NewsListItem";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { getCategoryBySlug, matchesCategory, CATEGORIES } from "@/utils/categories";
+import { Helmet } from "react-helmet-async";
 
 const CategoryPage = () => {
     const { slug } = useParams<{ slug: string }>();
@@ -78,8 +79,24 @@ const CategoryPage = () => {
         );
     }
 
+    const pageTitle = `${category.name} | thesite.ro`;
+    const pageDesc = `Știri din categoria ${category.name} — perspective multiple din presa română, analizate pe axa stânga–centru–dreapta.`;
+    const pageUrl = `https://thesite.ro/categorie/${slug}`;
+
     return (
         <div className="min-h-screen bg-background">
+            <Helmet>
+                <title>{pageTitle}</title>
+                <meta name="description" content={pageDesc} />
+                <link rel="canonical" href={pageUrl} />
+                <meta property="og:title" content={pageTitle} />
+                <meta property="og:description" content={pageDesc} />
+                <meta property="og:url" content={pageUrl} />
+                <meta property="og:type" content="website" />
+                <meta name="twitter:card" content="summary" />
+                <meta name="twitter:title" content={pageTitle} />
+                <meta name="twitter:description" content={pageDesc} />
+            </Helmet>
             <Header />
 
             <main className="container mx-auto px-4 py-6">
