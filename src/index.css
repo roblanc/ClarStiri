@@ -7,7 +7,14 @@
 @import '@fontsource-variable/newsreader/wght-italic.css';
 @import '@fontsource/hanken-grotesk/400.css';
 @import '@fontsource/hanken-grotesk/700.css';
-@import '@fontsource/bowlby-one/400.css';
+
+@font-face {
+  font-family: 'Block Berthold';
+  src: url('/fonts/blockberthold.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
