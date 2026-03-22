@@ -422,21 +422,7 @@ const StoryDetail = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <div className="relative flex-1 md:flex-none">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <input
-                      type="text"
-                      placeholder="Caută..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full md:w-64 pl-9 pr-4 py-2 text-sm rounded-none border-b border-border/40 bg-transparent focus:outline-none focus:border-black transition-colors"
-                    />
-                  </div>
-                  <Button variant="outline" size="sm" className="flex-shrink-0">
-                    <Filter className="w-4 h-4" />
-                  </Button>
-                </div>
+                {/* Actions removed as requested */}
               </div>
 
               {/* Articles List */}
