@@ -9,7 +9,7 @@ export function ThemeToggle() {
         <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-secondary"
+            className="h-9 w-9 text-black hover:bg-black/5 transition-colors"
             onClick={toggleTheme}
         >
             {resolvedTheme === 'dark' ? (
@@ -30,7 +30,7 @@ export function ThemeToggleSimple() {
         <Button
             variant="ghost"
             size="icon"
-            className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-secondary"
+            className="h-9 w-9 text-black hover:bg-black/5 transition-colors"
             onClick={toggleTheme}
         >
             {resolvedTheme === 'dark' ? (
