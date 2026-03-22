@@ -99,7 +99,7 @@ export function Header() {
   }, [searchOpen, clearQuery]);
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border transition-all">
+    <header className="sticky top-0 z-50 bg-brand-green border-b border-black/10 transition-all text-black shadow-sm">
       {/* Main Bar */}
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-14 md:h-16 gap-4">
@@ -108,9 +108,9 @@ export function Header() {
             <img
               src="/hero-illustration-headphones.png"
               alt="ClarStiri Logo"
-              className="h-10 md:h-12 w-auto object-contain dark:invert pointer-events-none"
+              className="h-10 md:h-12 w-auto object-contain pointer-events-none"
             />
-            <span className="font-serif italic text-xl md:text-2xl font-semibold text-foreground tracking-tight group-hover:opacity-80 transition-opacity">
+            <span className="font-serif italic text-xl md:text-2xl font-semibold text-black tracking-tight group-hover:opacity-80 transition-opacity">
               thesite.ro
             </span>
           </Link>
@@ -123,7 +123,7 @@ export function Header() {
                 to={link.to}
                 className={cn(
                   "text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:opacity-60",
-                  location.pathname === link.to ? "text-primary" : "text-foreground"
+                  location.pathname === link.to ? "text-black border-b-2 border-black" : "text-black/60"
                 )}
               >
                 {link.label}
@@ -147,21 +147,21 @@ export function Header() {
                     placeholder="CAUTĂ..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    className="w-32 md:w-64 h-8 text-[10px] uppercase tracking-widest bg-muted/50 border-none focus-visible:ring-1 focus-visible:ring-primary pl-8 pr-3 rounded-full"
+                    className="w-32 md:w-64 h-8 text-[10px] uppercase tracking-widest bg-black/5 border-black/10 text-black placeholder:text-black/40 focus-visible:ring-1 focus-visible:ring-black/20 pl-8 pr-3 rounded-full"
                     autoFocus
                   />
-                  <Search className="absolute left-2.5 w-3.5 h-3.5 text-muted-foreground" />
+                  <Search className="absolute left-2.5 w-3.5 h-3.5 text-black/40" />
                 </div>
-                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full" onClick={handleSearchClose} type="button">
+                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-black/10 text-black" onClick={handleSearchClose} type="button">
                   <X className="w-4 h-4" />
                 </Button>
               </form>
             ) : (
               <button
-                className="p-2 text-foreground hover:bg-muted rounded-full transition-colors"
+                className="p-2 text-black hover:bg-black/5 rounded-full transition-colors"
                 onClick={() => setSearchOpen(true)}
               >
-                <Search className="w-5 h-5 md:w-4 md:h-4" />
+                <Search className="w-5 h-5 md:w-4 md:h-4 text-black" />
               </button>
             )}
           </div>
@@ -176,8 +176,8 @@ export function Header() {
               className={cn(
                 "text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-colors py-1 px-2 rounded-md",
                 location.pathname === link.to
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:text-foreground bg-muted/30"
+                  ? "bg-black text-brand-green"
+                  : "text-black/60 hover:text-black bg-black/5"
               )}
             >
               {link.label}
