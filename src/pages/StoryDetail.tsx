@@ -460,7 +460,7 @@ const StoryDetail = () => {
                         </div>
 
                         {/* Article Title */}
-                        <h3 className="font-serif text-lg font-bold text-foreground mb-1.5 leading-snug group-hover:text-primary transition-colors">
+                        <h3 className="font-helvetica text-lg font-bold text-foreground mb-1.5 leading-snug group-hover:text-primary transition-colors">
                           <a href={article.link} target="_blank" rel="noopener noreferrer">
                             {article.title}
                           </a>
