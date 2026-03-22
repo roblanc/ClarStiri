@@ -210,8 +210,8 @@ const Index = () => {
               {/* Mobile Boy Image */}
               <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
-                  src="/logo_full.png"
-                  alt="ClarStiri Investigator Logo"
+                  src="/hero-illustration-headphones.png"
+                  alt="ClarStiri Ascultător"
                   className="w-full h-auto object-contain dark:invert transform scale-125"
                 />
               </div>
@@ -225,8 +225,8 @@ const Index = () => {
                 {/* Desktop Inline Boy Image (Seamless) */}
                 <div className="hidden md:flex shrink-0 w-40 h-52 lg:w-48 lg:h-64 items-center justify-center transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
                   <img
-                    src="/logo_full.png"
-                    alt="ClarStiri Investigator Logo"
+                    src="/hero-illustration-headphones.png"
+                    alt="ClarStiri Ascultător"
                     className="w-full h-full object-contain dark:invert pointer-events-none"
                   />
                 </div>
