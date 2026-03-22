@@ -8,6 +8,7 @@ import { SOURCE_CATALOG } from '@/data/sourceCatalog';
 import { getMissingProfileIds, scoreToBiasCategory } from '@/data/sourceProfiles';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 type BiasFilter = 'all' | 'left' | 'center-left' | 'center' | 'center-right' | 'right';
 
@@ -112,14 +113,14 @@ export default function Sources() {
           </section>
         )}
 
-        <section className="bg-card border border-border rounded-lg p-4 space-y-4">
-          <div className="relative">
+        <section className="py-6 border-y border-border/40 space-y-6">
+          <div className="relative max-w-2xl">
             <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <Input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Caută după sursă, proprietar, URL sau raționament"
-              className="pl-9 pr-10"
+              className="pl-9 pr-10 bg-transparent border-none focus-visible:ring-0 shadow-none text-lg placeholder:text-muted-foreground/50 h-auto py-2"
             />
             {search && (
               <button
@@ -138,7 +139,11 @@ export default function Sources() {
                 key={filter.value}
                 type="button"
                 size="sm"
-                variant={biasFilter === filter.value ? 'default' : 'outline'}
+                variant={biasFilter === filter.value ? 'default' : 'ghost'}
+                className={cn(
+                  "rounded-full text-[10px] uppercase font-bold tracking-widest px-4",
+                  biasFilter === filter.value ? "bg-editorial hover:bg-editorial/90" : "hover:bg-muted"
+                )}
                 onClick={() => setBiasFilter(filter.value)}
               >
                 {filter.label}
@@ -148,13 +153,13 @@ export default function Sources() {
         </section>
 
         {/* Methodology Section */}
-        <section className="bg-card border border-border rounded-lg overflow-hidden">
-          <div className="bg-[#0a0a0a] px-6 py-4">
-            <h2 className="text-lg font-bold text-white">Cum clasificăm bias-ul editorial?</h2>
-            <p className="text-neutral-400 text-sm mt-1">Metodologia thesite.ro pentru evaluarea spectrului politic al surselor</p>
+        <section className="pt-10 pb-16 border-b border-border/40">
+          <div className="mb-8">
+            <h2 className="text-2xl font-serif font-bold text-foreground">Cum clasificăm bias-ul editorial?</h2>
+            <p className="text-muted-foreground text-sm mt-1">Metodologia thesite.ro pentru evaluarea spectrului politic al surselor</p>
           </div>
 
-          <div className="p-6 space-y-6">
+          <div className="space-y-10">
             {/* Scale explanation */}
             <div>
               <h3 className="font-semibold text-foreground mb-3">Scala de clasificare</h3>
@@ -205,7 +210,7 @@ export default function Sources() {
                 Pentru fiecare subiect de știre, agregăm sursele care l-au acoperit și calculăm o distribuție procentuală pe trei axe (Stânga, Centru, Dreapta) folosind ponderi fixe:
               </p>
 
-              <div className="overflow-hidden rounded-lg border border-border">
+              <div className="overflow-hidden border-t border-border/40 mt-4">
                 <table className="w-full text-sm text-left">
                   <tbody className="divide-y divide-border">
                     <tr className="bg-muted/20">
@@ -271,12 +276,14 @@ export default function Sources() {
 
         {/* Compact Source List */}
         {filteredSources.length === 0 ? (
-          <section className="bg-card border border-border rounded-lg p-8 text-center">
+          <section className="py-12 text-center">
             <p className="text-foreground font-medium">Nicio sursă nu corespunde filtrelor curente.</p>
             <p className="text-sm text-muted-foreground mt-1">Resetează căutarea sau schimbă filtrul de bias.</p>
           </section>
         ) : (
-          <section className="bg-card border border-border rounded-lg divide-y divide-border overflow-hidden">
+          <section className="flex flex-col">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-4 px-2">Surse Documentate</h3>
+            <div className="divide-y divide-border/40">
             {filteredSources.map((source) => {
               const profile = source.profile!;
               const biasCategory = scoreToBiasCategory(profile.biasScore);
@@ -285,7 +292,7 @@ export default function Sources() {
                 <Link
                   key={source.id}
                   to={`/surse/${source.id}`}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-secondary/50 transition-colors group"
+                  className="flex items-center gap-4 py-4 px-2 hover:bg-muted/30 transition-all group"
                 >
                   <SourceFavicon source={{ name: source.name, url: source.url, bias: source.bias }} size="md" />
 
@@ -305,6 +312,7 @@ export default function Sources() {
                 </Link>
               );
             })}
+            </div>
           </section>
         )}
       </main>

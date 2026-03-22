@@ -352,7 +352,7 @@ const StoryDetail = () => {
               </div>
 
               {/* Summary Points */}
-              <div className="bg-card rounded-lg border border-border p-4 mb-6">
+              <div className="py-6 border-b border-border/40 mb-8">
                 <ul className="space-y-3">
                   <li className="flex gap-3">
                     <span className="text-muted-foreground">•</span>
@@ -430,7 +430,7 @@ const StoryDetail = () => {
                       placeholder="Caută..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full md:w-auto pl-9 pr-4 py-2 text-sm rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      className="w-full md:w-64 pl-9 pr-4 py-2 text-sm rounded-none border-b border-border/40 bg-transparent focus:outline-none focus:border-black transition-colors"
                     />
                   </div>
                   <Button variant="outline" size="sm" className="flex-shrink-0">
@@ -518,7 +518,7 @@ const StoryDetail = () => {
           {/* Sidebar - Right column */}
           <aside className="space-y-6">
             {/* Coverage Details Card */}
-            <div className="bg-card rounded-lg border border-border p-4">
+            <div className="py-6 border-b border-border/40">
               <h3 className="font-semibold text-foreground mb-4">Detalii Acoperire</h3>
 
               <div className="space-y-3">
@@ -558,7 +558,7 @@ const StoryDetail = () => {
             />
 
             {/* Share Actions */}
-            <div className="bg-card rounded-lg border border-border p-4">
+            <div className="py-6 border-b border-border/40">
               <h3 className="font-semibold text-foreground mb-4">Acțiuni</h3>
               <div className="space-y-2">
                 <ShareButton
@@ -571,51 +571,16 @@ const StoryDetail = () => {
               </div>
             </div>
 
-            {/* AI Bias Comparison Card - Temporar dezactivat până la endpoint-ul server-side dedicat */}
-            {/* TODO: Reactivează doar prin endpoint server-side (fără chei în frontend)
-            <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30 rounded-lg border border-purple-200 dark:border-purple-800 p-4">
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-purple-600" />
-                <h3 className="font-semibold text-foreground">Comparație Bias AI</h3>
-              </div>
-
-              {biasComparison.isLoading && (
-                <div className="flex flex-col items-center py-6">
-                  <Loader2 className="w-8 h-8 animate-spin text-purple-600 mb-3" />
-                  <p className="text-sm text-muted-foreground">Se analizează perspectivele...</p>
-                </div>
-              )}
-
-              {biasComparison.error && (
-                <div className="flex items-start gap-2 p-3 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-800">
-                  <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-700 dark:text-red-300">{biasComparison.error}</p>
-                </div>
-              )}
-
-              {biasComparison.comparison && (
-                <div className="prose prose-sm dark:prose-invert max-w-none">
-                  <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">
-                    {biasComparison.comparison}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-4 pt-3 border-t border-purple-200 dark:border-purple-700">
-                    ✨ Generat de AI • Poate conține erori
-                  </p>
-                </div>
-              )}
-
-              {!biasComparison.isLoading && !biasComparison.error && !biasComparison.comparison && (
-                <p className="text-sm text-muted-foreground">
-                  Se pregătește analiza...
-                </p>
-              )}
+            {/* AI Bias Comparison Card - Experimental
+            <div className="bg-editorial/5 py-4 px-5 border-l-4 border-editorial">
+              ... (commented out) ...
             </div>
             */}
 
             {/* Info Box */}
-            <div className="bg-muted/50 rounded-lg p-4 text-sm">
-              <h4 className="font-semibold text-foreground mb-2">ℹ️ Despre Analiza Bias</h4>
-              <p className="text-muted-foreground text-xs">
+            <div className="py-6 border-b border-border/40 text-sm">
+              <h4 className="font-bold text-xs uppercase tracking-widest text-foreground mb-3">ℹ️ Despre Analiza Bias</h4>
+              <p className="text-muted-foreground text-xs leading-relaxed">
                 thesite.ro analizează automat știrile din multiple surse românești și calculează
                 distribuția bias-ului politic bazat pe categoria editorială a fiecărei publicații.
               </p>

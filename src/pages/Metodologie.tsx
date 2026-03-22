@@ -85,8 +85,8 @@ export default function Metodologie() {
                         <Info className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Ce este thesite.ro?</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
-                        <p className="text-foreground mb-4">
+                    <div className="py-6 border-b border-border/40">
+                        <p className="text-foreground text-lg mb-4">
                             thesite.ro este un agregator de știri care colectează articole de la <strong>{NEWS_SOURCES.length} surse media românești</strong> și le grupează pe subiecte, oferindu-ți o perspectivă completă asupra modului în care diferite publicații acoperă aceleași evenimente.
                         </p>
                         <p className="text-muted-foreground">
@@ -101,24 +101,24 @@ export default function Metodologie() {
                         <BarChart3 className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Ce Înseamnă "Bias"?</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
-                        <p className="text-foreground mb-4">
+                    <div className="py-6 border-b border-border/40 space-y-4">
+                        <p className="text-foreground">
                             <strong>Bias-ul editorial</strong> se referă la tendința unei publicații de a prezenta știrile dintr-o anumită perspectivă politică sau ideologică. Aceasta poate influența:
                         </p>
-                        <ul className="list-disc list-inside text-muted-foreground mb-4 space-y-1">
+                        <ul className="list-disc list-inside text-muted-foreground mb-4 space-y-2 ml-2">
                             <li>Ce știri alege să acopere (și ce omite)</li>
                             <li>Cum titlulează și formulează articolele</li>
                             <li>Ce surse și experți citează</li>
                             <li>Ce context oferă sau omite</li>
                         </ul>
 
-                        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mt-4">
-                            <div className="flex items-start gap-2">
+                        <div className="bg-amber-50/50 dark:bg-amber-950/20 py-4 px-5 border-l-4 border-amber-400 mt-6">
+                            <div className="flex items-start gap-3">
                                 <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                                 <div>
-                                    <p className="font-medium text-amber-800 dark:text-amber-200 mb-1">Important de reținut</p>
-                                    <p className="text-sm text-amber-700 dark:text-amber-300">
-                                        <strong>Bias-ul NU înseamnă că o publicație minte.</strong> O sursă poate fi factuală dar biased - prezintă fapte reale, dar din perspectiva care îi convine. Nici "centru" nu înseamnă automat "corect" - înseamnă doar că publicația nu are o orientare politică clară.
+                                    <p className="font-bold text-amber-900 dark:text-amber-200 text-sm mb-1 uppercase tracking-wider">Important de reținut</p>
+                                    <p className="text-sm text-amber-800/80 dark:text-amber-300">
+                                        <strong>Bias-ul NU înseamnă că o publicație minte.</strong> O sursă poate fi factuală dar biased. Nici "centru" nu înseamnă automat "corect" - înseamnă doar că publicația nu are o orientare politică clară.
                                     </p>
                                 </div>
                             </div>
@@ -132,14 +132,14 @@ export default function Metodologie() {
                         <BarChart3 className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Bias în Context Românesc</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
-                        <p className="text-foreground mb-4">
-                            Clasificările noastre sunt adaptate <strong>contextului politic românesc</strong>, care diferă de cel american. În România, liniile de demarcație includ:
+                    <div className="py-6 border-b border-border/40 space-y-4">
+                        <p className="text-foreground">
+                            Bias editorial nu înseamnă știri false. Înseamnă o preferință sau o perspectivă a unei publicații — un filtru prin care aceasta colectează, raportează și dă formă știrilor.
                         </p>
-                        <ul className="list-disc list-inside text-muted-foreground mb-4 space-y-1">
-                            <li><strong>Stânga:</strong> Pro-UE, pro-NATO, anti-corupție, progresist</li>
-                            <li><strong>Dreapta:</strong> Suveranist, naționalist, conservator tradițional</li>
-                            <li><strong>Centru:</strong> Echilibru sau lipsă de orientare clară</li>
+                        <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4 ml-2">
+                            <li><strong>Filarea:</strong> selecția subiectelor care sunt acoperite.</li>
+                            <li><strong>Omisiunea:</strong> ce știri sunt lăsate pe dinafară.</li>
+                            <li><strong>Încadrarea:</strong> cuvintele folosite pentru a descrie o situație.</li>
                         </ul>
                         <p className="text-sm text-muted-foreground">
                             Clasificările sunt bazate pe analiza editorială a publicațiilor - titluri, selectarea știrilor, tonul general - nu pe declarații oficiale ale acestora.
@@ -153,7 +153,7 @@ export default function Metodologie() {
                         <BarChart3 className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Cum Citești Bara de Bias</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
+                    <div className="py-6 border-b border-border/40">
                         <p className="text-foreground mb-4">
                             Pentru fiecare știre agregată, afișăm o bară colorată care arată distribuția surselor:
                         </p>
@@ -199,13 +199,13 @@ export default function Metodologie() {
                         <Eye className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Ce Sunt "Subiectele Ignorate"?</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
+                    <div className="py-6 border-b border-border/40">
                         <p className="text-foreground mb-4 font-medium text-lg">
                             Un <strong>"Subiect Ignorat"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-100 dark:border-blue-900">
+                            <div className="bg-blue-50/50 dark:bg-blue-950/20 p-5 border-l-4 border-blue-400">
                                 <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
                                     <AlertTriangle className="w-4 h-4" />
                                     Ignorat de Stânga
@@ -214,7 +214,7 @@ export default function Metodologie() {
                                     Subiectul este relatat masiv de surse de Dreapta, dar este aproape complet ignorat de sursele de Stânga. Cititorii care urmăresc doar presă de stânga riscă să nu afle deloc despre acest eveniment.
                                 </p>
                             </div>
-                            <div className="bg-red-50 dark:bg-red-950/20 p-4 rounded-lg border border-red-100 dark:border-red-900">
+                            <div className="bg-red-50/50 dark:bg-red-950/20 p-5 border-l-4 border-red-400">
                                 <h4 className="font-bold text-red-800 dark:text-red-300 mb-2 flex items-center gap-2">
                                     <AlertTriangle className="w-4 h-4" />
                                     Ignorat de Dreapta
@@ -244,7 +244,7 @@ export default function Metodologie() {
                         <Shield className="w-5 h-5 text-primary" />
                         <h2 className="text-xl font-bold text-foreground">Scorul de Factualitate</h2>
                     </div>
-                    <div className="bg-card rounded-lg border border-border p-6">
+                    <div className="py-6 border-b border-border/40">
                         <p className="text-foreground mb-4">
                             Pe lângă bias, evaluăm și <strong>factualitatea</strong> fiecărei surse - cât de des publică informații verificabile și corecte:
                         </p>
@@ -277,7 +277,7 @@ export default function Metodologie() {
                     <div className="space-y-8">
                         {Object.entries(sourcesByBias).map(([bias, sources]) => (
                             sources.length > 0 && (
-                                <div key={bias} className="bg-card rounded-lg border border-border p-6">
+                                <div key={bias} className="py-6 border-b border-border/40">
                                     <div className="flex items-center gap-3 mb-3">
                                         <span className={`w-4 h-4 rounded ${biasLabels[bias].color}`}></span>
                                         <h3 className="font-bold text-foreground">{biasLabels[bias].name}</h3>

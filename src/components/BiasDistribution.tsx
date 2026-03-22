@@ -119,7 +119,7 @@ export function BiasDistribution({ sources, bias }: BiasDistributionProps) {
     };
 
     return (
-        <div className="bg-card rounded-lg border border-border p-4">
+        <div className="py-6 border-b border-border/40">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-foreground">Distribuție Bias</h3>
                 <ExternalLink className="w-4 h-4 text-muted-foreground cursor-pointer hover:text-foreground transition-colors" />

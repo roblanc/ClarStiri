@@ -149,9 +149,9 @@ const CategoryPage = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="flex flex-col gap-4 md:gap-6">
+                    <div className="flex flex-col">
                         {filteredStories.map((story) => (
-                            <div key={story.id} className="bg-card rounded-lg border border-border overflow-hidden hover:border-primary/30 transition-colors">
+                            <div key={story.id} className="border-b border-border/40 last:border-0">
                                 <NewsListItem
                                     story={{
                                         id: story.id,
