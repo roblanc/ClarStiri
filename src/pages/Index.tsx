@@ -113,7 +113,7 @@ const Index = () => {
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
-    let filtered = stories || [];
+    let filtered = (stories || []).filter(s => s.sourcesCount > 1);
 
     if (!filtered.length) {
       const demoFiltered = hasSearchQuery

@@ -91,6 +91,7 @@ export default function SearchPage() {
     if (!normalizedQuery) return [] as SearchResult[];
 
     const storyResults: SearchResult[] = stories
+      .filter((story) => story.sourcesCount > 1)
       .map((story) => {
         const titleScore = scoreMatch(story.title, normalizedQuery);
         const descScore = scoreMatch(story.description || "", normalizedQuery);

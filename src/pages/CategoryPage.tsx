@@ -26,7 +26,7 @@ const CategoryPage = () => {
         // Also check the aggregated story title
         const matchesTitle = matchesCategory(slug, undefined, story.title, story.description);
 
-        return matchingSource || matchesTitle;
+        return (matchingSource || matchesTitle) && story.sourcesCount > 1;
     }) || [];
 
     if (isLoading) {
