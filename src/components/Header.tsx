@@ -110,7 +110,7 @@ export function Header() {
               alt="ClarStiri Logo"
               className="h-10 md:h-12 w-auto object-contain pointer-events-none"
             />
-            <span className="font-serif italic text-xl md:text-2xl font-semibold text-black tracking-tight group-hover:opacity-80 transition-opacity">
+            <span className="font-berthold text-2xl md:text-3xl font-normal text-black tracking-tight group-hover:opacity-80 transition-opacity">
               thesite.ro
             </span>
           </Link>

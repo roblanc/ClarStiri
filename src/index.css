@@ -7,6 +7,7 @@
 @import '@fontsource-variable/newsreader/wght-italic.css';
 @import '@fontsource/hanken-grotesk/400.css';
 @import '@fontsource/hanken-grotesk/700.css';
+@import '@fontsource/bowlby-one-sc/400.css';
 
 @tailwind base;
 @tailwind components;
