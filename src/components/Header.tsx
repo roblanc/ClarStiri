@@ -28,6 +28,7 @@ export function Header() {
   const navLinks = [
     { to: "/surse", label: "Surse" },
     { to: "/influenceri", label: "Influenceri" },
+    { to: "/despre", label: "Despre" },
   ];
 
   const handleSearchClose = () => {
