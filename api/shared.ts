@@ -247,7 +247,12 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
             rawDescription.replace(/<[^>]*>/g, '')
         ).substring(0, 500);
         const link = getTagContent('link');
-        const pubDate = getTagContent('pubDate');
+        // Fallback: extrage data din URL dacă pubDate lipsește (ex: agerpres /2026/03/22/)
+        const rawPubDate = getTagContent('pubDate');
+        const pubDate = rawPubDate || (() => {
+            const m = link.match(/\/(\d{4})\/(\d{2})\/(\d{2})\//);
+            return m ? new Date(`${m[1]}-${m[2]}-${m[3]}T12:00:00Z`).toUTCString() : new Date().toUTCString();
+        })();
         const category = decodeHtmlEntities(getTagContent('category')) || undefined;
 
         // Filter out weather, horoscope news, etc.
@@ -285,7 +290,66 @@ const CORS_PROXIES = [
     'https://proxy.cors.sh/', // Might require API key, but good as fallback
 ];
 
+/**
+ * Scraper pentru realitatea.net — RSS-ul lor e înghețat, dar site-ul are
+ * JSON-LD ItemList pe homepage cu 50+ articole recente.
+ * Timestamp-ul e extras din primii 4 bytes ai MongoDB ObjectId-ului din URL.
+ */
+async function scrapeRealitateaNet(source: NewsSource): Promise<RSSNewsItem[]> {
+    try {
+        const response = await fetchWithTimeout('https://www.realitatea.net', 5000);
+        if (!response.ok) return [];
+        const html = await response.text();
+
+        // Extrage toate blocurile JSON-LD
+        const scriptRegex = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;
+        let match;
+        while ((match = scriptRegex.exec(html)) !== null) {
+            try {
+                const data = JSON.parse(match[1]);
+                if (data['@type'] !== 'ItemList' || !Array.isArray(data.itemListElement)) continue;
+
+                const items: RSSNewsItem[] = [];
+                for (const item of data.itemListElement) {
+                    if (!item.url || !item.name) continue;
+                    if (shouldFilterNews(item.name, '', item.url)) continue;
+
+                    // Extrage timestamp din MongoDB ObjectId (primii 4 bytes = Unix seconds)
+                    const shortId = item.url.split('/').pop() || '';
+                    const timestamp = shortId.length >= 8
+                        ? parseInt(shortId.substring(0, 8), 16) * 1000
+                        : Date.now();
+                    const pubDate = new Date(timestamp).toISOString();
+
+                    const biasAnalysis = quickBiasAnalysis(item.name, '');
+                    items.push({
+                        id: `realitatea-${shortId}`,
+                        title: item.name,
+                        description: '',
+                        link: item.url,
+                        pubDate,
+                        source,
+                        biasAnalysis,
+                    });
+                }
+                return items;
+            } catch {
+                continue;
+            }
+        }
+        return [];
+    } catch (error) {
+        console.warn('Failed to scrape realitatea.net:', error instanceof Error ? error.message : error);
+        return [];
+    }
+}
+
 export async function fetchRSSFeed(source: NewsSource, proxyIndex = -1): Promise<RSSNewsItem[]> {
+    // Realitatea.net are RSS înghețat — folosim scraper pe homepage
+    if (source.id === 'realitatea') {
+        return scrapeRealitateaNet(source);
+    }
+
     try {
         const urlToFetch = proxyIndex >= 0
             ? `${CORS_PROXIES[proxyIndex]}${encodeURIComponent(source.rssUrl)}`
