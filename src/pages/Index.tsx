@@ -103,7 +103,7 @@ const normalizeSearchText = (text: string) =>
     .trim();
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
+  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(100);
   const [visible, setVisible] = useState(BATCH);
   const { query } = useSearchStore();
   const normalizedQuery = normalizeSearchText(query || "");
