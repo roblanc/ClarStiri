@@ -113,7 +113,7 @@ export function Header() {
             <div className="flex items-center gap-0.5 font-berthold text-3xl md:text-4xl font-normal text-black tracking-tighter group-hover:opacity-80 transition-opacity">
               <span>thesite</span>
               <img 
-                src="/romania-flag-vertical.png" 
+                src="/romania-flag-vertical-transparent.png" 
                 alt="RO" 
                 className="h-6 md:h-8 w-auto object-contain mx-0.5"
               />

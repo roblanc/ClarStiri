@@ -239,7 +239,7 @@ export async function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, 
 
             let finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
 
-            if (dataI.entities.size > 0 && dataJ.entities.size > 0) {
+            if (dataI.entities.size > 0 && dataJ.entities.size > 0 && wordScore < 0.35) {
                 const uniqueToI = [...dataI.entities].filter(e => !dataJ.entities.has(e));
                 const uniqueToJ = [...dataJ.entities].filter(e => !dataI.entities.has(e));
 

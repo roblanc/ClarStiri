@@ -35,7 +35,7 @@ export const NEWS_SOURCES: NewsSource[] = NEWS_SOURCES_BASE.map((source) => ({ .
 export const BIAS_WEIGHT_MAP: Record<string, { left: number; center: number; right: number }> =
     SHARED_BIAS_WEIGHT_MAP;
 
-const FETCH_TIMEOUT = 3000;
+const FETCH_TIMEOUT = 5000;
 
 const FORBIDDEN_KEYWORDS = [
     // Vreme
