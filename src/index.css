@@ -9,6 +9,14 @@
 @import '@fontsource/hanken-grotesk/700.css';
 
 @font-face {
+  font-family: 'Hoolister';
+  src: url('/fonts/hoolister.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Block Berthold';
   src: url('/fonts/blockberthold.otf') format('opentype');
   font-weight: normal;
