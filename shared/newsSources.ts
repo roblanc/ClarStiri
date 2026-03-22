@@ -77,6 +77,14 @@ export const NEWS_SOURCES_BASE = [
   { id: 'buletindebucuresti', name: 'Buletin de București', url: 'https://buletin.de/bucuresti', rssUrl: 'https://buletin.de/bucuresti/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'ziaruldeiasi', name: 'Ziarul de Iași', url: 'https://www.ziaruldeiasi.ro', rssUrl: 'https://www.ziaruldeiasi.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
   { id: 'kanald', name: 'Kanal D', url: 'https://www.stirilekanald.ro', rssUrl: 'https://www.stirilekanald.ro/feed', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  // ── Adăugat 2026-03 ──────────────────────────────────────────────────────
+  { id: 'pressone', name: 'PressOne', url: 'https://pressone.ro', rssUrl: 'https://pressone.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'europalibera', name: 'Europa Liberă România', url: 'https://romania.europalibera.org', rssUrl: 'https://romania.europalibera.org/api/zvo_mml-vomx-tpeukvm_', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'caleaeuropeana', name: 'Calea Europeană', url: 'https://www.caleaeuropeana.ro', rssUrl: 'https://www.caleaeuropeana.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'juridice', name: 'Juridice.ro', url: 'https://juridice.ro', rssUrl: 'https://juridice.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'dela0', name: 'Dela0', url: 'https://beta.dela0.ro', rssUrl: 'https://beta.dela0.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'context', name: 'Context.ro', url: 'https://context.ro', rssUrl: 'https://context.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'newsro', name: 'News.ro', url: 'https://www.news.ro', rssUrl: 'https://www.news.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
