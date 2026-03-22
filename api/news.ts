@@ -68,6 +68,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     try {
+        // Per-story archive lookup: GET /api/news?id=<storyId>
+        const storyId = req.query.id as string | undefined;
+        if (storyId) {
+            if (!redis) return res.status(503).json({ success: false, error: 'Redis unavailable' });
+            const story = await redis.get<AggregatedStory>(`story:${storyId}`);
+            if (story) {
+                res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+                return res.status(200).json({ success: true, data: story, fromArchive: true });
+            }
+            return res.status(404).json({ success: false, error: 'Story not found in archive' });
+        }
+
         const limit = parseInt(req.query.limit as string) || 50;
 
         // Redis read — graceful if unavailable

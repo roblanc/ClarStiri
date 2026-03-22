@@ -10,7 +10,7 @@ import { normalizeStorySlug, toStorySlug, buildStoryHref } from "@/utils/storyRo
 import { ArrowLeft, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/ShareButton";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { decodeHtmlEntities } from "../../shared/htmlEntities";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 
@@ -169,6 +169,8 @@ const StoryDetail = () => {
   const { data: stories, isLoading } = useAggregatedNews(100);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [archivedStory, setArchivedStory] = useState<AggregatedStory | null>(null);
+  const [archiveLoading, setArchiveLoading] = useState(false);
   const cachedStories = useMemo(() => getCachedStories(), []);
   const slugFromUrl = normalizeStorySlug(searchParams.get("s") || "");
   const storiesPool = useMemo(() => {
@@ -202,8 +204,25 @@ const StoryDetail = () => {
     return undefined;
   }, [id, slugFromUrl, storiesPool]);
 
+  const resolvedStory = currentStory ?? archivedStory ?? undefined;
+
+  // Fallback: dacă povestea nu e în pool-ul principal, caută în arhiva Redis
+  useEffect(() => {
+    if (isLoading || currentStory || !id || archivedStory || archiveLoading) return;
+    setArchiveLoading(true);
+    fetch(`/api/news?id=${encodeURIComponent(id)}`)
+      .then(r => r.ok ? r.json() : null)
+      .then(json => {
+        if (json?.success && json?.data) {
+          setArchivedStory(normalizeCachedStoryDate(json.data as AggregatedStory));
+        }
+      })
+      .catch(() => {/* silently fail */})
+      .finally(() => setArchiveLoading(false));
+  }, [isLoading, currentStory, id, archivedStory, archiveLoading]);
+
   // Grupează sursele după bias
-  const groupedSources = currentStory?.sources.reduce((acc, source) => {
+  const groupedSources = resolvedStory?.sources.reduce((acc, source) => {
     const bias = source.source.bias;
     if (bias === 'left' || bias === 'center-left') {
       acc.left.push(source);
@@ -213,10 +232,10 @@ const StoryDetail = () => {
       acc.center.push(source);
     }
     return acc;
-  }, { left: [] as typeof currentStory.sources, center: [] as typeof currentStory.sources, right: [] as typeof currentStory.sources });
+  }, { left: [] as NonNullable<typeof resolvedStory>['sources'], center: [] as NonNullable<typeof resolvedStory>['sources'], right: [] as NonNullable<typeof resolvedStory>['sources'] });
 
   // Filtrează articolele
-  const filteredArticles = currentStory?.sources.filter(source => {
+  const filteredArticles = resolvedStory?.sources.filter(source => {
     const bias = source.source.bias;
     const matchesFilter = activeFilter === 'all' ||
       (activeFilter === 'left' && (bias === 'left' || bias === 'center-left')) ||
@@ -230,7 +249,7 @@ const StoryDetail = () => {
     return matchesFilter && matchesSearch;
   }) || [];
 
-  if (isLoading) {
+  if (isLoading || archiveLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -242,7 +261,7 @@ const StoryDetail = () => {
     );
   }
 
-  if (!currentStory) {
+  if (!resolvedStory) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -255,18 +274,18 @@ const StoryDetail = () => {
   }
 
   // Calculează statistici
-  const totalSources = currentStory.sourcesCount;
+  const totalSources = resolvedStory.sourcesCount;
   const leftCount = groupedSources?.left.length || 0;
   const centerCount = groupedSources?.center.length || 0;
   const rightCount = groupedSources?.right.length || 0;
 
   // Determină bias-ul dominant
-  const dominantBias = currentStory.bias.center >= currentStory.bias.left && currentStory.bias.center >= currentStory.bias.right
+  const dominantBias = resolvedStory.bias.center >= resolvedStory.bias.left && resolvedStory.bias.center >= resolvedStory.bias.right
     ? 'Centru'
-    : currentStory.bias.left > currentStory.bias.right
+    : resolvedStory.bias.left > resolvedStory.bias.right
       ? 'Stânga'
       : 'Dreapta';
-  const storyPublishedAt = toValidDate(currentStory.publishedAt) ?? new Date();
+  const storyPublishedAt = toValidDate(resolvedStory.publishedAt) ?? new Date();
 
   return (
     <div className="min-h-screen bg-background">
@@ -274,15 +293,15 @@ const StoryDetail = () => {
 
       {/* SEO Schema */}
       <NewsSchema story={{
-        title: currentStory.title,
-        description: currentStory.description || '',
-        image: currentStory.image || PLACEHOLDER_IMAGE,
+        title: resolvedStory.title,
+        description: resolvedStory.description || '',
+        image: resolvedStory.image || PLACEHOLDER_IMAGE,
         datePublished: storyPublishedAt.toISOString(),
         dateModified: storyPublishedAt.toISOString(),
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
         publisherLogo: 'https://thesite.ro/ethics-logo.png',
-        url: `https://thesite.ro${buildStoryHref(currentStory.id, currentStory.title)}`
+        url: `https://thesite.ro${buildStoryHref(resolvedStory.id, resolvedStory.title)}`
       }} />
 
       <main className="container mx-auto px-4 py-6 overflow-x-hidden">
@@ -302,13 +321,13 @@ const StoryDetail = () => {
             <div className="mb-6">
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
                 <Clock className="w-4 h-4" />
-                <span>Publicat {currentStory.timeAgo}</span>
+                <span>Publicat {resolvedStory.timeAgo}</span>
                 <span>•</span>
                 <span>Actualizat recent</span>
               </div>
 
               <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 leading-tight">
-                {currentStory.title}
+                {resolvedStory.title}
               </h1>
 
               {/* Bias Tabs */}
@@ -356,7 +375,7 @@ const StoryDetail = () => {
                 <ul className="space-y-3">
                   <li className="flex gap-3">
                     <span className="text-muted-foreground">•</span>
-                    <span className="text-sm text-foreground">{currentStory.description}</span>
+                    <span className="text-sm text-foreground">{resolvedStory.description}</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-muted-foreground">•</span>
@@ -364,11 +383,11 @@ const StoryDetail = () => {
                       Această știre este acoperită de {totalSources} {totalSources === 1 ? 'sursă' : 'surse'} din presa românească.
                     </span>
                   </li>
-                  {currentStory.bias.center > 50 && (
+                  {resolvedStory.bias.center > 50 && (
                     <li className="flex gap-3">
                       <span className="text-muted-foreground">•</span>
                       <span className="text-sm text-foreground">
-                        Majoritatea surselor ({currentStory.bias.center}%) sunt de centru, indicând o acoperire echilibrată.
+                        Majoritatea surselor ({resolvedStory.bias.center}%) sunt de centru, indicând o acoperire echilibrată.
                       </span>
                     </li>
                   )}
@@ -527,11 +546,11 @@ const StoryDetail = () => {
                 <div className="border-t border-border pt-3 mt-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Actualizat</span>
-                    <span className="text-foreground">{currentStory.timeAgo}</span>
+                    <span className="text-foreground">{resolvedStory.timeAgo}</span>
                   </div>
                   <div className="flex justify-between text-sm mt-2">
                     <span className="text-muted-foreground">Distribuție Bias</span>
-                    <span className="font-semibold text-foreground">{currentStory.bias.center}% Centru</span>
+                    <span className="font-semibold text-foreground">{resolvedStory.bias.center}% Centru</span>
                   </div>
                 </div>
               </div>
@@ -539,8 +558,8 @@ const StoryDetail = () => {
 
             {/* Bias Distribution Card - Similar to Ground News */}
             <BiasDistribution
-              sources={currentStory.sources}
-              bias={currentStory.bias}
+              sources={resolvedStory.sources}
+              bias={resolvedStory.bias}
             />
 
             {/* Share Actions */}
@@ -548,8 +567,8 @@ const StoryDetail = () => {
               <h3 className="font-semibold text-foreground mb-4">Acțiuni</h3>
               <div className="space-y-2">
                 <ShareButton
-                  title={currentStory.title}
-                  description={`${currentStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
+                  title={resolvedStory.title}
+                  description={`${resolvedStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
                   variant="outline"
                   className="w-full justify-start"
                   showLabel={true}
