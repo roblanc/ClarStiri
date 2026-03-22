@@ -281,9 +281,9 @@ export default function Sources() {
             <p className="text-sm text-muted-foreground mt-1">Resetează căutarea sau schimbă filtrul de bias.</p>
           </section>
         ) : (
-          <section className="flex flex-col">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 mb-4 px-2">Surse Documentate</h3>
-            <div className="divide-y divide-border/40">
+          <section className="space-y-6">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 px-2">Surse Documentate</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-10">
             {filteredSources.map((source) => {
               const profile = source.profile!;
               const biasCategory = scoreToBiasCategory(profile.biasScore);
@@ -292,23 +292,28 @@ export default function Sources() {
                 <Link
                   key={source.id}
                   to={`/surse/${source.id}`}
-                  className="flex items-center gap-4 py-4 px-2 hover:bg-muted/30 transition-all group"
+                  className="flex flex-col gap-3 p-2 hover:bg-muted/30 transition-all group rounded-none"
                 >
-                  <SourceFavicon source={{ name: source.name, url: source.url, bias: source.bias }} size="md" />
-
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium text-foreground text-sm truncate">{source.name}</span>
-                      <span className={`px-2 py-0.5 text-[10px] rounded-full border shrink-0 ${biasClassMap[biasCategory]}`}>
-                        {biasLabelMap[biasCategory]}
-                      </span>
+                  <div className="flex items-center gap-3">
+                    <SourceFavicon source={{ name: source.name, url: source.url, bias: source.bias }} size="md" />
+                    <div className="flex flex-col min-w-0">
+                      <span className="font-bold text-foreground text-sm truncate">{source.name}</span>
+                      <div className="inline-flex mt-0.5">
+                        <span className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded-none border shrink-0 ${biasClassMap[biasCategory]}`}>
+                          {biasLabelMap[biasCategory]}
+                        </span>
+                      </div>
                     </div>
-                    <p className="text-xs text-muted-foreground truncate mt-0.5">
-                      {profile.currentOwner || 'Proprietar nedocumentat'}
-                    </p>
                   </div>
 
-                  <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 group-hover:text-foreground transition-colors" />
+                  <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed h-8">
+                    {profile.currentOwner || 'Proprietar nedocumentat'}
+                  </p>
+                  
+                  <div className="mt-auto pt-2 flex items-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground group-hover:text-foreground transition-all">
+                    Vezi profil complet
+                    <ChevronRight className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </Link>
               );
             })}
