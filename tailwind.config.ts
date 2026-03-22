@@ -25,7 +25,7 @@ export default {
         anthropic: ["Newsreader Variable", "Newsreader", "Georgia", "serif"],
         minimalist: ["Hanken Grotesk", "Helvetica Neue", "Arial", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],
-        berthold: ["Bowlby One SC", "sans-serif"],
+        berthold: ["Bowlby One", "sans-serif"],
       },
       colors: {
         brand: {
