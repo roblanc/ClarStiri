@@ -47,7 +47,7 @@ export function Footer() {
           <div className="md:col-span-2 space-y-6">
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <img
-                src="/hero-illustration-headphones.png"
+                src="/hero-illustration-headphones.webp"
                 alt="ClarStiri Logo"
                 className="h-10 w-auto"
               />

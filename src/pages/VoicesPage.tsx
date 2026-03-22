@@ -17,11 +17,11 @@ const VoicesPage = () => {
                         </Button>
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-bold flex items-center gap-2 font-anthropic">
+                        <h1 className="text-2xl font-bold flex items-center gap-2 font-serif">
                             <Users className="w-6 h-6 text-primary" />
                             Barometru Opinie
                         </h1>
-                        <p className="text-muted-foreground text-sm font-anthropic">
+                        <p className="text-muted-foreground text-sm font-serif">
                             Analiza poziționării figurilor publice din spațiul românesc.
                         </p>
                     </div>
@@ -54,7 +54,7 @@ const VoicesPage = () => {
 
                             <div className="flex flex-col flex-1 w-full">
                                 <div className="mb-3 min-h-[56px] flex flex-col justify-center">
-                                    <h3 className="font-bold text-lg sm:text-xl transition-colors leading-tight mb-1 line-clamp-1 font-anthropic">
+                                    <h3 className="font-bold text-lg sm:text-xl transition-colors leading-tight mb-1 line-clamp-1 font-serif">
                                         {figure.name}
                                     </h3>
                                     <p className="text-xs font-medium text-muted-foreground line-clamp-1">

@@ -13,9 +13,12 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
 
-  <!-- Preconnect only to the single most critical external domain -->
-  <link rel="preconnect" href="https://wsrv.nl" crossorigin />
+  <!-- Preload critical custom font (stable path, used in header logo) -->
+  <link rel="preload" href="/fonts/hoolister.otf" as="font" type="font/otf" crossorigin />
+  <!-- Preconnect for image CDN — no crossorigin (plain img tags don't use CORS) -->
+  <link rel="preconnect" href="https://wsrv.nl" />
   <!-- DNS prefetch for image sources and analytics (non-blocking) -->
+  <link rel="dns-prefetch" href="https://wsrv.nl" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://media.hotnews.ro" />
   <link rel="dns-prefetch" href="https://static.digi24.ro" />

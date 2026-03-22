@@ -30,7 +30,7 @@ export default function Contact() {
          
           <div className="relative z-10">
             <h2 className="text-2xl font-serif font-bold text-white mb-1">Susține proiectul independent</h2>
-            <p className="text-sm font-minimalist text-white/90">
+            <p className="text-sm font-sans text-white/90">
               Dacă îți este util, ajută-ne să păstrăm thesite.ro independent.
             </p>
           </div>

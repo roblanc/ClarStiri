@@ -23,7 +23,7 @@ const VoiceProfile = () => {
             <div className="min-h-screen bg-background">
                 <Header />
                 <div className="container mx-auto px-4 py-8 text-center flex flex-col items-center justify-center min-h-[60vh]">
-                    <h1 className="text-3xl font-bold mb-4 font-anthropic text-foreground/80">Profilul nu a fost găsit</h1>
+                    <h1 className="text-3xl font-bold mb-4 font-serif text-foreground/80">Profilul nu a fost găsit</h1>
                     <p className="text-muted-foreground mb-8">Ne pare rău, dar vocea căutată nu există în baza noastră de date.</p>
                     <Link to="/influenceri">
                         <Button variant="default" className="rounded-full px-8">Înapoi la Influenceri</Button>
@@ -212,7 +212,7 @@ const VoiceProfile = () => {
                 {/* Bias quote card */}
                 <div className={cn("mb-8 p-5 rounded-2xl border bg-card flex gap-4 items-start", biasBorder)}>
                     <Activity className={cn("w-4 h-4 mt-0.5 shrink-0", biasText)} />
-                    <p className="text-sm text-muted-foreground leading-relaxed italic font-minimalist">
+                    <p className="text-sm text-muted-foreground leading-relaxed italic font-sans">
                         "{figure.bias.description}"
                     </p>
                 </div>
@@ -292,7 +292,7 @@ const VoiceProfile = () => {
                                             <div className="px-6 py-5">
                                                 <blockquote className="relative">
                                                     <Quote className="absolute -left-1 -top-2 w-7 h-7 text-editorial/20 rotate-180" />
-                                                    <p className="relative z-10 text-xl md:text-2xl font-minimalist font-medium leading-relaxed text-foreground pl-4">
+                                                    <p className="relative z-10 text-xl md:text-2xl font-sans font-medium leading-relaxed text-foreground pl-4">
                                                         "{statement.text}"
                                                     </p>
                                                 </blockquote>
