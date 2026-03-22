@@ -39,23 +39,78 @@ const FETCH_TIMEOUT = 3000;
 
 const FORBIDDEN_KEYWORDS = [
     // Vreme
-    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius', 
+    'vremea', 'prognoza', 'meteo', 'temperaturi', 'grade celsius',
     'cod galben', 'cod portocaliu', 'cod rosu', 'meteorologi', 'anm',
     'precipitatii', 'ninsori', 'viscol', 'canicula',
-    // Horoscop
-    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni', 
-    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn', 
-    'varsator', 'pesti', 'previziuni astrale'
+    // Horoscop / Astrologie
+    'horoscop', 'zodiac', 'zodii', 'astrologie', 'berbec', 'taur', 'gemeni',
+    'rac', 'leu', 'fecioara', 'balanta', 'scorpion', 'sagetator', 'capricorn',
+    'varsator', 'pesti', 'previziuni astrale', 'compatibilitate zodie',
+    // Sănătate / Medicină lifestyle (nu știri de sănătate publică)
+    'slabesti', 'slabire', 'dieta', 'diete', 'regim alimentar', 'cura de slabire',
+    'kilograme in plus', 'pierdere in greutate', 'burtă',
+    'remedii naturiste', 'remedii acasa', 'retete naturiste',
+    'plante medicinale', 'ceai de', 'ulei esential',
+    'semne ca suferi', 'simptome pe care', 'alimente care',
+    'ce sa mananci', 'ce sa bei', 'beneficiile', 'miracol pentru sanatate',
+    'trucuri pentru', 'sfaturi pentru sanatate',
+    'cate calorii', 'nutritionist', 'fitbit',
+    'sfornait', 'sforait', 'sforaitul',
+    // Relații / Lifestyle / Sex
+    'relatii de cuplu', 'viata de cuplu', 'cum sa iti',
+    'cum sa fii', 'cum sa devii', 'secretul unui',
+    'semne ca el', 'semne ca ea', 'semne ca partenerul',
+    'barbatii care', 'femeile care', 'cum iti dai seama',
+    'viata sexuala', 'viata intima', 'sfaturi in dragoste',
+    'cum sa cuceresti', 'cum sa atragi',
+    // Rețete / Mâncare / Gătit
+    'reteta', 'retete', 'ingrediente', 'mod de preparare',
+    'cum se face', 'cum se prepara', 'delicioase', 'gustoase',
+    // Celebrity / Showbiz / Monden
+    'vedete', 'showbiz', 'monden', 'cancan', 'paparazzi',
+    'divorteaza', 's-a despartit', 's-au despartit', 'nunta vedetei',
+    'look-ul', 'tinuta', 'rochie de', 'stilul lui', 'stilul ei',
+    'cel mai frumos', 'cea mai frumoasa', 'miss romania', 'miss univers',
+    'cel mai sexy', 'cea mai sexy',
+    // Sport entertainment (nu știri de politică sportivă)
+    'golul lui', 'golul saptamanii', 'transferul lui',
+    'meciul de', 'scor final', 'meci amical',
+    // Clickbait / Dezvoltare personală
+    'te va surprinde', 'nu vei crede', 'nimeni nu stia',
+    'secretul pe care', 'metoda garantata', 'rezultate uimitoare',
+    'motivatie zilnica', 'gandire pozitiva', 'lege a atractiei',
+    'succes garantat', 'devino bogat', 'independenta financiara in',
+    // Animale / Diverse
+    'pisica lui', 'cainele lui', 'animale de companie',
+    'rasa de caini', 'rasa de pisici',
+];
+
+/** URL path segments that indicate non-news content — filtered regardless of title */
+const FORBIDDEN_URL_SEGMENTS = [
+    '/lifestyle', '/life-style', '/sanatate', '/dieta', '/diete',
+    '/retete', '/recipe', '/beauty', '/frumusete', '/moda', '/fashion',
+    '/horoscop', '/zodiac', '/astrologie', '/meteo', '/vreme',
+    '/showbiz', '/vedete', '/monden', '/cancan', '/entertainment',
+    '/sport/fotbal/stiri', '/auto', '/travel', '/calatorii',
+    '/fun', '/viral', '/bizar', '/curiozitati',
 ];
 
 /**
- * Verifică dacă o știre trebuie filtrată (vreme, horoscop etc.)
+ * Verifică dacă o știre trebuie filtrată.
+ * Filtrează: lifestyle, horoscop, vreme, rețete, vedete, clickbait.
  */
-export function shouldFilterNews(title: string, description: string = ''): boolean {
+export function shouldFilterNews(title: string, description: string = '', url: string = ''): boolean {
     const text = `${title} ${description}`.toLowerCase();
+
+    // URL-based filter — path segments are reliable signals
+    if (url) {
+        const urlLower = url.toLowerCase();
+        if (FORBIDDEN_URL_SEGMENTS.some(seg => urlLower.includes(seg))) return true;
+    }
+
     return FORBIDDEN_KEYWORDS.some(keyword => {
-        // Match whole word for critical keywords, partial for others
-        if (['anm', 'meteo', 'zodii', 'berbec', 'taur', 'rac', 'leu', 'pesti'].includes(keyword)) {
+        // Whole-word match for short keywords that could appear inside other words
+        if (['anm', 'meteo', 'zodii', 'berbec', 'taur', 'rac', 'leu', 'pesti', 'dieta'].includes(keyword)) {
             return new RegExp(`\\b${keyword}\\b`, 'i').test(text);
         }
         return text.includes(keyword);

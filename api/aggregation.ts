@@ -1,4 +1,4 @@
-import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP } from './shared.js';
+import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP, shouldFilterNews } from './shared.js';
 import { createStoryId } from './storyId.js';
 import { generateAggregatedTitle, getEmbeddingsBatch } from './llm.js';
 
@@ -157,7 +157,9 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000; // 7 zile
     return news.filter(item => {
         const date = new Date(item.pubDate).getTime();
-        return isNaN(date) || date > cutoff;
+        if (!isNaN(date) && date <= cutoff) return false;
+        if (shouldFilterNews(item.title, item.description ?? '', item.link)) return false;
+        return true;
     });
 }
 
