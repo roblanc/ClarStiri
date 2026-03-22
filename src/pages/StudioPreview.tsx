@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { useSearchStore } from "@/hooks/useSearchStore";
@@ -585,34 +586,7 @@ const StudioPreview = () => {
         )}
       </main>
 
-      <footer className="mt-16 border-t border-border/60 py-10">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 text-center md:flex-row md:text-left">
-          <div>
-            <p className="text-sm font-semibold text-foreground">
-              thesite<span className="text-primary">.ro</span>
-            </p>
-            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
-              private preview
-            </p>
-          </div>
-
-          <nav className="flex items-center gap-5 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            <Link to="/surse" className="hover:text-foreground">
-              Surse
-            </Link>
-            <Link to="/influenceri" className="hover:text-foreground">
-              Influenceri
-            </Link>
-            <Link to="/metodologie" className="hover:text-foreground">
-              Metodologie
-            </Link>
-          </nav>
-
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground">
-            © 2026 Toate drepturile rezervate
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

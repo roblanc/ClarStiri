@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { PUBLIC_FIGURES, Statement } from "@/data/publicFigures";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Target, Zap, AlertTriangle, Users, History, Activity, BookOpen, MessageSquareQuote } from "lucide-react";
+import { ArrowLeft, ExternalLink, Quote, Facebook, Instagram, Youtube, Target, Zap, AlertTriangle, Users, History, Activity, BookOpen, MessageSquareQuote, BrainCircuit, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { StyledLink } from "@/components/ui/styled-link";
@@ -24,6 +25,7 @@ const VoiceProfile = () => {
                         <Button variant="default" className="rounded-full px-8">Înapoi la Influenceri</Button>
                     </Link>
                 </div>
+                <Footer />
             </div>
         );
     }
@@ -527,6 +529,7 @@ const VoiceProfile = () => {
                     </div>
                 </div>
             </main>
+            <Footer />
         </div>
     );
 };

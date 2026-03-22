@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet-async";
 import { ExternalLink, Rss, Users, BarChart3, GitMerge, Eye, ShieldAlert, Instagram, Radio } from "lucide-react";
 import { StyledLink } from "@/components/ui/styled-link";
@@ -32,7 +33,7 @@ const HOW_IT_WORKS = [
     step: "02",
     icon: GitMerge,
     title: "Agregare & Clustering",
-    body: "Algoritmul de similitudine detectează articolele care acoperă același eveniment și le grupează într-o singură „poveste". O știre majoră adună în timp articole de la mai multe redacții, acumulând surse pe măsură ce presa o preia.",
+    body: "Algoritmul de similitudine detectează articolele care acoperă același eveniment și le grupează într-o singură „poveste”. O știre majoră adună în timp articole de la mai multe redacții, acumulând surse pe măsură ce presa o preia.",
   },
   {
     step: "03",
@@ -44,7 +45,7 @@ const HOW_IT_WORKS = [
     step: "04",
     icon: Eye,
     title: "Puncte Oarbe",
-    body: "Când o știre e acoperită aproape exclusiv de o singură parte a spectrului, platforma semnalează un potențial „punct orb" — un unghi pe care tabăra opusă îl ignoră sau îl minimizează.",
+    body: "Când o știre e acoperită aproape exclusiv de o singură parte a spectrului, platforma semnalează un potențial „punct orb” — un unghi pe care tabăra opusă îl ignoră sau îl minimizează.",
   },
 ];
 
@@ -57,7 +58,7 @@ const PRINCIPLES = [
   {
     icon: Users,
     title: "Barometrul de opinie",
-    body: "Secțiunea „Influenceri" analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.",
+    body: "Secțiunea „Influenceri” analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.",
   },
   {
     icon: Eye,
@@ -205,6 +206,8 @@ export default function Despre() {
         </div>
 
       </main>
+
+      <Footer />
     </div>
   );
 }

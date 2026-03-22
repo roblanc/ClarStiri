@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
@@ -452,24 +453,7 @@ const Index = () => {
         )}
       </main>
 
-      {/* Editorial Footer */}
-      <footer className="border-t border-border mt-20 pt-12 pb-24 bg-card">
-        <div className="container mx-auto px-4 text-center">
-          <span className="font-serif italic text-3xl font-semibold text-foreground mb-8 block">
-            thesite.ro
-          </span>
-
-          <nav className="flex items-center justify-center gap-6 mb-8">
-            <Link to="/surse" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Surse</Link>
-            <span className="w-1 h-1 bg-border rounded-full"></span>
-            <Link to="/influenceri" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">Influenceri</Link>
-          </nav>
-
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            © 2026 Toate drepturile rezervate
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

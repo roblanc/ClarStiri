@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { SourceProfileCard } from '@/components/SourceProfileCard';
 import { SourceArchive } from '@/components/SourceArchive';
 import { SOURCE_CATALOG_BY_ID } from '@/data/sourceCatalog';
@@ -26,6 +27,7 @@ export default function SourceDetail() {
                         <p className="text-muted-foreground">Sursa solicitată nu există sau nu are profil documentat.</p>
                     </div>
                 </main>
+                <Footer />
             </div>
         );
     }
@@ -46,6 +48,7 @@ export default function SourceDetail() {
 
                 <SourceArchive sourceId={source.id} domain={source.url} />
             </main>
+            <Footer />
         </div>
     );
 }

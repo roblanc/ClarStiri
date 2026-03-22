@@ -1,4 +1,5 @@
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import { Link } from "react-router-dom";
 import { Users, Target, Search } from "lucide-react";
@@ -130,6 +131,8 @@ const Barometer = () => {
                     </div>
                 )}
             </main>
+
+            <Footer />
         </div>
     );
 };

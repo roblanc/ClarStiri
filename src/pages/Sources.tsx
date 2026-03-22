@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { SourceFavicon } from '@/components/SourceFavicon';
 import { SOURCE_CATALOG } from '@/data/sourceCatalog';
 import { getMissingProfileIds, scoreToBiasCategory } from '@/data/sourceProfiles';
@@ -307,6 +308,8 @@ export default function Sources() {
           </section>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { ChevronLeft, Coffee } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -39,6 +40,7 @@ export default function Contact() {
           </Button>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

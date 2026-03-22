@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { useSearchStore } from "@/hooks/useSearchStore";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
@@ -105,7 +106,7 @@ export default function SearchPage() {
           title: story.title,
           subtitle: `${story.sourcesCount} surse · ${story.timeAgo}`,
           href: buildStoryHref(story.id, story.title),
-          kind: "story" as const,
+          kind: "story" as ResultKind,
           score,
         };
       })
@@ -127,7 +128,7 @@ export default function SearchPage() {
           title: figure.name,
           subtitle: figure.role,
           href: `/voce/${figure.slug}`,
-          kind: "voice" as const,
+          kind: "voice" as ResultKind,
           score,
         };
       })
@@ -149,7 +150,7 @@ export default function SearchPage() {
           title: source.name,
           subtitle: source.profile?.currentOwner || source.url,
           href: `/surse/${source.id}`,
-          kind: "source" as const,
+          kind: "source" as ResultKind,
           score,
         };
       })
@@ -170,7 +171,7 @@ export default function SearchPage() {
           title: category.name,
           subtitle: `Categorie: ${category.slug}`,
           href: `/categorie/${category.slug}`,
-          kind: "category" as const,
+          kind: "category" as ResultKind,
           score,
         };
       })
@@ -184,7 +185,7 @@ export default function SearchPage() {
         if (score === 0) return null;
         return {
           ...page,
-          kind: "page" as const,
+          kind: "page" as ResultKind,
           score,
         };
       })
@@ -273,6 +274,8 @@ export default function SearchPage() {
           </div>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }

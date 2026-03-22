@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { NEWS_SOURCES } from "@/types/news";
 import { SourceFavicon } from "@/components/SourceFavicon";
 import { ChevronLeft, Info, Eye, BarChart3, Shield, AlertTriangle } from "lucide-react";
@@ -322,19 +323,7 @@ export default function Metodologie() {
                 </section>
             </main>
 
-            {/* Footer */}
-            <footer className="bg-card border-t border-border mt-12">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <div className="flex items-center gap-2">
-                            <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                            © 2026 thesite.ro
-                        </p>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 }

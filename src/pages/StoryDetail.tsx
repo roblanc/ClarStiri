@@ -1,6 +1,7 @@
 import { NewsSchema } from "@/components/NewsSchema";
 import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { BiasBar } from "@/components/BiasBar";
 import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
@@ -620,24 +621,7 @@ const StoryDetail = () => {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-card border-t border-border mt-12">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-foreground">thesite<span className="text-primary">.ro</span></span>
-            </div>
-            <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-              <Link to="/despre" className="hover:text-foreground transition-colors">Despre</Link>
-              <Link to="/surse" className="hover:text-foreground transition-colors">Surse</Link>
-              <Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link>
-            </nav>
-            <p className="text-sm text-muted-foreground">
-              © 2026 thesite.ro
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
