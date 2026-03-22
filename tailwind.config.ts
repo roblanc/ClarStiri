@@ -23,6 +23,7 @@ export default {
         serif: ["Playfair Display Variable", "Playfair Display", "Georgia", "serif"],
         title: ["VICE Grotesk", "Helvetica", "Arial", "sans-serif"],
         anthropic: ["Newsreader Variable", "Newsreader", "Georgia", "serif"],
+        minimalist: ["Hanken Grotesk", "Helvetica Neue", "Arial", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",

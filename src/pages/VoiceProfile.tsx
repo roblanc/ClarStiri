@@ -212,7 +212,7 @@ const VoiceProfile = () => {
                 {/* Bias quote card */}
                 <div className={cn("mb-8 p-5 rounded-2xl border bg-card flex gap-4 items-start", biasBorder)}>
                     <Activity className={cn("w-4 h-4 mt-0.5 shrink-0", biasText)} />
-                    <p className="text-sm text-muted-foreground leading-relaxed italic">
+                    <p className="text-sm text-muted-foreground leading-relaxed italic font-minimalist">
                         "{figure.bias.description}"
                     </p>
                 </div>
@@ -292,7 +292,7 @@ const VoiceProfile = () => {
                                             <div className="px-6 py-5">
                                                 <blockquote className="relative">
                                                     <Quote className="absolute -left-1 -top-2 w-7 h-7 text-primary/10 rotate-180" />
-                                                    <p className="relative z-10 text-xl md:text-2xl font-serif font-medium italic leading-relaxed text-foreground pl-4">
+                                                    <p className="relative z-10 text-xl md:text-2xl font-minimalist font-medium leading-relaxed text-foreground pl-4">
                                                         "{statement.text}"
                                                     </p>
                                                 </blockquote>

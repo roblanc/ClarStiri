@@ -5,6 +5,8 @@
 @import '@fontsource-variable/playfair-display/wght-italic.css';
 @import '@fontsource-variable/newsreader/wght.css';
 @import '@fontsource-variable/newsreader/wght-italic.css';
+@import '@fontsource/hanken-grotesk/400.css';
+@import '@fontsource/hanken-grotesk/700.css';
 
 @tailwind base;
 @tailwind components;
