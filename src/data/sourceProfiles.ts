@@ -1169,6 +1169,86 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   buletindebucuresti: { id: 'buletindebucuresti', currentOwner: 'Asociația Funky Citizens', editorialLine: 'Publicație bazată pe jurnalism comunitar, investigații și administrație locală în București + Ilfov.', biasRationale: 'Susținută de Funky Citizens, promovează anticorupția, transparența administrativă și libertățile civice (valori specifice centrului și centrului-stânga).', biasScore: -25, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Nivel ridicat de dovedire a faptelor prin hotărâri CGMB și documente de achiziții publice.' },
   ziaruldeiasi: { id: 'ziaruldeiasi', currentOwner: 'Privat', editorialLine: 'Cel mai important ziar local/regional din nord-estul țării.', biasRationale: 'Ziar quality regional, abordează nuanțat teme politice, cu ușoară tradiție academic/culturală datorată specificului universitar al Iașului.', biasScore: 0, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Echilibrat și bine documentat.' },
   kanald: { id: 'kanald', currentOwner: 'Dogan Media International', parentCompany: 'Dogan Holding (Turcia)', editorialLine: 'Televiziune generalistă (divertisment majoritar), plus un jurnal de știri cu audiență masivă la nivel național.', biasRationale: 'Canal de TV cu acționariat turc care preferă să stea departe de conflictele politice majore. Oferă știri neutre pe partea politică, preferând subiecte sociale, accidente și drame.', biasScore: 5, confidence: 'low', lastAnalysed: '2026-03-21', factualityRationale: 'Tabloidizare/emoționalizare în segmentul social, factual pe evenimente majore.' },
+  
+  // --- Adăugate 2026-03 ---
+  pressone: {
+    id: 'pressone',
+    foundedYear: 2015,
+    founders: ['Don Lothrop'],
+    currentOwner: 'Don Lothrop',
+    editorialLine: 'Jurnalism independent de lung format („slow journalism”), axat pe reportaje de profunzime și analize de impact social.',
+    biasRationale: 'Promovează valorile democratice, statul de drept și protecția mediului. Are o linie editorială progresistă și critică față de sistemul politic tradițional, integrându-se în spectrul centru-stânga prin focusul pe drepturi civile și reformă.',
+    biasScore: -30,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Jurnalism documentat masiv, premiat pentru acuratețe.'
+  },
+  europalibera: {
+    id: 'europalibera',
+    currentOwner: 'US Congress / USAGM',
+    parentCompany: 'Radio Free Europe / Radio Liberty',
+    editorialLine: 'Serviciu public internațional cu focus pe democrație, drepturile omului și monitorizarea puterii politice.',
+    biasRationale: 'Finanțat de Congresul SUA, promovează valorile atlantiste și pro-occidentale. Critică ferm autoritarismul și corupția. În contextul românesc, este percepută ca fiind de centru-stânga reformistă datorită focusului pe transparență și instituții.',
+    biasScore: -25,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Standarde internaționale riguroase de verificare.'
+  },
+  caleaeuropeana: {
+    id: 'caleaeuropeana',
+    founders: ['Dan Cărbunaru'],
+    currentOwner: 'Dan Cărbunaru',
+    editorialLine: 'Publicație specializată în afaceri europene, diplomație și politici comunitare.',
+    biasRationale: 'Axată pe integrare europeană și cooperare internațională. Tonul este instituțional și factual, fără o coloratură politică internă dominantă, încadrându-se în centru.',
+    biasScore: 0,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Focus pe documente oficiale și declarații diplomatice.'
+  },
+  juridice: {
+    id: 'juridice',
+    founders: ['Andrei Săvescu'],
+    currentOwner: 'Societatea de Științe Juridice',
+    editorialLine: 'Portal juridic specializat, oferind noutăți legislative și analize de drept.',
+    biasRationale: 'Sursă tehnică și profesională. Se limitează la interpretări juridice și știri legislative fărtă a lua poziții partizane, fiind o sursă de referință centristă prin obiectivitate tehnică.',
+    biasScore: 0,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Bazat pe texte de lege și practică judiciară.'
+  },
+  dela0: {
+    id: 'dela0',
+    founders: ['Iulian Andrei', 'Diana Oncioiu', 'Vlad Stoicescu'],
+    currentOwner: 'Independent (Asociația Dela0)',
+    editorialLine: 'Investigații sociale și reportaje despre categoriile vulnerabile și reformele instituționale.',
+    biasRationale: 'Pune mare accent pe dreptate socială și critica modului în care statul gestionează problemele cetățenilor. Se poziționează în zona centru-stânga prin valorile progresiste și activismul civic prin jurnalism.',
+    biasScore: -40,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Investigații cu documentare primară solidă.'
+  },
+  context: {
+    id: 'context',
+    founders: ['Attila Biro', 'Ana Poenariu'],
+    currentOwner: 'Asociația Context',
+    editorialLine: 'Unitate de investigații transfrontaliere, parte din rețeaua OCCRP.',
+    biasRationale: 'Podus de jurnaliști de investigație cu experiență, focusat pe crimă organizată și corupție la nivel înalt. Urmează linia jurnalismului anticorupție, specifică centrului-stânga reformist.',
+    biasScore: -20,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Standarde OCCRP de verificare și fact-checking.'
+  },
+  newsro: {
+    id: 'newsro',
+    founders: ['Foști jurnaliști Mediafax'],
+    currentOwner: 'News.ro (Orlando Nicoară)',
+    editorialLine: 'Agenție de presă cu flux de știri generalist (politic, economic, social).',
+    biasRationale: 'Funcționează ca agenție de furnizare de conținut B2B. Menține un ton factual și echilibrat pentru a satisface o clientelă diversă, fiind o sursă de centru.',
+    biasScore: -5,
+    confidence: 'high',
+    lastAnalysed: '2026-03-22',
+    factualityRationale: 'Sursă primară de știri de agenție.'
+  },
 };
 
 // ============================================================
