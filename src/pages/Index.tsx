@@ -212,6 +212,10 @@ const Index = () => {
                 <img
                   src="/hero-illustration-headphones.webp"
                   alt="ClarStiri Ascultător"
+                  width={480}
+                  height={482}
+                  loading="eager"
+                  fetchPriority="high"
                   className="w-full h-auto object-contain dark:invert transform scale-125"
                 />
               </div>
@@ -227,6 +231,8 @@ const Index = () => {
                   <img
                     src="/hero-illustration-headphones.webp"
                     alt="ClarStiri Ascultător"
+                    width={480}
+                    height={482}
                     className="w-full h-full object-contain dark:invert pointer-events-none"
                   />
                 </div>

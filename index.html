@@ -15,6 +15,8 @@
 
   <!-- Preload critical custom font (stable path, used in header logo) -->
   <link rel="preload" href="/fonts/hoolister.otf" as="font" type="font/otf" crossorigin />
+  <!-- Preload hero illustration (LCP element on mobile) -->
+  <link rel="preload" href="/hero-illustration-headphones.webp" as="image" type="image/webp" fetchpriority="high" />
   <!-- Preconnect for image CDN — no crossorigin (plain img tags don't use CORS) -->
   <link rel="preconnect" href="https://wsrv.nl" />
   <!-- DNS prefetch for image sources and analytics (non-blocking) -->

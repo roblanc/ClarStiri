@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
 import { CoverageBar } from "./CoverageBar";
-import { getThumbnailUrl } from "@/utils/imageOptimizer";
+import { getThumbnailUrl, getCardThumbUrl } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -65,7 +65,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
               
               <div className="w-[124px] h-[82px] shrink-0 rounded-[6px] overflow-hidden relative shadow-sm border border-border/40">
                 <NewsImage
-                  src={getThumbnailUrl(news.image)}
+                  src={getCardThumbUrl(news.image)}
                   seed={news.title}
                   loading={priority ? 'eager' : 'lazy'}
                   decoding={priority ? 'sync' : 'async'}
@@ -153,7 +153,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
           <div className="flex gap-4">
             <div className="w-24 h-24 flex-shrink-0 border border-border overflow-hidden">
               <NewsImage
-                src={getThumbnailUrl(news.image)}
+                src={getCardThumbUrl(news.image)}
                 seed={news.title}
                 loading="lazy"
                 decoding="async"

@@ -108,6 +108,8 @@ export function Header() {
             <img
               src="/hero-illustration-headphones.webp"
               alt="ClarStiri Logo"
+              width={480}
+              height={482}
               className="h-10 md:h-12 w-auto object-contain pointer-events-none"
             />
             <div className="flex items-center gap-0 font-berthold text-3xl md:text-4xl font-normal text-black tracking-tight group-hover:opacity-80 transition-opacity">
