@@ -28,9 +28,10 @@ export interface NewsItem {
 interface NewsCardProps {
   news: NewsItem;
   variant?: 'default' | 'featured' | 'compact' | 'poster';
+  priority?: boolean;
 }
 
-export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
+export function NewsCard({ news, variant = 'default', priority = false }: NewsCardProps) {
   const getBlindspotLabel = (blindspot: string | undefined) => {
     if (blindspot === 'left') return 'Ignorat de Stânga';
     if (blindspot === 'right') return 'Ignorat de Dreapta';
@@ -66,8 +67,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
                 <NewsImage
                   src={getThumbnailUrl(news.image)}
                   seed={news.title}
-                  loading="lazy"
-                  decoding="async"
+                  loading={priority ? 'eager' : 'lazy'}
+                  decoding={priority ? 'sync' : 'async'}
+                  fetchPriority={priority ? 'high' : undefined}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
                 {blindspotLabel && (
@@ -93,8 +95,9 @@ export function NewsCard({ news, variant = 'default' }: NewsCardProps) {
               <NewsImage
                 src={getThumbnailUrl(news.image)}
                 seed={news.title}
-                loading="lazy"
-                decoding="async"
+                loading={priority ? 'eager' : 'lazy'}
+                decoding={priority ? 'sync' : 'async'}
+                fetchPriority={priority ? 'high' : undefined}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               />
 
