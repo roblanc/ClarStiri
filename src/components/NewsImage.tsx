@@ -32,9 +32,13 @@ interface NewsImageProps {
   alt?: string;
   className?: string;
   style?: React.CSSProperties;
+  width?: number | string;
+  height?: number | string;
   loading?: 'lazy' | 'eager';
   decoding?: 'async' | 'auto' | 'sync';
   fetchPriority?: 'high' | 'low' | 'auto';
+  srcSet?: string;
+  sizes?: string;
 }
 
 export function NewsImage({
@@ -46,6 +50,10 @@ export function NewsImage({
   loading = 'lazy',
   decoding = 'async',
   fetchPriority,
+  width,
+  height,
+  srcSet,
+  sizes,
 }: NewsImageProps) {
   const [displaySrc, setDisplaySrc] = useState(src);
   const [failed, setFailed] = useState(!src);
@@ -91,6 +99,10 @@ export function NewsImage({
       style={style}
       loading={loading}
       decoding={decoding}
+      width={width}
+      height={height}
+      srcSet={srcSet}
+      sizes={sizes}
       {...(fetchPriority ? { fetchPriority } : {})}
       onError={handleError}
     />

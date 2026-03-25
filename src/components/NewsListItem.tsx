@@ -57,7 +57,10 @@ export function NewsListItem({ story }: NewsListItemProps) {
             <NewsImage
               src={getThumbnailUrl(story.image)}
               seed={story.title}
+              width={112}
+              height={80}
               loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover rounded-none shadow-md"
               style={{
                 transform: 'rotateY(0deg)',

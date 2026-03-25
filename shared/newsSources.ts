@@ -11,6 +11,7 @@ export interface BaseNewsSource {
   bias: SourceBias;
   factuality: SourceFactuality;
   category: SourceCategory;
+  customWeights?: { left: number; center: number; right: number };
 }
 
 export const NEWS_SOURCES_BASE = [
@@ -85,6 +86,7 @@ export const NEWS_SOURCES_BASE = [
   { id: 'dela0', name: 'Dela0', url: 'https://beta.dela0.ro', rssUrl: 'https://beta.dela0.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   { id: 'context', name: 'Context.ro', url: 'https://context.ro', rssUrl: 'https://context.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   { id: 'newsro', name: 'News.ro', url: 'https://www.news.ro', rssUrl: 'https://www.news.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'puterea', name: 'Puterea.ro', url: 'https://www.puterea.ro', rssUrl: 'https://www.puterea.ro/feed/', bias: 'right', factuality: 'mixed', category: 'mainstream', customWeights: { left: 5, center: 25, right: 70 } },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];

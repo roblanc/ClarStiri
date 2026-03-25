@@ -105,7 +105,7 @@ const normalizeSearchText = (text: string) =>
     .trim();
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching, isLoadingFresh } = useAggregatedNews(100);
+  const { data: stories, isLoading, error, refetch, isFetching, isLoadingFresh } = useAggregatedNews(40);
   const [visible, setVisible] = useState(BATCH);
   const { query } = useSearchStore();
   const normalizedQuery = normalizeSearchText(query || "");
@@ -208,7 +208,7 @@ const Index = () => {
             {/* Left Column (Title, Text, Boy) */}
             <div className="block flex-1 max-w-[600px]">
               {/* Mobile Boy Image */}
-              <div className="md:hidden float-right w-40 -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
+              <div className="md:hidden float-right w-40 min-h-[160px] -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
                   src="/hero-illustration-headphones.webp"
                   alt="ClarStiri Ascultător"
@@ -386,7 +386,30 @@ const Index = () => {
         {/* Banner actualizare — arată când e date din cache dar se fetchează fresh */}
         {isLoadingFresh && (
           <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground w-fit mx-auto mb-4">
-            <span className="inline-block h-2 w-2 rounded-full bg-primary animate-pulse" />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
+              <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="1.2" opacity="0.3" />
+              {[0, 1, 2].map((i) => (
+                <rect
+                  key={i}
+                  x="5"
+                  y={5 + i * 4}
+                  width={i === 2 ? 6 : 10}
+                  height="2"
+                  rx="1"
+                  fill="currentColor"
+                  style={{
+                    animation: 'newsLineGrow 1.8s ease-in-out infinite',
+                    animationDelay: `${i * 0.3}s`,
+                  }}
+                />
+              ))}
+              <style>{`
+                @keyframes newsLineGrow {
+                  0%, 100% { opacity: 0.2; transform: scaleX(0.4); transform-origin: 5px; }
+                  50% { opacity: 0.9; transform: scaleX(1); transform-origin: 5px; }
+                }
+              `}</style>
+            </svg>
             Se actualizează știrile…
           </div>
         )}

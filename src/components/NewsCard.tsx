@@ -67,6 +67,8 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                 <NewsImage
                   src={getCardThumbUrl(news.image)}
                   seed={news.title}
+                  width={124}
+                  height={82}
                   loading={priority ? 'eager' : 'lazy'}
                   decoding={priority ? 'sync' : 'async'}
                   fetchPriority={priority ? 'high' : undefined}
@@ -95,6 +97,8 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
               <NewsImage
                 src={getThumbnailUrl(news.image)}
                 seed={news.title}
+                width={800}
+                height={400}
                 loading={priority ? 'eager' : 'lazy'}
                 decoding={priority ? 'sync' : 'async'}
                 fetchPriority={priority ? 'high' : undefined}
@@ -155,6 +159,8 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
               <NewsImage
                 src={getCardThumbUrl(news.image)}
                 seed={news.title}
+                width={96}
+                height={96}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -212,6 +218,8 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
             <NewsImage
               src={getThumbnailUrl(news.image)}
               seed={news.title}
+              width={350}
+              height={224}
               loading="lazy"
               decoding="async"
               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"

@@ -96,7 +96,7 @@ export function calculateBiasDistribution(sources: RSSNewsItem[]): { left: numbe
     let totalLeft = 0, totalCenter = 0, totalRight = 0;
 
     sources.forEach(item => {
-        const weights = BIAS_WEIGHT_MAP[item.source.bias] || BIAS_WEIGHT_MAP['center'];
+        const weights = item.source.customWeights || BIAS_WEIGHT_MAP[item.source.bias] || BIAS_WEIGHT_MAP['center'];
         totalLeft += weights.left;
         totalCenter += weights.center;
         totalRight += weights.right;

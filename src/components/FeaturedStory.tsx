@@ -39,6 +39,8 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
           <NewsImage
             src={getFeaturedImageUrl(story.image)}
             seed={story.title}
+            width={800}
+            height={450}
             loading="eager"
             fetchPriority="high"
             decoding="async"
