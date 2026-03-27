@@ -43,7 +43,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
   if (variant === 'poster') {
     return (
       <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article data-story-id={news.id} className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-[10px] md:border">
+        <article data-story-id={news.id} className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-none md:border">
           
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">
@@ -63,7 +63,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                 {news.title}
               </h3>
               
-              <div className="w-[124px] h-[82px] shrink-0 rounded-[6px] overflow-hidden relative shadow-sm border border-border/40">
+              <div className="w-[124px] h-[82px] shrink-0 rounded-none overflow-hidden relative shadow-sm border border-border/40">
                 <NewsImage
                   src={getCardThumbUrl(news.image)}
                   seed={news.title}
@@ -79,7 +79,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                     <BiasBadge
                       type={news.blindspot as 'left' | 'right'}
                       label={blindspotLabel}
-                      className="rounded-sm border-none shadow-sm backdrop-blur-md bg-background/80 scale-[0.6] origin-top-left px-1.5 py-0.5"
+                      className="rounded-none border-none shadow-sm backdrop-blur-md bg-background/80 scale-[0.6] origin-top-left px-1.5 py-0.5"
                     />
                   </div>
                 )}
@@ -110,11 +110,11 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
 
               <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
                 <div className="flex items-center gap-1.5">
-                  <span className="rounded-full bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
+                  <span className="rounded-none bg-black/70 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/90 backdrop-blur-sm sm:text-[9px]">
                     {news.sourcesCount} surse
                   </span>
                   {news.timeAgo && !news.timeAgo.toLowerCase().includes('invalid') && (
-                    <span className="rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-semibold text-white/75 backdrop-blur-sm sm:text-[9px]">
+                    <span className="rounded-none bg-black/50 px-2.5 py-0.5 text-[10px] font-semibold text-white/75 backdrop-blur-sm sm:text-[9px]">
                       {news.timeAgo}
                     </span>
                   )}
@@ -124,7 +124,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                   <BiasBadge
                     type={news.blindspot as 'left' | 'right'}
                     label={blindspotLabel}
-                    className="rounded-full border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
+                    className="rounded-none border-none bg-white/86 px-3 py-1 text-[10px] shadow-none backdrop-blur-sm"
                   />
                 ) : null}
               </div>
@@ -229,7 +229,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                 <BiasBadge
                   type={news.blindspot as 'left' | 'right'}
                   label={blindspotLabel}
-                  className="rounded-full border-none shadow-lg backdrop-blur-md bg-background/60 scale-[0.6] md:scale-100 origin-top-left"
+                  className="rounded-none border-none shadow-lg backdrop-blur-md bg-background/60 scale-[0.6] md:scale-100 origin-top-left"
                 />
               </div>
             )}

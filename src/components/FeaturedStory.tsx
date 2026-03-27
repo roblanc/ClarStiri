@@ -47,7 +47,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
             className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute top-4 left-4">
-            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">
+            <span className="bg-primary text-primary-foreground text-[10px] font-bold px-2 py-1 rounded-none uppercase tracking-wider">
               Top Story
             </span>
           </div>
@@ -106,7 +106,7 @@ export function FeaturedStory({ story }: FeaturedStoryProps) {
               </div>
 
               {/* Solid Thick Bar */}
-              <div className="flex h-2.5 sm:h-3 w-full rounded-[3px] overflow-hidden shadow-sm border border-border/20">
+              <div className="flex h-2.5 sm:h-3 w-full rounded-none overflow-hidden shadow-sm border border-border/20">
                 {story.bias.left > 0 && <div className="h-full transition-all duration-500" style={{ width: `${story.bias.left}%`, backgroundColor: '#1d4ed8' }} />}
                 {story.bias.center > 0 && <div className="h-full transition-all duration-500 bg-white dark:bg-[#e2e8f0]" style={{ width: `${story.bias.center}%` }} />}
                 {story.bias.right > 0 && <div className="h-full transition-all duration-500" style={{ width: `${story.bias.right}%`, backgroundColor: '#7f1d1d' }} />}

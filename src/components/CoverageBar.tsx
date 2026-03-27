@@ -21,7 +21,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
   });
 
   return (
-    <div className={cn("flex h-8 sm:h-9 w-full rounded-[6px] shadow-sm border border-border/20", className)}>
+    <div className={cn("flex h-8 sm:h-9 w-full shadow-sm border border-border/20", className)}>
 
       {pLeft > 0 && (
         <div

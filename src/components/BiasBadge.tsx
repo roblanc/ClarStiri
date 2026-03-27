@@ -28,7 +28,7 @@ export function BiasBadge({ type, label, className }: BiasBadgeProps) {
   
   return (
     <span className={cn(
-      "inline-flex items-center px-2 py-0.5 rounded text-xs font-medium",
+      "inline-flex items-center px-2 py-0.5 rounded-none text-xs font-medium",
       config.className,
       className
     )}>
