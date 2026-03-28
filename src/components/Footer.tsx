@@ -10,7 +10,7 @@ export function Footer() {
       links: [
         { to: "/", label: "Feed Știri" },
         { to: "/surse", label: "Catalog Surse" },
-        { to: "/influenceri", label: "Barometru Opinie" },
+        { to: "/tribuni", label: "Tribuni" },
       ],
     },
     {

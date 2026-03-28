@@ -61,9 +61,10 @@ const RoutedApp = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/cauta" element={<SearchPage />} />
           <Route path="/categorie/:slug" element={<CategoryPage />} />
-          <Route path="/influenceri" element={<Barometer />} />
-          <Route path="/barometru" element={<Navigate to="/influenceri" replace />} />
-          <Route path="/voci" element={<Navigate to="/influenceri" replace />} />
+          <Route path="/tribuni" element={<Barometer />} />
+          <Route path="/influenceri" element={<Navigate to="/tribuni" replace />} />
+          <Route path="/barometru" element={<Navigate to="/tribuni" replace />} />
+          <Route path="/voci" element={<Navigate to="/tribuni" replace />} />
           <Route path="/voce/:slug" element={<VoiceProfile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

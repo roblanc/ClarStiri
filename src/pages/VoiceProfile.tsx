@@ -25,8 +25,8 @@ const VoiceProfile = () => {
                 <div className="container mx-auto px-4 py-8 text-center flex flex-col items-center justify-center min-h-[60vh]">
                     <h1 className="text-3xl font-bold mb-4 font-serif text-foreground/80">Profilul nu a fost găsit</h1>
                     <p className="text-muted-foreground mb-8">Ne pare rău, dar vocea căutată nu există în baza noastră de date.</p>
-                    <Link to="/influenceri">
-                        <Button variant="default" className="rounded-full px-8">Înapoi la Influenceri</Button>
+                    <Link to="/tribuni">
+                        <Button variant="default" className="rounded-full px-8">Înapoi la Tribuni</Button>
                     </Link>
                 </div>
                 <Footer />
@@ -83,11 +83,11 @@ const VoiceProfile = () => {
                 <div className="container mx-auto px-4 py-10 max-w-5xl relative z-10">
                     {/* Back link */}
                     <Link
-                        to="/influenceri"
+                        to="/tribuni"
                         className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors group mb-10"
                     >
                         <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-                        Voci &amp; Influenceri
+                        Voci &amp; Tribuni
                     </Link>
 
                     <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">

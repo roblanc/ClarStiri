@@ -503,10 +503,10 @@ const StudioPreview = () => {
                 Voci relevante ({matchedVoices.length})
               </h2>
               <Link
-                to="/influenceri"
+                to="/tribuni"
                 className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.22em] text-muted-foreground hover:text-foreground"
               >
-                Vezi influenceri
+                Vezi Tribuni
                 <ArrowUpRight className="h-3.5 w-3.5" />
               </Link>
             </div>

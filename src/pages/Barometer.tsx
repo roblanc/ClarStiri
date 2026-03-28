@@ -40,7 +40,7 @@ const Barometer = () => {
                     <div>
                         <h1 className="text-4xl md:text-5xl font-serif font-bold mb-4 flex items-center gap-3">
                             <Target className="w-10 h-10 text-primary" />
-                            Influenceri & Jurnaliști
+                            Tribuni
                         </h1>
                         <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
                             Cine face agenda publică? Analizăm poziționarea ideologică și cele mai recente declarații ale persoanelor care influențează opinia publică în România.

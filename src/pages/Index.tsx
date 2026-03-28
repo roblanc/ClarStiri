@@ -444,8 +444,8 @@ const Index = () => {
               <h2 className="font-serif text-xl text-foreground">
                 Voci Relevante ({matchedVoices.length})
               </h2>
-              <Link to="/influenceri" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
-                Vezi Influenceri
+              <Link to="/tribuni" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors">
+                Vezi Tribuni
               </Link>
             </div>
 

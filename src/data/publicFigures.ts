@@ -1357,5 +1357,111 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'center'
             }
         ]
+    },
+    {
+        id: 'andreea-esca',
+        slug: 'andreea-esca',
+        name: 'Andreea Esca',
+        role: 'Realizator TV / Jurnalist',
+        image: '/images/voices/andreea-esca.png',
+        bias: {
+            leaning: 'center',
+            score: 5,
+            description: 'Jurnalism de știri clasic, neutru editorial. Nu ia poziții politice explicite. Prezintă știrile cu o distanță profesionistă față de subiect, ceea ce o plasează în centru, chiar dacă PRO TV ca instituție are o orientare pro-occidentală și pro-europeană.'
+        },
+        description: 'Andreea Esca este cel mai longeviv și recunoscut prezentator de știri din România, cu o carieră de peste 30 de ani la PRO TV. Este un simbol al știrilor de seară în România, cu un indice de credibilitate excepțional de ridicat față de restul presei audio-vizuale. Stilul său este profesionist, distanțat și rar partizan, ceea ce o diferențiază radical de comentatorii politici cu care împarte ecranele.',
+        socialLinks: {
+            instagram: 'https://instagram.com/andreeaesca',
+        },
+        targets: [],
+        rhetoric: { aggressiveness: 10, irony: 20 },
+        contextNotes: [
+            'Este prezentatoarea știrilor de seară de la PRO TV din 1995 — una dintre cele mai lungi cariere continue în televiziunea românească.',
+            'A câștigat numeroase premii de jurnalism și este constant clasată printre cele mai credibile figuri media din România în sondajele de opinie.',
+            'Nu se implică public în dezbateri politice și evită declarațiile partizane, menținând o distanță editorială față de subiectele abordate.',
+        ],
+        statements: [
+            {
+                id: 'ae-s1',
+                text: 'Jurnalismul înseamnă să spui ce s-a întâmplat, nu ce crezi tu că ar fi trebuit să se întâmple.',
+                date: '2024-11-10',
+                sourceUrl: 'https://stirileprotv.ro',
+                topic: 'Jurnalism',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
+    },
+    {
+        id: 'selly',
+        slug: 'selly',
+        name: 'Selly',
+        role: 'Creator de Conținut / Antreprenor',
+        image: '/images/voices/selly.png',
+        bias: {
+            leaning: 'center-right',
+            score: 22,
+            description: 'Discurs centrat pe antreprenoriat, meritocreație și critici la adresa birocrației și a statului ineficient. Nu se identifică explicit cu un partid, dar mesajele sale rezonează cu valorile centrului-dreapta liberal: individualism economic, digitalizare, critici la adresa sistemului de educație. A intervenit public în alegerile din 2024 susținând votul anti-Georgescu.'
+        },
+        description: 'Andrei Șelaru, cunoscut ca Selly, este cel mai urmărit creator de conținut din România cu peste 3 milioane de abonați pe YouTube. La vârsta de 22 de ani conduce deja un grup de companii media (Selly Media Group). Influența sa depășește entertainment-ul: în 2024 a mobilizat activ publicul tânăr să voteze împotriva extremismului, devenind un actor neașteptat în peisajul civic. Reprezentativ pentru vocea Gen Z românesc format digital.',
+        socialLinks: {
+            youtube: 'https://youtube.com/selly',
+            instagram: 'https://instagram.com/sellytherobot',
+            tiktok: 'https://tiktok.com/@selly',
+        },
+        targets: ['Birocrația', 'Sistemul de Educație', 'Extremismul Politic'],
+        rhetoric: { aggressiveness: 35, irony: 65 },
+        contextNotes: [
+            'A început să creeze conținut la 11 ani și a construit unul dintre cele mai mari imperii media digitale românești până la 22 de ani.',
+            'A publicat cartea „Da, mă numesc Andrei" și este unul dintre puținii influenceri care a ieșit public împotriva lui Călin Georgescu în turul 1 al alegerilor din 2024.',
+            'Fondatorul platformei Thinkdigital și al mai multor companii din sfera creator economy.',
+        ],
+        statements: [
+            {
+                id: 'selly-s1',
+                text: 'Nu îmi pasă ce partid alegi, dar nu pot să stau cu mâinile în sân când oameni cu idei extremiste ajung la putere. Trebuie să votăm.',
+                date: '2024-11-22',
+                sourceUrl: 'https://youtube.com/selly',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'center'
+            }
+        ]
+    },
+    {
+        id: 'ion-cristoiu',
+        slug: 'ion-cristoiu',
+        name: 'Ion Cristoiu',
+        role: 'Jurnalist / Analist Politic',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ion_Cristoiu.jpg/220px-Ion_Cristoiu.jpg',
+        bias: {
+            leaning: 'center-right',
+            score: 45,
+            description: 'Analist politic cu un cinism sistematic față de clasa politică în general, dar cu o orientare culturală și valorică conservatoare. Critic al establishmentului pro-occidental, simpatizant al suveranismului cultural fără a îmbrățișa extremismul. Aproape de axa PSD ca preferință de sistem, față de reformismul USR pe care îl consideră importat și artificial.'
+        },
+        description: 'Ion Cristoiu este decarul presei românești — jurnalist de investigație, memorialist și analist politic cu o carieră de 50 de ani. Fondatorul publicațiilor Evenimentul Zilei și Jurnalul Național, acum activ cu blogul și podcastul „Cristoiu". Cel mai vizualizat jurnalist veteran pe YouTube în România, cu sute de mii de abonați. Stilul său combină erudiția istorică cu un populism de dreapta ce contestă narativele oficiale ale presei mainstream.',
+        socialLinks: {
+            youtube: 'https://youtube.com/@CristoiuBlog',
+            website: 'https://cristoiu.ro',
+        },
+        targets: ['Presa Mainstream', 'USR / Clasa Reformistă', 'Instituțiile Statului Paralel', 'Serviciile Secrete'],
+        rhetoric: { aggressiveness: 65, irony: 80 },
+        contextNotes: [
+            'A fondat Evenimentul Zilei în 1991, unul dintre cele mai importante cotidiane din istoria presei românești.',
+            'Este unul dintre cei mai vizualizați jurnaliști pe YouTube din România, cu episoade de analiză politică ce depășesc sute de mii de vizualizări.',
+            'Criticat de presa mainstream pentru apropierea de narative anti-sistem, susțin deschis că presa centrală este controlată politic.',
+            'Memorialist prolific — a publicat zeci de volume despre culisele politicii românești și ale tranziției post-comuniste.',
+        ],
+        statements: [
+            {
+                id: 'ic-s1',
+                text: 'Presa românească nu mai face jurnalism. Face servicii politice. Cine nu vede asta nu vrea să vadă.',
+                date: '2025-09-15',
+                sourceUrl: 'https://cristoiu.ro',
+                topic: 'Jurnalism',
+                impact: 'high',
+                bias: 'center-right'
+            }
+        ]
     }
 ];

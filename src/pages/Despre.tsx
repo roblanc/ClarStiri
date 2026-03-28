@@ -58,7 +58,7 @@ const PRINCIPLES = [
   {
     icon: Users,
     title: "Barometrul de opinie",
-    body: "Secțiunea „Influenceri” analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.",
+    body: “Secțiunea „Tribuni” analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.”,
   },
   {
     icon: Eye,
@@ -197,7 +197,7 @@ export default function Despre() {
               Feed Știri
             </Link>
             <Link
-              to="/influenceri"
+              to="/tribuni"
               className="text-[10px] font-black uppercase tracking-[0.2em] px-6 py-3 border border-border rounded-full hover:bg-muted transition-colors"
             >
               Barometru Opinie
