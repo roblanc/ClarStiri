@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
 import { CoverageBar } from "./CoverageBar";
@@ -7,6 +8,7 @@ import { AlertTriangle, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buildStoryHref } from "@/utils/storyRoute";
 import { getPosterTitleSizing } from "@/utils/posterTypography";
+import { useTextFit } from "@/hooks/useTextFit";
 
 export interface NewsItem {
   id: string;
@@ -32,6 +34,19 @@ interface NewsCardProps {
 }
 
 export function NewsCard({ news, variant = 'default', priority = false }: NewsCardProps) {
+  const posterTitleContainerRef = useRef<HTMLDivElement>(null);
+  const fittedFontSize = useTextFit(
+    posterTitleContainerRef,
+    news.title,
+    {
+      fontFamily: "\"VICE Grotesk\", Helvetica, Arial, sans-serif",
+      fontWeight: 700,
+      minSize: 17,
+      maxSize: 30,
+      maxLines: 4,
+    }
+  );
+
   const getBlindspotLabel = (blindspot: string | undefined) => {
     if (blindspot === 'left') return 'Ignorat de Stânga';
     if (blindspot === 'right') return 'Ignorat de Dreapta';
@@ -129,12 +144,17 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
                 ) : null}
               </div>
 
-              <div className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5 pt-20 sm:pt-14">
+              <div
+                ref={posterTitleContainerRef}
+                className="absolute inset-x-0 bottom-0 px-4 pb-4 sm:px-5 sm:pb-5 pt-20 sm:pt-14"
+              >
                 <h3
                   className={[
-                    "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-                    getPosterTitleSizing(news.title),
+                    "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] line-clamp-4",
+                    // Fall back to heuristic classes until canvas measurement is ready
+                    fittedFontSize == null ? getPosterTitleSizing(news.title) : "",
                   ].join(" ")}
+                  style={fittedFontSize != null ? { fontSize: fittedFontSize, lineHeight: 1.08 } : undefined}
                 >
                   {news.title}
                 </h3>
