@@ -78,6 +78,10 @@ export const NEWS_SOURCES_BASE = [
   { id: 'buletindebucuresti', name: 'Buletin de București', url: 'https://buletin.de/bucuresti', rssUrl: 'https://buletin.de/bucuresti/feed/', bias: 'center', factuality: 'high', category: 'independent' },
   { id: 'ziaruldeiasi', name: 'Ziarul de Iași', url: 'https://www.ziaruldeiasi.ro', rssUrl: 'https://www.ziaruldeiasi.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
   { id: 'kanald', name: 'Kanal D', url: 'https://www.stirilekanald.ro', rssUrl: 'https://www.stirilekanald.ro/feed', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  // ── Adăugat 2026-03-28 ───────────────────────────────────────────────────
+  { id: 'iamnews', name: 'IAMnews', url: 'https://iamnews.ro', rssUrl: 'https://iamnews.ro/rss/', bias: 'center-right', factuality: 'mixed', category: 'mainstream' },
+  { id: 'republica', name: 'Republica.ro', url: 'https://republica.ro', rssUrl: 'https://republica.ro/rss/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  { id: 'investigatoria', name: 'Investigatoria', url: 'https://investigatoria.ro', rssUrl: 'https://investigatoria.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   // ── Adăugat 2026-03 ──────────────────────────────────────────────────────
   { id: 'pressone', name: 'PressOne', url: 'https://pressone.ro', rssUrl: 'https://pressone.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   { id: 'europalibera', name: 'Europa Liberă România', url: 'https://romania.europalibera.org', rssUrl: 'https://romania.europalibera.org/api/zvo_mml-vomx-tpeukvm_', bias: 'center-left', factuality: 'high', category: 'independent' },
