@@ -58,7 +58,7 @@ const PRINCIPLES = [
   {
     icon: Users,
     title: "Barometrul de opinie",
-    body: “Secțiunea „Tribuni” analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.”,
+    body: "Secțiunea „Tribuni” analizează figurile publice care modelează discursul mediatic — jurnaliști, comentatori, politicieni. Bias-ul lor e calculat pe baza declarațiilor documentate și a orientării editoriale, nu a opiniei noastre.",
   },
   {
     icon: Eye,
