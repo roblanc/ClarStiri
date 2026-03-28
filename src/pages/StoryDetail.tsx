@@ -3,16 +3,19 @@ import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BiasBar } from "@/components/BiasBar";
-import { BiasDistribution } from "@/components/BiasDistribution";
 import { useAggregatedNews } from "@/hooks/useNews";
 import type { AggregatedStory } from "@/types/news";
 import { normalizeStorySlug, toStorySlug, buildStoryHref } from "@/utils/storyRoute";
-import { ArrowLeft, ExternalLink, Clock, MapPin, Loader2, Search, Filter, ChevronDown, AlertCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, ExternalLink, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { ShareButton } from "@/components/ShareButton";
 import { useMemo, useState, useEffect } from "react";
 import { decodeHtmlEntities } from "../../shared/htmlEntities";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 // Mapare bias text pentru filtre
 const BIAS_LABELS = {
@@ -44,6 +47,76 @@ const getBiasLabel = (bias: string) => {
     'right': 'Dreapta',
   };
   return labels[bias] || 'Centru';
+};
+
+const getDominantBiasMeta = (bias: { left: number; center: number; right: number }) => {
+  if (bias.center >= bias.left && bias.center >= bias.right) {
+    return {
+      label: 'Centru',
+      value: bias.center,
+      className: 'bg-slate-100 text-slate-700 border-slate-200',
+      accentClass: 'text-slate-700',
+    };
+  }
+
+  if (bias.left > bias.right) {
+    return {
+      label: 'Stânga',
+      value: bias.left,
+      className: 'bg-blue-100 text-blue-700 border-blue-200',
+      accentClass: 'text-blue-700',
+    };
+  }
+
+  return {
+    label: 'Dreapta',
+    value: bias.right,
+    className: 'bg-red-100 text-red-700 border-red-200',
+    accentClass: 'text-red-700',
+  };
+};
+
+const getBlindspotMeta = (blindspot?: AggregatedStory["blindspot"]) => {
+  if (blindspot === 'left') {
+    return {
+      label: 'Punct orb de stânga',
+      description: 'Subiectul pare acoperit mai mult de surse din afara zonei de stânga.',
+      className: 'bg-blue-100 text-blue-700 border-blue-200',
+    };
+  }
+
+  if (blindspot === 'right') {
+    return {
+      label: 'Punct orb de dreapta',
+      description: 'Subiectul pare acoperit mai mult de surse din afara zonei de dreapta.',
+      className: 'bg-red-100 text-red-700 border-red-200',
+    };
+  }
+
+  return null;
+};
+
+const formatStoryTimestamp = (date: Date) =>
+  new Intl.DateTimeFormat('ro-RO', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+
+const formatArticleTimestamp = (value: string) => {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat('ro-RO', {
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(parsed);
 };
 
 const toValidDate = (value: unknown): Date | null => {
@@ -279,13 +352,47 @@ const StoryDetail = () => {
   const centerCount = groupedSources?.center.length || 0;
   const rightCount = groupedSources?.right.length || 0;
 
-  // Determină bias-ul dominant
-  const dominantBias = resolvedStory.bias.center >= resolvedStory.bias.left && resolvedStory.bias.center >= resolvedStory.bias.right
-    ? 'Centru'
-    : resolvedStory.bias.left > resolvedStory.bias.right
-      ? 'Stânga'
-      : 'Dreapta';
   const storyPublishedAt = toValidDate(resolvedStory.publishedAt) ?? new Date();
+  const dominantBias = getDominantBiasMeta(resolvedStory.bias);
+  const blindspotMeta = getBlindspotMeta(resolvedStory.blindspot);
+  const storySummary = resolvedStory.description?.trim() || "Compară mai jos cum este tratat același subiect de publicații din zone editoriale diferite.";
+  const articleFilterCounts = {
+    all: totalSources,
+    left: leftCount,
+    center: centerCount,
+    right: rightCount,
+  } as const;
+  const sourceClusters = [
+    {
+      key: 'left',
+      label: 'Stânga',
+      count: leftCount,
+      textClass: 'text-blue-700',
+      ringClass: 'border-blue-200 bg-blue-50',
+      sources: groupedSources?.left || [],
+    },
+    {
+      key: 'center',
+      label: 'Centru',
+      count: centerCount,
+      textClass: 'text-slate-700',
+      ringClass: 'border-slate-200 bg-slate-50',
+      sources: groupedSources?.center || [],
+    },
+    {
+      key: 'right',
+      label: 'Dreapta',
+      count: rightCount,
+      textClass: 'text-red-700',
+      ringClass: 'border-red-200 bg-red-50',
+      sources: groupedSources?.right || [],
+    },
+  ];
+  const summaryPoints = [
+    `Subiectul este acoperit de ${totalSources} ${totalSources === 1 ? 'sursă' : 'surse'} distincte.`,
+    `Ponderea dominantă este ${dominantBias.label.toLowerCase()} (${dominantBias.value}%).`,
+    blindspotMeta?.description,
+  ].filter(Boolean) as string[];
 
   return (
     <div className="min-h-screen bg-background">
@@ -304,8 +411,7 @@ const StoryDetail = () => {
         url: `https://thesite.ro${buildStoryHref(resolvedStory.id, resolvedStory.title)}`
       }} />
 
-      <main className="container mx-auto px-4 py-6 overflow-x-hidden">
-        {/* Back Link */}
+      <main className="mx-auto w-full max-w-[1240px] overflow-x-hidden px-4 py-6 md:px-6 md:py-10">
         <Link
           to="/"
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
@@ -314,283 +420,309 @@ const StoryDetail = () => {
           Înapoi la știri
         </Link>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content - Left 2 columns */}
-          <div className="lg:col-span-2">
-            {/* Story Header */}
-            <div className="mb-6">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                <Clock className="w-4 h-4" />
-                <span>Publicat {resolvedStory.timeAgo}</span>
-                <span>•</span>
-                <span>Actualizat recent</span>
+        <div className="space-y-8">
+          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_360px]">
+            <div className="space-y-6">
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="outline" className="border-border/60 bg-background px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+                  {resolvedStory.mainCategory || "Actualitate"}
+                </Badge>
+                <Badge variant="outline" className={cn("border px-3 py-1 text-[10px] uppercase tracking-[0.18em]", dominantBias.className)}>
+                  Dominant: {dominantBias.label}
+                </Badge>
+                {blindspotMeta && (
+                  <Badge variant="outline" className={cn("border px-3 py-1 text-[10px] uppercase tracking-[0.18em]", blindspotMeta.className)}>
+                    {blindspotMeta.label}
+                  </Badge>
+                )}
               </div>
 
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4 leading-tight">
-                {resolvedStory.title}
-              </h1>
-
-              {/* Bias Tabs */}
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <button
-                  onClick={() => setActiveFilter('left')}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'left'
-                    ? 'bg-blue-100 text-blue-700 border-blue-300'
-                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
-                    }`}
-                >
-                  Stânga
-                </button>
-                <button
-                  onClick={() => setActiveFilter('center')}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'center'
-                    ? 'bg-purple-100 text-purple-700 border-purple-300'
-                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
-                    }`}
-                >
-                  Centru
-                </button>
-                <button
-                  onClick={() => setActiveFilter('right')}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'right'
-                    ? 'bg-red-100 text-red-700 border-red-300'
-                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
-                    }`}
-                >
-                  Dreapta
-                </button>
-                <button
-                  onClick={() => setActiveFilter('all')}
-                  className={`px-3 py-1.5 text-sm font-medium rounded-md border transition-colors ${activeFilter === 'all'
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-card text-muted-foreground border-border hover:bg-secondary'
-                    }`}
-                >
-                  Comparație
-                </button>
-              </div>
-
-              {/* Summary Points */}
-              <div className="py-6 border-b border-border/40 mb-8">
-                <ul className="space-y-3">
-                  <li className="flex gap-3">
-                    <span className="text-muted-foreground">•</span>
-                    <span className="text-sm text-foreground">{resolvedStory.description}</span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="text-muted-foreground">•</span>
-                    <span className="text-sm text-foreground">
-                      Această știre este acoperită de {totalSources} {totalSources === 1 ? 'sursă' : 'surse'} din presa românească.
-                    </span>
-                  </li>
-                  {resolvedStory.bias.center > 50 && (
-                    <li className="flex gap-3">
-                      <span className="text-muted-foreground">•</span>
-                      <span className="text-sm text-foreground">
-                        Majoritatea surselor ({resolvedStory.bias.center}%) sunt de centru, indicând o acoperire echilibrată.
-                      </span>
-                    </li>
-                  )}
-                </ul>
-
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-border">
-                  <span className="text-xs text-muted-foreground">📊 Analiză thesite.ro</span>
-                  <button className="text-xs text-primary hover:underline">
-                    Pare această analiză incorectă?
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Articles Section */}
-            <div>
-              <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                  <h2 className="text-lg font-bold text-foreground">
-                    {filteredArticles.length} Articole
-                  </h2>
-                  <div className="flex flex-wrap items-center gap-2 text-sm">
-                    <button
-                      onClick={() => setActiveFilter('all')}
-                      className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'all' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-secondary'
-                        }`}
-                    >
-                      Toate
-                    </button>
-                    <button
-                      onClick={() => setActiveFilter('left')}
-                      className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'left' ? 'bg-blue-500 text-white' : 'text-muted-foreground hover:bg-secondary'
-                        }`}
-                    >
-                      S {leftCount}
-                    </button>
-                    <button
-                      onClick={() => setActiveFilter('center')}
-                      className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'center' ? 'bg-purple-500 text-white' : 'text-muted-foreground hover:bg-secondary'
-                        }`}
-                    >
-                      C {centerCount}
-                    </button>
-                    <button
-                      onClick={() => setActiveFilter('right')}
-                      className={`px-3 py-1 rounded-full transition-colors ${activeFilter === 'right' ? 'bg-red-500 text-white' : 'text-muted-foreground hover:bg-secondary'
-                        }`}
-                    >
-                      D {rightCount}
-                    </button>
-                  </div>
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  <span>Publicat {resolvedStory.timeAgo}</span>
+                  <span className="text-muted-foreground/40">•</span>
+                  <span>{formatStoryTimestamp(storyPublishedAt)}</span>
                 </div>
 
-                {/* Actions removed as requested */}
+                <h1 className="max-w-4xl font-serif text-3xl font-bold leading-tight text-foreground md:text-5xl">
+                  {resolvedStory.title}
+                </h1>
+
+                <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">
+                  {storySummary}
+                </p>
               </div>
 
-              {/* Articles List */}
-              <div className="flex flex-col mt-2">
-                {filteredArticles.map((article, index) => (
-                  <article
-                    key={article.id}
-                    className="py-6 border-b border-border/40 last:border-0 first:pt-4 group"
-                  >
-                    <div className="flex items-start gap-4">
-                      {/* Source Logo */}
-                      <SourceLogo source={article.source} />
+              <div className="grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Surse</p>
+                  <p className="mt-2 text-3xl font-semibold text-foreground">{totalSources}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">publicații distincte în comparație</p>
+                </div>
+                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Bias dominant</p>
+                  <p className={cn("mt-2 text-3xl font-semibold", dominantBias.accentClass)}>{dominantBias.value}%</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{dominantBias.label} în distribuția totală</p>
+                </div>
+                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Filtru curent</p>
+                  <p className="mt-2 text-3xl font-semibold text-foreground">{articleFilterCounts[activeFilter]}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{BIAS_LABELS[activeFilter]} afișate mai jos</p>
+                </div>
+              </div>
 
-                      <div className="flex-1 min-w-0 pt-0.5">
-                        {/* Source Name and Badges */}
-                        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                          <span className="font-semibold text-foreground text-sm">{article.source.name}</span>
-                          <span className={`px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full border ${getBiasBadgeStyle(article.source.bias)}`}>
-                            {getBiasLabel(article.source.bias)}
-                          </span>
+              <Card className="rounded-[28px] border-border/60 shadow-sm">
+                <CardContent className="p-5 md:p-6">
+                  <div className="space-y-5">
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Distribuție editorială</p>
+                      <h2 className="text-lg font-semibold text-foreground">Cum se împart perspectivele pe această știre</h2>
+                    </div>
+
+                    <BiasBar
+                      left={resolvedStory.bias.left}
+                      center={resolvedStory.bias.center}
+                      right={resolvedStory.bias.right}
+                      variant="labeled"
+                      size="xl"
+                    />
+
+                    <div className="grid gap-3 md:grid-cols-3">
+                      {summaryPoints.map((point) => (
+                        <div key={point} className="rounded-2xl border border-border/50 bg-background/70 p-4 text-sm leading-relaxed text-muted-foreground">
+                          {point}
                         </div>
+                      ))}
+                    </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
-                        {/* Article Title */}
-                        <h3 className="font-helvetica text-lg font-bold text-foreground mb-1.5 leading-snug group-hover:text-primary transition-colors">
-                          <a href={article.link} target="_blank" rel="noopener noreferrer">
-                            {article.title}
-                          </a>
-                        </h3>
+            <Card className="overflow-hidden rounded-[28px] border-border/60 shadow-sm">
+              <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
+                <img
+                  src={resolvedStory.image || PLACEHOLDER_IMAGE}
+                  alt={resolvedStory.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <CardContent className="p-5">
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Cum citești comparația</p>
+                    <h2 className="text-lg font-semibold text-foreground">Deschide aceeași poveste din mai multe unghiuri</h2>
+                  </div>
 
-                        {/* Article Description */}
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          {article.description}
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>Filtrează după orientare ca să vezi cine insistă pe subiect și cine îl tratează mai puțin.</p>
+                    <p>Folosește căutarea din listă dacă vrei să găsești rapid o publicație sau un anumit titlu.</p>
+                  </div>
+
+                  <ShareButton
+                    title={resolvedStory.title}
+                    description={`${resolvedStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
+                    variant="outline"
+                    className="w-full justify-center rounded-full"
+                    showLabel={true}
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </section>
+
+          <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
+            <section className="space-y-5">
+              <Card className="rounded-[28px] border-border/60 shadow-sm">
+                <CardContent className="p-5 md:p-6">
+                  <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                      <div className="space-y-2">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Compară articolele</p>
+                        <h2 className="text-2xl font-semibold text-foreground">{filteredArticles.length} rezultate în listă</h2>
+                        <p className="text-sm text-muted-foreground">
+                          {activeFilter === 'all'
+                            ? 'Vezi toate sursele care au acoperit subiectul.'
+                            : `Vezi doar publicațiile din zona ${BIAS_LABELS[activeFilter].toLowerCase()}.`}
                         </p>
+                      </div>
 
-                        {/* Meta Info */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-3 h-3" />
-                              {new Date(article.pubDate).toLocaleDateString('ro-RO', {
-                                day: 'numeric',
-                                month: 'short',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
+                      <div className="relative w-full lg:max-w-sm">
+                        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          type="search"
+                          value={searchQuery}
+                          onChange={(event) => setSearchQuery(event.target.value)}
+                          aria-label="Caută după titlu sau publicație"
+                          placeholder="Caută după titlu sau publicație"
+                          className="h-11 rounded-full border-border/50 bg-background pl-11 pr-4"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2" role="toolbar" aria-label="Filtre pentru articole">
+                      {Object.entries(BIAS_LABELS).map(([key, label]) => {
+                        const filterKey = key as keyof typeof BIAS_LABELS;
+                        const count = articleFilterCounts[filterKey];
+
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            aria-pressed={activeFilter === key}
+                            onClick={() => setActiveFilter(key as typeof activeFilter)}
+                            className={cn(
+                              "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition-colors",
+                              activeFilter === key
+                                ? key === 'left'
+                                  ? 'border-blue-200 bg-blue-100 text-blue-700'
+                                  : key === 'center'
+                                    ? 'border-slate-200 bg-slate-100 text-slate-700'
+                                    : key === 'right'
+                                      ? 'border-red-200 bg-red-100 text-red-700'
+                                      : 'border-primary bg-primary text-primary-foreground'
+                                : 'border-border/60 bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground',
+                            )}
+                          >
+                            <span>{label}</span>
+                            <span className="rounded-full bg-black/10 px-2 py-0.5 text-[10px] leading-none text-inherit">
+                              {count}
                             </span>
-                            {article.category && (
-                              <span className="flex items-center gap-1">
-                                <MapPin className="w-3 h-3" />
-                                {article.category}
-                              </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="space-y-4">
+                {filteredArticles.map((article) => (
+                  <Card key={article.id} className="rounded-[28px] border-border/60 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                    <CardContent className="p-5">
+                      <div className="flex items-start gap-4">
+                        <SourceLogo source={article.source} />
+
+                        <div className="min-w-0 flex-1 space-y-3">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Link
+                              to={`/surse/${article.source.id}`}
+                              className="text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                            >
+                              {article.source.name}
+                            </Link>
+                            <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${getBiasBadgeStyle(article.source.bias)}`}>
+                              {getBiasLabel(article.source.bias)}
+                            </span>
+                            <span className="text-xs text-muted-foreground">{formatArticleTimestamp(article.pubDate)}</span>
+                          </div>
+
+                          <div className="space-y-2">
+                            <a
+                              href={article.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group/link inline-flex items-start gap-2 text-lg font-semibold leading-snug text-foreground transition-colors hover:text-primary"
+                            >
+                              <span>{article.title}</span>
+                              <ExternalLink className="mt-1 h-4 w-4 shrink-0 opacity-60 transition-transform group-hover/link:translate-x-0.5" />
+                            </a>
+
+                            {article.description && (
+                              <p className="text-sm leading-relaxed text-muted-foreground">
+                                {article.description}
+                              </p>
                             )}
                           </div>
 
-                          <a
-                            href={article.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:underline flex items-center gap-1"
-                          >
-                            Citește articolul
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
+                          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/50 pt-3">
+                            <div className="flex flex-wrap items-center gap-2">
+                              {article.category && (
+                                <Badge variant="outline" className="border-border/60 bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                                  {article.category}
+                                </Badge>
+                              )}
+                              <Badge variant="outline" className="border-border/60 bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                                {article.source.name}
+                              </Badge>
+                            </div>
+
+                            <a
+                              href={article.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-primary"
+                            >
+                              Citește articolul
+                              <ArrowRight className="h-4 w-4" />
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </article>
+                    </CardContent>
+                  </Card>
                 ))}
 
                 {filteredArticles.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <p>Nu există articole care să corespundă filtrelor selectate.</p>
-                  </div>
+                  <Card className="rounded-[28px] border-dashed border-border/80 shadow-none">
+                    <CardContent className="p-10 text-center">
+                      <p className="text-lg font-medium text-foreground">Nu există articole care să corespundă filtrelor selectate.</p>
+                      <p className="mt-2 text-sm text-muted-foreground">Schimbă filtrul sau golește căutarea pentru a vedea toate sursele.</p>
+                    </CardContent>
+                  </Card>
                 )}
               </div>
-            </div>
+            </section>
+
+            <aside className="space-y-5 xl:sticky xl:top-24 self-start">
+              <Card className="rounded-[28px] border-border/60 shadow-sm">
+                <CardContent className="p-5">
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Panou lateral</p>
+                      <h3 className="text-lg font-semibold text-foreground">Surse pe spectru</h3>
+                    </div>
+
+                    <div className="space-y-4">
+                      {sourceClusters.map((cluster) => (
+                        <div key={cluster.key} className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className={cn("text-xs font-bold uppercase tracking-[0.16em]", cluster.textClass)}>
+                              {cluster.label}
+                            </span>
+                            <span className="text-xs text-muted-foreground">{cluster.count} surse</span>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2">
+                            {cluster.sources.slice(0, 8).map((source) => (
+                              <SourceLogo key={source.id} source={source.source} />
+                            ))}
+                            {cluster.sources.length > 8 && (
+                              <div className={cn("inline-flex h-10 w-10 items-center justify-center rounded-full border text-xs font-semibold text-muted-foreground", cluster.ringClass)}>
+                                +{cluster.sources.length - 8}
+                              </div>
+                            )}
+                          </div>
+                      </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="rounded-[28px] border-border/60 shadow-sm">
+                <CardContent className="p-5">
+                  <div className="space-y-3">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Despre analiza bias</p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      thesite.ro compară orientarea editorială a surselor care au acoperit aceeași poveste. Scorurile spun ceva despre contextul sursei, nu reprezintă un verdict absolut despre articol.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </aside>
           </div>
-
-          {/* Sidebar - Right column */}
-          <aside className="space-y-6">
-            {/* Coverage Details Card */}
-            <div className="py-6 border-b border-border/40">
-              <h3 className="font-semibold text-foreground mb-4">Detalii Acoperire</h3>
-
-              <div className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Total Surse</span>
-                  <span className="font-semibold text-foreground">{totalSources}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Stânga</span>
-                  <span className="font-semibold text-foreground">{leftCount}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Dreapta</span>
-                  <span className="font-semibold text-foreground">{rightCount}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Centru</span>
-                  <span className="font-semibold text-foreground">{centerCount}</span>
-                </div>
-                <div className="border-t border-border pt-3 mt-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Actualizat</span>
-                    <span className="text-foreground">{resolvedStory.timeAgo}</span>
-                  </div>
-                  <div className="flex justify-between text-sm mt-2">
-                    <span className="text-muted-foreground">Distribuție Bias</span>
-                    <span className="font-semibold text-foreground">{resolvedStory.bias.center}% Centru</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bias Distribution Card - Similar to Ground News */}
-            <BiasDistribution
-              sources={resolvedStory.sources}
-              bias={resolvedStory.bias}
-            />
-
-            {/* Share Actions */}
-            <div className="py-6 border-b border-border/40">
-              <h3 className="font-semibold text-foreground mb-4">Acțiuni</h3>
-              <div className="space-y-2">
-                <ShareButton
-                  title={resolvedStory.title}
-                  description={`${resolvedStory.title} - Analiză din ${totalSources} surse pe thesite.ro`}
-                  variant="outline"
-                  className="w-full justify-start"
-                  showLabel={true}
-                />
-              </div>
-            </div>
-
-            {/* AI Bias Comparison Card - Experimental
-            <div className="bg-editorial/5 py-4 px-5 border-l-4 border-editorial">
-              ... (commented out) ...
-            </div>
-            */}
-
-            {/* Info Box */}
-            <div className="py-6 border-b border-border/40 text-sm">
-              <h4 className="font-bold text-xs uppercase tracking-widest text-foreground mb-3">ℹ️ Despre Analiza Bias</h4>
-              <p className="text-muted-foreground text-xs leading-relaxed">
-                thesite.ro analizează automat știrile din multiple surse românești și calculează
-                distribuția bias-ului politic bazat pe categoria editorială a fiecărei publicații.
-              </p>
-            </div>
-          </aside>
         </div>
       </main>
 
