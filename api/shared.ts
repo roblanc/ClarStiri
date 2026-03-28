@@ -224,6 +224,15 @@ function extractImageUrl(itemXml: string, rawDescription: string, rawContentEnco
     return extractFirstImageFromHtml(rawDescription) || extractFirstImageFromHtml(rawContentEncoded);
 }
 
+/** Deterministic djb2 hash of a URL → base-36 string. Used for stable story IDs across cron runs. */
+function hashUrl(url: string): string {
+    let hash = 0;
+    for (let i = 0; i < url.length; i++) {
+        hash = (Math.imul(31, hash) + url.charCodeAt(i)) | 0;
+    }
+    return Math.abs(hash).toString(36);
+}
+
 export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[] {
     const items: RSSNewsItem[] = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/gi;
@@ -267,7 +276,7 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
             const biasAnalysis = quickBiasAnalysis(title, description);
 
             items.push({
-                id: `${source.id}-${index}-${Date.now()}`,
+                id: `${source.id}-${hashUrl(link)}`,
                 title,
                 description,
                 link,

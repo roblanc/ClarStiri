@@ -10,7 +10,7 @@ import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo, calculateBiasDis
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
 const CACHE_TTL = 25 * 60 * 60; // 25h — outlasts daily Vercel Hobby cron (runs max 1x/day)
-const MIN_SOURCES_THRESHOLD = 1; // Include single-source stories to ensure enough items for pagination
+const MIN_SOURCES_THRESHOLD = 2; // matches frontend filter (sourcesCount > 1) — single-source stories are filtered out anyway
 const MAX_STORY_AGE_MS = 7 * 24 * 60 * 60 * 1000; // Expire stories older than 7 days
 const MAX_STORIES = 100;
 
