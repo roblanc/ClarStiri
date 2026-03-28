@@ -1359,72 +1359,136 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         ]
     },
     {
-        id: 'andreea-esca',
-        slug: 'andreea-esca',
-        name: 'Andreea Esca',
-        role: 'Realizator TV / Jurnalist',
-        image: '/images/voices/andreea-esca.png',
+        id: 'bogdan-chirieac',
+        slug: 'bogdan-chirieac',
+        name: 'Bogdan Chirieac',
+        role: 'Analist Politic / Realizator TV',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Bogdan_Chirieac.jpg/220px-Bogdan_Chirieac.jpg',
         bias: {
-            leaning: 'center',
-            score: 5,
-            description: 'Jurnalism de știri clasic, neutru editorial. Nu ia poziții politice explicite. Prezintă știrile cu o distanță profesionistă față de subiect, ceea ce o plasează în centru, chiar dacă PRO TV ca instituție are o orientare pro-occidentală și pro-europeană.'
+            leaning: 'right',
+            score: 65,
+            description: 'Comentator cu simpatii clare față de PSD și față de o politică externă mai echilibrată față de Rusia. Critic constant al USR și al a ceea ce numește „presa de serviciu" pro-occidentală. Promovează un naționalism economic și o diplomație mai puțin ancorată în NATO, fără a îmbrățișa deschis extremismul.'
         },
-        description: 'Andreea Esca este cel mai longeviv și recunoscut prezentator de știri din România, cu o carieră de peste 30 de ani la PRO TV. Este un simbol al știrilor de seară în România, cu un indice de credibilitate excepțional de ridicat față de restul presei audio-vizuale. Stilul său este profesionist, distanțat și rar partizan, ceea ce o diferențiază radical de comentatorii politici cu care împarte ecranele.',
+        description: 'Bogdan Chirieac este unul dintre cei mai prezenți analiști politici în televiziunile românești, cu apariții regulate la Antena 3, România TV și alte posturi. Fondatorul publicației Adevărul de seară și al platformei online Ziua News, Chirieac practică un comentariu politic în care geopolitica și relațiile de putere interne sunt privite mai degrabă prin prismă realistă decât normativă. Stilul său este analitic la suprafață, dar cu un slant vizibil față de sfera de influență a stângii social-democrate și față de o politică externă mai autonomă.',
         socialLinks: {
-            instagram: 'https://instagram.com/andreeaesca',
+            facebook: 'https://www.facebook.com/bogdan.chirieac',
+            youtube: 'https://www.youtube.com/@BogdanChirieac',
         },
-        targets: [],
-        rhetoric: { aggressiveness: 10, irony: 20 },
+        targets: ['USR', 'Presa Pro-Occidentală', 'Nicolae Ciucă', 'Klaus Iohannis', 'Serviciile Secrete'],
+        rhetoric: { aggressiveness: 55, irony: 45 },
         contextNotes: [
-            'Este prezentatoarea știrilor de seară de la PRO TV din 1995 — una dintre cele mai lungi cariere continue în televiziunea românească.',
-            'A câștigat numeroase premii de jurnalism și este constant clasată printre cele mai credibile figuri media din România în sondajele de opinie.',
-            'Nu se implică public în dezbateri politice și evită declarațiile partizane, menținând o distanță editorială față de subiectele abordate.',
+            'Apare regulat ca analist invitat în emisiunile de primă scenă de la Antena 3 și România TV.',
+            'Fondator al Adevărul de seară și al platformei Ziua News.',
+            'Criticat de presa reformistă pentru apropierea față de cercurile PSD și pentru nuanțarea agresiunii rusești în Ucraina.',
+            'Se prezintă ca analist geopolitic independent, dar pozițiile sale coincid sistematic cu interesele social-democrației românești.',
         ],
         statements: [
             {
-                id: 'ae-s1',
-                text: 'Jurnalismul înseamnă să spui ce s-a întâmplat, nu ce crezi tu că ar fi trebuit să se întâmple.',
-                date: '2024-11-10',
-                sourceUrl: 'https://stirileprotv.ro',
-                topic: 'Jurnalism',
+                id: 'bc-s1',
+                text: 'România nu poate să existe fără o relație funcțională cu vecinii săi, inclusiv cu Rusia. Geopolitica nu e morală, e calcul de interese.',
+                date: '2025-03-10',
+                sourceUrl: 'https://www.antena3.ro',
+                topic: 'Geopolitică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'bc-s2',
+                text: 'USR este un partid care a trăit din negație. Nu au construit nimic. Au demolat și au plecat când le-a venit greu.',
+                date: '2025-06-20',
+                sourceUrl: 'https://www.antena3.ro',
+                topic: 'Politică',
                 impact: 'medium',
-                bias: 'center'
+                bias: 'right'
             }
         ]
     },
     {
-        id: 'selly',
-        slug: 'selly',
-        name: 'Selly',
-        role: 'Creator de Conținut / Antreprenor',
-        image: '/images/voices/selly.png',
+        id: 'cosmin-gusa',
+        slug: 'cosmin-gusa',
+        name: 'Cosmin Gușă',
+        role: 'Consultant Politic / Analist',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Cosmin_Gu%C8%99%C4%83.jpg/220px-Cosmin_Gu%C8%99%C4%83.jpg',
         bias: {
-            leaning: 'center-right',
-            score: 22,
-            description: 'Discurs centrat pe antreprenoriat, meritocreație și critici la adresa birocrației și a statului ineficient. Nu se identifică explicit cu un partid, dar mesajele sale rezonează cu valorile centrului-dreapta liberal: individualism economic, digitalizare, critici la adresa sistemului de educație. A intervenit public în alegerile din 2024 susținând votul anti-Georgescu.'
+            leaning: 'right',
+            score: 70,
+            description: 'Consultant și strateg politic cu rădăcini în sfera PSD, reconvertit în analist media. Poziționarea sa îmbină populismul de dreapta cu o retorică naționalistă și anti-sistem, cu critici constante la adresa clasei tehnocrate și a presei mainstream pe care o acuză de subordonare față de interese externe.'
         },
-        description: 'Andrei Șelaru, cunoscut ca Selly, este cel mai urmărit creator de conținut din România cu peste 3 milioane de abonați pe YouTube. La vârsta de 22 de ani conduce deja un grup de companii media (Selly Media Group). Influența sa depășește entertainment-ul: în 2024 a mobilizat activ publicul tânăr să voteze împotriva extremismului, devenind un actor neașteptat în peisajul civic. Reprezentativ pentru vocea Gen Z românesc format digital.',
+        description: 'Cosmin Gușă este unul dintre cei mai cunoscuți consultanți politici din România, cu o carieră ce a trecut prin consilierea unor figuri PSD și prin construcția de campanii electorale. Fondatorul platformei Flux24 și al postului de televiziune România TV (alături de Intact Media), a migrat ulterior spre comentariul politic independent. Stilul său combină analiza strategică cu un discurs populist care a prins la audiența de dreapta. Este considerat unul dintre arhitecții comunicării politice a dreptei populiste în România.',
         socialLinks: {
-            youtube: 'https://youtube.com/selly',
-            instagram: 'https://instagram.com/sellytherobot',
-            tiktok: 'https://tiktok.com/@selly',
+            facebook: 'https://www.facebook.com/cosmin.gusa',
+            youtube: 'https://www.youtube.com/@cosmin.gusa',
         },
-        targets: ['Birocrația', 'Sistemul de Educație', 'Extremismul Politic'],
-        rhetoric: { aggressiveness: 35, irony: 65 },
+        targets: ['Presa Mainstream', 'Clasa Politică Veche', 'USR', 'Serviciile de Informații', 'Bruxelles'],
+        rhetoric: { aggressiveness: 72, irony: 60 },
         contextNotes: [
-            'A început să creeze conținut la 11 ani și a construit unul dintre cele mai mari imperii media digitale românești până la 22 de ani.',
-            'A publicat cartea „Da, mă numesc Andrei" și este unul dintre puținii influenceri care a ieșit public împotriva lui Călin Georgescu în turul 1 al alegerilor din 2024.',
-            'Fondatorul platformei Thinkdigital și al mai multor companii din sfera creator economy.',
+            'Fondator al platformei Flux24.ro și asociat în crearea România TV.',
+            'A consiliat mai mulți politicieni de dreapta și centru-dreapta în campanii electorale.',
+            'Considerat unul dintre cei mai pricepuți strategi în comunicarea politică din România anilor 2010-2020.',
+            'Discursul său s-a radicalizat vizibil după 2020, apropiindu-se de narative anti-sistem și suveraniste.',
         ],
         statements: [
             {
-                id: 'selly-s1',
-                text: 'Nu îmi pasă ce partid alegi, dar nu pot să stau cu mâinile în sân când oameni cu idei extremiste ajung la putere. Trebuie să votăm.',
-                date: '2024-11-22',
-                sourceUrl: 'https://youtube.com/selly',
+                id: 'cg-s1',
+                text: 'Clasa politică din România este o marionetă. Nimeni nu ia decizii reale în Parlament. Deciziile se iau în altă parte.',
+                date: '2025-04-18',
+                sourceUrl: 'https://flux24.ro',
                 topic: 'Politică',
                 impact: 'high',
-                bias: 'center'
+                bias: 'right'
+            },
+            {
+                id: 'cg-s2',
+                text: 'Românii nu mai au încredere în presă pentru că presa nu mai e a lor. E a unor interese pe care le servește docil.',
+                date: '2025-07-02',
+                sourceUrl: 'https://flux24.ro',
+                topic: 'Media',
+                impact: 'medium',
+                bias: 'right'
+            }
+        ]
+    },
+    {
+        id: 'andrei-caramitru',
+        slug: 'andrei-caramitru',
+        name: 'Andrei Caramitru',
+        role: 'Analist Politic / Antreprenor',
+        image: 'https://pbs.twimg.com/profile_images/1580897510374916097/tJJuv3bV_400x400.jpg',
+        bias: {
+            leaning: 'center-left',
+            score: -35,
+            description: 'Liberal pro-european și pro-occidental declarat, critic virulent al naționalismului și al suveranismului. Poziționarea sa este de reformism tehnocrat: crede în modernizarea instituțiilor, în expertocreație și în integrarea europeană ca motor de schimbare. Apropiat de sfera USR, pe care a consiliat-o informal, deși menține o distanță față de partizanatul de partid.'
+        },
+        description: 'Andrei Caramitru este antreprenor tech și comentator politic, cunoscut pentru postările sale virale pe Facebook și pentru apariția în dezbaterile publice post-2019. Fost consultant McKinsey, s-a transformat într-un analist civic care împinge agenda modernizării României. Este unul dintre cei mai citați voci ale centrului reformist în mediul online, combinând argumente tehnocratice cu un stil combativ față de politicienii pe care îi consideră incompetenți sau corupți.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/andrei.caramitru',
+        },
+        targets: ['PSD', 'AUR', 'Călin Georgescu', 'Politicienii Incompetenți', 'Naționalismul Populist'],
+        rhetoric: { aggressiveness: 80, irony: 70 },
+        contextNotes: [
+            'Fost consultant McKinsey, reconvertit în voce civică și analist politic în mediul online.',
+            'Unul dintre cei mai activi comentatori politici pe Facebook în România, cu postări virale frecvente.',
+            'A consiliat informal campania USR și figuri reformiste, fără a deține funcții oficiale de partid.',
+            'Stilul său combinant de expertiză economică și retorică dură față de clasa politică l-a transformat într-o figură polarizantă: iubit de centru-stânga reformistă, disprețuit de dreapata populistă.',
+        ],
+        statements: [
+            {
+                id: 'ac-s1',
+                text: 'România are nevoie de o revoluție a competenței. Atâta timp cât punem incompetenți și hoți să conducă instituțiile, nu ne mai mirăm că suntem în coada Europei.',
+                date: '2025-05-12',
+                sourceUrl: 'https://www.facebook.com/andrei.caramitru',
+                topic: 'Guvernanță',
+                impact: 'high',
+                bias: 'center-left'
+            },
+            {
+                id: 'ac-s2',
+                text: 'Georgescu nu e un fenomen politic. E un simptom al faptului că am lăsat sistemul de educație să putrezească timp de 35 de ani.',
+                date: '2024-12-05',
+                sourceUrl: 'https://www.facebook.com/andrei.caramitru',
+                topic: 'Educație',
+                impact: 'high',
+                bias: 'center-left'
             }
         ]
     },
