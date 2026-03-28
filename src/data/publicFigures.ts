@@ -1527,5 +1527,183 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
                 bias: 'center-right'
             }
         ]
+    },
+    {
+        id: 'traian-basescu',
+        slug: 'traian-basescu',
+        name: 'Traian Băsescu',
+        role: 'Fost Președinte / Comentator Politic',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Traian_B%C4%83sescu_official_portrait.jpg/220px-Traian_B%C4%83sescu_official_portrait.jpg',
+        bias: {
+            leaning: 'center-right',
+            score: 55,
+            description: 'Președinte cu două mandate care a îmbrățișat un discurs pro-atlantic ferm, pro-NATO și pro-UE. Post-mandat, a evoluat spre un comentariu politic tot mai combativ și partizan, critica la PSD transformându-se în obsesia centrală a discursului său public. Atacă sistematic corupția instituționalizată, dar propriul mandat rămâne controversat din perspectiva statului de drept.'
+        },
+        description: 'Traian Băsescu a condus România ca Președinte între 2004 și 2014, două mandate marcate de aderarea la UE, consolidarea relației cu SUA și un conflict frontal cu PSD. Post-2014 a rămas una dintre cele mai active voci politice, cu apariții constante la TV și declarații care domină uneori agenda media. Stilul său este combativ, adesea vulgar și fără autocenzură — ceea ce îl transformă într-o sursă garantată de declarații virale. Condamnat definitiv în 2023 pentru colaborare cu Securitatea, ceea ce i-a conferit statut de martir în ochii suporterilor și de ipocrit pentru adversari.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/TraianBasescu',
+        },
+        targets: ['PSD', 'Marcel Ciolacu', 'Victor Ponta', 'Călin Georgescu', 'Klaus Iohannis', 'Justiția Selectivă'],
+        rhetoric: { aggressiveness: 90, irony: 75 },
+        contextNotes: [
+            'Condamnat definitiv în 2023 de ÎCCJ la 4 ani de închisoare cu suspendare pentru colaborare cu fosta Securitate.',
+            'Suspendat de două ori din funcția de Președinte (2007 și 2012), supraviețuind ambelor referendumuri de demitere.',
+            'A inițiat dosarul "Deveselu" și a negociat instalarea scutului antirachetă NATO în România, considerat cel mai important act geopolitic al mandatelor sale.',
+            'Post-mandat, aparițiile sale TV sunt predictibil atacuri la PSD și la orice politică considerată subordonată față de Rusia.',
+        ],
+        statements: [
+            {
+                id: 'tb-s1',
+                text: 'PSD-ul este, a fost și va fi un partid corupt. Nu există reformă în PSD. Există cicluri de putere în care se fură mai mult sau mai puțin.',
+                date: '2025-08-20',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'tb-s2',
+                text: 'Dacă România iese din NATO sau din UE, nu mai există România în 20 de ani. Asta e realitatea geopolitică pe care unii refuză s-o vadă.',
+                date: '2025-04-10',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Geopolitică',
+                impact: 'high',
+                bias: 'center-right'
+            }
+        ]
+    },
+    {
+        id: 'dan-dungaciu',
+        slug: 'dan-dungaciu',
+        name: 'Dan Dungaciu',
+        role: 'Geopolitician / Analist Internațional',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Dan_Dungaciu.jpg/220px-Dan_Dungaciu.jpg',
+        bias: {
+            leaning: 'center-right',
+            score: 30,
+            description: 'Geopolitician pro-occidental și pro-NATO cu o puternică componentă de naționalism românesc cultural. Analizele sale pornesc de la premisa că România trebuie să fie mai asertivă în Europa și că interesele naționale trebuie să fie mai explicit articulate față de aliați. Nu este anti-european, dar critică des ceea ce percepe drept naivitate sau subordonare față de agenda Bruxelles-ului.'
+        },
+        description: 'Dan Dungaciu este directorul Institutului de Științe Politice și Relații Internaționale al Academiei Române și unul dintre cei mai citați geopoliticieni din România. Cu o specializare pe zona Republicii Moldova, relațiile României cu Rusia și arhitectura de securitate est-europeană, Dungaciu apare regulat în emisiunile de analiză politică ca voce „expertă" pe probleme de politică externă. Stilul său academic îl diferențiază de comentatorii de studio, dar nu îl ferește de poziționări partizane pe anumite dosare.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/dan.dungaciu',
+        },
+        targets: ['Influența Rusă', 'Suveranismul Fals', 'Naivitatea Pro-Europeană', 'Dezinformarea'],
+        rhetoric: { aggressiveness: 40, irony: 35 },
+        contextNotes: [
+            'Director al ISPRI (Institutul de Științe Politice și Relații Internaționale al Academiei Române).',
+            'Unul dintre principalii analiști pe dosarul Republicii Moldova și al relației România-Rusia.',
+            'Apare frecvent la Digi24, Antena 3 și în publicații de specialitate ca voce expertă pe securitate și geopolitică.',
+            'A publicat volume academice despre identitate națională, relațiile româno-moldovene și arhitectura de securitate europeană.',
+        ],
+        statements: [
+            {
+                id: 'dd-s1',
+                text: 'Republica Moldova este cel mai important dosar de politică externă al României. Dacă o pierdem în sfera rusă, pierdem și granița de est a NATO.',
+                date: '2025-06-14',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Geopolitică',
+                impact: 'high',
+                bias: 'center-right'
+            },
+            {
+                id: 'dd-s2',
+                text: 'Suveranismul care se vinde în România nu e suveranism. E dependență față de Moscova ambalată în retorică națională. Sunt contrariile ideologice ale aceluiași lucru.',
+                date: '2025-02-28',
+                sourceUrl: 'https://www.digi24.ro',
+                topic: 'Politică',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
+    },
+    {
+        id: 'cristian-pirvulescu',
+        slug: 'cristian-pirvulescu',
+        name: 'Cristian Pîrvulescu',
+        role: 'Politolog / Analist Politic',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Cristian_P%C3%AErvulescu.jpg/220px-Cristian_P%C3%AErvulescu.jpg',
+        bias: {
+            leaning: 'center-left',
+            score: -25,
+            description: 'Politolog cu orientare civică și pro-democratică, critic al populismului și al autoritarismului de orice culoare. Pune accent pe consolidarea instituțiilor, independența justiției și cultura participării civice. Aproape de valorile reformiste și pro-europene, fără a fi partizan explicit. Analizele sale sunt descriptiv-normative și instituționale, mai rar ideologice.'
+        },
+        description: 'Cristian Pîrvulescu este decanul Facultății de Științe Politice de la SNSPA (Școala Națională de Studii Politice și Administrative) și unul dintre cei mai prezenți politologi în media românească. Specialist în sisteme electorale, partide politice și democrație comparată, el apare constant în dezbateri TV ca voce moderatoare și analitică. Este unul dintre puținii analiști care evită partizanatul explicit, menținând un discurs instituționalist și centrist, ceea ce îl face frecvent invitat ca „expert neutru" de toate televiziunile.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/cristian.pirvulescu',
+        },
+        targets: ['Populismul', 'Corupția Sistemică', 'Slăbirea Instituțiilor Democratice', 'Dezinformarea Electorală'],
+        rhetoric: { aggressiveness: 25, irony: 30 },
+        contextNotes: [
+            'Decan al Facultății de Științe Politice de la SNSPA București.',
+            'Specialist în sisteme electorale și comportament de vot — unul dintre cei mai citați academicieni în analizele post-electorale.',
+            'Apare pe toate televiziunile majore ca expert politic, indiferent de orientarea lor editorială.',
+            'Membru fondator al mai multor organizații civice dedicate educației politice și combaterii dezinformării.',
+        ],
+        statements: [
+            {
+                id: 'cp-s1',
+                text: 'Democrația nu moare dintr-o dată. Moare lent, prin erodarea instituțiilor, prin normalizarea abuzului și prin indiferența cetățenilor.',
+                date: '2025-01-15',
+                sourceUrl: 'https://www.hotnews.ro',
+                topic: 'Democrație',
+                impact: 'high',
+                bias: 'center-left'
+            },
+            {
+                id: 'cp-s2',
+                text: 'Fenomenul Georgescu nu e o anomalie. E rezultatul a 35 de ani de educație civică nefăcută și de politicieni care au tratat cetățenii ca pe niște consumatori de clientelism.',
+                date: '2024-12-10',
+                sourceUrl: 'https://www.hotnews.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'center-left'
+            }
+        ]
+    },
+    {
+        id: 'sorin-rosca-stanescu',
+        slug: 'sorin-rosca-stanescu',
+        name: 'Sorin Roșca Stănescu',
+        role: 'Jurnalist / Analist Politic',
+        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Sorin_Ro%C8%99ca_St%C4%83nescu.jpg/220px-Sorin_Ro%C8%99ca_St%C4%83nescu.jpg',
+        bias: {
+            leaning: 'right',
+            score: 72,
+            description: 'Jurnalist cu un discurs profund anti-sistem și anti-establishment, cu o lungă istorie de colaborare cu structuri de putere pe care acum le atacă. Promovează teze despre „statul paralel", influența SRI și serviciile secrete în politică și presă. Pozițiile sale oscilează între investigație jurnalistică legitimă și teorii ale conspirației cu fundament factual discutabil.'
+        },
+        description: 'Sorin Roșca Stănescu este unul dintre cei mai vechi și mai controversați jurnaliști din România post-decembristă. Fost director al ziarului Ziua și colaborator al multor publicații de dreapta, a construit o carieră pe investigarea „culiselor" puterii. Condamnat în 2014 pentru șantaj și informator confirmat al Securității, a revenit în peisajul mediatic cu un blog și apariții la posturi de televiziune cu orientare suveranistă. Reprezentativ pentru tipul de „analist" care combină cunoaștere reală a mecanismelor puterii cu narativele anti-sistem.',
+        socialLinks: {
+            facebook: 'https://www.facebook.com/sorin.rosca.stanescu',
+            website: 'https://www.roscastanescu.ro',
+        },
+        targets: ['SRI / Serviciile Secrete', 'Statul Paralel', 'Presa Mainstream', 'USR', 'George Maior'],
+        rhetoric: { aggressiveness: 78, irony: 55 },
+        contextNotes: [
+            'Condamnat definitiv în 2014 la 5 ani de închisoare cu suspendare pentru șantaj la adresa unui om de afaceri.',
+            'Colaborator confirmat al Securității comuniste, fapt recunoscut public.',
+            'A fondat și condus cotidianul Ziua, una dintre publicațiile de referință ale dreptei din anii 2000.',
+            'Revenit în peisajul media post-2016 cu un blog activ și apariții pe posturile TV suveraniste.',
+            'Considerat simultan: sursă valoroasă de informații din culisele puterii și producător de dezinformare anti-sistem.',
+        ],
+        statements: [
+            {
+                id: 'srs-s1',
+                text: 'SRI conduce România. Nu Parlamentul, nu Guvernul. Serviciile. Cine nu știe asta fie e naiv, fie e parte din sistem.',
+                date: '2025-05-08',
+                sourceUrl: 'https://www.roscastanescu.ro',
+                topic: 'Politică',
+                impact: 'high',
+                bias: 'right'
+            },
+            {
+                id: 'srs-s2',
+                text: 'Presa română independentă nu există. Există presa finanțată de servicii și presa finanțată de partide. Restul sunt bloguri.',
+                date: '2025-03-22',
+                sourceUrl: 'https://www.roscastanescu.ro',
+                topic: 'Media',
+                impact: 'medium',
+                bias: 'right'
+            }
+        ]
     }
 ];
