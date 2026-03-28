@@ -1,326 +1,663 @@
-import { Link, useLocation } from "react-router-dom";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { NEWS_SOURCES } from "@/types/news";
-import { SourceFavicon } from "@/components/SourceFavicon";
-import { ChevronLeft, Info, Eye, BarChart3, Shield, AlertTriangle } from "lucide-react";
 import { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { AlertTriangle, ArrowRight, BarChart3, ChevronLeft, Eye, Info, Shield } from "lucide-react";
+
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { SourceFavicon } from "@/components/SourceFavicon";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { NEWS_SOURCES } from "@/types/news";
+
+const SECTION_LINKS = [
+    { id: "ce-este", label: "Ce agregăm" },
+    { id: "bias", label: "Bias editorial" },
+    { id: "bara-bias", label: "Bara de bias" },
+    { id: "blindspot", label: "Blindspot" },
+    { id: "factualitate", label: "Factualitate" },
+    { id: "surse", label: "Surse" },
+] as const;
+
+const BIAS_ORDER = ["left", "center-left", "center", "center-right", "right"] as const;
+
+const BIAS_META = {
+    left: {
+        name: "Stânga",
+        color: "bg-blue-600",
+        pill: "border-blue-200 bg-blue-50 text-blue-700",
+        description:
+            "Publicații cu orientare progresistă, pro-europeană și accent pe politici sociale sau reformiste.",
+    },
+    "center-left": {
+        name: "Centru-stânga",
+        color: "bg-blue-400",
+        pill: "border-sky-200 bg-sky-50 text-sky-700",
+        description:
+            "Publicații moderat progresiste, adesea concentrate pe investigații, corupție și teme civice.",
+    },
+    center: {
+        name: "Centru",
+        color: "bg-gray-500",
+        pill: "border-gray-200 bg-gray-50 text-gray-700",
+        description:
+            "Publicații care urmăresc echilibrul între perspective și evită o afiliere politică explicită.",
+    },
+    "center-right": {
+        name: "Centru-dreapta",
+        color: "bg-orange-400",
+        pill: "border-orange-200 bg-orange-50 text-orange-700",
+        description:
+            "Publicații moderat conservatoare, favorabile de regulă pieței libere și unei retorici mai ordonate.",
+    },
+    right: {
+        name: "Dreapta",
+        color: "bg-red-600",
+        pill: "border-red-200 bg-red-50 text-red-700",
+        description:
+            "Publicații cu accent conservator, suveranist sau anti-establishment, critice față de instituțiile mainstream.",
+    },
+} as const;
+
+const FACTUALITY_META = {
+    high: {
+        name: "Ridicată",
+        color: "text-emerald-600",
+        pill: "border-emerald-200 bg-emerald-50 text-emerald-700",
+        description: "Rar publică informații false și corectează erorile când apar.",
+    },
+    mixed: {
+        name: "Mixtă",
+        color: "text-amber-600",
+        pill: "border-amber-200 bg-amber-50 text-amber-700",
+        description: "Alternează între materiale solide și episoade de senzaționalism sau informații neconfirmate.",
+    },
+    low: {
+        name: "Scăzută",
+        color: "text-red-600",
+        pill: "border-red-200 bg-red-50 text-red-700",
+        description: "Publică frecvent informații slabe, înșelătoare sau greu de verificat.",
+    },
+} as const;
+
+const SOURCE_CATEGORY_LABELS = {
+    mainstream: "Mainstream",
+    independent: "Independentă",
+    tabloid: "Tabloid",
+    public: "Publică",
+} as const;
+
+const PRINCIPLES = [
+    {
+        title: "Agregăm aceeași poveste",
+        description: "Grupăm articole care tratează același eveniment, ca să poți compara perspectivele în loc să citești izolat.",
+    },
+    {
+        title: "Măsurăm direcția, nu adevărul absolut",
+        description: "Bias-ul editorial arată din ce unghi e spusă povestea, nu dacă publicația are sau nu dreptate în tot ce scrie.",
+    },
+    {
+        title: "Punem transparența înaintea verdictului",
+        description: "Etichetele sunt explicate, nu ascunse; vrem să vezi cum citim noi ecosistemul media, nu doar ce concluzie tragem.",
+    },
+] as const;
+
+const BIAS_FACTORS = [
+    "Ce subiecte sunt alese și care rămân pe dinafară.",
+    "Cum sunt titlate și încadrate evenimentele.",
+    "Ce surse, experți și instituții sunt invocate în mod repetat.",
+    "Ce context suplimentar este oferit sau, dimpotrivă, omis.",
+] as const;
+
+const CONTEXT_POINTS = [
+    {
+        title: "Filarea",
+        description: "Selecția subiectelor care devin vizibile pentru publicul unei publicații.",
+    },
+    {
+        title: "Omisiunea",
+        description: "Evenimentele lăsate pe dinafară, deși sunt relevante în altă parte a spectrului.",
+    },
+    {
+        title: "Încadrarea",
+        description: "Limbajul, tonul și unghiul prin care e descrisă aceeași situație.",
+    },
+] as const;
+
+const FACTUALITY_POINTS = [
+    { key: "high", title: "Ridicată" },
+    { key: "mixed", title: "Mixtă" },
+    { key: "low", title: "Scăzută" },
+] as const;
+
+const SOURCES_BY_BIAS = {
+    left: NEWS_SOURCES.filter((source) => source.bias === "left"),
+    "center-left": NEWS_SOURCES.filter((source) => source.bias === "center-left"),
+    center: NEWS_SOURCES.filter((source) => source.bias === "center"),
+    "center-right": NEWS_SOURCES.filter((source) => source.bias === "center-right"),
+    right: NEWS_SOURCES.filter((source) => source.bias === "right"),
+};
+
+const FACTUALITY_COUNTS = NEWS_SOURCES.reduce(
+    (counts, source) => {
+        counts[source.factuality] += 1;
+        return counts;
+    },
+    { high: 0, mixed: 0, low: 0 },
+);
+
+const OVERVIEW_STATS = [
+    { label: "Surse indexate", value: NEWS_SOURCES.length },
+    { label: "Zone pe spectru", value: BIAS_ORDER.length },
+    { label: "Factualitate ridicată", value: FACTUALITY_COUNTS.high },
+] as const;
+
+function SectionHeader({
+    eyebrow,
+    title,
+    description,
+}: {
+    eyebrow: string;
+    title: string;
+    description: string;
+}) {
+    return (
+        <div className="space-y-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{eyebrow}</p>
+            <h2 className="font-serif text-3xl text-foreground md:text-4xl">{title}</h2>
+            <p className="max-w-3xl text-base leading-relaxed text-muted-foreground md:text-lg">{description}</p>
+        </div>
+    );
+}
 
 export default function Metodologie() {
     const location = useLocation();
 
     useEffect(() => {
-        if (location.hash === '#surse') {
-            document.getElementById('surse')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        if (!location.hash) return;
+
+        const targetId = location.hash.replace("#", "");
+        const timer = window.setTimeout(() => {
+            document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 0);
+
+        return () => window.clearTimeout(timer);
     }, [location.hash]);
-
-    // Grupează sursele pe bias
-    const sourcesByBias = {
-        left: NEWS_SOURCES.filter(s => s.bias === 'left'),
-        'center-left': NEWS_SOURCES.filter(s => s.bias === 'center-left'),
-        center: NEWS_SOURCES.filter(s => s.bias === 'center'),
-        'center-right': NEWS_SOURCES.filter(s => s.bias === 'center-right'),
-        right: NEWS_SOURCES.filter(s => s.bias === 'right'),
-    };
-
-    const biasLabels: Record<string, { name: string; color: string; description: string }> = {
-        'left': {
-            name: 'Stânga',
-            color: 'bg-blue-600',
-            description: 'Publicații cu orientare progresistă, pro-europeană, care susțin de regulă partidele de stânga și politici sociale liberale.'
-        },
-        'center-left': {
-            name: 'Centru-Stânga',
-            color: 'bg-blue-400',
-            description: 'Publicații cu înclinație moderată spre stânga, adesea critice față de corupție și cu focus pe jurnalism de investigații.'
-        },
-        'center': {
-            name: 'Centru',
-            color: 'bg-gray-500',
-            description: 'Publicații care încearcă să mențină un echilibru între perspective, fără o înclinație politică evidentă.'
-        },
-        'center-right': {
-            name: 'Centru-Dreapta',
-            color: 'bg-red-400',
-            description: 'Publicații cu înclinație moderată spre dreapta, adesea favorabile politicilor economice liberale și conservatoare moderat.'
-        },
-        'right': {
-            name: 'Dreapta',
-            color: 'bg-red-600',
-            description: 'Publicații cu orientare conservatoare, naționalistă sau suveranistă, adesea critice față de UE și instituțiile internaționale.'
-        },
-    };
-
-    const factualityLabels: Record<string, { name: string; color: string }> = {
-        'high': { name: 'Ridicată', color: 'text-green-600' },
-        'mixed': { name: 'Mixtă', color: 'text-yellow-600' },
-        'low': { name: 'Scăzută', color: 'text-red-600' },
-    };
 
     return (
         <div className="min-h-screen bg-background">
             <Header />
 
-            <main className="container mx-auto px-4 py-8 max-w-4xl">
-                {/* Back link */}
-                <Link
-                    to="/"
-                    className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-6"
-                >
-                    <ChevronLeft className="w-4 h-4 mr-1" />
-                    Înapoi la Știri
-                </Link>
+            <main className="container mx-auto max-w-6xl px-4 py-8 md:py-12">
+                <section className="grid gap-8 border-b border-border/60 pb-12 lg:grid-cols-[minmax(0,1.2fr)_340px]">
+                    <div className="space-y-6">
+                        <Link
+                            to="/"
+                            className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                            <ChevronLeft className="h-4 w-4" />
+                            Înapoi la Știri
+                        </Link>
 
-                <h1 className="text-3xl font-bold text-foreground mb-2">
-                    Cum Funcționează thesite.ro
-                </h1>
-                <p className="text-lg text-muted-foreground mb-8">
-                    Metodologia noastră pentru agregarea și clasificarea știrilor din România
-                </p>
+                        <div className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                            <Badge variant="outline" className="rounded-full border-border/70 bg-background px-3 py-1 text-[11px] tracking-[0.18em]">
+                                Metodologie
+                            </Badge>
+                            <span>{NEWS_SOURCES.length} surse evaluate manual</span>
+                            <span className="hidden h-1 w-1 rounded-full bg-muted-foreground/40 sm:inline-flex" />
+                            <span>Lectură comparativă, nu verdict final</span>
+                        </div>
 
-                {/* Ce este ClarȘtiri */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Info className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Ce este thesite.ro?</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40">
-                        <p className="text-foreground text-lg mb-4">
-                            thesite.ro este un agregator de știri care colectează articole de la <strong>{NEWS_SOURCES.length} surse media românești</strong> și le grupează pe subiecte, oferindu-ți o perspectivă completă asupra modului în care diferite publicații acoperă aceleași evenimente.
-                        </p>
-                        <p className="text-muted-foreground">
-                            Scopul nostru este să te ajutăm să înțelegi ce povești sunt acoperite — și de cine — pentru a-ți forma o opinie mai informată.
-                        </p>
-                    </div>
-                </section>
+                        <div className="space-y-4">
+                            <h1 className="font-serif text-4xl font-bold tracking-tight text-foreground md:text-6xl">
+                                Cum funcționează thesite.ro
+                            </h1>
+                            <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground md:text-xl">
+                                Agregăm știri din ecosistemul media românesc și le plasăm într-un cadru clar: cine
+                                acoperă un subiect, din ce unghi îl spune și cât de fiabilă este sursa în timp.
+                            </p>
+                        </div>
 
-                {/* Ce înseamnă Bias */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <BarChart3 className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Ce Înseamnă "Bias"?</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40 space-y-4">
-                        <p className="text-foreground">
-                            <strong>Bias-ul editorial</strong> se referă la tendința unei publicații de a prezenta știrile dintr-o anumită perspectivă politică sau ideologică. Aceasta poate influența:
-                        </p>
-                        <ul className="list-disc list-inside text-muted-foreground mb-4 space-y-2 ml-2">
-                            <li>Ce știri alege să acopere (și ce omite)</li>
-                            <li>Cum titlulează și formulează articolele</li>
-                            <li>Ce surse și experți citează</li>
-                            <li>Ce context oferă sau omite</li>
-                        </ul>
+                        <div className="flex flex-wrap gap-3">
+                            <Button asChild className="rounded-full px-6">
+                                <Link to="/surse">
+                                    Vezi catalogul surselor
+                                    <ArrowRight className="h-4 w-4" />
+                                </Link>
+                            </Button>
+                            <Button asChild variant="outline" className="rounded-full px-6">
+                                <a href="#surse">Sari la distribuția pe spectru</a>
+                            </Button>
+                        </div>
 
-                        <div className="bg-amber-50/50 dark:bg-amber-950/20 py-4 px-5 border-l-4 border-amber-400 mt-6">
-                            <div className="flex items-start gap-3">
-                                <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                                <div>
-                                    <p className="font-bold text-amber-900 dark:text-amber-200 text-sm mb-1 uppercase tracking-wider">Important de reținut</p>
-                                    <p className="text-sm text-amber-800/80 dark:text-amber-300">
-                                        <strong>Bias-ul NU înseamnă că o publicație minte.</strong> O sursă poate fi factuală dar biased. Nici "centru" nu înseamnă automat "corect" - înseamnă doar că publicația nu are o orientare politică clară.
+                        <div className="grid gap-4 sm:grid-cols-3">
+                            {PRINCIPLES.map((principle) => (
+                                <div key={principle.title} className="rounded-[1.75rem] border border-border/60 bg-card/70 p-5">
+                                    <p className="font-serif text-xl text-foreground">{principle.title}</p>
+                                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                                        {principle.description}
                                     </p>
                                 </div>
-                            </div>
+                            ))}
                         </div>
                     </div>
-                </section>
 
-                {/* Clasificarea în context românesc */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <BarChart3 className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Bias în Context Românesc</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40 space-y-4">
-                        <p className="text-foreground">
-                            Bias editorial nu înseamnă știri false. Înseamnă o preferință sau o perspectivă a unei publicații — un filtru prin care aceasta colectează, raportează și dă formă știrilor.
+                    <aside className="rounded-[2rem] border border-border/60 bg-card/70 p-6">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                            Pe scurt
                         </p>
-                        <ul className="list-disc list-inside text-muted-foreground space-y-2 mt-4 ml-2">
-                            <li><strong>Filarea:</strong> selecția subiectelor care sunt acoperite.</li>
-                            <li><strong>Omisiunea:</strong> ce știri sunt lăsate pe dinafară.</li>
-                            <li><strong>Încadrarea:</strong> cuvintele folosite pentru a descrie o situație.</li>
-                        </ul>
-                        <p className="text-sm text-muted-foreground">
-                            Clasificările sunt bazate pe analiza editorială a publicațiilor - titluri, selectarea știrilor, tonul general - nu pe declarații oficiale ale acestora.
-                        </p>
-                    </div>
-                </section>
+                        <div className="mt-4 space-y-4">
+                            {OVERVIEW_STATS.map((stat) => (
+                                <div key={stat.label} className="rounded-[1.25rem] border border-border/60 bg-background/80 p-4">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                        {stat.label}
+                                    </p>
+                                    <p className="mt-2 font-serif text-3xl text-foreground">{stat.value}</p>
+                                </div>
+                            ))}
+                        </div>
 
-                {/* Bara de Bias */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <BarChart3 className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Cum Citești Bara de Bias</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40">
-                        <p className="text-foreground mb-4">
-                            Pentru fiecare știre agregată, afișăm o bară colorată care arată distribuția surselor:
-                        </p>
-
-                        {/* Demo Bias Bar */}
-                        <div className="mb-6">
-                            <div className="flex h-8 rounded overflow-hidden text-sm font-medium mb-2">
-                                <div className="bg-bias-left flex items-center justify-center text-white" style={{ width: '30%' }}>
-                                    S 30%
-                                </div>
-                                <div className="bg-bias-center flex items-center justify-center text-white" style={{ width: '45%' }}>
-                                    C 45%
-                                </div>
-                                <div className="bg-bias-right flex items-center justify-center text-white" style={{ width: '25%' }}>
-                                    D 25%
-                                </div>
-                            </div>
-                            <p className="text-sm text-muted-foreground text-center">
-                                Exemplu: 30% surse stânga, 45% centru, 25% dreapta
+                        <div className="mt-6 border-t border-border/60 pt-5">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                Traseu rapid
                             </p>
+                            <nav className="mt-3 flex flex-wrap gap-2">
+                                {SECTION_LINKS.map((link) => (
+                                    <a
+                                        key={link.id}
+                                        href={`#${link.id}`}
+                                        className="rounded-full border border-border/70 bg-background px-3 py-1.5 text-sm text-foreground transition-colors hover:bg-muted"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </nav>
                         </div>
-
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2">
-                                <span className="w-4 h-4 rounded bg-bias-left"></span>
-                                <span className="text-foreground"><strong>Albastru (S)</strong> = Surse de stânga și centru-stânga</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-4 h-4 rounded bg-bias-center"></span>
-                                <span className="text-foreground"><strong>Gri (C)</strong> = Surse de centru</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="w-4 h-4 rounded bg-bias-right"></span>
-                                <span className="text-foreground"><strong>Roșu (D)</strong> = Surse de dreapta și centru-dreapta</span>
-                            </li>
-                        </ul>
-                    </div>
+                    </aside>
                 </section>
 
-                {/* Punct Orbit */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Eye className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Ce Sunt "Subiectele Ignorate"?</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40">
-                        <p className="text-foreground mb-4 font-medium text-lg">
-                            Un <strong>"Subiect Ignorat"</strong> (Blindspot) este o știre acoperită disproporționat de sursele dintr-o singură parte a spectrului politic, fiind practic "invizibilă" pentru cealaltă tabără.
-                        </p>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div className="bg-blue-50/50 dark:bg-blue-950/20 p-5 border-l-4 border-blue-400">
-                                <h4 className="font-bold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    Ignorat de Stânga
-                                </h4>
-                                <p className="text-sm text-blue-700/80 dark:text-blue-400/80">
-                                    Subiectul este relatat masiv de surse de Dreapta, dar este aproape complet ignorat de sursele de Stânga. Cititorii care urmăresc doar presă de stânga riscă să nu afle deloc despre acest eveniment.
-                                </p>
-                            </div>
-                            <div className="bg-red-50/50 dark:bg-red-950/20 p-5 border-l-4 border-red-400">
-                                <h4 className="font-bold text-red-800 dark:text-red-300 mb-2 flex items-center gap-2">
-                                    <AlertTriangle className="w-4 h-4" />
-                                    Ignorat de Dreapta
-                                </h4>
-                                <p className="text-sm text-red-700/80 dark:text-red-400/80">
-                                    Subiectul este central în publicațiile de Stânga, dar lipsește de pe agenda surselor de Dreapta. Cititorii din "bula" de dreapta pierd această informație.
-                                </p>
-                            </div>
-                        </div>
-
-                        <p className="text-muted-foreground mb-4">
-                            Aceste fenomene apar adesea atunci când un subiect este inconfortabil pentru o anumită ideologie sau când o temă este folosită ca instrument politic doar de o anumită tabără.
-                        </p>
-
-                        <div className="bg-muted/50 p-4 rounded-lg">
-                            <p className="text-sm font-semibold mb-2">Algoritmul nostru:</p>
-                            <p className="text-sm text-muted-foreground">
-                                Detectăm automat aceste cazuri atunci când o știre are cel puțin 3 surse, iar una dintre tabere (Stânga sau Dreapta) are o prezență de <strong>sub 8%</strong> în timp ce cealaltă domină acoperirea.
+                <div className="mt-10 grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
+                    <aside className="hidden lg:block">
+                        <div className="sticky top-24 rounded-[1.75rem] border border-border/60 bg-card/60 p-5">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                Cuprins
                             </p>
+                            <nav className="mt-4 space-y-2">
+                                {SECTION_LINKS.map((link) => (
+                                    <a
+                                        key={link.id}
+                                        href={`#${link.id}`}
+                                        className="block rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
+                            </nav>
                         </div>
-                    </div>
-                </section>
+                    </aside>
 
-                {/* Factualitate */}
-                <section className="mb-12">
-                    <div className="flex items-center gap-2 mb-4">
-                        <Shield className="w-5 h-5 text-primary" />
-                        <h2 className="text-xl font-bold text-foreground">Scorul de Factualitate</h2>
-                    </div>
-                    <div className="py-6 border-b border-border/40">
-                        <p className="text-foreground mb-4">
-                            Pe lângă bias, evaluăm și <strong>factualitatea</strong> fiecărei surse - cât de des publică informații verificabile și corecte:
-                        </p>
-                        <ul className="space-y-2 text-sm mb-4">
-                            <li className="flex items-center gap-2">
-                                <span className="font-medium text-green-600">● Ridicată</span>
-                                <span className="text-muted-foreground">— Rar publică informații false, corectează erorile</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="font-medium text-yellow-600">● Mixtă</span>
-                                <span className="text-muted-foreground">— Ocazional publică informații neconfirmate sau senzaționalism</span>
-                            </li>
-                            <li className="flex items-center gap-2">
-                                <span className="font-medium text-red-600">● Scăzută</span>
-                                <span className="text-muted-foreground">— Frecvent publică informații false sau înșelătoare</span>
-                            </li>
-                        </ul>
-                        <p className="text-sm text-muted-foreground">
-                            Clasificările de factualitate sunt bazate pe istoricul publicațiilor, verificări de fapte anterioare și practica jurnalistică observată.
-                        </p>
-                    </div>
-                </section>
+                    <div className="space-y-14">
+                        <section id="ce-este" className="space-y-6 border-b border-border/60 pb-12">
+                            <SectionHeader
+                                eyebrow="Ce agregăm"
+                                title="Ce este, concret, thesite.ro"
+                                description="Un agregator comparativ de știri: colectăm aceeași poveste din mai multe redacții și îți arătăm unde există convergență, dezechilibru sau tăcere."
+                            />
 
-                {/* Lista Surselor */}
-                <section className="mb-12" id="surse">
-                    <h2 className="text-xl font-bold text-foreground mb-4">
-                        Toate Sursele Noastre ({NEWS_SOURCES.length})
-                    </h2>
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_320px]">
+                                <div className="space-y-4 text-base leading-relaxed text-muted-foreground">
+                                    <p>
+                                        thesite.ro adună materiale de la <strong className="text-foreground">{NEWS_SOURCES.length} surse media românești</strong>, le
+                                        grupează pe subiecte și pune în fața ta nu doar articolul, ci și distribuția
+                                        editorială din spatele lui.
+                                    </p>
+                                    <p>
+                                        Scopul nu este să îți spunem ce să crezi, ci să îți oferim mai rapid contextul
+                                        de care ai nevoie ca să vezi dacă o poveste e împinsă dintr-o singură direcție
+                                        sau circulă echilibrat prin spectrul media.
+                                    </p>
+                                </div>
 
-                    <div className="space-y-8">
-                        {Object.entries(sourcesByBias).map(([bias, sources]) => (
-                            sources.length > 0 && (
-                                <div key={bias} className="py-6 border-b border-border/40">
-                                    <div className="flex items-center gap-3 mb-3">
-                                        <span className={`w-4 h-4 rounded ${biasLabels[bias].color}`}></span>
-                                        <h3 className="font-bold text-foreground">{biasLabels[bias].name}</h3>
-                                        <span className="text-sm text-muted-foreground">({sources.length} surse)</span>
+                                <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                        Ce urmărim
+                                    </p>
+                                    <div className="mt-4 space-y-4">
+                                        <div className="flex items-start gap-3">
+                                            <Info className="mt-0.5 h-4 w-4 text-primary" />
+                                            <p className="text-sm leading-relaxed text-muted-foreground">
+                                                <span className="font-medium text-foreground">Acoperirea:</span> cine
+                                                vorbește despre un subiect și cine lipsește complet.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <BarChart3 className="mt-0.5 h-4 w-4 text-primary" />
+                                            <p className="text-sm leading-relaxed text-muted-foreground">
+                                                <span className="font-medium text-foreground">Unghiul:</span> din ce
+                                                direcție editorială este împinsă povestea.
+                                            </p>
+                                        </div>
+                                        <div className="flex items-start gap-3">
+                                            <Shield className="mt-0.5 h-4 w-4 text-primary" />
+                                            <p className="text-sm leading-relaxed text-muted-foreground">
+                                                <span className="font-medium text-foreground">Fiabilitatea:</span> cât
+                                                de des sursa respectivă publică informații verificabile.
+                                            </p>
+                                        </div>
                                     </div>
-                                    <p className="text-sm text-muted-foreground mb-4">
-                                        {biasLabels[bias].description}
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="bias" className="space-y-6 border-b border-border/60 pb-12">
+                            <SectionHeader
+                                eyebrow="Bias editorial"
+                                title="Cum definim bias-ul"
+                                description="Bias-ul editorial este preferința unei publicații pentru un anumit unghi de interpretare. Nu e sinonim cu minciuna; este filtrul prin care realitatea este selectată și povestită."
+                            />
+
+                            <div className="grid gap-6 lg:grid-cols-2">
+                                <div className="space-y-5">
+                                    <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                        <p className="text-sm leading-relaxed text-muted-foreground">
+                                            În practică, bias-ul poate fi observat în felul în care o publicație
+                                            prioritizează teme, alegerea cuvintelor și selecția vocilor citate în mod
+                                            repetat.
+                                        </p>
+                                        <ul className="mt-5 space-y-3">
+                                            {BIAS_FACTORS.map((factor) => (
+                                                <li key={factor} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                                                    <span className="mt-1.5 h-2 w-2 rounded-full bg-foreground/30" />
+                                                    <span>{factor}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <div className="rounded-[1.75rem] border border-amber-200 bg-amber-50/70 p-6 dark:border-amber-900/70 dark:bg-amber-950/20">
+                                        <div className="flex items-start gap-3">
+                                            <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600" />
+                                            <div>
+                                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700 dark:text-amber-300">
+                                                    Important
+                                                </p>
+                                                <p className="mt-2 text-sm leading-relaxed text-amber-900/80 dark:text-amber-100/80">
+                                                    O sursă poate fi <strong>factuală, dar biased</strong>. La fel,
+                                                    eticheta „centru” nu înseamnă automat „corect”, ci doar absența unei
+                                                    orientări politice foarte vizibile.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                        Context românesc
                                     </p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {sources.map(source => (
-                                            <div
-                                                key={source.id}
-                                                className="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-transparent hover:border-border transition-colors"
-                                            >
-                                                <SourceFavicon source={source} size="sm" showRing={false} />
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="font-medium text-sm text-foreground truncate">
-                                                        {source.name}
-                                                    </p>
-                                                    <p className={`text-xs ${factualityLabels[source.factuality].color}`}>
-                                                        Factualitate: {factualityLabels[source.factuality].name}
-                                                    </p>
-                                                </div>
+                                    <div className="mt-4 space-y-4">
+                                        {CONTEXT_POINTS.map((point) => (
+                                            <div key={point.title} className="rounded-[1.25rem] border border-border/60 bg-background/80 p-4">
+                                                <p className="font-medium text-foreground">{point.title}</p>
+                                                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                                    {point.description}
+                                                </p>
                                             </div>
                                         ))}
                                     </div>
+                                    <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+                                        Clasificările sunt bazate pe analiza editorială a publicațiilor — titluri,
+                                        selecția subiectelor, tonul general — nu pe declarațiile lor oficiale despre
+                                        neutralitate.
+                                    </p>
                                 </div>
-                            )
-                        ))}
-                    </div>
-                </section>
+                            </div>
+                        </section>
 
-                {/* Disclaimer */}
-                <section className="mb-12">
-                    <div className="bg-muted/50 rounded-lg p-6">
-                        <h3 className="font-bold text-foreground mb-2">Disclaimer</h3>
-                        <p className="text-sm text-muted-foreground">
-                            Clasificările noastre sunt <strong>subiective</strong> și bazate pe propria analiză editorială.
-                            Nu suntem afiliați cu nicio publicație listată, și nu pretindem că clasificările sunt perfecte.
-                            Te încurajăm să citești din surse diverse și să îți formezi propria opinie.
-                        </p>
+                        <section id="bara-bias" className="space-y-6 border-b border-border/60 pb-12">
+                            <SectionHeader
+                                eyebrow="Bara de bias"
+                                title="Cum citești distribuția surselor"
+                                description="Pentru fiecare știre agregată afișăm o bară care arată ce pondere a acoperirii vine din stânga, centru și dreapta."
+                            />
+
+                            <div className="rounded-[2rem] border border-border/60 bg-card/70 p-6">
+                                <div className="flex h-10 overflow-hidden rounded-full text-sm font-semibold text-white">
+                                    <div className="flex items-center justify-center bg-bias-left" style={{ width: "30%" }}>
+                                        S 30%
+                                    </div>
+                                    <div className="flex items-center justify-center bg-bias-center" style={{ width: "45%" }}>
+                                        C 45%
+                                    </div>
+                                    <div className="flex items-center justify-center bg-bias-right" style={{ width: "25%" }}>
+                                        D 25%
+                                    </div>
+                                </div>
+
+                                <p className="mt-4 text-sm text-muted-foreground">
+                                    Exemplu: aceeași poveste e preluată de 30% surse de stânga, 45% de centru și 25%
+                                    de dreapta.
+                                </p>
+
+                                <div className="mt-6 grid gap-4 md:grid-cols-3">
+                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="h-3 w-3 rounded-full bg-bias-left" />
+                                            <p className="font-medium text-foreground">Albastru</p>
+                                        </div>
+                                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                            Surse de stânga și centru-stânga.
+                                        </p>
+                                    </div>
+                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="h-3 w-3 rounded-full bg-bias-center" />
+                                            <p className="font-medium text-foreground">Gri</p>
+                                        </div>
+                                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                            Surse de centru sau echilibru editorial.
+                                        </p>
+                                    </div>
+                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                        <div className="flex items-center gap-2">
+                                            <span className="h-3 w-3 rounded-full bg-bias-right" />
+                                            <p className="font-medium text-foreground">Roșu</p>
+                                        </div>
+                                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                                            Surse de dreapta și centru-dreapta.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="blindspot" className="space-y-6 border-b border-border/60 pb-12">
+                            <SectionHeader
+                                eyebrow="Blindspot"
+                                title="Ce înseamnă un subiect ignorat"
+                                description="Un blindspot apare când o poveste este împinsă aproape exclusiv dintr-o parte a spectrului și devine practic invizibilă pentru cititorii celeilalte tabere."
+                            />
+
+                            <div className="grid gap-4 md:grid-cols-2">
+                                <div className="rounded-[1.75rem] border border-blue-200 bg-blue-50/70 p-6 dark:border-blue-900/70 dark:bg-blue-950/20">
+                                    <p className="flex items-center gap-2 font-medium text-blue-900 dark:text-blue-200">
+                                        <AlertTriangle className="h-4 w-4" />
+                                        Ignorat de stânga
+                                    </p>
+                                    <p className="mt-3 text-sm leading-relaxed text-blue-900/80 dark:text-blue-100/80">
+                                        Subiectul este acoperit masiv de surse de dreapta, dar aproape lipsește din
+                                        zona progresistă. Cititorii care urmăresc doar presa de stânga riscă să nu-l
+                                        vadă deloc.
+                                    </p>
+                                </div>
+
+                                <div className="rounded-[1.75rem] border border-red-200 bg-red-50/70 p-6 dark:border-red-900/70 dark:bg-red-950/20">
+                                    <p className="flex items-center gap-2 font-medium text-red-900 dark:text-red-200">
+                                        <AlertTriangle className="h-4 w-4" />
+                                        Ignorat de dreapta
+                                    </p>
+                                    <p className="mt-3 text-sm leading-relaxed text-red-900/80 dark:text-red-100/80">
+                                        Subiectul domină în publicațiile de stânga, dar dispare aproape complet din
+                                        agenda surselor conservatoare sau suveraniste.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                    Algoritmul nostru
+                                </p>
+                                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                                    Semnalăm automat cazurile în care o știre are cel puțin <strong className="text-foreground">3 surse</strong>, iar una dintre
+                                    tabere are o prezență de <strong className="text-foreground">sub 8%</strong>, în timp ce cealaltă domină clar acoperirea.
+                                </p>
+                            </div>
+                        </section>
+
+                        <section id="factualitate" className="space-y-6 border-b border-border/60 pb-12">
+                            <SectionHeader
+                                eyebrow="Factualitate"
+                                title="Cum notăm fiabilitatea surselor"
+                                description="Pe lângă bias, evaluăm cât de constant publică o redacție informații verificabile și corecte."
+                            />
+
+                            <div className="grid gap-4 md:grid-cols-3">
+                                {FACTUALITY_POINTS.map((item) => {
+                                    const meta = FACTUALITY_META[item.key];
+
+                                    return (
+                                        <div key={item.key} className="rounded-[1.75rem] border border-border/60 bg-card/70 p-5">
+                                            <Badge
+                                                variant="outline"
+                                                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${meta.pill}`}
+                                            >
+                                                {item.title}
+                                            </Badge>
+                                            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                                                {meta.description}
+                                            </p>
+                                            <p className={`mt-4 text-sm font-medium ${meta.color}`}>
+                                                {FACTUALITY_COUNTS[item.key]} surse în această categorie
+                                            </p>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <p className="text-sm leading-relaxed text-muted-foreground">
+                                Clasificările de factualitate folosesc istoricul publicației, corecțiile ulterioare,
+                                standardele editoriale observabile și episoadele cunoscute de dezinformare.
+                            </p>
+                        </section>
+
+                        <section id="surse" className="space-y-6">
+                            <SectionHeader
+                                eyebrow="Distribuția surselor"
+                                title={`Toate sursele noastre (${NEWS_SOURCES.length})`}
+                                description="Catalogul este împărțit pe zone editoriale. Deschide fiecare grup pentru a vedea componența și mixul de factualitate."
+                            />
+
+                            <Accordion
+                                type="multiple"
+                                defaultValue={["center", "center-left"]}
+                                className="rounded-[2rem] border border-border/60 bg-card/70 px-6"
+                            >
+                                {BIAS_ORDER.map((biasKey) => {
+                                    const sources = SOURCES_BY_BIAS[biasKey];
+                                    const meta = BIAS_META[biasKey];
+
+                                    if (sources.length === 0) return null;
+
+                                    const localFactualityCounts = sources.reduce(
+                                        (counts, source) => {
+                                            counts[source.factuality] += 1;
+                                            return counts;
+                                        },
+                                        { high: 0, mixed: 0, low: 0 },
+                                    );
+
+                                    return (
+                                        <AccordionItem
+                                            key={biasKey}
+                                            value={biasKey}
+                                            className="border-border/60 py-1 last:border-b-0"
+                                        >
+                                            <AccordionTrigger className="py-5 text-left hover:no-underline">
+                                                <div className="space-y-3">
+                                                    <div className="flex flex-wrap items-center gap-3">
+                                                        <span className={`h-3 w-3 rounded-full ${meta.color}`} />
+                                                        <span className="font-serif text-2xl text-foreground">
+                                                            {meta.name}
+                                                        </span>
+                                                        <Badge
+                                                            variant="outline"
+                                                            className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${meta.pill}`}
+                                                        >
+                                                            {sources.length} surse
+                                                        </Badge>
+                                                    </div>
+                                                    <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+                                                        {meta.description}
+                                                    </p>
+                                                </div>
+                                            </AccordionTrigger>
+
+                                            <AccordionContent className="space-y-5">
+                                                <div className="flex flex-wrap gap-2">
+                                                    {FACTUALITY_POINTS.map((item) => {
+                                                        const factualityMeta = FACTUALITY_META[item.key];
+
+                                                        return (
+                                                            <Badge
+                                                                key={item.key}
+                                                                variant="outline"
+                                                                className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${factualityMeta.pill}`}
+                                                            >
+                                                                {item.title}: {localFactualityCounts[item.key]}
+                                                            </Badge>
+                                                        );
+                                                    })}
+                                                </div>
+
+                                                <div className="grid gap-3 sm:grid-cols-2">
+                                                    {sources.map((source) => (
+                                                        <Link
+                                                            key={source.id}
+                                                            to={`/surse/${source.id}`}
+                                                            className="flex items-center gap-3 rounded-[1.25rem] border border-border/60 bg-background/80 p-4 transition-colors hover:bg-muted/60"
+                                                        >
+                                                            <SourceFavicon source={source} size="sm" showRing={false} />
+                                                            <div className="min-w-0 flex-1">
+                                                                <p className="truncate font-medium text-foreground">
+                                                                    {source.name}
+                                                                </p>
+                                                                <p className="mt-1 text-sm text-muted-foreground">
+                                                                    {SOURCE_CATEGORY_LABELS[source.category]}
+                                                                </p>
+                                                            </div>
+                                                            <span className={`text-xs font-medium ${FACTUALITY_META[source.factuality].color}`}>
+                                                                {FACTUALITY_META[source.factuality].name}
+                                                            </span>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    );
+                                })}
+                            </Accordion>
+
+                            <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                <h3 className="font-serif text-2xl text-foreground">Disclaimer</h3>
+                                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                                    Clasificările noastre rămân <strong className="text-foreground">interpretări editoriale</strong>, nu adevăruri absolute.
+                                    Nu suntem afiliați cu publicațiile listate și nu pretindem perfecțiune. Cel mai
+                                    bun antidot la bias rămâne citirea din surse diverse și compararea lor.
+                                </p>
+                            </div>
+                        </section>
                     </div>
-                </section>
+                </div>
             </main>
 
             <Footer />
