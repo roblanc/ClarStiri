@@ -226,19 +226,19 @@ export default function SearchPage() {
         </div>
 
         {!normalizedQuery && (
-          <div className="border border-border bg-card p-8 text-center text-muted-foreground">
+          <div className="surface-panel rounded-[2rem] p-8 text-center text-muted-foreground">
             Introdu un termen în căutare.
           </div>
         )}
 
         {normalizedQuery && !isLoading && allResults.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
+          <div className="surface-ghost flex flex-col items-center justify-center rounded-[2rem] py-20">
             <SearchX className="w-12 h-12 text-muted-foreground mb-4" />
             <p className="font-serif text-2xl mb-2 text-foreground">Niciun rezultat</p>
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-8 text-center max-w-md">
               Nu am găsit nimic pentru "{query}". Încearcă alți termeni.
             </p>
-            <Button onClick={clearQuery} variant="outline" className="rounded-none border-border font-serif uppercase text-xs tracking-widest px-8">
+            <Button onClick={clearQuery} variant="outline" className="rounded-full border-transparent bg-background/80 font-serif uppercase text-xs tracking-widest px-8 hover:bg-background">
               ȘTERGE CĂUTAREA
             </Button>
           </div>
@@ -257,7 +257,7 @@ export default function SearchPage() {
                       <Link
                         key={result.id}
                         to={result.href}
-                        className="border border-border bg-card p-4 hover:bg-muted/40 transition-colors"
+                        className="surface-panel rounded-[1.5rem] p-4 transition-all hover:-translate-y-0.5 hover:bg-background/95"
                       >
                         <div className="flex items-center justify-between gap-2 mb-2">
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">

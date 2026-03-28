@@ -34,8 +34,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             token: process.env.UPSTASH_REDIS_REST_TOKEN!,
         });
         const [cache, ts] = await Promise.all([
-            redis.get<unknown[]>('aggregated_news'),
-            redis.get<number>('aggregated_news_ts'),
+            redis.get<unknown[]>('aggregated_news_v2'),
+            redis.get<number>('aggregated_news_v2_ts'),
         ]);
         out.redis = {
             status: 'ok',

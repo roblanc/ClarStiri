@@ -9,10 +9,12 @@ import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo, calculateBiasDis
 
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
-const CACHE_TTL = 25 * 60 * 60; // 25h — outlasts daily Vercel Hobby cron (runs max 1x/day)
+const CACHE_TTL = 25 * 60 * 60;
 const MIN_SOURCES_THRESHOLD = 2; // matches frontend filter (sourcesCount > 1) — single-source stories are filtered out anyway
 const MAX_STORY_AGE_MS = 7 * 24 * 60 * 60 * 1000; // Expire stories older than 7 days
 const MAX_STORIES = 100;
+const REFRESH_LOCK_KEY = `${CACHE_KEY}:refresh_lock`;
+const REFRESH_LOCK_TTL = 10 * 60;
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
     // Toate sursele în paralel — se termină în max 3s (timeout per sursă)
@@ -91,6 +93,23 @@ function sortByImportance(stories: AggregatedStory[]): AggregatedStory[] {
     });
 }
 
+async function acquireRefreshLock(redis: Redis): Promise<string | null> {
+    const lockId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const result = await redis.set(REFRESH_LOCK_KEY, lockId, { nx: true, ex: REFRESH_LOCK_TTL });
+    return result === 'OK' ? lockId : null;
+}
+
+async function releaseRefreshLock(redis: Redis, lockId: string): Promise<void> {
+    try {
+        const currentLock = await redis.get<string>(REFRESH_LOCK_KEY);
+        if (currentLock === lockId) {
+            await redis.del(REFRESH_LOCK_KEY);
+        }
+    } catch (error) {
+        console.error('[CRON] Refresh lock release failed:', error);
+    }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'GET') {
@@ -126,6 +145,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!redis) {
         return res.status(500).json({ success: false, error: 'Redis unavailable — check UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN env vars' });
+    }
+
+    const lockId = await acquireRefreshLock(redis);
+    if (!lockId) {
+        return res.status(200).json({
+            success: true,
+            skipped: true,
+            message: 'Refresh already in progress',
+        });
     }
 
     try {
@@ -219,5 +247,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error'
         });
+    } finally {
+        await releaseRefreshLock(redis, lockId);
     }
 }

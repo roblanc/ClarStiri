@@ -57,7 +57,7 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
   const biasCategory = scoreToBiasCategory(profile.biasScore);
 
   return (
-    <article className="bg-card border border-border rounded-xl p-5 space-y-5">
+    <article className="surface-panel rounded-[1.75rem] p-5 space-y-5">
       <header className="space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
@@ -87,7 +87,7 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
           <span className={`px-2.5 py-1 text-xs rounded-full border ${factualityClassMap[source.factuality]}`}>
             {factualityLabelMap[source.factuality]}
           </span>
-          <span className="px-2.5 py-1 text-xs rounded-full border border-border bg-muted text-muted-foreground">
+          <span className="surface-subtle px-2.5 py-1 text-xs rounded-full text-muted-foreground">
             Încredere {getConfidenceLabel(profile.confidence).toLowerCase()}
           </span>
         </div>
@@ -153,7 +153,7 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
       <SectionList title="Puncte forte" items={profile.strengths} />
 
       {profile.references && profile.references.length > 0 && (
-        <section className="space-y-2 border-t border-border pt-4">
+        <section className="space-y-2 border-t border-border/40 pt-4">
           <h4 className="text-sm font-semibold text-foreground">Surse și referințe</h4>
           <ol className="space-y-1.5">
             {profile.references.map((ref, i) => (
@@ -176,4 +176,3 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
     </article>
   );
 }
-

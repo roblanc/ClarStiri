@@ -13,7 +13,7 @@ const CORS_PROXIES = [
 // Cache keys pentru localStorage
 const CACHE_KEY = 'clarstiri_news_cache';
 const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v4_ultra';
-const CACHE_DURATION = 30 * 60 * 1000; // 30 minute
+const CACHE_DURATION = 10 * 60 * 1000; // 10 minute — fallback-ul local trebuie să rămână cât mai proaspăt
 
 // Timeout pentru fetch (în milisecunde)
 const FETCH_TIMEOUT = 8000; // 8 secunde — proxy-urile CORS au latență mai mare din România
@@ -588,10 +588,9 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-// Client-side fallback uses a lower threshold (2) because CORS proxies
-// fetch fewer sources than the server — show something rather than nothing.
-// The server API already enforces 3 sources on the fast path.
-const MIN_SOURCES_THRESHOLD = 3;
+// Păstrăm același prag ca pe server ca să nu avem homepage diferit
+// între fast path-ul din API și fallback-ul client-side.
+const MIN_SOURCES_THRESHOLD = 2;
 
 export function aggregateNews(news: RSSNewsItem[]): AggregatedStory[] {
     const storyGroups = findSimilarStories(filterRecentNews(news));

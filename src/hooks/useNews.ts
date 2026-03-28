@@ -86,10 +86,10 @@ export function useAggregatedNews(limit = 20) {
                 throw error;
             }
         },
-        staleTime: 5 * 60 * 1000,     // refetch doar dacă datele sunt mai vechi de 5 min
+        staleTime: 2 * 60 * 1000,     // verifică noutăți mai des, dar profită de cache-ul edge
         gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
         refetchOnWindowFocus: true,   // refetch când userul revine pe tab (critic pe mobile)
-        refetchInterval: 5 * 60 * 1000,
+        refetchInterval: 2 * 60 * 1000,
         retry: 1,
     });
 

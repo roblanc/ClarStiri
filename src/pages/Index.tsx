@@ -110,10 +110,16 @@ const Index = () => {
   const { query } = useSearchStore();
   const normalizedQuery = normalizeSearchText(query || "");
   const hasSearchQuery = normalizedQuery.length > 0;
+  const hasFetchedStories = (stories?.length ?? 0) > 0;
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
-    let filtered = (stories || []).filter(s => s.sourcesCount > 1);
+    const realStories = stories || [];
+    let filtered = realStories.filter((story) => story.sourcesCount > 1);
+
+    if (!filtered.length && realStories.length > 0) {
+      filtered = realStories;
+    }
 
     if (!filtered.length) {
       const demoFiltered = hasSearchQuery
@@ -159,7 +165,7 @@ const Index = () => {
     })) || [];
   }, [stories, hasSearchQuery, normalizedQuery]);
 
-  const useDemoContent = !isLoading && !(stories?.length ?? 0);
+  const useDemoContent = !isLoading && !hasFetchedStories;
 
   const matchedVoices = useMemo(() => {
     if (!hasSearchQuery) return [];

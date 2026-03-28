@@ -455,24 +455,24 @@ const StoryDetail = () => {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-[24px] p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Surse</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">{totalSources}</p>
                   <p className="mt-1 text-sm text-muted-foreground">publicații distincte în comparație</p>
                 </div>
-                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-[24px] p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Bias dominant</p>
                   <p className={cn("mt-2 text-3xl font-semibold", dominantBias.accentClass)}>{dominantBias.value}%</p>
                   <p className="mt-1 text-sm text-muted-foreground">{dominantBias.label} în distribuția totală</p>
                 </div>
-                <div className="rounded-[24px] border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-[24px] p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Filtru curent</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">{articleFilterCounts[activeFilter]}</p>
                   <p className="mt-1 text-sm text-muted-foreground">{BIAS_LABELS[activeFilter]} afișate mai jos</p>
                 </div>
               </div>
 
-              <Card className="rounded-[28px] border-border/60 shadow-sm">
+              <Card className="rounded-[28px]">
                 <CardContent className="p-5 md:p-6">
                   <div className="space-y-5">
                     <div className="space-y-2">
@@ -490,7 +490,7 @@ const StoryDetail = () => {
 
                     <div className="grid gap-3 md:grid-cols-3">
                       {summaryPoints.map((point) => (
-                        <div key={point} className="rounded-2xl border border-border/50 bg-background/70 p-4 text-sm leading-relaxed text-muted-foreground">
+                        <div key={point} className="surface-subtle rounded-2xl p-4 text-sm leading-relaxed text-muted-foreground">
                           {point}
                         </div>
                       ))}
@@ -500,7 +500,7 @@ const StoryDetail = () => {
                   </Card>
                 </div>
 
-            <Card className="overflow-hidden rounded-[28px] border-border/60 shadow-sm">
+            <Card className="overflow-hidden rounded-[28px]">
               <div className="aspect-[4/3] w-full overflow-hidden bg-muted">
                 <img
                   src={resolvedStory.image || PLACEHOLDER_IMAGE}
@@ -534,7 +534,7 @@ const StoryDetail = () => {
 
           <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
             <section className="space-y-5">
-              <Card className="rounded-[28px] border-border/60 shadow-sm">
+              <Card className="rounded-[28px]">
                 <CardContent className="p-5 md:p-6">
                   <div className="flex flex-col gap-5">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -556,7 +556,7 @@ const StoryDetail = () => {
                           onChange={(event) => setSearchQuery(event.target.value)}
                           aria-label="Caută după titlu sau publicație"
                           placeholder="Caută după titlu sau publicație"
-                          className="h-11 rounded-full border-border/50 bg-background pl-11 pr-4"
+                          className="surface-subtle h-11 rounded-full border-0 pl-11 pr-4"
                         />
                       </div>
                     </div>
@@ -582,7 +582,7 @@ const StoryDetail = () => {
                                     : key === 'right'
                                       ? 'border-red-200 bg-red-100 text-red-700'
                                       : 'border-primary bg-primary text-primary-foreground'
-                                : 'border-border/60 bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground',
+                                : 'border-transparent bg-background/65 text-muted-foreground hover:bg-background/90 hover:text-foreground',
                             )}
                           >
                             <span>{label}</span>
@@ -599,7 +599,7 @@ const StoryDetail = () => {
 
               <div className="space-y-4">
                 {filteredArticles.map((article) => (
-                  <Card key={article.id} className="rounded-[28px] border-border/60 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md">
+                  <Card key={article.id} className="rounded-[28px] transition-all hover:-translate-y-0.5 hover:bg-background/95">
                     <CardContent className="p-5">
                       <div className="flex items-start gap-4">
                         <SourceLogo source={article.source} />
@@ -636,14 +636,14 @@ const StoryDetail = () => {
                             )}
                           </div>
 
-                          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/50 pt-3">
+                          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/35 pt-3">
                             <div className="flex flex-wrap items-center gap-2">
                               {article.category && (
-                                <Badge variant="outline" className="border-border/60 bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                                <Badge variant="outline" className="border-transparent bg-background/80 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground shadow-none">
                                   {article.category}
                                 </Badge>
                               )}
-                              <Badge variant="outline" className="border-border/60 bg-background px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                              <Badge variant="outline" className="border-transparent bg-background/80 px-2.5 py-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground shadow-none">
                                 {article.source.name}
                               </Badge>
                             </div>
@@ -665,7 +665,7 @@ const StoryDetail = () => {
                 ))}
 
                 {filteredArticles.length === 0 && (
-                  <Card className="rounded-[28px] border-dashed border-border/80 shadow-none">
+                  <Card className="surface-ghost rounded-[28px] shadow-none">
                     <CardContent className="p-10 text-center">
                       <p className="text-lg font-medium text-foreground">Nu există articole care să corespundă filtrelor selectate.</p>
                       <p className="mt-2 text-sm text-muted-foreground">Schimbă filtrul sau golește căutarea pentru a vedea toate sursele.</p>
@@ -676,7 +676,7 @@ const StoryDetail = () => {
             </section>
 
             <aside className="space-y-5 xl:sticky xl:top-24 self-start">
-              <Card className="rounded-[28px] border-border/60 shadow-sm">
+              <Card className="rounded-[28px]">
                 <CardContent className="p-5">
                   <div className="space-y-4">
                     <div className="space-y-1">
@@ -711,7 +711,7 @@ const StoryDetail = () => {
                 </CardContent>
               </Card>
 
-              <Card className="rounded-[28px] border-border/60 shadow-sm">
+              <Card className="rounded-[28px]">
                 <CardContent className="p-5">
                   <div className="space-y-3">
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Despre analiza bias</p>

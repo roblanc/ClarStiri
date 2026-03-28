@@ -265,17 +265,17 @@ export default function Sources() {
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-2xl border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-2xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Profiluri</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">{sourcesWithProfiles.length}</p>
                   <p className="mt-1 text-sm text-muted-foreground">surse documentate complet</p>
                 </div>
-                <div className="rounded-2xl border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-2xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Bias track</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">{BIAS_GUIDE.length}</p>
                   <p className="mt-1 text-sm text-muted-foreground">zone de clasificare editorială</p>
                 </div>
-                <div className="rounded-2xl border border-border/60 bg-card/90 p-4">
+                <div className="surface-subtle rounded-2xl p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Ritm review</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">Trim.</p>
                   <p className="mt-1 text-sm text-muted-foreground">revizuire periodică a profilurilor</p>
@@ -283,7 +283,7 @@ export default function Sources() {
               </div>
             </div>
 
-            <Card className="overflow-hidden border-border/60 bg-card/95 shadow-sm">
+            <Card className="overflow-hidden bg-card/95">
               <CardContent className="p-5">
                 <div className="space-y-5">
                   <div className="space-y-1">
@@ -321,7 +321,7 @@ export default function Sources() {
                     })}
                   </div>
 
-                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+                  <div className="surface-tint-amber rounded-2xl p-4 text-sm text-amber-900">
                     <div className="flex items-start gap-3">
                       <CircleAlert className="mt-0.5 h-4 w-4 shrink-0" />
                       <div className="space-y-1">
@@ -338,7 +338,7 @@ export default function Sources() {
           </section>
 
           {missingProfileIds.length > 0 && (
-            <section className="rounded-2xl border border-amber-200 bg-amber-50/80 p-4 md:p-5">
+            <section className="surface-tint-amber rounded-2xl p-4 md:p-5">
               <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
                 <div className="space-y-1">
                   <p className="text-sm font-semibold text-amber-900">Mai există surse fără profil complet</p>
@@ -353,7 +353,7 @@ export default function Sources() {
 
           <section
             id="catalog"
-            className="scroll-mt-24 rounded-[28px] border border-border/60 bg-card/95 p-5 shadow-sm md:p-6"
+            className="surface-panel scroll-mt-24 rounded-[28px] bg-card/95 p-5 md:p-6"
           >
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
@@ -365,7 +365,7 @@ export default function Sources() {
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-border/50 bg-background px-4 py-3 text-sm">
+                <div className="surface-subtle rounded-2xl px-4 py-3 text-sm">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Rezultate curente</p>
                   <p className="mt-1 font-medium text-foreground">
                     {filteredSources.length} surse pentru{' '}
@@ -384,7 +384,7 @@ export default function Sources() {
                     onChange={(event) => setSearch(event.target.value)}
                     aria-label="Caută după sursă, proprietar, URL sau raționament"
                     placeholder="Caută după sursă, proprietar, URL sau raționament"
-                    className="h-12 rounded-full border-border/50 bg-background pl-11 pr-12 text-sm shadow-none placeholder:text-muted-foreground/60 md:text-base"
+                    className="surface-subtle h-12 rounded-full border-0 pl-11 pr-12 text-sm shadow-none placeholder:text-muted-foreground/60 md:text-base"
                   />
                   {search && (
                     <button
@@ -430,7 +430,7 @@ export default function Sources() {
                         'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] transition-colors',
                         biasFilter === filter.value
                           ? 'border-primary bg-primary text-primary-foreground'
-                          : 'border-border/60 bg-background text-muted-foreground hover:border-foreground/20 hover:text-foreground',
+                          : 'border-transparent bg-background/65 text-muted-foreground hover:bg-background/90 hover:text-foreground',
                       )}
                     >
                       <span>{filter.label}</span>
@@ -443,7 +443,7 @@ export default function Sources() {
               </div>
 
               {filteredSources.length === 0 ? (
-                <div className="rounded-3xl border border-dashed border-border/80 bg-background/70 px-6 py-16 text-center">
+                <div className="surface-ghost rounded-3xl px-6 py-16 text-center">
                   <p className="text-lg font-medium text-foreground">Nicio sursă nu corespunde filtrelor curente.</p>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Încearcă alt termen de căutare sau revino la filtrul „Toate”.
@@ -462,7 +462,7 @@ export default function Sources() {
                       <Link
                         key={source.id}
                         to={`/surse/${source.id}`}
-                        className="group flex h-full flex-col rounded-[24px] border border-border/60 bg-background/70 p-5 transition-all hover:-translate-y-1 hover:border-foreground/15 hover:shadow-lg"
+                        className="group surface-panel flex h-full flex-col rounded-[24px] bg-background/70 p-5 transition-all hover:-translate-y-1 hover:bg-background/95"
                       >
                         <div className="flex items-start gap-4">
                           <SourceFavicon source={{ name: source.name, url: source.url, bias: source.bias }} size="lg" />
@@ -478,13 +478,13 @@ export default function Sources() {
                             </div>
 
                             <div className="flex flex-wrap gap-2">
-                              <span className="rounded-full border border-border/60 bg-card px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                              <span className="surface-subtle rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
                                 {SOURCE_CATEGORY_LABELS[source.category]}
                               </span>
                               <span className={cn('rounded-full border px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em]', factualityClassMap[source.factuality])}>
                                 {factualityLabelMap[source.factuality]}
                               </span>
-                              <span className="rounded-full border border-border/60 bg-card px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                              <span className="surface-subtle rounded-full px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
                                 Încredere {confidenceLabelMap[profile.confidence]}
                               </span>
                             </div>
@@ -492,28 +492,28 @@ export default function Sources() {
                         </div>
 
                         <div className="mt-5 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
-                          <div className="rounded-2xl border border-border/50 bg-card/80 p-3">
+                          <div className="surface-subtle rounded-2xl p-3">
                             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground/80">Proprietar</p>
                             <p className="mt-2 leading-relaxed text-foreground">{owner}</p>
                           </div>
-                          <div className="rounded-2xl border border-border/50 bg-card/80 p-3">
+                          <div className="surface-subtle rounded-2xl p-3">
                             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground/80">Ultima analiză</p>
                             <p className="mt-2 leading-relaxed text-foreground">{formatDateLabel(profile.lastAnalysed)}</p>
                           </div>
                         </div>
 
                         <div className="mt-4 space-y-3">
-                          <div className="rounded-2xl border border-border/50 bg-card/80 p-4">
+                          <div className="surface-subtle rounded-2xl p-4">
                             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Linie editorială</p>
                             <p className="mt-2 text-sm leading-relaxed text-foreground">{summary}</p>
                           </div>
-                          <div className="rounded-2xl border border-border/50 bg-card/80 p-4">
+                          <div className="surface-subtle rounded-2xl p-4">
                             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">De ce primește acest scor</p>
                             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{rationale}</p>
                           </div>
                         </div>
 
-                        <div className="mt-auto flex items-center justify-between border-t border-border/50 pt-4">
+                        <div className="mt-auto flex items-center justify-between border-t border-border/35 pt-4">
                           <span className="min-w-0 truncate pr-4 text-xs text-muted-foreground">
                             {source.url.replace(/^https?:\/\//, '').replace(/^www\./, '')}
                           </span>
@@ -532,7 +532,7 @@ export default function Sources() {
 
           <section
             id="metodologie"
-            className="scroll-mt-24 rounded-[28px] border border-border/60 bg-card/95 p-5 shadow-sm md:p-6"
+            className="surface-panel scroll-mt-24 rounded-[28px] bg-card/95 p-5 md:p-6"
           >
             <div className="space-y-6">
               <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
@@ -552,7 +552,7 @@ export default function Sources() {
               </div>
 
               <div className="grid gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-                <Card className="border-border/60 shadow-none">
+                <Card className="shadow-none">
                   <CardContent className="p-5">
                     <div className="space-y-4">
                       <div className="space-y-1">
@@ -567,7 +567,7 @@ export default function Sources() {
                           <div
                             key={item.key}
                             className={cn(
-                              'rounded-2xl border p-4',
+                              'surface-subtle rounded-2xl p-4',
                               biasClassMap[item.key],
                             )}
                           >
@@ -581,7 +581,7 @@ export default function Sources() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-border/60 shadow-none">
+                <Card className="shadow-none">
                   <CardContent className="p-5">
                     <div className="space-y-4">
                       <div className="space-y-1">
@@ -593,7 +593,7 @@ export default function Sources() {
 
                       <div className="space-y-3">
                         {CRITERIA_CARDS.map((item) => (
-                          <div key={item.title} className="rounded-2xl border border-border/60 bg-background/80 p-4">
+                          <div key={item.title} className="surface-subtle rounded-2xl p-4">
                             <div className="flex items-start gap-3">
                               <item.icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                               <div>
@@ -609,7 +609,7 @@ export default function Sources() {
                 </Card>
               </div>
 
-              <Accordion type="multiple" className="rounded-[24px] border border-border/60 bg-background/70 px-5">
+              <Accordion type="multiple" className="surface-subtle rounded-[24px] bg-background/70 px-5">
                 <AccordionItem value="weights" className="border-border/60">
                   <AccordionTrigger className="text-left hover:no-underline">
                     <div className="flex items-center gap-3">
@@ -622,7 +622,7 @@ export default function Sources() {
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
                     <div className="grid gap-3 md:grid-cols-2">
-                      <div className="rounded-2xl border border-border/60 bg-card p-4">
+                      <div className="surface-subtle rounded-2xl p-4">
                         <p className="font-medium text-foreground">Exemplu de mapare</p>
                         <ul className="mt-3 space-y-2">
                           <li>Stânga → 100% Stânga</li>
@@ -632,7 +632,7 @@ export default function Sources() {
                           <li>Dreapta → 100% Dreapta</li>
                         </ul>
                       </div>
-                      <div className="rounded-2xl border border-border/60 bg-card p-4">
+                      <div className="surface-subtle rounded-2xl p-4">
                         <p className="font-medium text-foreground">Cum citești rezultatul</p>
                         <p className="mt-3 leading-relaxed">
                           Dacă o știre are 40% Stânga, 27% Centru și 33% Dreapta, înseamnă că sursele care au acoperit-o
@@ -654,7 +654,7 @@ export default function Sources() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
-                    <div className="rounded-2xl border border-border/60 bg-card p-4 leading-relaxed">
+                    <div className="surface-subtle rounded-2xl p-4 leading-relaxed">
                       Reevaluăm periodic proprietatea, sursele de finanțare, conexiunile politice și tiparele editoriale.
                       Dacă o publicație își schimbă direcția sau conducerea, profilul ei trebuie actualizat — scorul nu este permanent.
                     </div>
@@ -672,7 +672,7 @@ export default function Sources() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
-                    <div className="rounded-2xl border border-border/60 bg-card p-4 leading-relaxed">
+                    <div className="surface-subtle rounded-2xl p-4 leading-relaxed">
                       O sursă clasificată la „stânga” sau „dreapta” poate publica jurnalism foarte bun. Scopul acestei pagini este
                       să îți dea context despre poziționarea sursei, nu să o excludă automat din analiză.
                     </div>

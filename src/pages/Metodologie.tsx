@@ -232,7 +232,7 @@ export default function Metodologie() {
 
                         <div className="grid gap-4 sm:grid-cols-3">
                             {PRINCIPLES.map((principle) => (
-                                <div key={principle.title} className="rounded-[1.75rem] border border-border/60 bg-card/70 p-5">
+                                <div key={principle.title} className="surface-panel rounded-[1.75rem] p-5">
                                     <p className="font-serif text-xl text-foreground">{principle.title}</p>
                                     <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                                         {principle.description}
@@ -242,13 +242,13 @@ export default function Metodologie() {
                         </div>
                     </div>
 
-                    <aside className="rounded-[2rem] border border-border/60 bg-card/70 p-6">
+                    <aside className="surface-panel rounded-[2rem] p-6">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                             Pe scurt
                         </p>
                         <div className="mt-4 space-y-4">
                             {OVERVIEW_STATS.map((stat) => (
-                                <div key={stat.label} className="rounded-[1.25rem] border border-border/60 bg-background/80 p-4">
+                                <div key={stat.label} className="surface-subtle rounded-[1.25rem] p-4">
                                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                                         {stat.label}
                                     </p>
@@ -278,7 +278,7 @@ export default function Metodologie() {
 
                 <div className="mt-10 grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
                     <aside className="hidden lg:block">
-                        <div className="sticky top-24 rounded-[1.75rem] border border-border/60 bg-card/60 p-5">
+                        <div className="surface-panel sticky top-24 rounded-[1.75rem] p-5">
                             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                                 Cuprins
                             </p>
@@ -318,7 +318,7 @@ export default function Metodologie() {
                                     </p>
                                 </div>
 
-                                <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                <div className="surface-panel rounded-[1.75rem] p-6">
                                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                                         Ce urmărim
                                     </p>
@@ -358,7 +358,7 @@ export default function Metodologie() {
 
                             <div className="grid gap-6 lg:grid-cols-2">
                                 <div className="space-y-5">
-                                    <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                    <div className="surface-panel rounded-[1.75rem] p-6">
                                         <p className="text-sm leading-relaxed text-muted-foreground">
                                             În practică, bias-ul poate fi observat în felul în care o publicație
                                             prioritizează teme, alegerea cuvintelor și selecția vocilor citate în mod
@@ -374,7 +374,7 @@ export default function Metodologie() {
                                         </ul>
                                     </div>
 
-                                    <div className="rounded-[1.75rem] border border-amber-200 bg-amber-50/70 p-6 dark:border-amber-900/70 dark:bg-amber-950/20">
+                                    <div className="surface-tint-amber rounded-[1.75rem] p-6">
                                         <div className="flex items-start gap-3">
                                             <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600" />
                                             <div>
@@ -391,13 +391,13 @@ export default function Metodologie() {
                                     </div>
                                 </div>
 
-                                <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                                <div className="surface-panel rounded-[1.75rem] p-6">
                                     <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                                         Context românesc
                                     </p>
                                     <div className="mt-4 space-y-4">
                                         {CONTEXT_POINTS.map((point) => (
-                                            <div key={point.title} className="rounded-[1.25rem] border border-border/60 bg-background/80 p-4">
+                                            <div key={point.title} className="surface-subtle rounded-[1.25rem] p-4">
                                                 <p className="font-medium text-foreground">{point.title}</p>
                                                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                                                     {point.description}
@@ -421,7 +421,7 @@ export default function Metodologie() {
                                 description="Pentru fiecare știre agregată afișăm o bară care arată ce pondere a acoperirii vine din stânga, centru și dreapta."
                             />
 
-                            <div className="rounded-[2rem] border border-border/60 bg-card/70 p-6">
+                            <div className="surface-panel rounded-[2rem] p-6">
                                 <div className="flex h-10 overflow-hidden rounded-full text-sm font-semibold text-white">
                                     <div className="flex items-center justify-center bg-bias-left" style={{ width: "30%" }}>
                                         S 30%
@@ -440,7 +440,7 @@ export default function Metodologie() {
                                 </p>
 
                                 <div className="mt-6 grid gap-4 md:grid-cols-3">
-                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                    <div className="surface-subtle rounded-[1.5rem] p-4">
                                         <div className="flex items-center gap-2">
                                             <span className="h-3 w-3 rounded-full bg-bias-left" />
                                             <p className="font-medium text-foreground">Albastru</p>
@@ -449,7 +449,7 @@ export default function Metodologie() {
                                             Surse de stânga și centru-stânga.
                                         </p>
                                     </div>
-                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                    <div className="surface-subtle rounded-[1.5rem] p-4">
                                         <div className="flex items-center gap-2">
                                             <span className="h-3 w-3 rounded-full bg-bias-center" />
                                             <p className="font-medium text-foreground">Gri</p>
@@ -458,7 +458,7 @@ export default function Metodologie() {
                                             Surse de centru sau echilibru editorial.
                                         </p>
                                     </div>
-                                    <div className="rounded-[1.5rem] border border-border/60 bg-background/80 p-4">
+                                    <div className="surface-subtle rounded-[1.5rem] p-4">
                                         <div className="flex items-center gap-2">
                                             <span className="h-3 w-3 rounded-full bg-bias-right" />
                                             <p className="font-medium text-foreground">Roșu</p>
@@ -479,7 +479,7 @@ export default function Metodologie() {
                             />
 
                             <div className="grid gap-4 md:grid-cols-2">
-                                <div className="rounded-[1.75rem] border border-blue-200 bg-blue-50/70 p-6 dark:border-blue-900/70 dark:bg-blue-950/20">
+                                <div className="surface-tint-blue rounded-[1.75rem] p-6">
                                     <p className="flex items-center gap-2 font-medium text-blue-900 dark:text-blue-200">
                                         <AlertTriangle className="h-4 w-4" />
                                         Ignorat de stânga
@@ -491,7 +491,7 @@ export default function Metodologie() {
                                     </p>
                                 </div>
 
-                                <div className="rounded-[1.75rem] border border-red-200 bg-red-50/70 p-6 dark:border-red-900/70 dark:bg-red-950/20">
+                                <div className="surface-tint-red rounded-[1.75rem] p-6">
                                     <p className="flex items-center gap-2 font-medium text-red-900 dark:text-red-200">
                                         <AlertTriangle className="h-4 w-4" />
                                         Ignorat de dreapta
@@ -503,7 +503,7 @@ export default function Metodologie() {
                                 </div>
                             </div>
 
-                            <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                            <div className="surface-panel rounded-[1.75rem] p-6">
                                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                                     Algoritmul nostru
                                 </p>
@@ -526,7 +526,7 @@ export default function Metodologie() {
                                     const meta = FACTUALITY_META[item.key];
 
                                     return (
-                                        <div key={item.key} className="rounded-[1.75rem] border border-border/60 bg-card/70 p-5">
+                                        <div key={item.key} className="surface-panel rounded-[1.75rem] p-5">
                                             <Badge
                                                 variant="outline"
                                                 className={`rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${meta.pill}`}
@@ -560,7 +560,7 @@ export default function Metodologie() {
                             <Accordion
                                 type="multiple"
                                 defaultValue={["center", "center-left"]}
-                                className="rounded-[2rem] border border-border/60 bg-card/70 px-6"
+                                className="surface-panel rounded-[2rem] px-6"
                             >
                                 {BIAS_ORDER.map((biasKey) => {
                                     const sources = SOURCES_BY_BIAS[biasKey];
@@ -624,7 +624,7 @@ export default function Metodologie() {
                                                         <Link
                                                             key={source.id}
                                                             to={`/surse/${source.id}`}
-                                                            className="flex items-center gap-3 rounded-[1.25rem] border border-border/60 bg-background/80 p-4 transition-colors hover:bg-muted/60"
+                                                            className="surface-subtle flex items-center gap-3 rounded-[1.25rem] p-4 transition-colors hover:bg-muted/60"
                                                         >
                                                             <SourceFavicon source={source} size="sm" showRing={false} />
                                                             <div className="min-w-0 flex-1">
@@ -647,7 +647,7 @@ export default function Metodologie() {
                                 })}
                             </Accordion>
 
-                            <div className="rounded-[1.75rem] border border-border/60 bg-card/70 p-6">
+                            <div className="surface-panel rounded-[1.75rem] p-6">
                                 <h3 className="font-serif text-2xl text-foreground">Disclaimer</h3>
                                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                                     Clasificările noastre rămân <strong className="text-foreground">interpretări editoriale</strong>, nu adevăruri absolute.

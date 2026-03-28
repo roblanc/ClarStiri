@@ -103,7 +103,7 @@ export default function Despre() {
             {HOW_IT_WORKS.map(({ step, icon: Icon, title, body }) => (
               <div
                 key={step}
-                className="relative p-6 rounded-2xl border border-border/60 bg-card hover:border-border transition-colors"
+                className="surface-panel relative rounded-2xl p-6 transition-transform duration-200 hover:-translate-y-0.5"
               >
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 flex flex-col items-center gap-2">
@@ -130,8 +130,8 @@ export default function Despre() {
 
           <div className="space-y-4">
             {PRINCIPLES.map(({ icon: Icon, title, body }) => (
-              <div key={title} className="flex gap-5 p-6 rounded-2xl bg-muted/20 border border-border/40">
-                <div className="shrink-0 p-2.5 bg-background rounded-xl border border-border/60 h-fit mt-0.5">
+              <div key={title} className="surface-subtle flex gap-5 rounded-2xl p-6">
+                <div className="surface-subtle shrink-0 rounded-xl p-2.5 h-fit mt-0.5">
                   <Icon className="w-4 h-4 text-foreground/70" />
                 </div>
                 <div>
@@ -168,7 +168,7 @@ export default function Despre() {
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-5 p-6 rounded-2xl border border-border/60 bg-card hover:border-foreground hover:shadow-md transition-all duration-200 no-underline"
+                className="surface-panel group flex items-center gap-5 rounded-2xl p-6 transition-all duration-200 no-underline hover:-translate-y-0.5 hover:bg-background/95"
               >
                 <div className="shrink-0 p-3.5 bg-muted rounded-xl group-hover:bg-foreground group-hover:text-background transition-colors">
                   <Icon className="w-5 h-5" />

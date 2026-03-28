@@ -11,9 +11,13 @@ import { setCorsHeaders } from './cors.js';
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
-const CACHE_TTL = 25 * 60 * 60; // 25h — outlasts daily Vercel Hobby cron
-const STALE_AFTER = 23 * 60 * 60; // 23h — just under daily cron cycle; visitor-triggered refresh fires only if cron missed
+const CACHE_TTL = 25 * 60 * 60; // păstrăm suficient istoric cât să avem fallback dacă refresh-ul eșuează
+const STALE_AFTER = 30 * 60; // după 30 min primul vizitator declanșează refresh în background
 const MIN_SOURCES_THRESHOLD = 2; // matches frontend filter (sourcesCount > 1) — no point storing single-source stories
+const REFRESH_LOCK_KEY = `${CACHE_KEY}:refresh_lock`;
+const REFRESH_LOCK_TTL = 10 * 60;
+const EDGE_CACHE_S_MAXAGE = 120;
+const EDGE_CACHE_STALE_WHILE_REVALIDATE = 300;
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
     const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
@@ -41,6 +45,38 @@ async function buildFallbackStories(allNews: RSSNewsItem[], limit: number): Prom
             timeAgo: getTimeAgo(item.pubDate),
         }))
     );
+}
+
+async function acquireRefreshLock(redis: Redis): Promise<string | null> {
+    const lockId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    const result = await redis.set(REFRESH_LOCK_KEY, lockId, { nx: true, ex: REFRESH_LOCK_TTL });
+    return result === 'OK' ? lockId : null;
+}
+
+async function releaseRefreshLock(redis: Redis, lockId: string): Promise<void> {
+    try {
+        const currentLock = await redis.get<string>(REFRESH_LOCK_KEY);
+        if (currentLock === lockId) {
+            await redis.del(REFRESH_LOCK_KEY);
+        }
+    } catch (error) {
+        console.error('Refresh lock release failed:', error);
+    }
+}
+
+async function buildAndStoreLatestNews(redis: Redis, limit: number): Promise<AggregatedStory[]> {
+    const allNews = await fetchAllNews();
+    const aggregated = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD);
+    const storiesToStore = aggregated.length > 0 ? aggregated : await buildFallbackStories(allNews, limit);
+
+    if (storiesToStore.length > 0) {
+        await Promise.all([
+            redis.set(CACHE_KEY, storiesToStore, { ex: CACHE_TTL }),
+            redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
+        ]);
+    }
+
+    return storiesToStore;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -102,7 +138,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         if (cached && cached.length > 0) {
             // Instant delivery via Vercel Edge Cache
-            res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=1800');
+            res.setHeader('Cache-Control', `public, s-maxage=${EDGE_CACHE_S_MAXAGE}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE}`);
             res.status(200).json({
                 success: true,
                 data: cached.slice(0, limit),
@@ -112,18 +148,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
 
             if (isStale && redis) {
-                fetchAllNews().then(async news => {
-                    const agg = await aggregateNewsBuildTopics(news, MIN_SOURCES_THRESHOLD);
-                    const toStore = agg.length > 0 ? agg : await buildFallbackStories(news, 50);
-                    if (toStore.length > 0 && redis) {
-                        try {
-                            await Promise.all([
-                                redis.set(CACHE_KEY, toStore, { ex: CACHE_TTL }),
-                                redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
-                            ]);
-                        } catch (e) { console.error('Background Redis write failed:', e); }
-                    }
-                }).catch(err => console.error('Background refresh failed:', err));
+                acquireRefreshLock(redis)
+                    .then((lockId) => {
+                        if (!lockId) return;
+                        void buildAndStoreLatestNews(redis, 50)
+                            .catch((error) => console.error('Background refresh failed:', error))
+                            .finally(() => releaseRefreshLock(redis, lockId));
+                    })
+                    .catch((error) => console.error('Background refresh lock failed:', error));
             }
             return;
         }
@@ -168,6 +200,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Don't let Vercel CDN cache empty responses
         if (aggregated.length === 0) {
             res.setHeader('Cache-Control', 'no-store');
+        } else {
+            res.setHeader('Cache-Control', `public, s-maxage=${EDGE_CACHE_S_MAXAGE}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE}`);
         }
 
         return res.status(200).json({

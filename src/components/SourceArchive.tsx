@@ -182,7 +182,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 bg-card border border-border rounded-xl">
+      <div className="surface-panel flex flex-col items-center justify-center rounded-[1.75rem] py-12">
         <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
         <p className="text-sm text-muted-foreground">Se reconstruiește istoricul publicației...</p>
       </div>
@@ -211,7 +211,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
             placeholder="Caută în arhivă..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs rounded-full border border-border bg-background w-full sm:w-48 focus:outline-none focus:ring-1 focus:ring-primary"
+            className="surface-subtle pl-8 pr-3 py-1.5 text-xs rounded-full w-full sm:w-48 focus:outline-none focus:ring-1 focus:ring-primary"
           />
         </div>
       </div>
@@ -221,7 +221,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
       )}
 
       {sortedYears.length === 0 ? (
-        <div className="p-8 text-center bg-card border border-border rounded-xl">
+        <div className="surface-ghost rounded-[1.75rem] p-8 text-center">
           <p className="text-sm text-muted-foreground">
             {isRefreshingWayback
               ? 'Se caută înregistrări în Wayback...'
@@ -234,7 +234,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
       ) : (
         <div className="space-y-3">
           {sortedYears.map(year => (
-            <div key={year} className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+            <div key={year} className="surface-panel rounded-[1.5rem] overflow-hidden">
               <button 
                 onClick={() => toggleYear(year)}
                 className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
@@ -261,7 +261,7 @@ export function SourceArchive({ sourceId, domain }: SourceArchiveProps) {
                     if (searchQuery && articles.length === 0) return null;
 
                     return (
-                      <div key={month} className="border border-border/40 rounded-lg overflow-hidden bg-muted/10">
+                      <div key={month} className="surface-subtle rounded-[1.1rem] overflow-hidden">
                         <button 
                           onClick={() => toggleMonth(year, month)}
                           className="w-full flex items-center justify-between p-3 hover:bg-muted/30 transition-colors text-sm font-bold"

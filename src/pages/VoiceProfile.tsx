@@ -210,7 +210,7 @@ const VoiceProfile = () => {
             <main className="container mx-auto px-4 py-10 max-w-5xl">
 
                 {/* Bias quote card */}
-                <div className={cn("mb-8 p-5 rounded-2xl border bg-card flex gap-4 items-start", biasBorder)}>
+                <div className={cn("surface-panel mb-8 flex gap-4 items-start rounded-2xl p-5", biasBorder)}>
                     <Activity className={cn("w-4 h-4 mt-0.5 shrink-0", biasText)} />
                     <p className="text-sm text-muted-foreground leading-relaxed italic font-sans">
                         "{figure.bias.description}"
@@ -219,7 +219,7 @@ const VoiceProfile = () => {
 
                 {/* Tabs */}
                 <Tabs defaultValue={defaultTab}>
-                    <TabsList className="mb-8 h-auto p-1 bg-muted/40 rounded-xl flex flex-wrap gap-1 w-full justify-start">
+                    <TabsList className="surface-subtle mb-8 h-auto rounded-xl p-1 flex flex-wrap gap-1 w-full justify-start">
                         {displayStatements.length > 0 && (
                             <TabsTrigger value="declaratii" className="text-[10px] uppercase tracking-[0.15em] font-bold rounded-lg px-4 py-2 flex items-center gap-1.5 data-[state=active]:bg-editorial data-[state=active]:text-white group">
                                 <MessageSquareQuote className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ const VoiceProfile = () => {
                     {displayStatements.length > 0 && (
                         <TabsContent value="declaratii">
                             {weakStatementsCount > 0 && (
-                                <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 rounded-xl flex gap-3 items-start">
+                                <div className="surface-tint-amber mb-6 flex gap-3 items-start rounded-xl p-4">
                                     <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                                     <p className="text-xs leading-relaxed text-amber-900/80 dark:text-amber-200/80">
                                         <span className="font-bold uppercase tracking-wider">Avertisment: </span>
@@ -264,7 +264,7 @@ const VoiceProfile = () => {
                                     return (
                                         <div
                                             key={statement.id || idx}
-                                            className="rounded-2xl border border-border/50 bg-card overflow-hidden hover:border-border transition-colors"
+                                            className="surface-panel rounded-2xl overflow-hidden transition-all hover:-translate-y-0.5 hover:bg-background/95"
                                         >
                                             {/* Card header */}
                                             <div className="flex flex-wrap items-center justify-between gap-2 px-5 py-3 border-b border-border/30 bg-muted/20">
@@ -332,7 +332,7 @@ const VoiceProfile = () => {
 
                                                 {/* Fact check */}
                                                 {statement.factCheck && (
-                                                    <div className="mt-4 rounded-xl border border-primary/20 bg-card overflow-hidden">
+                                                <div className="surface-subtle mt-4 rounded-xl overflow-hidden">
                                                         <div className="bg-primary/5 px-4 py-2 border-b border-primary/10 flex items-center gap-2">
                                                             <Sparkles className="w-3.5 h-3.5 text-primary" />
                                                             <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Fact-Check</span>
@@ -366,7 +366,7 @@ const VoiceProfile = () => {
                         <TabsContent value="context">
                             <ul className="space-y-3">
                                 {figure.contextNotes!.map((note, i) => (
-                                    <li key={i} className="flex gap-4 p-5 rounded-2xl bg-card border border-border/50">
+                                    <li key={i} className="surface-subtle flex gap-4 rounded-2xl p-5">
                                         <span className={cn("text-lg mt-0.5 shrink-0", biasText)}>•</span>
                                         <p className="text-base text-foreground/80 leading-relaxed">{note}</p>
                                     </li>
@@ -379,7 +379,7 @@ const VoiceProfile = () => {
                     <TabsContent value="profil">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {/* Targets */}
-                            <div className="p-6 rounded-2xl border border-border/50 bg-card">
+                            <div className="surface-panel rounded-2xl p-6">
                                 <h3 className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground mb-5">
                                     <Users className="w-3.5 h-3.5" /> Ținte Predilecte
                                 </h3>
@@ -397,7 +397,7 @@ const VoiceProfile = () => {
                             </div>
 
                             {/* Rhetoric bars */}
-                            <div className="p-6 rounded-2xl border border-border/50 bg-card">
+                            <div className="surface-panel rounded-2xl p-6">
                                 <h3 className="flex items-center gap-2 text-[10px] uppercase font-bold tracking-[0.2em] text-muted-foreground mb-5">
                                     <Zap className="w-3.5 h-3.5" /> Tonul Discursului
                                 </h3>
@@ -430,7 +430,7 @@ const VoiceProfile = () => {
                         <TabsContent value="analize">
                             <div className="space-y-6">
                                 {figure.externalAnalyses!.map((analysis, idx) => (
-                                    <div key={idx} className="rounded-2xl border border-border/50 bg-card overflow-hidden">
+                                    <div key={idx} className="surface-panel rounded-2xl overflow-hidden">
                                         {/* Analysis header */}
                                         <div className="px-6 py-4 border-b border-border/30 bg-muted/10 flex items-center gap-2">
                                             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Analiză de la</span>
@@ -510,7 +510,7 @@ const VoiceProfile = () => {
                                     <Link
                                         key={suggested.id}
                                         to={`/voce/${suggested.slug}`}
-                                        className="group flex flex-col items-center text-center p-5 rounded-2xl border border-border/40 bg-card hover:border-border hover:-translate-y-0.5 hover:shadow-md transition-all duration-200 relative overflow-hidden"
+                                        className="group surface-panel relative flex flex-col items-center overflow-hidden rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-background/95"
                                     >
                                         <div className={cn("absolute top-0 left-0 right-0 h-0.5", sColor)} />
                                         <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border/40 group-hover:border-primary/30 transition-colors mb-3 mt-1">
