@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, RefObject } from "react";
+import { useState, useEffect, RefObject } from "react";
 import { shrinkwrapFontSize } from "@/utils/textMeasure";
 
 interface TextFitOptions {
-  /** CSS font-family string, e.g. "VICE Grotesk, Helvetica, sans-serif" */
   fontFamily: string;
   fontWeight?: string | number;
   minSize: number;
@@ -14,8 +13,7 @@ interface TextFitOptions {
  * Returns the optimal font size (px) for `text` to fill `containerRef`
  * without exceeding `maxLines`. Recalculates on container resize.
  *
- * Returns null until the container is measured (use a fallback size for SSR /
- * first render).
+ * Returns null on first render — use a CSS fallback until resolved.
  */
 export function useTextFit(
   containerRef: RefObject<HTMLElement | null>,
@@ -24,10 +22,6 @@ export function useTextFit(
 ): number | null {
   const [fontSize, setFontSize] = useState<number | null>(null);
   const { fontFamily, fontWeight = "bold", minSize, maxSize, maxLines } = options;
-
-  // Stable ref so the ResizeObserver callback doesn't capture stale options
-  const optsRef = useRef(options);
-  optsRef.current = options;
 
   useEffect(() => {
     const el = containerRef.current;
@@ -46,7 +40,6 @@ export function useTextFit(
       setFontSize(size);
     };
 
-    // Wait for custom fonts to be ready so measurements are accurate
     const run = (width: number) => {
       if (document.fonts?.ready) {
         document.fonts.ready.then(() => measure(width));
