@@ -137,11 +137,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const isStale = cacheAge > STALE_AFTER;
 
         if (cached && cached.length > 0) {
+            // Recalculate timeAgo at serve time — prevents stale relative timestamps from Redis
+            const freshened = cached.map(s => ({ ...s, timeAgo: getTimeAgo(s.publishedAt) }));
             // Instant delivery via Vercel Edge Cache
             res.setHeader('Cache-Control', `public, s-maxage=${EDGE_CACHE_S_MAXAGE}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE}`);
             res.status(200).json({
                 success: true,
-                data: cached.slice(0, limit),
+                data: freshened.slice(0, limit),
                 fromCache: true,
                 stale: isStale,
                 cacheAgeSeconds: Math.round(cacheAge),
