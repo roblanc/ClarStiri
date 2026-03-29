@@ -91,6 +91,17 @@ export const NEWS_SOURCES_BASE = [
   { id: 'context', name: 'Context.ro', url: 'https://context.ro', rssUrl: 'https://context.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
   { id: 'newsro', name: 'News.ro', url: 'https://www.news.ro', rssUrl: 'https://www.news.ro/rss', bias: 'center', factuality: 'high', category: 'mainstream' },
   { id: 'puterea', name: 'Puterea.ro', url: 'https://www.puterea.ro', rssUrl: 'https://www.puterea.ro/feed/', bias: 'right', factuality: 'mixed', category: 'mainstream', customWeights: { left: 5, center: 25, right: 70 } },
+  // ── Business/Analiză ────────────────────────────────────────────────────────
+  { id: 'forbes', name: 'Forbes România', url: 'https://www.forbes.ro', rssUrl: 'https://www.forbes.ro/feed', bias: 'center-right', factuality: 'high', category: 'mainstream' },
+  { id: 'wallstreet', name: 'Wall-street.ro', url: 'https://www.wall-street.ro', rssUrl: 'https://www.wall-street.ro/feed', bias: 'center-right', factuality: 'high', category: 'mainstream' },
+  { id: 'contributors', name: 'Contributors.ro', url: 'https://www.contributors.ro', rssUrl: 'https://www.contributors.ro/feed', bias: 'center', factuality: 'high', category: 'independent' },
+  // ── Regional ────────────────────────────────────────────────────────────────
+  { id: 'ziaruldecluj', name: 'Ziarul de Cluj', url: 'https://www.ziaruldecluj.ro', rssUrl: 'https://www.ziaruldecluj.ro/feed/', bias: 'center', factuality: 'high', category: 'mainstream' },
+  { id: 'opiniatimisoarei', name: 'Opinia Timișoarei', url: 'https://www.opiniatimisoarei.ro', rssUrl: 'https://www.opiniatimisoarei.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'monitorulsv', name: 'Monitorul de Suceava', url: 'https://www.monitorulsv.ro', rssUrl: 'https://www.monitorulsv.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'cugetliber', name: 'Cuget Liber', url: 'https://www.cugetliber.ro', rssUrl: 'https://www.cugetliber.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'bihoreanul', name: 'Bihoreanul', url: 'https://www.bihoreanul.ro', rssUrl: 'https://www.bihoreanul.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'gds', name: 'Gazeta de Sud', url: 'https://www.gds.ro', rssUrl: 'https://www.gds.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];
