@@ -89,7 +89,7 @@ export function useAggregatedNews(limit = 20) {
         staleTime: 2 * 60 * 1000,     // verifică noutăți mai des, dar profită de cache-ul edge
         gcTime: 24 * 60 * 60 * 1000, // 24 ore persistat în memorie
         refetchOnWindowFocus: true,   // refetch când userul revine pe tab (critic pe mobile)
-        refetchInterval: 2 * 60 * 1000,
+        refetchInterval: 12 * 60 * 1000,
         retry: 1,
     });
 
@@ -162,20 +162,6 @@ export function useTopStories(limit = 5) {
 
     return {
         data: topStories,
-        ...rest,
-    };
-}
-
-/**
- * Hook pentru a obține detaliile unei știri specifice
- */
-export function useStoryDetail(storyId: string) {
-    const { data: stories, ...rest } = useAggregatedNews(50);
-
-    const story = stories?.find(s => s.id === storyId);
-
-    return {
-        data: story,
         ...rest,
     };
 }
