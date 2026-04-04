@@ -392,27 +392,14 @@ const Index = () => {
         {/* Banner actualizare — arată când e date din cache dar se fetchează fresh */}
         {isLoadingFresh && (
           <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground w-fit mx-auto mb-4">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="shrink-0">
-              <rect x="2" y="2" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="1.2" opacity="0.3" />
-              {[0, 1, 2].map((i) => (
-                <rect
-                  key={i}
-                  x="5"
-                  y={5 + i * 4}
-                  width={i === 2 ? 6 : 10}
-                  height="2"
-                  rx="1"
-                  fill="currentColor"
-                  style={{
-                    animation: 'newsLineGrow 1.8s ease-in-out infinite',
-                    animationDelay: `${i * 0.3}s`,
-                  }}
-                />
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="shrink-0" style={{ animation: 'claudeAsteriskSpin 1.5s linear infinite' }}>
+              {[0, 60, 120, 180, 240, 300].map((angle) => (
+                <rect key={angle} x="7.5" y="1.5" width="3" height="6.5" rx="1.5" transform={`rotate(${angle} 9 9)`} />
               ))}
               <style>{`
-                @keyframes newsLineGrow {
-                  0%, 100% { opacity: 0.2; transform: scaleX(0.4); transform-origin: 5px; }
-                  50% { opacity: 0.9; transform: scaleX(1); transform-origin: 5px; }
+                @keyframes claudeAsteriskSpin {
+                  from { transform: rotate(0deg); }
+                  to { transform: rotate(360deg); }
                 }
               `}</style>
             </svg>
