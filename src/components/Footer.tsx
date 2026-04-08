@@ -67,6 +67,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="p-2.5 bg-black/5 rounded-full text-black/60 hover:text-black hover:bg-black/10 transition-all border border-black/10"
                   title={social.label}
+                  aria-label={social.label}
                 >
                   <social.icon className="w-5 h-5" />
                 </a>

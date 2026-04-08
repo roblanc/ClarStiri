@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  esbuild: {
+    // Strip console.log/warn in production — keep console.error for real failures
+    drop: mode === "production" ? ["debugger"] : [],
+    pure: mode === "production" ? ["console.log", "console.warn"] : [],
+  },
   build: {
     // Target modern browsers — smaller, faster output
     target: "es2020",

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
 import { CoverageBar } from "./CoverageBar";
@@ -9,6 +9,14 @@ import { cn } from "@/lib/utils";
 import { buildStoryHref } from "@/utils/storyRoute";
 import { getPosterTitleSizing } from "@/utils/posterTypography";
 import { useTextFit } from "@/hooks/useTextFit";
+
+const POSTER_FONT_CONFIG = {
+  fontFamily: "\"VICE Grotesk\", Helvetica, Arial, sans-serif",
+  fontWeight: 700,
+  minSize: 17,
+  maxSize: 30,
+  maxLines: 4,
+} as const;
 
 export interface NewsItem {
   id: string;
@@ -38,13 +46,7 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
   const fittedFontSize = useTextFit(
     posterTitleContainerRef,
     news.title,
-    {
-      fontFamily: "\"VICE Grotesk\", Helvetica, Arial, sans-serif",
-      fontWeight: 700,
-      minSize: 17,
-      maxSize: 30,
-      maxLines: 4,
-    }
+    POSTER_FONT_CONFIG
   );
 
   const getBlindspotLabel = (blindspot: string | undefined) => {
