@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { NewsCard } from "@/components/NewsCard";
@@ -13,6 +13,29 @@ import {
 } from "@/components/Skeleton";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { Helmet } from "react-helmet-async";
+
+const CLAUDE_FRAMES: [string, number][] = [
+  ["·", 300],
+  ["✻", 150],
+  ["✽", 150],
+  ["✶", 150],
+  ["✳", 150],
+  ["✢", 300],
+];
+
+function ClaudeAsciiSpinner() {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const [, duration] = CLAUDE_FRAMES[idx];
+    const t = setTimeout(() => setIdx((i) => (i + 1) % CLAUDE_FRAMES.length), duration);
+    return () => clearTimeout(t);
+  }, [idx]);
+  return (
+    <span className="inline-block w-4 text-center shrink-0 font-mono leading-none" style={{ fontSize: '16px' }}>
+      {CLAUDE_FRAMES[idx][0]}
+    </span>
+  );
+}
 
 const BATCH = 20;
 
@@ -392,17 +415,7 @@ const Index = () => {
         {/* Banner actualizare — arată când e date din cache dar se fetchează fresh */}
         {isLoadingFresh && (
           <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground w-fit mx-auto mb-4">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="shrink-0" style={{ animation: 'claudeAsteriskSpin 1.5s linear infinite' }}>
-              {[0, 60, 120, 180, 240, 300].map((angle) => (
-                <rect key={angle} x="7.5" y="1.5" width="3" height="6.5" rx="1.5" transform={`rotate(${angle} 9 9)`} />
-              ))}
-              <style>{`
-                @keyframes claudeAsteriskSpin {
-                  from { transform: rotate(0deg); }
-                  to { transform: rotate(360deg); }
-                }
-              `}</style>
-            </svg>
+            <ClaudeAsciiSpinner />
             Se actualizează știrile…
           </div>
         )}
