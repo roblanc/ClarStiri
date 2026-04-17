@@ -13,6 +13,7 @@ const StudioPreview = lazy(() => import("./pages/StudioPreview"));
 
 // Lazy load pages for better code splitting
 const Index = lazy(() => import("./pages/Index"));
+const IndexEditorial = lazy(() => import("./pages/IndexEditorial"));
 const Metodologie = lazy(() => import("./pages/Metodologie"));
 const Sources = lazy(() => import("./pages/Sources"));
 const SourceDetail = lazy(() => import("./pages/SourceDetail"));
@@ -52,6 +53,7 @@ const RoutedApp = () => {
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/editorial" element={<IndexEditorial />} />
           <Route path="/studio" element={<StudioPreview />} />
           <Route path="/stire/:id" element={<StoryDetail />} />
           <Route path="/metodologie" element={<Metodologie />} />

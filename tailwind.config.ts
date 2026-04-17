@@ -26,6 +26,9 @@ export default {
         minimalist: ["Hanken Grotesk", "Helvetica Neue", "Arial", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],
         berthold: ["Hoolister", "Block Berthold", "Bowlby One", "sans-serif"],
+        editorial: ["Fraunces", "Georgia", "serif"],
+        "editorial-sans": ["Inter", "system-ui", "sans-serif"],
+        "editorial-mono": ["JetBrains Mono", "ui-monospace", "monospace"],
       },
       colors: {
         brand: {

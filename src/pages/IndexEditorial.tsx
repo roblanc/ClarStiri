@@ -1,284 +1,565 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Header } from "@/components/Header";
-import { NewsImage } from "@/components/NewsImage";
 import { useAggregatedNews } from "@/hooks/useNews";
-import { getThumbnailUrl } from "@/utils/imageOptimizer";
-import { AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { MainFeedSkeleton } from "@/components/Skeleton";
 import { buildStoryHref } from "@/utils/storyRoute";
+import { AggregatedStory } from "@/types/news";
 
-const PLACEHOLDER_IMAGE = "/default-news.png";
-const ARCHIVE_BATCH = 6;
+const MAX_SPREADS = 10;
 
-interface EditorialStory {
-  id: string;
-  title: string;
-  image: string;
-  bias: { left: number; center: number; right: number };
-  category: string;
-  sourcesCount: number;
-  timeAgo: string;
-  description: string;
+type SpreadKind = "hero" | "rose" | "pale" | "midnight" | "olive" | "drop";
+
+interface Spread {
+  kind: SpreadKind;
+  bg: string;
+  surface: string;
+  text: string;
+  muted: string;
+  accent: string;
 }
 
-// ─── Card mare featured (stânga sus) ─────────────────────────────────────────
-function FeaturedCard({ story }: { story: EditorialStory }) {
+const PALETTE: Record<SpreadKind, Spread> = {
+  hero: {
+    kind: "hero",
+    bg: "#F0E8D6",
+    surface: "#E7DFCD",
+    text: "#141414",
+    muted: "#5E584B",
+    accent: "#C64028",
+  },
+  rose: {
+    kind: "rose",
+    bg: "#F2D1CB",
+    surface: "#E9C3BC",
+    text: "#141414",
+    muted: "#6A4A46",
+    accent: "#C64028",
+  },
+  pale: {
+    kind: "pale",
+    bg: "#CEDEE3",
+    surface: "#BDD0D6",
+    text: "#15212A",
+    muted: "#3F5560",
+    accent: "#1B3341",
+  },
+  midnight: {
+    kind: "midnight",
+    bg: "#0F1410",
+    surface: "#1A2019",
+    text: "#EDE6D6",
+    muted: "#8FA38F",
+    accent: "#D4A64D",
+  },
+  olive: {
+    kind: "olive",
+    bg: "#4A5A4B",
+    surface: "#3F4E40",
+    text: "#EDE6D6",
+    muted: "#B8C4B8",
+    accent: "#E8B85C",
+  },
+  drop: {
+    kind: "drop",
+    bg: "#EDE5D4",
+    surface: "#E3DAC6",
+    text: "#141414",
+    muted: "#5E584B",
+    accent: "#7E3B1F",
+  },
+};
+
+const SEQUENCE: SpreadKind[] = ["hero", "pale", "rose", "olive", "drop", "midnight", "pale", "hero", "drop", "midnight"];
+
+function domainFromUrl(url?: string): string {
+  if (!url) return "";
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "";
+  }
+}
+
+function firstSentence(text: string): string {
+  if (!text) return "";
+  const cleaned = text.replace(/\s+/g, " ").trim();
+  const match = cleaned.match(/^[^.!?]+[.!?]/);
+  return (match ? match[0] : cleaned).trim();
+}
+
+function splitBody(description: string, title: string): string[] {
+  const base = (description || "").replace(/\s+/g, " ").trim();
+  if (base.length < 40) {
+    return [
+      base || `${title}. Un subiect urmărit în presa românească.`,
+      "Mai multe surse au reluat informația cu perspective diferite — click pe card pentru comparație.",
+    ];
+  }
+  const sentences = base.split(/(?<=[.!?])\s+/).filter(Boolean);
+  if (sentences.length <= 1) return [base];
+  const mid = Math.ceil(sentences.length / 2);
+  return [sentences.slice(0, mid).join(" "), sentences.slice(mid).join(" ")];
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Eyebrow (tagline uppercase small-caps)
+// ────────────────────────────────────────────────────────────────────────────
+function Eyebrow({ label, accent }: { label: string; accent: string }) {
   return (
-    <Link to={buildStoryHref(story.id, story.title)} className="block h-full group">
-      <article className="border border-border h-full flex flex-col bg-card">
-        <div className="px-3 py-1.5 bg-primary border-b border-border">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-primary-foreground">
-            {story.category || "Actualitate"} · {story.sourcesCount} surse
-          </span>
-        </div>
-        <div className="h-48 md:h-64 border-b border-border overflow-hidden">
-          <NewsImage
-            src={getThumbnailUrl(story.image)}
-            seed={story.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            loading="eager"
-            fetchPriority="high"
-          />
-        </div>
-        <div className="p-4 flex flex-col flex-1">
-          <h2 className="font-serif text-xl md:text-2xl font-bold leading-tight text-foreground group-hover:underline mb-3">
-            {story.title}
-          </h2>
-          {story.description && (
-            <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 mb-4">
-              {story.description}
-            </p>
-          )}
-          <div className="mt-auto">
-            <BiasLine bias={story.bias} />
-            <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
-              {story.timeAgo}
-            </span>
-          </div>
-        </div>
-      </article>
-    </Link>
+    <p
+      className="font-editorial-sans font-bold uppercase"
+      style={{
+        color: accent,
+        fontSize: "13px",
+        letterSpacing: "0.18em",
+      }}
+    >
+      {label}
+    </p>
   );
 }
 
-// ─── Card capsulă (dreapta sus) ───────────────────────────────────────────────
-function CapsuleCard({ story, index }: { story: EditorialStory; index: number }) {
+// ────────────────────────────────────────────────────────────────────────────
+// Bottom metadata
+// ────────────────────────────────────────────────────────────────────────────
+function Meta({ story, palette }: { story: AggregatedStory; palette: Spread }) {
+  const domain = domainFromUrl(story.sources[0]?.link);
   return (
-    <Link to={buildStoryHref(story.id, story.title)} className="block group">
-      <article className="border border-border bg-card flex flex-col h-full">
-        <div className="px-3 py-1.5 border-b border-border flex items-center justify-between">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Capsul{index + 1}
-          </span>
-          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
-            {story.sourcesCount} surse
-          </span>
-        </div>
-        <div className="p-4 flex gap-3 flex-1">
-          <div className="w-20 h-20 flex-shrink-0 border border-border overflow-hidden">
-            <NewsImage
-              src={getThumbnailUrl(story.image)}
-              seed={story.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <div className="flex flex-col flex-1 min-w-0">
-            <h3 className="font-serif text-base font-bold leading-snug text-foreground group-hover:underline mb-2">
-              {story.title}
-            </h3>
-            <div className="mt-auto">
-              <BiasLine bias={story.bias} />
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
-                {story.timeAgo}
-              </span>
-            </div>
-          </div>
-        </div>
-      </article>
-    </Link>
-  );
-}
-
-// ─── Card arhivă (rândul de jos) ──────────────────────────────────────────────
-function ArchiveCard({ story }: { story: EditorialStory }) {
-  return (
-    <Link to={buildStoryHref(story.id, story.title)} className="block group">
-      <article className="border border-border bg-card h-full flex flex-col">
-        <div className="px-3 py-1.5 border-b border-border">
-          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            Arhivă · {story.category || "Actualitate"}
-          </span>
-        </div>
-        <div className="p-3 flex gap-3 flex-1">
-          <div className="w-16 h-16 flex-shrink-0 border border-border overflow-hidden">
-            <NewsImage
-              src={getThumbnailUrl(story.image)}
-              seed={story.title}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <div className="flex flex-col flex-1 min-w-0">
-            <h4 className="font-serif text-sm font-bold leading-snug text-foreground group-hover:underline mb-1 line-clamp-3">
-              {story.title}
-            </h4>
-            <span className="text-[9px] font-bold uppercase tracking-[0.1em] text-muted-foreground mt-auto">
-              {story.sourcesCount} surse · {story.timeAgo}
-            </span>
-          </div>
-        </div>
-      </article>
-    </Link>
-  );
-}
-
-// ─── Bara de bias minimalistă ─────────────────────────────────────────────────
-function BiasLine({ bias }: { bias: { left: number; center: number; right: number } }) {
-  return (
-    <div className="flex h-0.5 w-full mb-2 overflow-hidden">
-      <div className="bg-blue-400" style={{ width: `${bias.left}%` }} />
-      <div className="bg-gray-300" style={{ width: `${bias.center}%` }} />
-      <div className="bg-red-400" style={{ width: `${bias.right}%` }} />
+    <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 font-editorial-sans text-[15px]" style={{ color: palette.muted }}>
+      <span>{story.sourcesCount} surse · {story.timeAgo}</span>
+      {domain && (
+        <a
+          href={story.sources[0]?.link}
+          target="_blank"
+          rel="noreferrer"
+          className="font-semibold underline underline-offset-4 hover:no-underline"
+          style={{ color: palette.accent, textDecorationColor: palette.accent }}
+        >
+          {domain}
+        </a>
+      )}
     </div>
   );
 }
 
-// ─── Pagina principală ────────────────────────────────────────────────────────
-const IndexEditorial = () => {
-  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
-  const [archiveVisible, setArchiveVisible] = useState(ARCHIVE_BATCH);
+// ────────────────────────────────────────────────────────────────────────────
+// SPREAD VARIANTS
+// ────────────────────────────────────────────────────────────────────────────
 
-  const converted = useMemo(() => {
-    return stories?.map(s => ({
-      id: s.id,
-      title: s.title,
-      image: s.image || PLACEHOLDER_IMAGE,
-      bias: s.bias,
-      category: s.mainCategory || "Actualitate",
-      sourcesCount: s.sourcesCount,
-      timeAgo: s.timeAgo,
-      description: s.description,
-    })) || [];
-  }, [stories]);
-
-  const featured = converted[0];
-  const capsules = converted.slice(1, 3);
-  const archive = converted.slice(3);
-
+function HeroSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const n = String(index + 1).padStart(2, "0");
+  const tag = index === 0 ? "THE BIG ONE" : "MAIN STORY";
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-32">
+        <Eyebrow label={`${tag} · ${(story.mainCategory || "Actualitate").toUpperCase()}`} accent={palette.accent} />
+        <h2
+          className="font-editorial font-bold group-hover:italic transition-all"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(3rem, 7vw, 7rem)",
+            lineHeight: "0.95",
+            letterSpacing: "-0.02em",
+            marginTop: "2rem",
+          }}
+        >
+          {story.title}
+        </h2>
 
-      {/* Banner test */}
-      <div className="bg-foreground text-background text-center py-1.5">
-        <span className="text-[9px] font-bold uppercase tracking-[0.3em]">
-          ⚗ Layout alternativ — test editorial
-        </span>
-        <Link to="/" className="text-[9px] font-bold uppercase tracking-[0.2em] ml-6 underline opacity-60 hover:opacity-100">
-          ← înapoi la layout normal
-        </Link>
-      </div>
-
-      <main className="container mx-auto px-4 py-8 lg:max-w-[90%] xl:max-w-[85%]">
-
-        {/* Loading */}
-        {isLoading && (
-          <div className="space-y-8">
-            <MainFeedSkeleton />
-          </div>
-        )}
-
-        {/* Error */}
-        {!isLoading && !isFetching && !stories?.length && (
-          <div className="flex flex-col items-center justify-center py-20 border border-border bg-card">
-            <AlertCircle className="w-10 h-10 text-destructive mb-4" />
-            <p className="font-serif text-xl mb-6 text-foreground">
-              {error?.message ?? "Flux gol. Reveniti."}
-            </p>
-            <Button onClick={() => refetch()} variant="outline" className="rounded-none text-xs uppercase tracking-widest px-8">
-              Reîncearcă
-            </Button>
-          </div>
-        )}
-
-        {converted.length > 0 && (
-          <>
-            {/* ── Rândul 1: Featured + Capsule ── */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-0 md:border border-border mb-6 md:mb-0">
-              {/* Featured: 2/3 */}
-              <div className="md:col-span-2 md:border-r border-border">
-                {featured && <FeaturedCard story={featured} />}
-              </div>
-
-              {/* Capsule: 1/3, împărțit vertical */}
-              <div className="flex flex-col gap-6 md:gap-0">
-                {capsules.map((s, i) => (
-                  <div key={s.id} className={i === 0 ? "md:border-b border-border flex-1" : "flex-1"}>
-                    <CapsuleCard story={s} index={i} />
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Separator cu label */}
-            <div className="md:border-x md:border-b border-border px-3 py-1.5 flex items-center gap-3 mb-6 md:mb-0">
-              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
-                Arhivă
-              </span>
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                {archive.length} știri
-              </span>
-            </div>
-
-            {/* ── Rândul 2+: Arhivă ── */}
-            <section className="md:border-x md:border-b border-border">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-0">
-                {archive.slice(0, archiveVisible).map((s, i) => {
-                  return (
-                    <div
-                      key={s.id}
-                      className={[
-                        "h-full",
-                        i % 3 !== 2 ? "md:border-r border-border" : "",
-                        i < archive.slice(0, archiveVisible).length - (archive.slice(0, archiveVisible).length % 3 || 3) ? "md:border-b border-border" : "",
-                      ].join(" ")}
-                    >
-                      <ArchiveCard story={s} />
-                    </div>
-                  );
-                })}
-              </div>
-
-              {archiveVisible < archive.length && (
-                <div className="border-t border-border flex justify-center py-4">
-                  <Button
-                    onClick={() => setArchiveVisible(v => v + ARCHIVE_BATCH)}
-                    variant="ghost"
-                    className="rounded-none text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground"
-                  >
-                    Mai multe
-                  </Button>
-                </div>
-              )}
-            </section>
-          </>
-        )}
-      </main>
-
-      <footer className="border-t border-border mt-16 pt-8 pb-16">
-        <div className="container mx-auto px-4 text-center">
-          <span className="font-serif italic text-2xl font-semibold text-foreground block mb-4">
-            thesite.ro
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-8 md:gap-16 items-start">
+          <span
+            className="font-editorial italic font-bold leading-none"
+            style={{ color: palette.accent, fontSize: "clamp(6rem, 14vw, 14rem)" }}
+          >
+            {n}
           </span>
-          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-            © 2026 · Layout editorial test
+          <div className="max-w-[640px]">
+            {body.map((p, i) => (
+              <p
+                key={i}
+                className="font-editorial-sans"
+                style={{
+                  color: palette.text,
+                  fontSize: "19px",
+                  lineHeight: "1.55",
+                  marginBottom: "1.25rem",
+                }}
+              >
+                {p}
+              </p>
+            ))}
+            {index === 0 && (
+              <aside className="mt-8 py-5 pl-5 pr-6" style={{ background: palette.surface, borderLeft: `4px solid ${palette.accent}` }}>
+                <Eyebrow label="TE PRIVEȘTE" accent={palette.accent} />
+                <p className="font-editorial-sans mt-2" style={{ color: palette.text, fontSize: "18px", lineHeight: "1.5" }}>
+                  Dacă urmărești {(story.mainCategory || "știri").toLowerCase()}, articolul ăsta merită 5 minute din dimineața ta.
+                </p>
+              </aside>
+            )}
+            <div className="mt-10">
+              <Meta story={story} palette={palette} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function RoseAlertSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const n = String(index + 1).padStart(2, "0");
+  return (
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-28">
+        <div
+          className="inline-block px-4 py-2 font-editorial-sans font-bold uppercase"
+          style={{
+            border: `2px solid ${palette.accent}`,
+            color: palette.accent,
+            fontSize: "13px",
+            letterSpacing: "0.2em",
+          }}
+        >
+          HEADS UP · ACTION REQUIRED
+        </div>
+        <div className="mt-8">
+          <Eyebrow label={`${n} · ${(story.mainCategory || "Actualitate").toUpperCase()}`} accent={palette.accent} />
+        </div>
+        <h2
+          className="font-editorial font-bold mt-6 group-hover:italic transition-all"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(2.5rem, 6vw, 6rem)",
+            lineHeight: "0.98",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {story.title}
+        </h2>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-[1100px]">
+          {body.map((p, i) => (
+            <p
+              key={i}
+              className="font-editorial-sans"
+              style={{ color: palette.text, fontSize: "19px", lineHeight: "1.55" }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+        <div className="mt-12">
+          <Meta story={story} palette={palette} />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function PaleItalicSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const pull = firstSentence(story.description) || story.title;
+  return (
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-28">
+        <div className="h-px w-full" style={{ background: palette.text, opacity: 0.85 }} />
+        <div className="mt-10">
+          <Eyebrow label={(story.mainCategory || "Actualitate").toUpperCase()} accent={palette.accent} />
+        </div>
+        <h2
+          className="font-editorial italic font-semibold mt-6"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(2.75rem, 6.5vw, 6.5rem)",
+            lineHeight: "1.02",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          {story.title}
+        </h2>
+        <div className="mt-12 max-w-[720px]">
+          {body.map((p, i) => (
+            <p
+              key={i}
+              className="font-editorial-sans"
+              style={{ color: palette.text, fontSize: "19px", lineHeight: "1.6", marginBottom: "1.25rem" }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+        <blockquote className="mt-10 pl-5 max-w-[720px]" style={{ borderLeft: `4px solid ${palette.text}` }}>
+          <p className="font-editorial font-semibold" style={{ color: palette.text, fontSize: "clamp(1.5rem, 2.4vw, 2rem)", lineHeight: "1.25" }}>
+            {pull}
+          </p>
+        </blockquote>
+        <div className="mt-12">
+          <Meta story={story} palette={palette} />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function MidnightTerminalSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const n = String(index + 1).padStart(2, "0");
+  const slug = (story.mainCategory || "news").toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 18) || "news";
+  return (
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-28">
+        <div className="font-editorial-mono" style={{ fontSize: "17px" }}>
+          <span style={{ color: palette.accent }}>~/stiri</span>
+          <span style={{ color: palette.muted }}> $ </span>
+          <span style={{ color: palette.text }}>cat {slug}.md</span>
+        </div>
+        <div className="mt-10 flex items-start justify-between gap-6">
+          <Eyebrow label={`${(story.mainCategory || "actualitate").toUpperCase()} · WORTH A LOOK`} accent={palette.accent} />
+          <span
+            className="font-editorial-mono leading-none"
+            style={{ color: palette.accent, fontSize: "clamp(2.5rem, 4vw, 3.5rem)" }}
+          >
+            {n}
+          </span>
+        </div>
+        <div className="h-px w-full mt-5" style={{ background: palette.muted, opacity: 0.3 }} />
+        <h2
+          className="font-editorial font-bold mt-10"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(2.5rem, 6vw, 6rem)",
+            lineHeight: "1",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {story.title}
+        </h2>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10 max-w-[1100px]">
+          {body.map((p, i) => (
+            <p
+              key={i}
+              className="font-editorial-sans"
+              style={{ color: palette.text, fontSize: "19px", lineHeight: "1.6", opacity: 0.92 }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+        <div className="mt-12">
+          <Meta story={story} palette={palette} />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function OliveSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const n = String(index + 1).padStart(2, "0");
+  return (
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-28">
+        <div className="flex items-baseline justify-between">
+          <Eyebrow label={(story.mainCategory || "Actualitate").toUpperCase()} accent={palette.accent} />
+          <span
+            className="font-editorial italic font-bold leading-none"
+            style={{ color: palette.accent, fontSize: "clamp(2.5rem, 4vw, 4rem)" }}
+          >
+            {n}
+          </span>
+        </div>
+        <h2
+          className="font-editorial font-bold mt-8"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)",
+            lineHeight: "1",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {story.title}
+        </h2>
+        <div className="mt-14 max-w-[720px]">
+          {body.map((p, i) => (
+            <p
+              key={i}
+              className="font-editorial-sans"
+              style={{ color: palette.text, fontSize: "19px", lineHeight: "1.6", marginBottom: "1.25rem", opacity: 0.94 }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+        <div className="mt-10">
+          <Meta story={story} palette={palette} />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function DropCapSpread({ story, index, palette }: { story: AggregatedStory; index: number; palette: Spread }) {
+  const body = splitBody(story.description, story.title);
+  const joined = body.join(" ");
+  const firstChar = joined.charAt(0) || story.title.charAt(0);
+  const rest = joined.slice(1);
+  const n = String(index + 1).padStart(2, "0");
+  return (
+    <Link to={buildStoryHref(story.id, story.title)} className="block group" style={{ background: palette.bg }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-20 md:py-28">
+        <div className="flex items-baseline justify-between">
+          <Eyebrow label={`ESEU · ${(story.mainCategory || "Actualitate").toUpperCase()}`} accent={palette.accent} />
+          <span className="font-editorial-sans font-bold" style={{ color: palette.muted, fontSize: "15px", letterSpacing: "0.15em" }}>
+            № {n}
+          </span>
+        </div>
+        <h2
+          className="font-editorial font-bold mt-8"
+          style={{
+            color: palette.text,
+            fontSize: "clamp(2.5rem, 6vw, 5.5rem)",
+            lineHeight: "1.02",
+            letterSpacing: "-0.015em",
+          }}
+        >
+          {story.title}
+        </h2>
+        <div className="mt-12 max-w-[780px]">
+          <p className="font-editorial-sans" style={{ color: palette.text, fontSize: "19px", lineHeight: "1.65" }}>
+            <span
+              className="font-editorial font-bold float-left mr-4"
+              style={{
+                color: palette.accent,
+                fontSize: "clamp(5rem, 8vw, 7rem)",
+                lineHeight: "0.85",
+                marginTop: "0.15em",
+              }}
+            >
+              {firstChar}
+            </span>
+            {rest}
           </p>
         </div>
-      </footer>
+        <div className="mt-10">
+          <Meta story={story} palette={palette} />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function SpreadRouter({ story, index }: { story: AggregatedStory; index: number }) {
+  const kind = SEQUENCE[index % SEQUENCE.length];
+  const palette = PALETTE[kind];
+  switch (kind) {
+    case "hero":
+      return <HeroSpread story={story} index={index} palette={palette} />;
+    case "rose":
+      return <RoseAlertSpread story={story} index={index} palette={palette} />;
+    case "pale":
+      return <PaleItalicSpread story={story} index={index} palette={palette} />;
+    case "midnight":
+      return <MidnightTerminalSpread story={story} index={index} palette={palette} />;
+    case "olive":
+      return <OliveSpread story={story} index={index} palette={palette} />;
+    case "drop":
+      return <DropCapSpread story={story} index={index} palette={palette} />;
+  }
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Masthead + Footer
+// ────────────────────────────────────────────────────────────────────────────
+function Masthead() {
+  const today = new Date().toLocaleDateString("ro-RO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return (
+    <header className="border-b" style={{ borderColor: "#1a1a1a", background: "#F0E8D6" }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-6 flex items-center justify-between gap-4">
+        <div className="font-editorial-sans font-bold uppercase" style={{ color: "#C64028", fontSize: "12px", letterSpacing: "0.22em" }}>
+          Morning Edition
+        </div>
+        <h1
+          className="font-editorial italic font-bold text-center"
+          style={{ color: "#141414", fontSize: "clamp(1.75rem, 3vw, 2.25rem)", letterSpacing: "-0.01em" }}
+        >
+          thesite.ro
+        </h1>
+        <Link to="/" className="font-editorial-sans font-bold uppercase hover:underline" style={{ color: "#5E584B", fontSize: "12px", letterSpacing: "0.18em" }}>
+          ← layout clasic
+        </Link>
+      </div>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 pb-5 font-editorial-sans" style={{ color: "#5E584B", fontSize: "13px", letterSpacing: "0.08em" }}>
+        {today}
+      </div>
+    </header>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="border-t" style={{ borderColor: "#1a1a1a", background: "#F0E8D6" }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+        <span className="font-editorial italic font-bold" style={{ color: "#141414", fontSize: "1.5rem" }}>
+          thesite.ro
+        </span>
+        <span className="font-editorial-sans font-bold uppercase" style={{ color: "#5E584B", fontSize: "11px", letterSpacing: "0.22em" }}>
+          © 2026 · ediție editorială experimentală
+        </span>
+      </div>
+    </footer>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Loading & empty
+// ────────────────────────────────────────────────────────────────────────────
+function LoadingSpread() {
+  return (
+    <div style={{ background: "#F0E8D6" }}>
+      <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-32 flex flex-col items-center justify-center gap-6">
+        <div className="font-editorial italic font-bold" style={{ color: "#C64028", fontSize: "clamp(3rem, 6vw, 5rem)" }}>
+          …
+        </div>
+        <p className="font-editorial-sans font-bold uppercase" style={{ color: "#5E584B", fontSize: "12px", letterSpacing: "0.22em" }}>
+          Se pregătește ediția
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Page
+// ────────────────────────────────────────────────────────────────────────────
+const IndexEditorial = () => {
+  const { data: stories, isLoading } = useAggregatedNews(40);
+
+  const spreads = useMemo(() => (stories || []).slice(0, MAX_SPREADS), [stories]);
+
+  return (
+    <div className="min-h-screen">
+      <Masthead />
+      <main>
+        {isLoading && <LoadingSpread />}
+        {!isLoading && spreads.length === 0 && (
+          <div style={{ background: "#F0E8D6" }}>
+            <div className="mx-auto max-w-[1400px] px-6 md:px-16 py-32">
+              <p className="font-editorial italic" style={{ color: "#141414", fontSize: "2rem" }}>
+                Ediția de azi e goală. Revino mai târziu.
+              </p>
+            </div>
+          </div>
+        )}
+        {spreads.map((story, index) => (
+          <SpreadRouter key={story.id} story={story} index={index} />
+        ))}
+      </main>
+      <Footer />
     </div>
   );
 };
