@@ -25,7 +25,7 @@
             "path": "/api/cron/refresh-news",
             "schedule": "0 * * * *"
         }
-    },
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
