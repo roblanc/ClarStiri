@@ -962,6 +962,44 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         ]
     },
     {
+        id: 'sebastian-zachmann',
+        slug: 'sebastian-zachmann',
+        name: 'Sebastian Zachmann',
+        role: 'Jurnalist Politic / Realizator TV',
+        image: '/images/voices/sebastian-zachmann.jpg',
+        bias: {
+            leaning: 'center',
+            score: 0,
+            description: 'Jurnalist politic de formație clasică, cu interviuri cu actorii majori din toate taberele — PSD, PNL, USR, AUR, președinție. Stilul este instituțional, fără militantism explicit; nu se pozitionează programatic pe stânga sau pe dreapta, ci urmărește accesul la factorii de decizie și dezbaterea publică.'
+        },
+        description: 'Sebastian Zachmann este unul dintre cei mai vizibili jurnaliști de politică internă din România. Începe la Adevărul (2011), conduce secția politică din 2013, iar în 2020 trece la Prima TV, unde devine realizator al emisiunii „Insider Politic". În septembrie 2025 preia conducerea editorială a site-ului Cotidianul, sub noul patron Orlando Nicoară / Clever Group. În aprilie 2026 își anunță plecarea atât din grupul Prima TV, cât și din funcția de redactor-șef al Cotidianului, rămânând realizator al emisiunii „Piața Victoriei" la Europa FM.',
+        socialLinks: {
+            website: 'https://www.cotidianul.ro/author/sebastian-zachmann/'
+        },
+        targets: [],
+        rhetoric: { aggressiveness: 25, irony: 35 },
+        contextNotes: [
+            'Absolvent de Filosofie; a petrecut o bursă în Spania înainte să intre în presa românească, în 2011, la Adevărul.',
+            'La Prima TV a realizat interviuri-eveniment cu premierul Ilie Bolojan și președintele Nicușor Dan, în cadrul emisiunii „Insider Politic".',
+            'La Europa FM moderează emisiunea „Piața Victoriei", axată pe analiză politică săptămânală.',
+            'Demisia din aprilie 2026 a fost anunțată chiar în ziua difuzării interviului cu Nicușor Dan, după aproximativ șase luni la conducerea Cotidianului și șase ani în grupul Prima.'
+        ],
+        statements: [
+            {
+                id: 'sz-s1',
+                text: 'Vin câteva schimbări.',
+                date: '2026-04-16',
+                sourceUrl: 'https://www.libertatea.ro',
+                articleUrl: 'https://www.libertatea.ro/stiri/sebastian-zachmann-demisioneaza-de-la-cotidianul-si-prima-tv-5702357',
+                verificationStatus: 'secondary',
+                evidenceNote: 'Mesaj public atribuit jurnalistului la anunțarea demisiei; reluat de Libertatea, HotNews, Click, G4Media.',
+                topic: 'Media',
+                impact: 'medium',
+                bias: 'center'
+            }
+        ]
+    },
+    {
         id: 'rares-bogdan',
         slug: 'rares-bogdan',
         name: 'Rareș Bogdan',
