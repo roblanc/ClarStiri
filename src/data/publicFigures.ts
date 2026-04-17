@@ -966,7 +966,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'sebastian-zachmann',
         name: 'Sebastian Zachmann',
         role: 'Jurnalist Politic / Realizator TV',
-        image: '/images/voices/sebastian-zachmann.jpg',
+        image: 'https://romania2118.ro/wp-content/uploads/2018/12/214-ro.jpg',
         bias: {
             leaning: 'center',
             score: 0,
@@ -1491,7 +1491,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'andrei-caramitru',
         name: 'Andrei Caramitru',
         role: 'Analist Politic / Antreprenor',
-        image: 'https://pbs.twimg.com/profile_images/1580897510374916097/tJJuv3bV_400x400.jpg',
+        image: 'https://fra1.digitaloceanspaces.com/usr-cdn/national/assets/stiri/8150_caramitru-2.jpg',
         bias: {
             leaning: 'center-left',
             score: -35,
@@ -1659,7 +1659,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'cristian-pirvulescu',
         name: 'Cristian Pîrvulescu',
         role: 'Politolog / Analist Politic',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Cristian_P%C3%AErvulescu.jpg/220px-Cristian_P%C3%AErvulescu.jpg',
+        image: 'https://snspa.ro/wp-content/uploads/2017/12/cristian_pirvulescu-960x648.jpg',
         bias: {
             leaning: 'center-left',
             score: -25,
