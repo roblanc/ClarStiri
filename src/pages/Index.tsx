@@ -391,19 +391,39 @@ const Index = () => {
 
         {/* Banner actualizare — arată când e date din cache dar se fetchează fresh */}
         {isLoadingFresh && (
-          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs text-muted-foreground w-fit mx-auto mb-4">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="shrink-0" style={{ animation: 'claudeAsteriskSpin 1.5s linear infinite' }}>
+          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs w-fit mx-auto mb-4">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="shrink-0 text-muted-foreground" style={{ animation: 'claudeAsteriskPulse 1.8s ease-in-out infinite' }}>
               {[0, 60, 120, 180, 240, 300].map((angle) => (
                 <rect key={angle} x="7.5" y="1.5" width="3" height="6.5" rx="1.5" transform={`rotate(${angle} 9 9)`} />
               ))}
-              <style>{`
-                @keyframes claudeAsteriskSpin {
-                  from { transform: rotate(0deg); }
-                  to { transform: rotate(360deg); }
-                }
-              `}</style>
             </svg>
-            Se actualizează știrile…
+            <span className="claude-shimmer-text">Se actualizează știrile…</span>
+            <style>{`
+              @keyframes claudeAsteriskPulse {
+                0%, 100% { transform: scale(0.85); opacity: 0.55; }
+                50% { transform: scale(1.05); opacity: 1; }
+              }
+              .claude-shimmer-text {
+                background: linear-gradient(
+                  90deg,
+                  hsl(var(--muted-foreground) / 0.45) 0%,
+                  hsl(var(--muted-foreground) / 0.45) 35%,
+                  hsl(var(--foreground)) 50%,
+                  hsl(var(--muted-foreground) / 0.45) 65%,
+                  hsl(var(--muted-foreground) / 0.45) 100%
+                );
+                background-size: 200% 100%;
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                color: transparent;
+                animation: claudeShimmer 2.2s linear infinite;
+              }
+              @keyframes claudeShimmer {
+                from { background-position: 200% 0; }
+                to { background-position: -200% 0; }
+              }
+            `}</style>
           </div>
         )}
 
