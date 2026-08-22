@@ -50,7 +50,7 @@
             "destination": "/api/$1"
         },
         {
-            "source": "/((?!api/).*)",
+            "source": "/((?!api/|social_preview/).*)",
             "destination": "/index.html"
         }
     ],
