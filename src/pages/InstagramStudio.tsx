@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { 
   Copy, Check, RefreshCw, AlertTriangle, ArrowRight, ArrowLeft,
-  Sparkles, Layers, ShieldCheck, ExternalLink, Download, ZoomIn, ZoomOut
+  Layers, ZoomIn, ZoomOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +30,15 @@ export default function InstagramStudio() {
   const totalSources = currentStory?.sourcesCount || currentStory?.sources?.length || 0;
   const category = (currentStory?.mainCategory || "ACTUALITATE").toUpperCase();
   const blindspot = currentStory?.blindspot;
+
+  // Calculăm eticheta de dominanță/preluare
+  const dominantBadgeLabel = useMemo(() => {
+    if (blindspot === 'left') return 'Punct Orbit Stânga';
+    if (blindspot === 'right') return 'Punct Orbit Dreapta';
+    if (left > center && left > right) return 'Preluat de Stânga';
+    if (right > center && right > left) return 'Preluat de Dreapta';
+    return 'Preluat de Centru';
+  }, [blindspot, left, center, right]);
 
   // Grupăm sursele pe cele 3 tabere
   const leftSources = useMemo(() => {
@@ -68,20 +77,10 @@ export default function InstagramStudio() {
 
   const captionText = useMemo(() => {
     if (!currentStory) return "";
-    return `⚖️ ${currentStory.title}
+    return `thesite.ro ${currentStory.title}. Vezi știrea din toate perspectivele pe thesite.ro.
 
-📊 Cum a relatat presa acest eveniment?
-${totalSources} publicații au acoperit subiectul:
-• Stânga: ${left}%
-• Centru: ${center}%
-• Dreapta: ${right}%
-
-👉 Glisează pentru a vedea cum diferă titlurile și framing-ul fiecărei publicații!
-
-🔗 Vezi analiza completă pe thesite.ro (Link în Bio)
-
-#thesite #știri #romania #groundnews #media #bias #actualitate #presaromana`;
-  }, [currentStory, totalSources, left, center, right]);
+#stiri #politica #economie #romania`;
+  }, [currentStory]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(captionText);
@@ -96,13 +95,6 @@ ${totalSources} publicații au acoperit subiectul:
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
-      {/* Ambient background light glows */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
-        <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-blue-600/20 blur-[140px]" />
-        <div className="absolute top-[40%] -right-[10%] w-[45vw] h-[45vw] rounded-full bg-amber-500/15 blur-[140px]" />
-        <div className="absolute -bottom-[20%] left-[30%] w-[50vw] h-[50vw] rounded-full bg-rose-600/15 blur-[140px]" />
-      </div>
-
       {/* Top Header */}
       <header className="border-b border-white/10 bg-[#0c0e14]/80 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -112,7 +104,7 @@ ${totalSources} publicații au acoperit subiectul:
               Studio Instagram
             </Badge>
           </Link>
-          <span className="hidden sm:inline-block text-xs text-slate-400 font-medium">| Previzualizare Carusel 1080×1350</span>
+          <span className="hidden sm:inline-block text-xs text-slate-400 font-medium">| Previzualizare Card Clasic Site (1080×1350)</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -132,7 +124,7 @@ ${totalSources} publicații au acoperit subiectul:
             className="bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-full gap-2 shadow-lg shadow-amber-400/20"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-black" /> : <Copy className="w-3.5 h-3.5 text-black" />}
-            {copied ? "Copiat în clipboard!" : "Copiază Caption"}
+            {copied ? "Copiat!" : "Copiază Caption"}
           </Button>
         </div>
       </header>
@@ -185,9 +177,9 @@ ${totalSources} publicații au acoperit subiectul:
                   
                   {/* Mini Bias Bar */}
                   <div className="mt-3 flex h-1.5 w-full rounded-full overflow-hidden bg-white/10 gap-0.5">
-                    <div style={{ width: `${story.bias?.left || 0}%` }} className="bg-gradient-to-r from-blue-500 to-cyan-400" />
-                    <div style={{ width: `${story.bias?.center || 0}%` }} className="bg-slate-200" />
-                    <div style={{ width: `${story.bias?.right || 0}%` }} className="bg-gradient-to-r from-rose-500 to-red-500" />
+                    <div style={{ width: `${story.bias?.left || 0}%` }} className="bg-[#23497d]" />
+                    <div style={{ width: `${story.bias?.center || 0}%` }} className="bg-white" />
+                    <div style={{ width: `${story.bias?.right || 0}%` }} className="bg-[#7e2226]" />
                   </div>
                 </button>
               );
@@ -198,10 +190,10 @@ ${totalSources} publicații au acoperit subiectul:
         {/* Right Column: Slide Visualizer & Controls */}
         <div className="flex flex-col items-center w-full">
           
-          {/* Top Control Bar: Slide Tabs & Zoom Controls */}
+          {/* Top Control Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 w-full max-w-[620px] mb-6">
             
-            {/* Tabs */}
+            {/* Slide Tabs */}
             <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-white/[0.04] border border-white/10 rounded-full backdrop-blur-xl shadow-xl">
               <button
                 onClick={() => setActiveSlide(1)}
@@ -209,7 +201,7 @@ ${totalSources} publicații au acoperit subiectul:
                   activeSlide === 1 ? "bg-amber-400 text-black shadow-md shadow-amber-400/20" : "text-slate-400 hover:text-white"
                 }`}
               >
-                Slide 1: Copertă
+                Card Clasic Site
               </button>
               <button
                 onClick={() => setActiveSlide(2)}
@@ -226,14 +218,6 @@ ${totalSources} publicații au acoperit subiectul:
                 }`}
               >
                 Slide 3: CTA
-              </button>
-              <button
-                onClick={() => setActiveSlide(4)}
-                className={`px-4 py-2 rounded-full text-xs font-black transition-all ${
-                  activeSlide === 4 ? "bg-cyan-500 text-black shadow-md shadow-cyan-500/20" : "text-slate-400 hover:text-white"
-                }`}
-              >
-                Single-Post
               </button>
             </div>
 
@@ -265,98 +249,85 @@ ${totalSources} publicații au acoperit subiectul:
             className="transition-all duration-200 ease-out origin-top flex items-center justify-center"
             style={{ transform: `scale(${scale})`, marginBottom: `${(scale - 1) * 675}px` }}
           >
-            {/* 1080x1350 Ratio Frame */}
-            <div className="w-[540px] h-[675px] bg-[#090a0f] border border-white/20 rounded-[32px] shadow-2xl shadow-black/80 overflow-hidden relative flex flex-col p-7 justify-between select-none">
+            {/* 1080x1350 Ratio Frame (540px x 675px canvas) */}
+            <div className="w-[540px] h-[675px] bg-[#000000] border border-white/20 rounded-none shadow-2xl overflow-hidden relative flex flex-col justify-between select-none">
               
-              {/* Radial dot matrix background */}
-              <div 
-                className="absolute inset-0 pointer-events-none opacity-25" 
-                style={{
-                  backgroundImage: "radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px)",
-                  backgroundSize: "22px 22px"
-                }} 
-              />
-              
-              {/* Soft corner gradient accents */}
-              <div className="absolute -top-24 -left-24 w-60 h-60 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* SLIDE 1: Cover & Bias Bar */}
+              {/* SLIDE 1: EXACT CLASSIC SITE CARD LAYOUT */}
               {activeSlide === 1 && currentStory && (
-                <div className="relative z-10 flex flex-col justify-between h-full">
-                  {/* Top Bar */}
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-gradient-to-r from-amber-400 to-amber-500 text-black text-[11px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md shadow-amber-500/15">
-                        {category}
-                      </span>
-                      <span className="bg-white/10 text-white text-[11px] font-extrabold px-3 py-1 rounded-full border border-white/15 backdrop-blur-md">
-                        {totalSources} SURSE
-                      </span>
-                    </div>
-                    <div className="bg-[#f2efe6] px-4 py-1 rounded-full shadow-lg border border-white/40">
-                      <span className="font-serif italic font-bold text-black text-sm tracking-tight">thesite.ro</span>
-                    </div>
-                  </div>
-
-                  {/* Hero Image Card */}
-                  <div className="relative my-4 rounded-2xl overflow-hidden flex-1 border border-white/15 shadow-2xl bg-black/60 group">
+                <div className="relative z-10 flex flex-col justify-between h-full w-full bg-black">
+                  
+                  {/* Hero Image Container (top ~82% height) */}
+                  <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-6">
                     <img 
                       src={getThumbnailUrl(currentStory.image) || PLACEHOLDER_IMAGE} 
                       alt={currentStory.title}
-                      className="w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090a0f] via-[#090a0f]/40 to-transparent" />
                     
-                    <div className="absolute bottom-0 inset-x-0 p-5 space-y-2.5">
-                      {blindspot && (
-                        <div className="inline-flex items-center gap-1.5 bg-red-500/20 border border-red-500/50 text-red-300 text-[11px] font-black px-3 py-1 rounded-lg backdrop-blur-md shadow-md">
-                          <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
-                          PUNCT ORB: Ignorat de {blindspot === 'left' ? 'Stânga' : 'Dreapta'}
+                    {/* Dark gradient overlay at the bottom */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                    
+                    {/* Top Badges Bar */}
+                    <div className="relative z-20 flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        {/* 7 SURSE Pill */}
+                        <div className="bg-[#1e293b] text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-none shadow-lg">
+                          {totalSources} SURSE
                         </div>
-                      )}
-                      <h1 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight drop-shadow-md text-balance">
+                        {/* Timp Pill */}
+                        <div className="bg-[#1e293b]/90 text-white text-xs font-bold px-3.5 py-1.5 rounded-none backdrop-blur-md">
+                          {currentStory.timeAgo || "acum 20 min"}
+                        </div>
+                      </div>
+
+                      {/* Right Badge Pill: Preluat de Centru / Stânga / Dreapta */}
+                      <div className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-none shadow-lg">
+                        {dominantBadgeLabel}
+                      </div>
+                    </div>
+
+                    {/* Headline & Watermark at bottom of image */}
+                    <div className="relative z-20 space-y-3 pt-12">
+                      <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight drop-shadow-md text-balance">
                         {currentStory.title}
                       </h1>
+                      <div className="text-[12px] font-medium text-slate-300 tracking-wide opacity-90">
+                        thesite.ro
+                      </div>
                     </div>
                   </div>
 
-                  {/* Bias Bar Card */}
-                  <div className="bg-white/[0.05] border border-white/10 rounded-2xl p-4 backdrop-blur-xl space-y-2.5 shadow-xl">
-                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
-                      <span>Distribuție orientare media</span>
-                      <span className="text-amber-400 font-extrabold">{totalSources} publicații analizate</span>
+                  {/* Bottom Solid 3-Column Bias Bar (bottom ~18% height) */}
+                  <div className="flex w-full h-[105px] shrink-0 border-t border-black">
+                    
+                    {/* Left Column (Blue) */}
+                    <div className="flex-1 bg-[#23497d] flex flex-col justify-center items-center p-2 text-white">
+                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">STÂNGA</span>
+                      <span className="text-3xl font-black">{left}%</span>
                     </div>
 
-                    <div className="flex justify-between text-xs font-black">
-                      <span className="text-cyan-400">Stânga {left}%</span>
-                      <span className="text-slate-200">Centru {center}%</span>
-                      <span className="text-rose-400">Dreapta {right}%</span>
+                    {/* Center Column (White) */}
+                    <div className="flex-1 bg-white flex flex-col justify-center items-center p-2 text-[#1e293b]">
+                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">CENTRU</span>
+                      <span className="text-3xl font-black">{center}%</span>
                     </div>
 
-                    <div className="flex h-3 w-full rounded-full overflow-hidden gap-1 bg-white/10 p-0.5 border border-white/10">
-                      <div style={{ width: `${left}%` }} className="bg-gradient-to-r from-blue-500 to-cyan-400 h-full rounded-l-full" />
-                      <div style={{ width: `${center}%` }} className="bg-slate-200 h-full" />
-                      <div style={{ width: `${right}%` }} className="bg-gradient-to-r from-rose-500 to-red-500 h-full rounded-r-full" />
+                    {/* Right Column (Red) */}
+                    <div className="flex-1 bg-[#7e2226] flex flex-col justify-center items-center p-2 text-white">
+                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">DREAPTA</span>
+                      <span className="text-3xl font-black">{right}%</span>
                     </div>
 
-                    <div className="flex justify-between items-center text-[10px] text-slate-400 pt-1">
-                      <span className="font-semibold text-slate-400">Analiză automată media</span>
-                      <span className="text-amber-400 font-black flex items-center gap-1 bg-amber-400/10 px-2.5 py-0.5 rounded-full border border-amber-400/20">
-                        Glisează pentru titluri <ArrowRight className="w-3 h-3" />
-                      </span>
-                    </div>
                   </div>
+
                 </div>
               )}
 
               {/* SLIDE 2: Head-to-Head Headlines */}
               {activeSlide === 2 && currentStory && (
-                <div className="relative z-10 flex flex-col justify-between h-full space-y-3">
-                  {/* Top Bar */}
+                <div className="relative z-10 flex flex-col justify-between h-full space-y-3 p-6 bg-[#090a0f]">
                   <div className="flex justify-between items-center">
-                    <span className="bg-gradient-to-r from-blue-500 to-cyan-500 text-black text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
+                    <span className="bg-blue-500 text-white text-[10px] font-black uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md">
                       Comparație Titluri
                     </span>
                     <span className="font-serif italic font-bold text-slate-200 text-sm tracking-tight">thesite.ro</span>
@@ -369,7 +340,6 @@ ${totalSources} publicații au acoperit subiectul:
 
                   {/* Headline Outlet Cards Stack */}
                   <div className="space-y-3 flex-1 flex flex-col justify-center">
-                    
                     {/* Left Outlet Card */}
                     <div className="bg-white/[0.04] border border-white/10 border-l-4 border-l-cyan-400 rounded-2xl p-4 backdrop-blur-md space-y-2 relative overflow-hidden shadow-lg">
                       <div className="flex justify-between items-center text-[10px]">
@@ -417,7 +387,6 @@ ${totalSources} publicații au acoperit subiectul:
                         „{sampleRight.title}”
                       </p>
                     </div>
-
                   </div>
 
                   <div className="bg-white/[0.06] border border-white/10 rounded-full px-4 py-2 flex justify-between items-center text-[10px] backdrop-blur-md">
@@ -431,7 +400,7 @@ ${totalSources} publicații au acoperit subiectul:
 
               {/* SLIDE 3: CTA & Mission */}
               {activeSlide === 3 && (
-                <div className="relative z-10 flex flex-col justify-between h-full">
+                <div className="relative z-10 flex flex-col justify-between h-full p-6 bg-[#090a0f]">
                   <div className="flex justify-between items-center">
                     <span className="font-serif italic font-bold text-amber-100 text-lg tracking-tight">thesite.ro</span>
                     <span className="text-[10px] bg-white/10 border border-white/15 px-3 py-1 rounded-full text-slate-200 font-extrabold backdrop-blur-md">
@@ -441,7 +410,6 @@ ${totalSources} publicații au acoperit subiectul:
 
                   <div className="bg-white/[0.04] border border-white/15 rounded-3xl p-6 text-center space-y-4 my-auto backdrop-blur-xl shadow-2xl relative overflow-hidden">
                     <div className="inline-flex items-center gap-1.5 bg-gradient-to-r from-emerald-400 to-teal-400 text-black text-[10px] font-black uppercase px-3.5 py-1 rounded-full shadow-md">
-                      <ShieldCheck className="w-3.5 h-3.5 text-black" />
                       Decide tu ce să crezi
                     </div>
 
@@ -456,104 +424,11 @@ ${totalSources} publicații au acoperit subiectul:
                     <div className="inline-flex items-center gap-2 bg-[#f2efe6] text-black px-6 py-2.5 rounded-full font-black text-xs shadow-xl border border-white">
                       🔗 Link în bio: thesite.ro
                     </div>
-
-                    <div className="grid grid-cols-2 gap-2 pt-2 text-left text-[10px] text-slate-300">
-                      <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-amber-400 font-black">✓</span> 35+ publicații
-                      </div>
-                      <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-amber-400 font-black">✓</span> Detecție blindspots
-                      </div>
-                      <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-amber-400 font-black">✓</span> Comparație titluri
-                      </div>
-                      <div className="bg-white/5 p-2.5 rounded-xl border border-white/5 flex items-center gap-2">
-                        <span className="text-amber-400 font-black">✓</span> Fără algoritmi de bulă
-                      </div>
-                    </div>
                   </div>
 
                   <div className="border-t border-white/10 pt-3 flex justify-between text-[10px] text-slate-400 font-semibold">
                     <span>© thesite.ro</span>
                     <span>Urmărește @thesite.ro</span>
-                  </div>
-                </div>
-              )}
-
-              {/* SLIDE 4: Single-Post Layout */}
-              {activeSlide === 4 && currentStory && (
-                <div className="relative z-10 flex flex-col justify-between h-full space-y-3">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-amber-400 text-black text-[10px] font-black uppercase px-2.5 py-0.5 rounded-full">
-                        {category}
-                      </span>
-                      <span className="bg-white/15 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-white/10">
-                        {totalSources} SURSE
-                      </span>
-                    </div>
-                    <span className="font-serif italic font-bold text-amber-100 text-sm">thesite.ro</span>
-                  </div>
-
-                  {/* Hero Box */}
-                  <div className="relative rounded-2xl overflow-hidden h-[180px] border border-white/15 bg-black/60 shadow-xl">
-                    <img 
-                      src={getThumbnailUrl(currentStory.image) || PLACEHOLDER_IMAGE} 
-                      alt={currentStory.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090a0f] via-[#090a0f]/40 to-transparent" />
-                    <div className="absolute bottom-0 inset-x-0 p-3.5">
-                      <h2 className="text-sm sm:text-base font-black text-white leading-snug line-clamp-2">
-                        {currentStory.title}
-                      </h2>
-                    </div>
-                  </div>
-
-                  {/* Mini Bias Bar */}
-                  <div className="bg-white/[0.05] border border-white/10 rounded-xl p-3 space-y-1.5 backdrop-blur-md">
-                    <div className="flex justify-between text-[9px] font-black uppercase tracking-wider text-slate-400">
-                      <span>Distribuție media</span>
-                      <span>{totalSources} surse</span>
-                    </div>
-                    <div className="flex justify-between text-[11px] font-extrabold">
-                      <span className="text-cyan-400">Stânga {left}%</span>
-                      <span className="text-slate-200">Centru {center}%</span>
-                      <span className="text-rose-400">Dreapta {right}%</span>
-                    </div>
-                    <div className="flex h-2.5 rounded-full overflow-hidden gap-0.5 bg-white/10 p-0.5">
-                      <div style={{ width: `${left}%` }} className="bg-gradient-to-r from-blue-500 to-cyan-400 rounded-l-full" />
-                      <div style={{ width: `${center}%` }} className="bg-slate-200" />
-                      <div style={{ width: `${right}%` }} className="bg-gradient-to-r from-rose-500 to-red-500 rounded-r-full" />
-                    </div>
-                  </div>
-
-                  {/* 2 Mini Headlines with Favicons */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-white/[0.04] border border-white/10 border-l-2 border-l-cyan-400 p-3 rounded-xl space-y-1.5 backdrop-blur-md">
-                      <div className="flex items-center gap-1.5">
-                        <SourceFavicon source={sampleLeft.source} size="xs" showRing={false} />
-                        <span className="text-[9px] font-black text-cyan-300 uppercase truncate">
-                          {sampleLeft.source?.name}
-                        </span>
-                      </div>
-                      <p className="text-[10px] font-bold text-slate-200 line-clamp-2 leading-tight">„{sampleLeft.title}”</p>
-                    </div>
-
-                    <div className="bg-white/[0.04] border border-white/10 border-l-2 border-l-rose-400 p-3 rounded-xl space-y-1.5 backdrop-blur-md">
-                      <div className="flex items-center gap-1.5">
-                        <SourceFavicon source={sampleRight.source} size="xs" showRing={false} />
-                        <span className="text-[9px] font-black text-rose-300 uppercase truncate">
-                          {sampleRight.source?.name}
-                        </span>
-                      </div>
-                      <p className="text-[10px] font-bold text-slate-200 line-clamp-2 leading-tight">„{sampleRight.title}”</p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-white/10 pt-2 flex justify-between text-[10px] text-slate-400 font-semibold">
-                    <span>thesite.ro — Vezi toate perspectivele</span>
-                    <span className="text-amber-400 font-bold">🔗 Link în bio</span>
                   </div>
                 </div>
               )}
@@ -573,7 +448,7 @@ ${totalSources} publicații au acoperit subiectul:
               <ArrowLeft className="w-3.5 h-3.5" /> Slide anterior
             </Button>
             <span className="text-xs font-bold text-slate-400">
-              {activeSlide <= 3 ? `Slide ${activeSlide} din 3` : "Single Post"}
+              Slide {activeSlide} din 3
             </span>
             <Button
               variant="outline"
