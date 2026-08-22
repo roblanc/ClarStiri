@@ -1249,6 +1249,66 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Sursă primară de știri de agenție.'
   },
+  panorama: {
+    id: 'panorama',
+    foundedYear: 2021,
+    founders: ['Andrei Crăciun', 'Elena Deacu', 'Echipa Panorama'],
+    currentOwner: 'Fundația Romanian Business Leaders / Proiect editorial independent',
+    editorialLine: 'Jurnalism explicativ, grafice de date, analize macroeconomice, sociale și de mediu.',
+    biasRationale: 'Orientare centristă axată pe date concrete, statistici Eurostat/INS și opinii ale experților independenți. Menține un limbaj echilibrat și factologie de înaltă precizie.',
+    biasScore: 0,
+    confidence: 'high',
+    lastAnalysed: '2026-08-22',
+    factualityRationale: 'Jurnalism bazat pe date și verificare riguroasă.'
+  },
+  rra: {
+    id: 'rra',
+    foundedYear: 1928,
+    founders: ['Societatea Română de Radiodifuziune (SRR)'],
+    currentOwner: 'Statul Român (Serviciu Public de Radio)',
+    editorialLine: 'Post public național de știri cu transmisie 24/24 și rețea de corespondenți în toată țara.',
+    biasRationale: 'Fiind serviciu public finanțat de la buget, respectă normele deontologice de echilibru și pluralism, având o linie editorială strict factuală de centru.',
+    biasScore: 2,
+    confidence: 'high',
+    lastAnalysed: '2026-08-22',
+    factualityRationale: 'Serviciu public național de radiodifuziune.'
+  },
+  presshub: {
+    id: 'presshub',
+    foundedYear: 2018,
+    founders: ['Freedom House România', 'Rețeaua Presei Locale Independente'],
+    currentOwner: 'Asociația Ziariștilor Independenți din România',
+    editorialLine: 'Rețea de presă independentă ce reunește ziare locale și investigații din toate județele.',
+    biasRationale: 'Accent pe transparență instituțională, anticorupție și drepturile cetățenilor. Deși investigațiile vizează decidenții locali din toate partidele, tonul general este pro-reformist și centrist.',
+    biasScore: -8,
+    confidence: 'high',
+    lastAnalysed: '2026-08-22',
+    factualityRationale: 'Investigații documentate și premiate.'
+  },
+  infosudest: {
+    id: 'infosudest',
+    foundedYear: 2012,
+    founders: ['Cristian Andrei Leonte', 'Andreea Pavel'],
+    currentOwner: 'Asociația Info Sud-Est',
+    editorialLine: 'Jurnalism de investigație axat pe regiunea Dobrogea, patrimoniu istoric și administrație locală.',
+    biasRationale: 'Publicație independentă membră a rețelelor de investigații din România. Ton critic la adresa abuzurilor de putere, cu o orientare moderat de centru-stânga spre societate civilă.',
+    biasScore: -15,
+    confidence: 'high',
+    lastAnalysed: '2026-08-22',
+    factualityRationale: 'Jurnalism premiat Superscrieri.'
+  },
+  misreport: {
+    id: 'misreport',
+    foundedYear: 2022,
+    founders: ['Ovidiu Vanghele', 'Centrul de Investigații Media'],
+    currentOwner: 'Proiect independent de fact-checking',
+    editorialLine: 'Newsletter și publicație de fact-checking specializată pe demontarea dezinformării și fake news.',
+    biasRationale: 'Proiect strict dedicat verificării factualității declarațiilor publice și a campaniilor de manipulare. Clasificat drept centru pur cu facticitate maximă.',
+    biasScore: 0,
+    confidence: 'high',
+    lastAnalysed: '2026-08-22',
+    factualityRationale: 'Fact-checking certificat și metodologie riguroasă.'
+  },
 };
 
 // ============================================================
