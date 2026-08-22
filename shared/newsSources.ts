@@ -102,6 +102,12 @@ export const NEWS_SOURCES_BASE = [
   { id: 'cugetliber', name: 'Cuget Liber', url: 'https://www.cugetliber.ro', rssUrl: 'https://www.cugetliber.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
   { id: 'bihoreanul', name: 'Bihoreanul', url: 'https://www.bihoreanul.ro', rssUrl: 'https://www.bihoreanul.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
   { id: 'gds', name: 'Gazeta de Sud', url: 'https://www.gds.ro', rssUrl: 'https://www.gds.ro/feed/', bias: 'center', factuality: 'mixed', category: 'mainstream' },
+  { id: 'infosudest', name: 'Info Sud-Est', url: 'https://www.info-sud-est.ro', rssUrl: 'https://www.info-sud-est.ro/feed/', bias: 'center-left', factuality: 'high', category: 'independent' },
+  // ── Analiză, Fact-checking & Presă Publică ─────────────────────────────────
+  { id: 'panorama', name: 'Panorama', url: 'https://panorama.ro', rssUrl: 'https://panorama.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'rra', name: 'Radio România Actualități', url: 'https://www.romania-actualitati.ro', rssUrl: 'https://www.romania-actualitati.ro/rss', bias: 'center', factuality: 'high', category: 'public' },
+  { id: 'presshub', name: 'PressHub', url: 'https://presshub.ro', rssUrl: 'https://www.presshub.ro/feed/', bias: 'center', factuality: 'high', category: 'independent' },
+  { id: 'misreport', name: 'Misreport', url: 'https://misreport.ro', rssUrl: 'https://misreport.substack.com/feed', bias: 'center', factuality: 'high', category: 'independent' },
 ] as const satisfies readonly BaseNewsSource[];
 
 export type SourceId = (typeof NEWS_SOURCES_BASE)[number]['id'];

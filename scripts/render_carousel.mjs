@@ -57,8 +57,13 @@ async function run() {
     return;
   }
 
-  // Pick top story (preferably one with blindspot or high sources count)
-  const story = stories.find(s => s.blindspot && s.blindspot !== 'none') || stories[0];
+  // Selectam stirea despre Nea Mihai (sau stirea de top cu blindspot / surse multe)
+  const targetStory = stories.find(s => 
+    s.id === 'story-20260821-8jef4i' ||
+    (s.title + ' ' + (s.description || '')).toLowerCase().includes('nea mihai') ||
+    (s.title + ' ' + (s.description || '')).toLowerCase().includes('merdene')
+  );
+  const story = targetStory || stories.find(s => s.blindspot && s.blindspot !== 'none') || stories[0];
   console.log('📌 Selected Story:', story.title);
   console.log(`   Surse: ${story.sourcesCount || story.sources?.length} | Blindspot: ${story.blindspot || 'none'}`);
 

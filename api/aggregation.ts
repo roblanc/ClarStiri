@@ -2,10 +2,18 @@ import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP, shouldFilterNews } from './
 import { createStoryId } from './storyId.js';
 import { generateAggregatedTitle, getEmbeddingsBatch } from './llm.js';
 
+const ogImageCache = new Map<string, { image: string; expires: number }>();
+const OG_CACHE_TTL = 30 * 60 * 1000; // 30 min cache
+
 async function fetchOgImage(url: string): Promise<string> {
+    if (!url) return '';
+    const cached = ogImageCache.get(url);
+    if (cached && cached.expires > Date.now()) {
+        return cached.image;
+    }
     try {
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 4000);
+        const timeout = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(url, {
             signal: controller.signal,
             headers: { 'User-Agent': 'Mozilla/5.0 (compatible; thesite-bot/1.0)' },
@@ -15,7 +23,13 @@ async function fetchOgImage(url: string): Promise<string> {
         const html = await res.text();
         const match = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
             || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
-        return match?.[1] || '';
+        const image = match?.[1] || '';
+        ogImageCache.set(url, { image, expires: Date.now() + OG_CACHE_TTL });
+        if (ogImageCache.size > 1200) {
+            const first = ogImageCache.keys().next().value;
+            if (first) ogImageCache.delete(first);
+        }
+        return image;
     } catch {
         return '';
     }
