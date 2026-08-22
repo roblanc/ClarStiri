@@ -9,7 +9,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate:social": "node scripts/render_carousel.mjs"
+    "generate:social": "node scripts/render_carousel.mjs",
+    "publish:instagram": "node scripts/publish_to_instagram.mjs"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.2",
