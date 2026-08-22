@@ -8,7 +8,8 @@
     "build": "node scripts/generate-sitemap.js && vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:social": "node scripts/render_carousel.mjs"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.2",
