@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { 
-  Copy, Check, RefreshCw, AlertTriangle, ArrowRight, ArrowLeft,
+  Copy, Check, RefreshCw, ArrowRight, ArrowLeft,
   Layers, ZoomIn, ZoomOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ import { SourceFavicon } from "@/components/SourceFavicon";
 export default function InstagramStudio() {
   const { data: stories, isLoading, refetch, isFetching } = useAggregatedNews(60);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
-  const [activeSlide, setActiveSlide] = useState<1 | 2 | 3 | 4>(1);
+  const [activeSlide, setActiveSlide] = useState<1 | 2 | 3>(1);
   const [copied, setCopied] = useState(false);
   const [scale, setScale] = useState<number>(0.85);
 
@@ -28,10 +28,9 @@ export default function InstagramStudio() {
   const center = Math.round(currentStory?.bias?.center || 0);
   const right = Math.round(currentStory?.bias?.right || 0);
   const totalSources = currentStory?.sourcesCount || currentStory?.sources?.length || 0;
-  const category = (currentStory?.mainCategory || "ACTUALITATE").toUpperCase();
   const blindspot = currentStory?.blindspot;
 
-  // Calculăm eticheta de dominanță/preluare
+  // Eticheta pentru insigna din dreapta sus
   const dominantBadgeLabel = useMemo(() => {
     if (blindspot === 'left') return 'Punct Orbit Stânga';
     if (blindspot === 'right') return 'Punct Orbit Dreapta';
@@ -40,12 +39,9 @@ export default function InstagramStudio() {
     return 'Preluat de Centru';
   }, [blindspot, left, center, right]);
 
-  // Grupăm sursele pe cele 3 tabere
+  // Surse pentru slide-ul 2
   const leftSources = useMemo(() => {
-    return (currentStory?.sources || []).filter(s => {
-      const b = (s.source?.bias || "").toLowerCase();
-      return b.includes("left");
-    });
+    return (currentStory?.sources || []).filter(s => (s.source?.bias || "").toLowerCase().includes("left"));
   }, [currentStory]);
 
   const centerSources = useMemo(() => {
@@ -56,10 +52,7 @@ export default function InstagramStudio() {
   }, [currentStory]);
 
   const rightSources = useMemo(() => {
-    return (currentStory?.sources || []).filter(s => {
-      const b = (s.source?.bias || "").toLowerCase();
-      return b.includes("right");
-    });
+    return (currentStory?.sources || []).filter(s => (s.source?.bias || "").toLowerCase().includes("right"));
   }, [currentStory]);
 
   const sampleLeft = leftSources[0] || { 
@@ -104,7 +97,7 @@ export default function InstagramStudio() {
               Studio Instagram
             </Badge>
           </Link>
-          <span className="hidden sm:inline-block text-xs text-slate-400 font-medium">| Previzualizare Card Clasic Site (1080×1350)</span>
+          <span className="hidden sm:inline-block text-xs text-slate-400 font-medium">| Postare Instagram 1080×1350 (Card Clasic Site)</span>
         </div>
 
         <div className="flex items-center gap-3">
@@ -175,11 +168,11 @@ export default function InstagramStudio() {
                     {story.title}
                   </p>
                   
-                  {/* Mini Bias Bar */}
-                  <div className="mt-3 flex h-1.5 w-full rounded-full overflow-hidden bg-white/10 gap-0.5">
-                    <div style={{ width: `${story.bias?.left || 0}%` }} className="bg-[#23497d]" />
-                    <div style={{ width: `${story.bias?.center || 0}%` }} className="bg-white" />
-                    <div style={{ width: `${story.bias?.right || 0}%` }} className="bg-[#7e2226]" />
+                  {/* Mini Proportional Bias Bar */}
+                  <div className="mt-3 flex h-1.5 w-full overflow-hidden bg-white/10">
+                    {story.bias?.left > 0 && <div style={{ flexGrow: story.bias.left }} className="bg-[#28508a] h-full" />}
+                    {story.bias?.center > 0 && <div style={{ flexGrow: story.bias.center }} className="bg-white h-full" />}
+                    {story.bias?.right > 0 && <div style={{ flexGrow: story.bias.right }} className="bg-[#822727] h-full" />}
                   </div>
                 </button>
               );
@@ -201,7 +194,7 @@ export default function InstagramStudio() {
                   activeSlide === 1 ? "bg-amber-400 text-black shadow-md shadow-amber-400/20" : "text-slate-400 hover:text-white"
                 }`}
               >
-                Card Clasic Site
+                1. Card Clasic Site (Foto Post)
               </button>
               <button
                 onClick={() => setActiveSlide(2)}
@@ -209,7 +202,7 @@ export default function InstagramStudio() {
                   activeSlide === 2 ? "bg-amber-400 text-black shadow-md shadow-amber-400/20" : "text-slate-400 hover:text-white"
                 }`}
               >
-                Slide 2: Titluri
+                2. Comparație Titluri
               </button>
               <button
                 onClick={() => setActiveSlide(3)}
@@ -217,7 +210,7 @@ export default function InstagramStudio() {
                   activeSlide === 3 ? "bg-amber-400 text-black shadow-md shadow-amber-400/20" : "text-slate-400 hover:text-white"
                 }`}
               >
-                Slide 3: CTA
+                3. Call To Action
               </button>
             </div>
 
@@ -252,11 +245,11 @@ export default function InstagramStudio() {
             {/* 1080x1350 Ratio Frame (540px x 675px canvas) */}
             <div className="w-[540px] h-[675px] bg-[#000000] border border-white/20 rounded-none shadow-2xl overflow-hidden relative flex flex-col justify-between select-none">
               
-              {/* SLIDE 1: EXACT CLASSIC SITE CARD LAYOUT */}
+              {/* SLIDE 1: EXACT PIXEL-PERFECT CLASSIC SITE NEWS CARD */}
               {activeSlide === 1 && currentStory && (
                 <div className="relative z-10 flex flex-col justify-between h-full w-full bg-black">
                   
-                  {/* Hero Image Container (top ~82% height) */}
+                  {/* Hero Image Container (~83% height) */}
                   <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-6">
                     <img 
                       src={getThumbnailUrl(currentStory.image) || PLACEHOLDER_IMAGE} 
@@ -267,26 +260,26 @@ export default function InstagramStudio() {
                     {/* Dark gradient overlay at the bottom */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                     
-                    {/* Top Badges Bar */}
+                    {/* Top Badges Row */}
                     <div className="relative z-20 flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
-                        {/* 7 SURSE Pill */}
-                        <div className="bg-[#1e293b] text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-none shadow-lg">
+                        {/* 7 SURSE Badge */}
+                        <div className="bg-[#132238] text-white text-xs font-black uppercase tracking-wider px-3.5 py-1.5 rounded-none shadow-md">
                           {totalSources} SURSE
                         </div>
-                        {/* Timp Pill */}
-                        <div className="bg-[#1e293b]/90 text-white text-xs font-bold px-3.5 py-1.5 rounded-none backdrop-blur-md">
+                        {/* Timp Badge */}
+                        <div className="bg-[#132238]/90 text-white text-xs font-bold px-3.5 py-1.5 rounded-none backdrop-blur-sm">
                           {currentStory.timeAgo || "acum 20 min"}
                         </div>
                       </div>
 
-                      {/* Right Badge Pill: Preluat de Centru / Stânga / Dreapta */}
-                      <div className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-none shadow-lg">
+                      {/* Right Badge: Preluat de Centru / Stânga / Dreapta */}
+                      <div className="bg-white text-black text-xs font-bold px-4 py-1.5 rounded-none shadow-md">
                         {dominantBadgeLabel}
                       </div>
                     </div>
 
-                    {/* Headline & Watermark at bottom of image */}
+                    {/* Headline & Watermark */}
                     <div className="relative z-20 space-y-3 pt-12">
                       <h1 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight drop-shadow-md text-balance">
                         {currentStory.title}
@@ -297,26 +290,41 @@ export default function InstagramStudio() {
                     </div>
                   </div>
 
-                  {/* Bottom Solid 3-Column Bias Bar (bottom ~18% height) */}
-                  <div className="flex w-full h-[105px] shrink-0 border-t border-black">
+                  {/* Bottom Proportional Bias Bar (~17% height) */}
+                  <div className="flex w-full h-[95px] shrink-0 border-t border-black/20">
                     
-                    {/* Left Column (Blue) */}
-                    <div className="flex-1 bg-[#23497d] flex flex-col justify-center items-center p-2 text-white">
-                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">STÂNGA</span>
-                      <span className="text-3xl font-black">{left}%</span>
-                    </div>
+                    {/* Left Segment */}
+                    {left > 0 && (
+                      <div 
+                        style={{ flexGrow: left, minWidth: '16%' }}
+                        className="bg-[#28508a] text-white flex flex-col items-center justify-center p-2"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">STÂNGA</span>
+                        <span className="text-2xl font-black">{left}%</span>
+                      </div>
+                    )}
 
-                    {/* Center Column (White) */}
-                    <div className="flex-1 bg-white flex flex-col justify-center items-center p-2 text-[#1e293b]">
-                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">CENTRU</span>
-                      <span className="text-3xl font-black">{center}%</span>
-                    </div>
+                    {/* Center Segment */}
+                    {center > 0 && (
+                      <div 
+                        style={{ flexGrow: center, minWidth: '16%' }}
+                        className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-2 border-x border-black/10"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-80">CENTRU</span>
+                        <span className="text-2xl font-black">{center}%</span>
+                      </div>
+                    )}
 
-                    {/* Right Column (Red) */}
-                    <div className="flex-1 bg-[#7e2226] flex flex-col justify-center items-center p-2 text-white">
-                      <span className="text-[11px] font-black tracking-widest uppercase mb-1">DREAPTA</span>
-                      <span className="text-3xl font-black">{right}%</span>
-                    </div>
+                    {/* Right Segment */}
+                    {right > 0 && (
+                      <div 
+                        style={{ flexGrow: right, minWidth: '16%' }}
+                        className="bg-[#822727] text-white flex flex-col items-center justify-center p-2"
+                      >
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">DREAPTA</span>
+                        <span className="text-2xl font-black">{right}%</span>
+                      </div>
+                    )}
 
                   </div>
 
