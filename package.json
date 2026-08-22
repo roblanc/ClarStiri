@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "generate:social": "node scripts/render_carousel.mjs",
-    "publish:instagram": "node scripts/publish_to_instagram.mjs"
+    "publish:instagram": "node scripts/publish_to_instagram.mjs",
+    "post:browser": "node scripts/auto_post_playwright.mjs"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.2",
