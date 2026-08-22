@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { 
-  Copy, Check, RefreshCw, Layers, ArrowLeft
+  Copy, Check, RefreshCw, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
@@ -49,7 +49,12 @@ export default function InstagramStudio() {
       {/* Top Header */}
       <header className="border-b border-black/10 bg-[#faf9f6]/90 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+            <img 
+              src="/hero-illustration-headphones.webp" 
+              alt="thesite.ro" 
+              className="w-8 h-8 object-contain"
+            />
             <span className="font-serif italic font-bold text-2xl text-black tracking-tight">thesite.ro</span>
             <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-2.5 py-0.5 rounded-none">
               Studio Privat
@@ -164,13 +169,22 @@ export default function InstagramStudio() {
                     </span>
                   </div>
 
-                  {/* Title & Watermark */}
-                  <div className="relative z-20 space-y-2 pt-12">
+                  {/* Title & Watermark with Headphone Character Logo */}
+                  <div className="relative z-20 space-y-2.5 pt-12">
                     <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight text-balance drop-shadow-md">
                       {featuredStory.title}
                     </h2>
-                    <div className="text-[12px] font-medium text-slate-300 tracking-wide opacity-90">
-                      thesite.ro
+                    
+                    {/* Logo Watermark Pill */}
+                    <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 border border-white/20">
+                      <img 
+                        src="/hero-illustration-headphones.webp" 
+                        alt="thesite.ro logo" 
+                        className="w-4 h-4 object-contain"
+                      />
+                      <span className="text-[11px] font-bold text-white tracking-wide">
+                        thesite.ro
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -229,7 +243,7 @@ export default function InstagramStudio() {
               <div 
                 key={story.id || i}
                 onClick={() => setSelectedStoryIndex(i)}
-                className="w-full aspect-[4/5] bg-black rounded-none shadow-xl overflow-hidden flex flex-col justify-between relative cursor-pointer group hover:ring-2 ring-black transition-all"
+                className="w-full aspect-[4/5] bg-black rounded-none shadow-xl overflow-hidden flex flex-col justify-between relative cursor-pointer group hover:ring-2 ring-black transition-all border border-black"
               >
                 <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-5">
                   <img 
@@ -275,7 +289,7 @@ export default function InstagramStudio() {
         </section>
 
 
-        {/* SECTION 3: FEED CURAT - Știri cu aceeași structură, dar cu prezentare mai bună */}
+        {/* SECTION 3: FEED CURAT */}
         <section className="space-y-6">
           <div className="flex items-end justify-between">
             <div>
@@ -329,11 +343,22 @@ export default function InstagramStudio() {
                       </span>
                     </div>
 
-                    {/* Title */}
-                    <div className="relative z-20 space-y-1 pt-8">
+                    {/* Title & Watermark */}
+                    <div className="relative z-20 space-y-1.5 pt-8">
                       <h3 className="text-sm font-extrabold text-white line-clamp-3 leading-snug">
                         {story.title}
                       </h3>
+                      
+                      <div className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 border border-white/20">
+                        <img 
+                          src="/hero-illustration-headphones.webp" 
+                          alt="thesite.ro logo" 
+                          className="w-3 h-3 object-contain"
+                        />
+                        <span className="text-[10px] font-bold text-white tracking-wide">
+                          thesite.ro
+                        </span>
+                      </div>
                     </div>
                   </div>
 

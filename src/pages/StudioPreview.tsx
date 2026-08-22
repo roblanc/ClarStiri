@@ -13,7 +13,6 @@ import { AlertCircle, ArrowUpRight, Image as ImageIcon, Layers3, SearchX, Sparkl
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { NewsImage } from "@/components/NewsImage";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
-import { getPosterTitleSizing } from "@/utils/posterTypography";
 
 const BATCH = 18;
 
@@ -177,18 +176,27 @@ function StoryPoster({
           </span>
         </div>
 
-        {/* Headline & Watermark */}
-        <div className="relative z-20 space-y-2 pt-10">
+        {/* Title & Official Watermark with Headphone Character Logo */}
+        <div className="relative z-20 space-y-2.5 pt-10">
           <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-snug tracking-tight text-balance drop-shadow-md">
             {story.title}
           </h2>
-          <div className="text-[11px] font-medium text-slate-300 tracking-wide opacity-90">
-            thesite.ro
+          
+          {/* Logo Watermark Pill */}
+          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 border border-white/20">
+            <img 
+              src="/hero-illustration-headphones.webp" 
+              alt="thesite.ro logo" 
+              className="w-4 h-4 object-contain"
+            />
+            <span className="text-[11px] font-bold text-white tracking-wide">
+              thesite.ro
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Proportional 3-Column Solid Bias Bar (EXACT PICTURE 2 DESIGN) */}
+      {/* Proportional 3-Column Solid Bias Bar */}
       <div className="flex w-full h-[75px] shrink-0 border-t border-black/20 font-sans">
         {left > 0 && (
           <div 
