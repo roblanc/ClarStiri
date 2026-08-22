@@ -133,134 +133,92 @@ function StoryPoster({
   const left = Math.round(story.bias.left);
   const center = Math.round(story.bias.center);
   const right = Math.round(story.bias.right);
-  const isBreaking = variant === "breaking";
-  const isComparison = variant === "comparison";
-  const isTabloid = variant === "tabloid";
+
+  const getDominantBadge = (s: StudioStory) => {
+    if (s.blindspot === 'left') return 'Ignorat de Stânga';
+    if (s.blindspot === 'right') return 'Ignorat de Dreapta';
+    if (left > center && left > right) return 'Preluat de Stânga';
+    if (right > center && right > left) return 'Preluat de Dreapta';
+    return 'Preluat de Centru';
+  };
 
   return (
     <div
       id={elementId || `studio-poster-${variant}`}
       data-screenshot-target="story-poster"
-      className={[
-        "relative overflow-hidden rounded-[1rem] border text-white shadow-[0_30px_80px_-30px_rgba(0,0,0,0.45)]",
-        isBreaking
-          ? "border-[#b22d2d]/60 bg-[#7e1f1f]"
-          : isTabloid
-            ? "border-[#1a1a1a]/70 bg-black"
-            : "border-border/60 bg-zinc-950",
-      ].join(" ")}
+      className="relative overflow-hidden rounded-none border border-black bg-black text-white shadow-2xl flex flex-col justify-between"
     >
-      <div className="relative aspect-[40/43] overflow-hidden md:aspect-[16/17]">
-          <NewsImage
-            src={getThumbnailUrl(story.image)}
-            seed={story.title}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            className={[
-              "absolute inset-0 h-full w-full object-cover",
-              isBreaking
-                ? "grayscale contrast-125 brightness-[0.62]"
-                : isTabloid
-                  ? "contrast-110 brightness-[0.66]"
-                  : "grayscale contrast-110 brightness-[0.72]",
-            ].join(" ")}
-          />
+      {/* 4:5 Poster Image Area */}
+      <div className="relative aspect-[4/5] overflow-hidden w-full flex flex-col justify-between p-5 sm:p-6">
+        <NewsImage
+          src={getThumbnailUrl(story.image)}
+          seed={story.title}
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-          <div
-            className={[
-              "absolute inset-0",
-              isBreaking
-                ? "bg-[linear-gradient(180deg,rgba(122,23,23,0.03)_0%,rgba(66,9,9,0.12)_28%,rgba(40,4,4,0.28)_48%,rgba(0,0,0,0.52)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(122,23,23,0.08)_0%,rgba(66,9,9,0.2)_22%,rgba(40,4,4,0.38)_44%,rgba(0,0,0,0.64)_66%,rgba(0,0,0,0.88)_84%,rgba(0,0,0,0.98)_100%)]"
-                : isTabloid
-                  ? "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.24)_48%,rgba(0,0,0,0.48)_68%,rgba(0,0,0,0.82)_84%,rgba(0,0,0,0.97)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.16)_22%,rgba(0,0,0,0.34)_44%,rgba(0,0,0,0.64)_66%,rgba(0,0,0,0.9)_84%,rgba(0,0,0,0.99)_100%)]"
-                  : "bg-[linear-gradient(180deg,rgba(0,0,0,0.02)_0%,rgba(0,0,0,0.1)_28%,rgba(0,0,0,0.22)_48%,rgba(0,0,0,0.46)_68%,rgba(0,0,0,0.8)_84%,rgba(0,0,0,0.96)_100%)] md:bg-[linear-gradient(180deg,rgba(0,0,0,0.03)_0%,rgba(0,0,0,0.12)_22%,rgba(0,0,0,0.28)_44%,rgba(0,0,0,0.58)_66%,rgba(0,0,0,0.86)_84%,rgba(0,0,0,0.98)_100%)]",
-            ].join(" ")}
-          />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
 
-          <div className="absolute inset-x-0 top-0 flex items-start justify-between p-4 sm:p-5">
-            <div className="flex flex-wrap gap-2">
-              <span className={[
-                "rounded-full px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]",
-                isBreaking ? "bg-red-200/90" : "bg-amber-200/90",
-              ].join(" ")}>
-                {story.category.toUpperCase()}
-              </span>
-              <span className="rounded-full bg-white/88 px-2.5 py-0.5 text-[10px] font-semibold tracking-tight text-zinc-900 sm:text-[9px]">
-                {story.sourcesCount} surse
-              </span>
-            </div>
+        {/* Top Badges */}
+        <div className="relative z-20 flex items-center justify-between w-full">
+          <div className="flex items-center gap-2">
+            <span className="bg-[#132238] text-white text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-none shadow">
+              {story.sourcesCount} SURSE
+            </span>
+            <span className="bg-[#132238]/90 text-white text-[11px] font-bold px-3 py-1.5 rounded-none backdrop-blur-sm">
+              {story.timeAgo || "acum 20 min"}
+            </span>
           </div>
-        <div className="absolute inset-x-0 bottom-0 px-4 pb-4 pt-20 sm:px-5 sm:pb-4 sm:pt-10">
-          {isTabloid && (
-            <div className="mb-2.5 flex items-end justify-between gap-3">
-              <p className="max-w-[7rem] font-serif text-[1.8rem] font-semibold leading-none tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.5)]">
-                thesite.ro
-              </p>
-              <div className="rounded-full bg-black/55 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
-                Poster editorial
-              </div>
-            </div>
-          )}
 
-          <h2
-            className={[
-              "w-full max-w-none font-title font-bold tracking-[-0.05em] text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.45)] text-balance",
-              isTabloid ? "font-title" : "",
-              getPosterTitleSizing(story.title, isTabloid ? "tabloid" : "default"),
-            ].join(" ")}
-          >
+          <span className="bg-white text-black text-[11px] font-bold px-3.5 py-1.5 rounded-none shadow">
+            {getDominantBadge(story)}
+          </span>
+        </div>
+
+        {/* Headline & Watermark */}
+        <div className="relative z-20 space-y-2 pt-10">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-white leading-snug tracking-tight text-balance drop-shadow-md">
             {story.title}
           </h2>
-
-          <div className={isTabloid ? "mt-3.5 rounded-[1.35rem] bg-black/55 p-3 text-white ring-1 ring-white/12 backdrop-blur-sm" : "mt-3.5"}>
-            {isComparison ? (
-              <div className="rounded-[1.2rem] bg-white/10 p-3 ring-1 ring-white/15 backdrop-blur-sm">
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
-                  <span>Stânga {left}%</span>
-                  <span>Centru {center}%</span>
-                  <span>Dreapta {right}%</span>
-                </div>
-                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
-                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                  <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
-                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-                </div>
-              </div>
-            ) : isTabloid ? (
-              <>
-              <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
-                <span>Stânga {left}%</span>
-                <span>Centru {center}%</span>
-                <span>Dreapta {right}%</span>
-                </div>
-                <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/12">
-                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                  <div className="bg-[#efe9dc]" style={{ width: `${story.bias.center}%` }} />
-                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-white/72 sm:text-[8px] sm:tracking-[0.16em]">
-                  <span>{story.sourcesCount} surse</span>
-                  <span>{story.category}</span>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="mb-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.16em] text-white sm:text-[8px] sm:tracking-[0.2em]">
-                  <span>Stânga {left}%</span>
-                  <span>Centru {center}%</span>
-                  <span>Dreapta {right}%</span>
-                </div>
-
-                <div className="flex h-3 w-full overflow-hidden rounded-full bg-white/12 ring-1 ring-white/15">
-                  <div className="bg-[#2f5fa6]" style={{ width: `${story.bias.left}%` }} />
-                  <div className="bg-[#f5f1e8]" style={{ width: `${story.bias.center}%` }} />
-                  <div className="bg-[#9a2f2f]" style={{ width: `${story.bias.right}%` }} />
-                </div>
-              </>
-            )}
+          <div className="text-[11px] font-medium text-slate-300 tracking-wide opacity-90">
+            thesite.ro
           </div>
         </div>
+      </div>
+
+      {/* Proportional 3-Column Solid Bias Bar (EXACT PICTURE 2 DESIGN) */}
+      <div className="flex w-full h-[75px] shrink-0 border-t border-black/20 font-sans">
+        {left > 0 && (
+          <div 
+            style={{ flexGrow: left, minWidth: '15%' }}
+            className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1.5"
+          >
+            <span className="text-[9px] font-bold uppercase tracking-wider mb-0.5 opacity-90">STÂNGA</span>
+            <span className="text-xl font-black">{left}%</span>
+          </div>
+        )}
+
+        {center > 0 && (
+          <div 
+            style={{ flexGrow: center, minWidth: '15%' }}
+            className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1.5 border-x border-black/10"
+          >
+            <span className="text-[9px] font-bold uppercase tracking-wider mb-0.5 opacity-80">CENTRU</span>
+            <span className="text-xl font-black">{center}%</span>
+          </div>
+        )}
+
+        {right > 0 && (
+          <div 
+            style={{ flexGrow: right, minWidth: '15%' }}
+            className="bg-[#822727] text-white flex flex-col items-center justify-center p-1.5"
+          >
+            <span className="text-[9px] font-bold uppercase tracking-wider mb-0.5 opacity-90">DREAPTA</span>
+            <span className="text-xl font-black">{right}%</span>
+          </div>
+        )}
       </div>
     </div>
   );
