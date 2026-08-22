@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const StudioPreview = lazy(() => import("./pages/StudioPreview"));
+const InstagramStudio = lazy(() => import("./pages/InstagramStudio"));
 
 // Lazy load pages for better code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -55,6 +56,7 @@ const RoutedApp = () => {
           <Route path="/" element={<Index />} />
           <Route path="/editorial" element={<IndexEditorial />} />
           <Route path="/studio" element={<StudioPreview />} />
+          <Route path="/studio-instagram" element={<InstagramStudio />} />
           <Route path="/stire/:id" element={<StoryDetail />} />
           <Route path="/metodologie" element={<Metodologie />} />
           <Route path="/surse" element={<Sources />} />
