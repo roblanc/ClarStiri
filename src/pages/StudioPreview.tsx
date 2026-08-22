@@ -363,6 +363,16 @@ const StudioPreview = () => {
                   structura pe care o ai deja, dar să îți dea o compoziție mai bună pentru screenshot-uri,
                   export social și un look mai editorial.
                 </p>
+
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <Link
+                    to="/studio-instagram"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-400 hover:bg-amber-500 text-black font-bold text-xs uppercase tracking-wider transition-all shadow-md"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    Laborator Carusele Instagram (5 Slide-uri)
+                  </Link>
+                </div>
               </div>
 
               <div className="grid gap-3 sm:grid-cols-3">
