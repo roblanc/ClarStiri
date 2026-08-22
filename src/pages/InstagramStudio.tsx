@@ -3,15 +3,19 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { 
-  Copy, Check, RefreshCw, ArrowLeft
+  Copy, Check, RefreshCw, ArrowLeft, Layers, Sparkles, 
+  Eye, BarChart3, MessageSquare, ChevronRight, Share2, Compass
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { getThumbnailUrl } from "@/utils/imageOptimizer";
 
+type SlideType = 1 | 2 | 3 | 4 | 5;
+
 export default function InstagramStudio() {
   const { data: stories, isLoading, refetch, isFetching } = useAggregatedNews(60);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
+  const [activeSlide, setActiveSlide] = useState<SlideType>(1);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const featuredStory = useMemo(() => {
@@ -19,35 +23,79 @@ export default function InstagramStudio() {
     return stories[selectedStoryIndex] || stories[0];
   }, [stories, selectedStoryIndex]);
 
+  const left = Math.round(featuredStory?.bias?.left || 0);
+  const center = Math.round(featuredStory?.bias?.center || 0);
+  const right = Math.round(featuredStory?.bias?.right || 0);
+  const totalSources = featuredStory?.sourcesCount || featuredStory?.sources?.length || 0;
+  const blindspot = featuredStory?.blindspot;
+
+  const leftSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
+    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    return b.includes('left');
+  }), [featuredStory]);
+
+  const centerSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
+    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    return b === 'center' || b === '' || (!b.includes('left') && !b.includes('right'));
+  }), [featuredStory]);
+
+  const rightSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
+    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    return b.includes('right');
+  }), [featuredStory]);
+
+  const sampleLeft = leftSources[0] || { 
+    source: { name: 'G4Media / Libertatea', url: 'https://g4media.ro', bias: 'left' }, 
+    title: featuredStory?.title || 'Perspectiva orientată pe reforme și societate civilă'
+  };
+  const sampleCenter = centerSources[0] || { 
+    source: { name: 'HotNews / Digi24', url: 'https://hotnews.ro', bias: 'center' }, 
+    title: featuredStory?.title || 'Faptele prezentate echilibrat și declarațiile oficiale'
+  };
+  const sampleRight = rightSources[0] || { 
+    source: { name: 'Antena 3 / România TV', url: 'https://antena3.ro', bias: 'right' }, 
+    title: featuredStory?.title || 'Accent pe impactul economic și deciziile guvernamentale'
+  };
+
+  const getDominantBadge = (story: any) => {
+    if (!story) return 'Preluat de Centru';
+    const l = Math.round(story.bias?.left || 0);
+    const c = Math.round(story.bias?.center || 0);
+    const r = Math.round(story.bias?.right || 0);
+    const b = story.blindspot;
+
+    if (b === 'left') return 'Punct Orb Stânga';
+    if (b === 'right') return 'Punct Orb Dreapta';
+    if (l > c && l > r) return 'Preluat de Stânga';
+    if (r > c && r > l) return 'Preluat de Dreapta';
+    return 'Preluat de Centru';
+  };
+
   const copyCaption = (storyTitle: string, id: string) => {
-    const caption = `thesite.ro ${storyTitle}. Vezi știrea din toate perspectivele pe thesite.ro.\n\n#stiri #politica #economie #romania`;
+    const caption = `thesite.ro ${storyTitle}. Vezi știrea din toate perspectivele pe thesite.ro.
+
+📊 ${totalSources} publicații au acoperit subiectul:
+• Stânga: ${left}%${blindspot === 'left' ? ' (Punct orb)' : ''}
+• Centru: ${center}%
+• Dreapta: ${right}%${blindspot === 'right' ? ' (Punct orb)' : ''}
+
+👉 Glisează pentru a vedea cum diferă titlurile fiecărei publicații!
+
+#stiri #romania #actualitate #groundnews #media #bias #presaromana #thesite`;
     navigator.clipboard.writeText(caption);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const getDominantBadge = (story: any) => {
-    const left = Math.round(story.bias?.left || 0);
-    const center = Math.round(story.bias?.center || 0);
-    const right = Math.round(story.bias?.right || 0);
-    const blindspot = story.blindspot;
-
-    if (blindspot === 'left') return 'Ignorat de Stânga';
-    if (blindspot === 'right') return 'Ignorat de Dreapta';
-    if (left > center && left > right) return 'Preluat de Stânga';
-    if (right > center && right > left) return 'Preluat de Dreapta';
-    return 'Preluat de Centru';
-  };
-
   return (
-    <div className="min-h-screen bg-[#faf9f6] text-[#111111] flex flex-col font-sans selection:bg-amber-300 selection:text-black">
+    <div className="min-h-screen bg-[#0d0f12] text-[#f0f2f5] flex flex-col font-sans selection:bg-amber-400 selection:text-black">
       <Helmet>
-        <title>Laborator de Layout & Instagram Studio | thesite.ro</title>
+        <title>Instagram Carousel Studio & Design Lab | thesite.ro</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
 
-      {/* Top Header */}
-      <header className="border-b border-black/10 bg-[#faf9f6]/90 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+      {/* Top Bar */}
+      <header className="border-b border-white/10 bg-[#0d0f12]/90 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
             <img 
@@ -55,13 +103,13 @@ export default function InstagramStudio() {
               alt="thesite.ro" 
               className="w-8 h-8 object-contain"
             />
-            <span className="font-serif italic font-bold text-2xl text-black tracking-tight">thesite.ro</span>
-            <span className="text-[10px] font-black uppercase tracking-widest bg-black text-white px-2.5 py-0.5 rounded-none">
-              Studio Privat
+            <span className="font-serif italic font-bold text-2xl text-white tracking-tight">thesite.ro</span>
+            <span className="text-[10px] font-black uppercase tracking-widest bg-amber-400 text-black px-2.5 py-0.5 font-mono">
+              STUDIO CAROUSEL
             </span>
           </Link>
-          <span className="hidden md:inline-block text-xs text-neutral-500 font-medium">
-            | Previzualizare & Export 1080×1350
+          <span className="hidden md:inline-block text-xs text-neutral-400 font-medium">
+            | Previzualizare Carusel Instagram 1080×1350 (4:5)
           </span>
         </div>
 
@@ -71,150 +119,413 @@ export default function InstagramStudio() {
             size="sm" 
             onClick={() => refetch()} 
             disabled={isFetching}
-            className="border-black/20 bg-white hover:bg-neutral-100 text-black text-xs rounded-none font-bold gap-2"
+            className="border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs rounded-none font-bold gap-2"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? "animate-spin" : ""}`} />
-            Reîmprospătează datele
+            Reîmprospătează Știrile
           </Button>
           <Link 
             to="/" 
-            className="text-xs font-bold text-neutral-600 hover:text-black flex items-center gap-1"
+            className="text-xs font-bold text-neutral-400 hover:text-white flex items-center gap-1 ml-2"
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Înapoi la site
+            <ArrowLeft className="w-3.5 h-3.5" /> Înapoi pe Site
           </Link>
         </div>
       </header>
 
-      <div className="max-w-[1550px] w-full mx-auto p-6 lg:p-10 space-y-16">
+      <div className="max-w-[1600px] w-full mx-auto p-6 lg:p-10 space-y-16">
 
-        {/* SECTION 1: HERO & MAIN POSTER REFERENCE */}
-        <section className="grid grid-cols-1 lg:grid-cols-[1fr_520px] gap-12 items-start border-b border-black/10 pb-16">
+        {/* SECTION 1: INTERACTIVE CAROUSEL VIEWER */}
+        <section className="grid grid-cols-1 lg:grid-cols-[1fr_560px] gap-12 items-start border-b border-white/10 pb-16">
           
-          {/* Hero Left Intro */}
+          {/* Left Column: Carousel Controls & Explanations */}
           <div className="space-y-8 pt-2">
             <div className="flex flex-wrap gap-2">
-              <span className="text-[10px] font-black uppercase tracking-widest border border-black/20 bg-white px-3 py-1 text-neutral-700">
-                PREVIZUALIZARE PRIVATĂ
+              <span className="text-[10px] font-black uppercase tracking-widest border border-amber-400/40 bg-amber-400/10 text-amber-300 px-3 py-1 font-mono">
+                LABORATOR DE DESIGN CAROUSEL
               </span>
-              <span className="text-[10px] font-black uppercase tracking-widest border border-black/20 bg-white px-3 py-1 text-neutral-700">
-                LABORATOR DE LAYOUT
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-widest border border-black/20 bg-white px-3 py-1 text-neutral-700">
-                GATA DE CAPTURĂ
+              <span className="text-[10px] font-black uppercase tracking-widest border border-white/20 bg-white/5 text-neutral-300 px-3 py-1 font-mono">
+                FORMAT 4:5 PORTRAIT
               </span>
             </div>
 
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight leading-[1.05]">
-                Citești. Compari. Postezi.
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+                Design & Structură Carusele
               </h1>
-              <p className="text-sm sm:text-base text-neutral-600 max-w-xl leading-relaxed font-normal">
-                Aceasta este o variantă privată a landing page-ului actual, construită ca să păstreze structura pe care o ai deja, dar să îți dea o compoziție mai bună pentru screenshot-uri, export social și un look mai editorial.
+              <p className="text-sm sm:text-base text-neutral-300 max-w-2xl leading-relaxed">
+                Aici poți previzualiza și testa toate slide-urile generate pentru postările automate pe Instagram. Alege un slide mai jos pentru a-i vedea compoziția grafică detaliată.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-black/10">
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase">01 / CADRU</span>
-                <p className="text-xs text-neutral-700 font-medium leading-normal">
-                  Un singur cadru clar, bun pentru instagram și pentru share.
-                </p>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase">02 / STRUCTURĂ</span>
-                <p className="text-xs text-neutral-700 font-medium leading-normal">
-                  Hero, feed, surse și footer rămân, doar sunt compuse mai curat.
-                </p>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10px] font-mono font-bold text-neutral-400 uppercase">03 / CAPTURĂ</span>
-                <p className="text-xs text-neutral-700 font-medium leading-normal">
-                  Ușor de țintit din script, fără rupe layout-ul public.
-                </p>
+            {/* Slide Tabs Navigation */}
+            <div className="space-y-3">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">
+                Alege slide-ul din carusel:
+              </span>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+                {[
+                  { num: 1, label: "Copertă (Hero)", icon: Eye, desc: "Imagine, titlu & bară bias" },
+                  { num: 2, label: "Titluri (Frame)", icon: Layers, desc: "Comparație Stânga/Centru/Dreapta" },
+                  { num: 3, label: "Punctul Orb", icon: Compass, desc: "Unghiul ignorat & analiză" },
+                  { num: 4, label: "Harta Surse", icon: BarChart3, desc: "Publicațiile implicate" },
+                  { num: 5, label: "CTA / Final", icon: MessageSquare, desc: "Întrebare dezbatere & bio" },
+                ].map(({ num, label, icon: Icon, desc }) => (
+                  <button
+                    key={num}
+                    onClick={() => setActiveSlide(num as SlideType)}
+                    className={`p-3.5 text-left flex flex-col justify-between border transition-all ${
+                      activeSlide === num 
+                        ? "border-amber-400 bg-amber-400/15 text-white shadow-lg shadow-amber-400/10" 
+                        : "border-white/10 bg-white/[0.03] text-neutral-400 hover:border-white/30 hover:text-white"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between w-full mb-1">
+                      <span className="text-[10px] font-mono font-black uppercase text-amber-400">SLIDE {num}</span>
+                      <Icon className="w-3.5 h-3.5 opacity-80" />
+                    </div>
+                    <span className="text-xs font-bold text-white block mb-0.5">{label}</span>
+                    <span className="text-[10px] text-neutral-400 line-clamp-1 leading-tight">{desc}</span>
+                  </button>
+                ))}
               </div>
             </div>
+
+            {/* Slide Information & Design Rationale */}
+            <div className="p-5 border border-white/10 bg-white/[0.02] rounded-none space-y-3">
+              <div className="flex items-center gap-2 text-amber-400 text-xs font-bold font-mono uppercase">
+                <Sparkles className="w-4 h-4" />
+                <span>Explicație Design • Slide {activeSlide}</span>
+              </div>
+              <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed">
+                {activeSlide === 1 && "Slide 1 este primul contact vizual: imagine de impact, titlul mare lizibil la scroll rapid, sursele totale și distribuția politică pe cele 3 culori oficiale (Albastru, Alb, Roșu)."}
+                {activeSlide === 2 && "Slide 2 aduce valoarea principală: pune față în față titlurile reale din presă cu favicon-urile publicațiilor (G4Media vs HotNews vs Antena3), demonstrând diferențele de încadrare."}
+                {activeSlide === 3 && "Slide 3 evidențiază «Punctul Orb» (Blindspot): arată clar care spectru a ignorat subiectul sau distribuția procentuală detaliată a acoperirii mediatice."}
+                {activeSlide === 4 && "Slide 4 arată ecosistemul complet al presei: lista tuturor ziarelor care au scris despre subiect, împărțite pe coloane de orientare politică."}
+                {activeSlide === 5 && "Slide 5 stimulează engagement-ul: adresează o întrebare deschisă pentru secțiunea de comentarii («Tu pe cine crezi?») și invită utilizatorul să intre pe thesite.ro."}
+              </p>
+
+              {featuredStory && (
+                <div className="pt-3 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-xs text-neutral-400 truncate max-w-sm">
+                    Știre selectată: <strong className="text-white">{featuredStory.title}</strong>
+                  </span>
+                  <button
+                    onClick={() => copyCaption(featuredStory.title, featuredStory.id)}
+                    className="bg-white text-black hover:bg-neutral-200 font-bold text-xs px-3 py-1.5 flex items-center gap-1.5 transition-colors"
+                  >
+                    {copiedId === featuredStory.id ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedId === featuredStory.id ? "Copiat!" : "Copiază Caption"}
+                  </button>
+                </div>
+              )}
+            </div>
+
           </div>
 
-          {/* Hero Right Poster Reference (1080 x 1350 Card) */}
+          {/* Right Column: Live 4:5 Phone / Instagram Canvas Container */}
           <div className="space-y-3">
-            <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500">
-              <span>POSTER DE REFERINȚĂ • Format 4:5, bun pentru export.</span>
-              <span className="border border-black/20 bg-white px-2 py-0.5 text-black">1080 X 1350</span>
+            <div className="flex items-center justify-between text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                CANVAS PREVIEW • SLIDE {activeSlide}/5
+              </span>
+              <span className="border border-white/20 bg-white/5 px-2 py-0.5 text-white">1080 × 1350 (4:5)</span>
             </div>
 
             {featuredStory && (
-              <div className="w-full aspect-[4/5] bg-black rounded-none shadow-2xl overflow-hidden flex flex-col justify-between relative group select-none border border-black">
-                {/* Hero Image Area */}
-                <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-6">
-                  <img 
-                    src={getThumbnailUrl(featuredStory.image) || PLACEHOLDER_IMAGE} 
-                    alt={featuredStory.title}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-transparent" />
-                  
-                  {/* Top Badges */}
-                  <div className="relative z-20 flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2">
-                      <span className="bg-[#132238] text-white text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-none shadow">
-                        {featuredStory.sourcesCount || featuredStory.sources?.length || 0} SURSE
+              <div className="w-full aspect-[4/5] bg-[#090a0f] rounded-none shadow-2xl overflow-hidden flex flex-col justify-between relative select-none border border-white/20">
+                
+                {/* ─── SLIDE 1: COPERTĂ CLASICĂ (HERO) ─── */}
+                {activeSlide === 1 && (
+                  <div className="w-full h-full flex flex-col justify-between relative bg-black">
+                    <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-6">
+                      <img 
+                        src={getThumbnailUrl(featuredStory.image) || PLACEHOLDER_IMAGE} 
+                        alt={featuredStory.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                      
+                      {/* Top Badges */}
+                      <div className="relative z-20 flex items-center justify-between w-full">
+                        <div className="flex items-center gap-2">
+                          <span className="bg-[#132238] text-white text-[11px] font-black uppercase tracking-wider px-3 py-1.5">
+                            {totalSources} SURSE
+                          </span>
+                          <span className="bg-[#132238]/90 text-white text-[11px] font-bold px-3 py-1.5 backdrop-blur-sm">
+                            {featuredStory.timeAgo || "acum 20 min"}
+                          </span>
+                        </div>
+
+                        <span className="bg-white text-black text-[11px] font-bold px-3.5 py-1.5 shadow">
+                          {getDominantBadge(featuredStory)}
+                        </span>
+                      </div>
+
+                      {/* Title & Watermark */}
+                      <div className="relative z-20 space-y-3 pt-12">
+                        <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight drop-shadow-md">
+                          {featuredStory.title}
+                        </h2>
+                        
+                        <div className="inline-flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1 border border-white/20">
+                          <img 
+                            src="/hero-illustration-headphones.webp" 
+                            alt="thesite.ro logo" 
+                            className="w-4 h-4 object-contain"
+                          />
+                          <span className="text-xs font-bold text-white tracking-wide">
+                            thesite.ro
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Proportional 3-Column Solid Bias Bar */}
+                    <div className="flex w-full h-[95px] shrink-0 border-t border-black/30">
+                      <div style={{ flexGrow: left || 1, minWidth: '15%' }} className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">STÂNGA</span>
+                        <span className="text-2xl font-black">{left}%</span>
+                      </div>
+                      <div style={{ flexGrow: center || 1, minWidth: '15%' }} className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1.5 border-x border-black/10">
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-80">CENTRU</span>
+                        <span className="text-2xl font-black">{center}%</span>
+                      </div>
+                      <div style={{ flexGrow: right || 1, minWidth: '15%' }} className="bg-[#822727] text-white flex flex-col items-center justify-center p-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">DREAPTA</span>
+                        <span className="text-2xl font-black">{right}%</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── SLIDE 2: COMPARAȚIE TITLURI (HEAD-TO-HEAD) ─── */}
+                {activeSlide === 2 && (
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-[#0e1117] to-[#08090c]">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <span className="text-[11px] font-mono font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/40 px-3 py-1">
+                        COMPARAȚIE TITLURI
                       </span>
-                      <span className="bg-[#132238]/90 text-white text-[11px] font-bold px-3 py-1.5 rounded-none backdrop-blur-sm">
-                        {featuredStory.timeAgo || "acum 20 min"}
+                      <span className="font-serif italic font-bold text-lg text-white">thesite.ro</span>
+                    </div>
+
+                    <div className="space-y-1 my-2">
+                      <span className="text-[10px] font-mono font-bold uppercase text-amber-400 tracking-widest">PERSPECTIVE MEDIA</span>
+                      <h3 className="text-xl font-black text-white leading-tight">Același eveniment, unghiuri diferite:</h3>
+                    </div>
+
+                    {/* 3 Outlet Headline Cards */}
+                    <div className="space-y-3 my-auto">
+                      {/* Stânga */}
+                      <div className="p-4 bg-sky-950/20 border-l-4 border-sky-400 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="font-bold text-white flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-sky-400"></span>
+                            {sampleLeft.source?.name || "Presa de Stânga"}
+                          </span>
+                          <span className="text-[10px] font-mono uppercase bg-sky-400/20 text-sky-300 px-2 py-0.5 font-bold">Stânga</span>
+                        </div>
+                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
+                          „{sampleLeft.title}”
+                        </p>
+                      </div>
+
+                      {/* Centru */}
+                      <div className="p-4 bg-slate-900/40 border-l-4 border-slate-200 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="font-bold text-white flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-slate-200"></span>
+                            {sampleCenter.source?.name || "Presa de Centru"}
+                          </span>
+                          <span className="text-[10px] font-mono uppercase bg-white/20 text-white px-2 py-0.5 font-bold">Centru</span>
+                        </div>
+                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
+                          „{sampleCenter.title}”
+                        </p>
+                      </div>
+
+                      {/* Dreapta */}
+                      <div className="p-4 bg-rose-950/20 border-l-4 border-rose-500 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="font-bold text-white flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
+                            {sampleRight.source?.name || "Presa de Dreapta"}
+                          </span>
+                          <span className="text-[10px] font-mono uppercase bg-rose-500/20 text-rose-300 px-2 py-0.5 font-bold">Dreapta</span>
+                        </div>
+                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
+                          „{sampleRight.title}”
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
+                      <span>Limbajul folosit schimbă percepția</span>
+                      <span className="text-amber-400 font-bold flex items-center gap-1">Glisează ➔</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── SLIDE 3: PUNCTUL ORB (BLINDSPOT ANALYSIS) ─── */}
+                {activeSlide === 3 && (
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-[#0b0d11]">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <span className="text-[11px] font-mono font-black uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 px-3 py-1">
+                        ANALIZĂ PUNCT ORB
+                      </span>
+                      <span className="font-serif italic font-bold text-lg text-white">thesite.ro</span>
+                    </div>
+
+                    <div className="my-auto space-y-6">
+                      <div className="text-center space-y-2">
+                        <span className="text-xs font-mono uppercase text-neutral-400 tracking-wider">DISTRIBUȚIA PE PERSPECTIVE</span>
+                        <h3 className="text-2xl font-black text-white">
+                          {blindspot === 'left' ? 'Ignorat de publicațiile de Stânga' : 
+                           blindspot === 'right' ? 'Ignorat de publicațiile de Dreapta' : 
+                           'Acoperire extinsă în tot spectrul'}
+                        </h3>
+                      </div>
+
+                      {/* 3 Metric Cards */}
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="p-3.5 bg-[#28508a]/30 border border-[#28508a] text-center space-y-1">
+                          <span className="text-[10px] font-bold text-sky-300 uppercase block">Stânga</span>
+                          <span className="text-3xl font-black text-white">{left}%</span>
+                          <span className="text-[9px] text-neutral-400 block">{leftSources.length} surse</span>
+                        </div>
+                        <div className="p-3.5 bg-white/10 border border-white/30 text-center space-y-1">
+                          <span className="text-[10px] font-bold text-neutral-200 uppercase block">Centru</span>
+                          <span className="text-3xl font-black text-white">{center}%</span>
+                          <span className="text-[9px] text-neutral-400 block">{centerSources.length} surse</span>
+                        </div>
+                        <div className="p-3.5 bg-[#822727]/30 border border-[#822727] text-center space-y-1">
+                          <span className="text-[10px] font-bold text-rose-300 uppercase block">Dreapta</span>
+                          <span className="text-3xl font-black text-white">{right}%</span>
+                          <span className="text-[9px] text-neutral-400 block">{rightSources.length} surse</span>
+                        </div>
+                      </div>
+
+                      {/* Insight Box */}
+                      <div className="p-4 bg-white/5 border border-white/10 space-y-1 text-center">
+                        <p className="text-xs text-neutral-300 leading-relaxed">
+                          Algoritmul <strong>thesite.ro</strong> scanează automat zeci de fluxuri de știri din România pentru a detecta asimetriile de acoperire mediatică în timp real.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
+                      <span>Date agregate din {totalSources} publicații</span>
+                      <span className="text-amber-400 font-bold">Glisează ➔</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── SLIDE 4: HARTA ECOSISTEMULUI DE SURSE ─── */}
+                {activeSlide === 4 && (
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-[#090b0e]">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                      <span className="text-[11px] font-mono font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1">
+                        HARTA SURSELOR
+                      </span>
+                      <span className="font-serif italic font-bold text-lg text-white">thesite.ro</span>
+                    </div>
+
+                    <div className="space-y-1 my-2">
+                      <span className="text-[10px] font-mono font-bold uppercase text-emerald-400 tracking-widest">TRANSPARENȚĂ TOTALĂ</span>
+                      <h3 className="text-xl font-black text-white">Publicațiile care au relatat evenimentul:</h3>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2.5 my-auto">
+                      {/* Stânga */}
+                      <div className="space-y-2 p-3 bg-sky-950/20 border border-sky-500/30">
+                        <span className="text-[10px] font-mono font-bold text-sky-300 uppercase block border-b border-sky-500/20 pb-1">STÂNGA</span>
+                        <div className="space-y-1">
+                          {leftSources.slice(0, 4).map((s, idx) => (
+                            <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
+                              • {s.source?.name || s.name || "G4Media"}
+                            </div>
+                          ))}
+                          {leftSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
+                        </div>
+                      </div>
+
+                      {/* Centru */}
+                      <div className="space-y-2 p-3 bg-slate-900/40 border border-white/20">
+                        <span className="text-[10px] font-mono font-bold text-slate-200 uppercase block border-b border-white/10 pb-1">CENTRU</span>
+                        <div className="space-y-1">
+                          {centerSources.slice(0, 4).map((s, idx) => (
+                            <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
+                              • {s.source?.name || s.name || "HotNews"}
+                            </div>
+                          ))}
+                          {centerSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
+                        </div>
+                      </div>
+
+                      {/* Dreapta */}
+                      <div className="space-y-2 p-3 bg-rose-950/20 border border-rose-500/30">
+                        <span className="text-[10px] font-mono font-bold text-rose-300 uppercase block border-b border-rose-500/20 pb-1">DREAPTA</span>
+                        <div className="space-y-1">
+                          {rightSources.slice(0, 4).map((s, idx) => (
+                            <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
+                              • {s.source?.name || s.name || "Antena 3"}
+                            </div>
+                          ))}
+                          {rightSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
+                      <span>Nicio știre nu e citită dintr-o singură sursă</span>
+                      <span className="text-amber-400 font-bold">Concluzie ➔</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* ─── SLIDE 5: CALL TO ACTION (CTA & DEZBATERE) ─── */}
+                {activeSlide === 5 && (
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-[#111318] to-[#07080a] text-center">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-3 text-left">
+                      <span className="font-serif italic font-bold text-xl text-white">thesite.ro</span>
+                      <span className="text-[10px] font-mono font-bold uppercase bg-white/10 text-neutral-300 px-2.5 py-1">
+                        AGREGATOR DE PERSPECTIVE
                       </span>
                     </div>
 
-                    <span className="bg-white text-black text-[11px] font-bold px-3.5 py-1.5 rounded-none shadow">
-                      {getDominantBadge(featuredStory)}
-                    </span>
-                  </div>
-
-                  {/* Title & Watermark with Headphone Character Logo */}
-                  <div className="relative z-20 space-y-2.5 pt-12">
-                    <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug tracking-tight text-balance drop-shadow-md">
-                      {featuredStory.title}
-                    </h2>
-                    
-                    {/* Logo Watermark Pill */}
-                    <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 border border-white/20">
+                    <div className="my-auto space-y-5 px-3">
                       <img 
                         src="/hero-illustration-headphones.webp" 
-                        alt="thesite.ro logo" 
-                        className="w-4 h-4 object-contain"
+                        alt="thesite.ro icon" 
+                        className="w-16 h-16 object-contain mx-auto drop-shadow-xl"
                       />
-                      <span className="text-[11px] font-bold text-white tracking-wide">
-                        thesite.ro
-                      </span>
+
+                      <div className="space-y-2">
+                        <span className="text-[11px] font-mono font-black uppercase text-amber-400 tracking-widest">
+                          TU DIN CE UNGHI VEZI LUCRURILE?
+                        </span>
+                        <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                          Ieși din bula ta de informație.
+                        </h3>
+                      </div>
+
+                      <p className="text-xs text-neutral-300 max-w-xs mx-auto leading-relaxed">
+                        Pe <strong>thesite.ro</strong> compari știrile din România în câteva secunde, fără filtre politice ascunse.
+                      </p>
+
+                      <div className="inline-block bg-white text-black font-black text-xs px-6 py-3 shadow-xl">
+                        🔗 LINK ÎN BIO: thesite.ro
+                      </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
+                      <span>Urmărește @thesite.ro</span>
+                      <span className="text-white font-bold">Scrie-ți părerea 👇</span>
                     </div>
                   </div>
-                </div>
+                )}
 
-                {/* Proportional 3-Column Solid Bias Bar */}
-                <div className="flex w-full h-[95px] shrink-0 border-t border-black/20">
-                  <div 
-                    style={{ flexGrow: Math.round(featuredStory.bias?.left || 0) || 1, minWidth: '15%' }}
-                    className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1.5"
-                  >
-                    <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">STÂNGA</span>
-                    <span className="text-2xl font-black">{Math.round(featuredStory.bias?.left || 0)}%</span>
-                  </div>
-
-                  <div 
-                    style={{ flexGrow: Math.round(featuredStory.bias?.center || 0) || 1, minWidth: '15%' }}
-                    className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1.5 border-x border-black/10"
-                  >
-                    <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-80">CENTRU</span>
-                    <span className="text-2xl font-black">{Math.round(featuredStory.bias?.center || 0)}%</span>
-                  </div>
-
-                  <div 
-                    style={{ flexGrow: Math.round(featuredStory.bias?.right || 0) || 1, minWidth: '15%' }}
-                    className="bg-[#822727] text-white flex flex-col items-center justify-center p-1.5"
-                  >
-                    <span className="text-[10px] font-bold uppercase tracking-wider mb-0.5 opacity-90">DREAPTA</span>
-                    <span className="text-2xl font-black">{Math.round(featuredStory.bias?.right || 0)}%</span>
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -222,104 +533,38 @@ export default function InstagramStudio() {
         </section>
 
 
-        {/* SECTION 2: PACHET INSTAGRAM - 3 screenshot-uri gata de comparat */}
-        <section className="space-y-6 border-b border-black/10 pb-16">
+        {/* SECTION 2: SELECTEAZĂ O ALTĂ ȘTIRE DIN FEED PENTRU TESTARE */}
+        <section className="space-y-6 border-b border-white/10 pb-16">
           <div className="flex items-end justify-between">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-neutral-400">
-                PACHET INSTAGRAM
+              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400">
+                PROBEAZĂ CU ORICE ȘTIRE
               </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
-                Trei screenshot-uri gata de comparat
+              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                Alege altă știre din feed-ul live
               </h2>
             </div>
-            <span className="text-[10px] font-mono font-bold uppercase border border-black/20 bg-white px-2.5 py-1 text-black">
-              3 VARIANTE
+            <span className="text-[10px] font-mono font-bold uppercase border border-white/20 bg-white/5 px-2.5 py-1 text-neutral-300">
+              {stories?.length || 0} ȘTIRI DISPONIBILE
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stories?.slice(0, 4).map((story, i) => (
-              <div 
-                key={story.id || i}
-                onClick={() => setSelectedStoryIndex(i)}
-                className="w-full aspect-[4/5] bg-black rounded-none shadow-xl overflow-hidden flex flex-col justify-between relative cursor-pointer group hover:ring-2 ring-black transition-all border border-black"
-              >
-                <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-5">
-                  <img 
-                    src={getThumbnailUrl(story.image) || PLACEHOLDER_IMAGE} 
-                    alt={story.title} 
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                  
-                  <div className="relative z-20 flex justify-between">
-                    <span className="bg-[#132238] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1">
-                      {story.mainCategory || "ACTUALITATE"}
-                    </span>
-                    <span className="bg-white text-black text-[9px] font-bold px-2.5 py-1">
-                      {story.sourcesCount || 0} SURSE
-                    </span>
-                  </div>
-
-                  <div className="relative z-20 space-y-1">
-                    <h3 className="text-sm font-bold text-white line-clamp-3 leading-snug">
-                      {story.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <div className="flex w-full h-[65px] shrink-0 border-t border-black/20">
-                  <div style={{ flexGrow: Math.round(story.bias?.left || 1) }} className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1">
-                    <span className="text-[8px] font-bold uppercase">STÂNGA</span>
-                    <span className="text-sm font-black">{Math.round(story.bias?.left || 0)}%</span>
-                  </div>
-                  <div style={{ flexGrow: Math.round(story.bias?.center || 1) }} className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1 border-x border-black/10">
-                    <span className="text-[8px] font-bold uppercase">CENTRU</span>
-                    <span className="text-sm font-black">{Math.round(story.bias?.center || 0)}%</span>
-                  </div>
-                  <div style={{ flexGrow: Math.round(story.bias?.right || 1) }} className="bg-[#822727] text-white flex flex-col items-center justify-center p-1">
-                    <span className="text-[8px] font-bold uppercase">DREAPTA</span>
-                    <span className="text-sm font-black">{Math.round(story.bias?.right || 0)}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-
-        {/* SECTION 3: FEED CURAT */}
-        <section className="space-y-6">
-          <div className="flex items-end justify-between">
-            <div>
-              <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-neutral-400">
-                FEED CURAT
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-black tracking-tight">
-                Știri cu aceeași structură, dar cu prezentare mai bună
-              </h2>
-            </div>
-            <span className="text-[10px] font-mono font-bold uppercase border border-black/20 bg-white px-2.5 py-1 text-black">
-              {stories?.length || 0} ȘTIRI
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {stories?.map((story) => {
-              const left = Math.round(story.bias?.left || 0);
-              const center = Math.round(story.bias?.center || 0);
-              const right = Math.round(story.bias?.right || 0);
-              const totalSources = story.sourcesCount || story.sources?.length || 0;
-              const isCopied = copiedId === story.id;
+            {stories?.slice(0, 8).map((story, i) => {
+              const isSelected = selectedStoryIndex === i;
+              const l = Math.round(story.bias?.left || 0);
+              const c = Math.round(story.bias?.center || 0);
+              const r = Math.round(story.bias?.right || 0);
 
               return (
                 <div 
-                  key={story.id} 
-                  className="bg-black rounded-none shadow-xl overflow-hidden flex flex-col justify-between relative group border border-black"
+                  key={story.id || i}
+                  onClick={() => setSelectedStoryIndex(i)}
+                  className={`w-full aspect-[4/5] bg-black rounded-none shadow-xl overflow-hidden flex flex-col justify-between relative cursor-pointer group transition-all border ${
+                    isSelected ? "ring-2 ring-amber-400 border-amber-400" : "border-white/10 hover:border-white/40"
+                  }`}
                 >
-                  {/* 4:5 Poster Image Card */}
-                  <div className="relative aspect-[4/5] w-full flex flex-col justify-between p-5 overflow-hidden">
+                  <div className="relative flex-1 w-full overflow-hidden flex flex-col justify-between p-5">
                     <img 
                       src={getThumbnailUrl(story.image) || PLACEHOLDER_IMAGE} 
                       alt={story.title} 
@@ -327,79 +572,36 @@ export default function InstagramStudio() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                     
-                    {/* Top Badges */}
-                    <div className="relative z-20 flex items-center justify-between w-full">
-                      <div className="flex items-center gap-1.5">
-                        <span className="bg-[#132238] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1">
-                          {totalSources} SURSE
-                        </span>
-                        <span className="bg-[#132238]/90 text-white text-[9px] font-bold px-2.5 py-1 backdrop-blur-sm">
-                          {story.timeAgo || "acum 20 min"}
-                        </span>
-                      </div>
-
+                    <div className="relative z-20 flex justify-between">
+                      <span className="bg-[#132238] text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1">
+                        {story.mainCategory || "ACTUALITATE"}
+                      </span>
                       <span className="bg-white text-black text-[9px] font-bold px-2.5 py-1">
-                        {getDominantBadge(story)}
+                        {story.sourcesCount || 0} SURSE
                       </span>
                     </div>
 
-                    {/* Title & Watermark */}
-                    <div className="relative z-20 space-y-1.5 pt-8">
-                      <h3 className="text-sm font-extrabold text-white line-clamp-3 leading-snug">
+                    <div className="relative z-20 space-y-1">
+                      <h3 className="text-sm font-bold text-white line-clamp-3 leading-snug">
                         {story.title}
                       </h3>
-                      
-                      <div className="inline-flex items-center gap-1 bg-black/60 backdrop-blur-md px-2 py-0.5 border border-white/20">
-                        <img 
-                          src="/hero-illustration-headphones.webp" 
-                          alt="thesite.ro logo" 
-                          className="w-3 h-3 object-contain"
-                        />
-                        <span className="text-[10px] font-bold text-white tracking-wide">
-                          thesite.ro
-                        </span>
-                      </div>
                     </div>
                   </div>
 
-                  {/* Proportional 3-Column Solid Bias Bar */}
                   <div className="flex w-full h-[65px] shrink-0 border-t border-black/20">
-                    {left > 0 && (
-                      <div style={{ flexGrow: left, minWidth: '15%' }} className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1">
-                        <span className="text-[8px] font-bold uppercase">STÂNGA</span>
-                        <span className="text-sm font-black">{left}%</span>
-                      </div>
-                    )}
-
-                    {center > 0 && (
-                      <div style={{ flexGrow: center, minWidth: '15%' }} className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1 border-x border-black/10">
-                        <span className="text-[8px] font-bold uppercase">CENTRU</span>
-                        <span className="text-sm font-black">{center}%</span>
-                      </div>
-                    )}
-
-                    {right > 0 && (
-                      <div style={{ flexGrow: right, minWidth: '15%' }} className="bg-[#822727] text-white flex flex-col items-center justify-center p-1">
-                        <span className="text-[8px] font-bold uppercase">DREAPTA</span>
-                        <span className="text-sm font-black">{right}%</span>
-                      </div>
-                    )}
+                    <div style={{ flexGrow: l || 1 }} className="bg-[#28508a] text-white flex flex-col items-center justify-center p-1">
+                      <span className="text-[8px] font-bold uppercase">STÂNGA</span>
+                      <span className="text-sm font-black">{l}%</span>
+                    </div>
+                    <div style={{ flexGrow: c || 1 }} className="bg-white text-[#1f2937] flex flex-col items-center justify-center p-1 border-x border-black/10">
+                      <span className="text-[8px] font-bold uppercase">CENTRU</span>
+                      <span className="text-sm font-black">{c}%</span>
+                    </div>
+                    <div style={{ flexGrow: r || 1 }} className="bg-[#822727] text-white flex flex-col items-center justify-center p-1">
+                      <span className="text-[8px] font-bold uppercase">DREAPTA</span>
+                      <span className="text-sm font-black">{r}%</span>
+                    </div>
                   </div>
-
-                  {/* Quick Action Footer */}
-                  <div className="bg-[#faf9f6] p-2.5 border-t border-black/10 flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-neutral-600 truncate max-w-[150px]">
-                      {story.mainCategory || "Actualitate"}
-                    </span>
-                    <button
-                      onClick={() => copyCaption(story.title, story.id)}
-                      className="bg-black hover:bg-neutral-800 text-white font-bold text-[10px] px-2.5 py-1 flex items-center gap-1"
-                    >
-                      {isCopied ? <Check className="w-3 h-3 text-amber-400" /> : <Copy className="w-3 h-3" />}
-                      {isCopied ? "Copiat" : "Caption"}
-                    </button>
-                  </div>
-
                 </div>
               );
             })}
@@ -410,3 +612,4 @@ export default function InstagramStudio() {
     </div>
   );
 }
+

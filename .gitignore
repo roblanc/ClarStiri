@@ -22,5 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 
-# Screenshots
+# Screenshots & exports
 screenshots/
+social_export/
+
+# Environment
+.env
+.env*.local
