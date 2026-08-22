@@ -5,6 +5,16 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+function getFaviconUrl(url) {
+  try {
+    if (!url) return null;
+    const hostname = new URL(url).hostname;
+    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+  } catch {
+    return null;
+  }
+}
+
 export function buildHtmlSlides(story) {
   const left = Math.round(story.bias?.left || 0);
   const center = Math.round(story.bias?.center || 0);
@@ -28,24 +38,37 @@ export function buildHtmlSlides(story) {
     return b.includes('right');
   });
 
-  const sampleLeft = leftSources[0] || { source: { name: 'Presa de Stânga' }, title: story.title };
-  const sampleCenter = centerSources[0] || { source: { name: 'Presa de Centru' }, title: story.title };
-  const sampleRight = rightSources[0] || { source: { name: 'Presa de Dreapta' }, title: story.title };
+  const sampleLeft = leftSources[0] || { 
+    source: { name: 'Presa de Stânga', url: 'https://g4media.ro', bias: 'left' }, 
+    title: story.title 
+  };
+  const sampleCenter = centerSources[0] || { 
+    source: { name: 'Presa de Centru', url: 'https://hotnews.ro', bias: 'center' }, 
+    title: story.title 
+  };
+  const sampleRight = rightSources[0] || { 
+    source: { name: 'Presa de Dreapta', url: 'https://antena3.ro', bias: 'right' }, 
+    title: story.title 
+  };
+
+  const leftFavicon = getFaviconUrl(sampleLeft.source?.url || sampleLeft.url);
+  const centerFavicon = getFaviconUrl(sampleCenter.source?.url || sampleCenter.url);
+  const rightFavicon = getFaviconUrl(sampleRight.source?.url || sampleRight.url);
 
   let blindspotText = '';
   if (blindspot === 'left') {
-    blindspotText = `⚠️ Punct Orb: Ignorat de sursele de Stânga (doar ${left}% acoperire)`;
+    blindspotText = `⚠️ PUNCT ORB: Ignorat de sursele de Stânga (doar ${left}% acoperire)`;
   } else if (blindspot === 'right') {
-    blindspotText = `⚠️ Punct Orb: Ignorat de sursele de Dreapta (doar ${right}% acoperire)`;
+    blindspotText = `⚠️ PUNCT ORB: Ignorat de sursele de Dreapta (doar ${right}% acoperire)`;
   }
 
   const commonStyle = `
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,700&family=Playfair+Display:ital,wght@1,600;1,700;1,800&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       width: 1080px;
       height: 1350px;
-      background: #0f1015;
+      background: #07080c;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       color: #ffffff;
       overflow: hidden;
@@ -56,8 +79,29 @@ export function buildHtmlSlides(story) {
     .bg-grid {
       position: absolute;
       inset: 0;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-      background-size: 24px 24px;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+      background-size: 26px 26px;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+    }
+    .glow-blue {
+      position: absolute;
+      top: -100px;
+      left: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .glow-red {
+      position: absolute;
+      bottom: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 70%);
       pointer-events: none;
       z-index: 1;
     }
@@ -92,50 +136,53 @@ export function buildHtmlSlides(story) {
         align-items: center;
       }
       .badge-category {
-        background: #f59e0b;
+        background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
         color: #000;
-        font-weight: 800;
+        font-weight: 900;
         font-size: 13px;
-        padding: 6px 16px;
+        padding: 8px 20px;
         border-radius: 100px;
         letter-spacing: 0.1em;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
       }
       .badge-sources {
-        background: rgba(255,255,255,0.15);
+        background: rgba(255,255,255,0.12);
         color: #fff;
-        font-weight: 700;
+        font-weight: 800;
         font-size: 13px;
-        padding: 6px 16px;
+        padding: 8px 20px;
         border-radius: 100px;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(12px);
         border: 1px solid rgba(255,255,255,0.2);
       }
       .brand-pill {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: rgba(240, 238, 230, 0.95);
-        padding: 6px 20px;
+        background: rgba(242, 239, 230, 0.95);
+        padding: 8px 24px;
         border-radius: 100px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
       }
       .brand-name {
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-weight: 700;
-        color: #111;
-        font-size: 20px;
+        font-weight: 800;
+        color: #000;
+        font-size: 22px;
+        letter-spacing: -0.02em;
       }
       .hero-card {
         position: relative;
         width: 100%;
         height: 640px;
-        border-radius: 28px;
+        border-radius: 32px;
         overflow: hidden;
         margin-top: 24px;
         margin-bottom: 24px;
-        border: 1px solid rgba(255,255,255,0.15);
-        box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.18);
+        box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+        background: #000;
       }
       .hero-img {
         width: 100%;
@@ -145,14 +192,14 @@ export function buildHtmlSlides(story) {
       .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 45%, rgba(10,11,15,0.98) 100%);
+        background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(7,8,12,0.4) 40%, rgba(7,8,12,0.98) 100%);
       }
       .hero-content {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        padding: 40px;
+        padding: 44px;
       }
       .blindspot-alert {
         display: inline-flex;
@@ -162,24 +209,27 @@ export function buildHtmlSlides(story) {
         border: 1px solid rgba(239, 68, 68, 0.5);
         color: #fca5a5;
         font-size: 13px;
-        font-weight: 700;
-        padding: 6px 14px;
-        border-radius: 8px;
-        margin-bottom: 16px;
+        font-weight: 800;
+        padding: 8px 18px;
+        border-radius: 12px;
+        margin-bottom: 18px;
+        backdrop-filter: blur(10px);
       }
       .story-title {
         font-size: 38px;
-        font-weight: 800;
+        font-weight: 900;
         line-height: 1.25;
         letter-spacing: -0.02em;
         color: #ffffff;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.5);
       }
       .bias-section {
         background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 24px 32px;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 28px;
+        padding: 26px 36px;
         backdrop-filter: blur(20px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
       }
       .bias-header {
         display: flex;
@@ -187,7 +237,7 @@ export function buildHtmlSlides(story) {
         align-items: center;
         margin-bottom: 14px;
         font-size: 12px;
-        font-weight: 800;
+        font-weight: 900;
         letter-spacing: 0.15em;
         text-transform: uppercase;
         color: rgba(255,255,255,0.6);
@@ -195,22 +245,23 @@ export function buildHtmlSlides(story) {
       .bias-labels {
         display: flex;
         justify-content: space-between;
-        font-size: 15px;
-        font-weight: 800;
-        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: 900;
+        margin-bottom: 12px;
       }
       .bias-bar {
         display: flex;
-        height: 20px;
+        height: 22px;
         border-radius: 100px;
         overflow: hidden;
-        border: 1px solid rgba(255,255,255,0.2);
+        border: 1px solid rgba(255,255,255,0.15);
         gap: 3px;
         background: rgba(255,255,255,0.1);
+        padding: 2px;
       }
-      .bar-left { background: #3b82f6; width: ${left}%; height: 100%; }
-      .bar-center { background: #e5e7eb; width: ${center}%; height: 100%; }
-      .bar-right { background: #ef4444; width: ${right}%; height: 100%; }
+      .bar-left { background: linear-gradient(90deg, #3b82f6 0%, #38bdf8 100%); width: ${left}%; height: 100%; border-radius: 100px 0 0 100px; }
+      .bar-center { background: linear-gradient(90deg, #f1f5f9 0%, #cbd5e1 100%); width: ${center}%; height: 100%; }
+      .bar-right { background: linear-gradient(90deg, #f43f5e 0%, #ef4444 100%); width: ${right}%; height: 100%; border-radius: 0 100px 100px 0; }
       .swipe-footer {
         display: flex;
         justify-content: space-between;
@@ -218,20 +269,25 @@ export function buildHtmlSlides(story) {
         margin-top: 18px;
         color: rgba(255,255,255,0.7);
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
       }
       .swipe-badge {
-        background: rgba(255,255,255,0.1);
-        padding: 6px 16px;
+        background: rgba(245, 158, 11, 0.15);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: #fbbf24;
+        padding: 6px 18px;
         border-radius: 100px;
         display: flex;
         align-items: center;
         gap: 8px;
+        font-weight: 800;
       }
     </style>
   </head>
   <body>
     <div class="bg-grid"></div>
+    <div class="glow-blue"></div>
+    <div class="glow-red"></div>
     <div class="slide-container">
       <div class="top-nav">
         <div class="tag-group">
@@ -255,12 +311,12 @@ export function buildHtmlSlides(story) {
       <div class="bias-section">
         <div class="bias-header">
           <span>DISTRIBUȚIE ORIENTARE MEDIA</span>
-          <span>${totalSources} PUBLICAȚII ANALIZATE</span>
+          <span style="color: #fbbf24;">${totalSources} PUBLICAȚII ANALIZATE</span>
         </div>
         <div class="bias-labels">
-          <span style="color: #60a5fa;">Stânga ${left}%</span>
-          <span style="color: #f3f4f6;">Centru ${center}%</span>
-          <span style="color: #f87171;">Dreapta ${right}%</span>
+          <span style="color: #38bdf8;">Stânga ${left}%</span>
+          <span style="color: #f8fafc;">Centru ${center}%</span>
+          <span style="color: #f43f5e;">Dreapta ${right}%</span>
         </div>
         <div class="bias-bar">
           <div class="bar-left"></div>
@@ -268,9 +324,9 @@ export function buildHtmlSlides(story) {
           <div class="bar-right"></div>
         </div>
         <div class="swipe-footer">
-          <span>Analiză automată media</span>
+          <span>Analiză automată a presei românești</span>
           <div class="swipe-badge">
-            <span>Glisează pentru comparație titluri</span>
+            <span>Glisează pentru titluri</span>
             <span>➔</span>
           </div>
         </div>
@@ -304,20 +360,20 @@ export function buildHtmlSlides(story) {
         align-items: center;
       }
       .section-heading {
-        margin-top: 24px;
-        margin-bottom: 24px;
+        margin-top: 20px;
+        margin-bottom: 20px;
       }
       .section-subtitle {
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 0.2em;
         color: #f59e0b;
         margin-bottom: 8px;
       }
       .section-title {
-        font-size: 34px;
-        font-weight: 800;
+        font-size: 36px;
+        font-weight: 900;
         line-height: 1.2;
       }
       .cards-stack {
@@ -325,47 +381,63 @@ export function buildHtmlSlides(story) {
         flex-direction: column;
         gap: 20px;
         flex: 1;
+        justify-content: center;
       }
       .headline-card {
         background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 22px;
-        padding: 24px 28px;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 26px;
+        padding: 26px 32px;
         position: relative;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        backdrop-filter: blur(20px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
       }
-      .card-left { border-left: 6px solid #3b82f6; }
-      .card-center { border-left: 6px solid #e5e7eb; }
-      .card-right { border-left: 6px solid #ef4444; }
+      .card-left { border-left: 6px solid #38bdf8; }
+      .card-center { border-left: 6px solid #f8fafc; }
+      .card-right { border-left: 6px solid #f43f5e; }
       
       .card-meta {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
+      }
+      .outlet-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .favicon-img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: #fff;
+        padding: 2px;
       }
       .outlet-badge {
-        font-size: 13px;
-        font-weight: 800;
-        padding: 4px 12px;
-        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 900;
+        padding: 5px 14px;
+        border-radius: 8px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
-      .badge-left { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
-      .badge-center { background: rgba(255, 255, 255, 0.2); color: #f3f4f6; }
-      .badge-right { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+      .badge-left { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
+      .badge-center { background: rgba(255, 255, 255, 0.2); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.3); }
+      .badge-right { background: rgba(244, 63, 94, 0.2); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
 
       .outlet-name {
-        font-size: 14px;
-        font-weight: 700;
-        color: rgba(255,255,255,0.8);
+        font-size: 16px;
+        font-weight: 800;
+        color: #ffffff;
       }
       .headline-quote {
-        font-size: 20px;
-        font-weight: 700;
+        font-size: 21px;
+        font-weight: 800;
         line-height: 1.35;
         color: #ffffff;
       }
@@ -374,35 +446,41 @@ export function buildHtmlSlides(story) {
         justify-content: space-between;
         align-items: center;
         background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.12);
         border-radius: 100px;
-        padding: 14px 28px;
+        padding: 16px 32px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
+        backdrop-filter: blur(20px);
       }
     </style>
   </head>
   <body>
     <div class="bg-grid"></div>
+    <div class="glow-blue"></div>
+    <div class="glow-red"></div>
     <div class="slide-container">
       <div class="top-nav">
         <div style="display: flex; gap: 12px;">
-          <span style="background: #3b82f6; color:#fff; font-weight:800; font-size:12px; padding:6px 14px; border-radius:100px;">COMPARAȚIE TITLURI</span>
+          <span style="background: linear-gradient(135deg, #3b82f6, #06b6d4); color:#fff; font-weight:900; font-size:13px; padding:8px 18px; border-radius:100px;">COMPARAȚIE TITLURI</span>
         </div>
-        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:20px; font-weight:700; color:#e5e7eb;">thesite.ro</div>
+        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:22px; font-weight:800; color:#f0eee6;">thesite.ro</div>
       </div>
 
       <div class="section-heading">
         <div class="section-subtitle">Perspective media</div>
-        <h2 class="section-title">Același eveniment, formulări diferite</h2>
+        <h2 class="section-title">Același eveniment, unghiuri diferite</h2>
       </div>
 
       <div class="cards-stack">
-        <!-- Card 1: Stânga / Centru-Stânga -->
+        <!-- Card 1: Stânga -->
         <div class="headline-card card-left">
           <div class="card-meta">
+            <div class="outlet-info">
+              ${leftFavicon ? `<img class="favicon-img" src="${leftFavicon}" alt="favicon" />` : ''}
+              <span class="outlet-name">${sampleLeft.source?.name || 'Sursă Stânga'}</span>
+            </div>
             <span class="outlet-badge badge-left">Stânga</span>
-            <span class="outlet-name">${sampleLeft.source?.name || 'Sursă Stânga'}</span>
           </div>
           <div class="headline-quote">„${sampleLeft.title}”</div>
         </div>
@@ -410,25 +488,31 @@ export function buildHtmlSlides(story) {
         <!-- Card 2: Centru -->
         <div class="headline-card card-center">
           <div class="card-meta">
+            <div class="outlet-info">
+              ${centerFavicon ? `<img class="favicon-img" src="${centerFavicon}" alt="favicon" />` : ''}
+              <span class="outlet-name">${sampleCenter.source?.name || 'Sursă Centru'}</span>
+            </div>
             <span class="outlet-badge badge-center">Centru</span>
-            <span class="outlet-name">${sampleCenter.source?.name || 'Sursă Centru'}</span>
           </div>
           <div class="headline-quote">„${sampleCenter.title}”</div>
         </div>
 
-        <!-- Card 3: Dreapta / Centru-Dreapta -->
+        <!-- Card 3: Dreapta -->
         <div class="headline-card card-right">
           <div class="card-meta">
+            <div class="outlet-info">
+              ${rightFavicon ? `<img class="favicon-img" src="${rightFavicon}" alt="favicon" />` : ''}
+              <span class="outlet-name">${sampleRight.source?.name || 'Sursă Dreapta'}</span>
+            </div>
             <span class="outlet-badge badge-right">Dreapta</span>
-            <span class="outlet-name">${sampleRight.source?.name || 'Sursă Dreapta'}</span>
           </div>
           <div class="headline-quote">„${sampleRight.title}”</div>
         </div>
       </div>
 
       <div class="bottom-bar">
-        <span style="color: rgba(255,255,255,0.7);">Vezi cum limbajul schimbă percepția</span>
-        <span style="color: #f59e0b; font-weight:800;">Glisează pentru sinteză ➔</span>
+        <span style="color: rgba(255,255,255,0.7);">Vezi cum limbajul schimbă nuanța</span>
+        <span style="color: #fbbf24; font-weight:900;">Glisează pentru sinteză ➔</span>
       </div>
     </div>
   </body>
@@ -464,24 +548,26 @@ export function buildHtmlSlides(story) {
         align-items: center;
         text-align: center;
         margin: auto 0;
-        background: rgba(255,255,255,0.03);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 32px;
-        padding: 48px 40px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.14);
+        border-radius: 36px;
+        padding: 52px 44px;
         backdrop-filter: blur(20px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
       }
       .app-badge {
-        background: #10b981;
+        background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
         color: #000;
-        font-weight: 800;
+        font-weight: 900;
         font-size: 13px;
-        padding: 6px 16px;
+        padding: 8px 22px;
         border-radius: 100px;
         margin-bottom: 24px;
         letter-spacing: 0.1em;
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
       }
       .cta-title {
-        font-size: 42px;
+        font-size: 46px;
         font-weight: 900;
         line-height: 1.15;
         letter-spacing: -0.03em;
@@ -489,64 +575,70 @@ export function buildHtmlSlides(story) {
       }
       .cta-desc {
         font-size: 20px;
-        color: rgba(255,255,255,0.75);
+        color: rgba(255,255,255,0.8);
         line-height: 1.5;
         max-width: 780px;
         margin-bottom: 36px;
+        font-weight: 500;
       }
       .cta-button {
-        background: #f0eee6;
-        color: #111;
+        background: #f2efe6;
+        color: #000;
         font-size: 22px;
-        font-weight: 800;
-        padding: 18px 44px;
+        font-weight: 900;
+        padding: 20px 48px;
         border-radius: 100px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.6);
         display: inline-flex;
         align-items: center;
         gap: 12px;
+        border: 2px solid #ffffff;
       }
       .feature-list {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 16px;
+        gap: 18px;
         width: 100%;
         margin-top: 10px;
       }
       .feature-item {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 18px;
-        padding: 18px 20px;
-        font-size: 15px;
-        font-weight: 600;
-        color: rgba(255,255,255,0.85);
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 20px 24px;
+        font-size: 16px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.9);
         display: flex;
         align-items: center;
         gap: 12px;
+        text-align: left;
       }
       .feature-icon {
-        color: #f59e0b;
-        font-size: 20px;
+        color: #fbbf24;
+        font-size: 22px;
+        font-weight: 900;
       }
       .footer-brand {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-top: 24px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        color: rgba(255,255,255,0.5);
+        border-top: 1px solid rgba(255,255,255,0.12);
+        color: rgba(255,255,255,0.6);
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
       }
     </style>
   </head>
   <body>
     <div class="bg-grid"></div>
+    <div class="glow-blue"></div>
+    <div class="glow-red"></div>
     <div class="slide-container">
       <div class="top-nav">
-        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:26px; font-weight:700; color:#f0eee6;">thesite.ro</div>
-        <span style="background: rgba(255,255,255,0.1); padding:6px 14px; border-radius:100px; font-size:13px; font-weight:700;">Harta presei românești</span>
+        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:28px; font-weight:800; color:#f0eee6;">thesite.ro</div>
+        <span style="background: rgba(255,255,255,0.12); padding:8px 18px; border-radius:100px; font-size:13px; font-weight:800;">Harta presei românești</span>
       </div>
 
       <div class="cta-center">
@@ -560,7 +652,7 @@ export function buildHtmlSlides(story) {
           <span>🔗 Link în bio: thesite.ro</span>
         </div>
 
-        <div class="feature-list" style="margin-top: 36px;">
+        <div class="feature-list" style="margin-top: 38px;">
           <div class="feature-item">
             <span class="feature-icon">✓</span>
             <span>Peste 35 de publicații</span>
@@ -571,7 +663,7 @@ export function buildHtmlSlides(story) {
           </div>
           <div class="feature-item">
             <span class="feature-icon">✓</span>
-            <span>Comparație instantanee de titluri</span>
+            <span>Comparație instantanee titluri</span>
           </div>
           <div class="feature-item">
             <span class="feature-icon">✓</span>
@@ -590,240 +682,4 @@ export function buildHtmlSlides(story) {
   `;
 
   return { slide1, slide2, slide3 };
-}
-
-export function buildSinglePostHtml(story) {
-  const left = Math.round(story.bias?.left || 0);
-  const center = Math.round(story.bias?.center || 0);
-  const right = Math.round(story.bias?.right || 0);
-  const totalSources = story.sourcesCount || story.sources?.length || 0;
-  const category = (story.mainCategory || story.category || 'ACTUALITATE').toUpperCase();
-  const blindspot = story.blindspot;
-  const image = story.image || 'https://picsum.photos/seed/clarstiri/1200/800';
-
-  const leftSources = (story.sources || []).filter(s => (s.source?.bias || s.bias || '').toLowerCase().includes('left'));
-  const rightSources = (story.sources || []).filter(s => (s.source?.bias || s.bias || '').toLowerCase().includes('right'));
-  const centerSources = (story.sources || []).filter(s => {
-    const b = (s.source?.bias || s.bias || '').toLowerCase();
-    return b === 'center' || (!b.includes('left') && !b.includes('right'));
-  });
-
-  const sampleLeft = leftSources[0] || { source: { name: 'Presa de Stânga' }, title: story.title };
-  const sampleRight = rightSources[0] || { source: { name: 'Presa de Dreapta' }, title: story.title };
-
-  let blindspotText = '';
-  if (blindspot === 'left') {
-    blindspotText = `⚠️ Punct Orb: Ignorat de Stânga (${left}%)`;
-  } else if (blindspot === 'right') {
-    blindspotText = `⚠️ Punct Orb: Ignorat de Dreapta (${right}%)`;
-  }
-
-  return `
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset="utf-8">
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@1,600;1,700&display=swap');
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        width: 1080px;
-        height: 1350px;
-        background: #0f1015;
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-        color: #ffffff;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 50px;
-        position: relative;
-      }
-      .bg-grid {
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-        background-size: 24px 24px;
-        pointer-events: none;
-        z-index: 1;
-      }
-      .content-wrap {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: space-between;
-      }
-      .top-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .badge-cat {
-        background: #f59e0b;
-        color: #000;
-        font-weight: 800;
-        font-size: 13px;
-        padding: 6px 16px;
-        border-radius: 100px;
-        letter-spacing: 0.1em;
-      }
-      .brand-pill {
-        font-family: 'Playfair Display', serif;
-        font-style: italic;
-        font-weight: 700;
-        color: #111;
-        font-size: 20px;
-        background: rgba(240, 238, 230, 0.95);
-        padding: 6px 20px;
-        border-radius: 100px;
-      }
-      .hero-card {
-        position: relative;
-        width: 100%;
-        height: 480px;
-        border-radius: 24px;
-        overflow: hidden;
-        margin-top: 18px;
-        margin-bottom: 16px;
-        border: 1px solid rgba(255,255,255,0.15);
-      }
-      .hero-img { width: 100%; height: 100%; object-fit: cover; }
-      .hero-overlay {
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 40%, rgba(10,11,15,0.98) 100%);
-      }
-      .hero-content {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 30px;
-      }
-      .story-title {
-        font-size: 32px;
-        font-weight: 800;
-        line-height: 1.25;
-      }
-      .bias-box {
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 20px;
-        padding: 20px 24px;
-      }
-      .bias-bar {
-        display: flex;
-        height: 16px;
-        border-radius: 100px;
-        overflow: hidden;
-        gap: 3px;
-        background: rgba(255,255,255,0.1);
-        margin: 10px 0;
-      }
-      .bar-l { background: #3b82f6; width: ${left}%; }
-      .bar-c { background: #e5e7eb; width: ${center}%; }
-      .bar-r { background: #ef4444; width: ${right}%; }
-      .headlines-mini {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 14px;
-        margin-top: 14px;
-      }
-      .mini-card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 16px;
-      }
-      .mini-card-l { border-left: 4px solid #3b82f6; }
-      .mini-card-r { border-left: 4px solid #ef4444; }
-      .mini-meta {
-        font-size: 11px;
-        font-weight: 800;
-        text-transform: uppercase;
-        margin-bottom: 6px;
-        display: flex;
-        justify-content: space-between;
-      }
-      .mini-title {
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 1.35;
-        color: rgba(255,255,255,0.9);
-      }
-      .single-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 14px;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        font-size: 13px;
-        color: rgba(255,255,255,0.6);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="bg-grid"></div>
-    <div class="content-wrap">
-      <div class="top-nav">
-        <div style="display:flex; gap:10px; align-items:center;">
-          <span class="badge-cat">${category}</span>
-          <span style="background:rgba(255,255,255,0.15); padding:6px 14px; border-radius:100px; font-size:12px; font-weight:700;">${totalSources} SURSE</span>
-        </div>
-        <div class="brand-pill">thesite.ro</div>
-      </div>
-
-      <div class="hero-card">
-        <img class="hero-img" src="${image}" alt="hero" />
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-          ${blindspotText ? `<div style="background:rgba(239,68,68,0.2); border:1px solid rgba(239,68,68,0.4); color:#fca5a5; font-size:12px; font-weight:700; padding:4px 10px; border-radius:6px; margin-bottom:10px; display:inline-block;">${blindspotText}</div>` : ''}
-          <h1 class="story-title">${story.title}</h1>
-        </div>
-      </div>
-
-      <div class="bias-box">
-        <div style="display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:rgba(255,255,255,0.6); letter-spacing:0.1em; text-transform:uppercase;">
-          <span>Distribuție Media</span>
-          <span>${totalSources} Publicații</span>
-        </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:800; margin-top:8px;">
-          <span style="color:#60a5fa;">Stânga ${left}%</span>
-          <span style="color:#f3f4f6;">Centru ${center}%</span>
-          <span style="color:#f87171;">Dreapta ${right}%</span>
-        </div>
-        <div class="bias-bar">
-          <div class="bar-l"></div>
-          <div class="bar-c"></div>
-          <div class="bar-r"></div>
-        </div>
-      </div>
-
-      <div class="headlines-mini">
-        <div class="mini-card mini-card-l">
-          <div class="mini-meta">
-            <span style="color:#93c5fd;">Stânga</span>
-            <span style="color:rgba(255,255,255,0.6);">${sampleLeft.source?.name || 'Sursă'}</span>
-          </div>
-          <div class="mini-title">„${sampleLeft.title}”</div>
-        </div>
-        <div class="mini-card mini-card-r">
-          <div class="mini-meta">
-            <span style="color:#fca5a5;">Dreapta</span>
-            <span style="color:rgba(255,255,255,0.6);">${sampleRight.source?.name || 'Sursă'}</span>
-          </div>
-          <div class="mini-title">„${sampleRight.title}”</div>
-        </div>
-      </div>
-
-      <div class="single-footer">
-        <span>thesite.ro — Vezi toate perspectivele</span>
-        <span style="color:#f59e0b; font-weight:700;">🔗 Link în bio</span>
-      </div>
-    </div>
-  </body>
-  </html>
-  `;
 }
