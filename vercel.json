@@ -1,11 +1,23 @@
 {
     "regions": ["fra1"],
+    "crons": [
+        {
+            "path": "/api/cron/refresh-news",
+            "schedule": "*/15 * * * *"
+        }
+    ],
     "functions": {
         "api/news.ts": {
             "maxDuration": 60
         },
         "api/cron/refresh-news.ts": {
             "maxDuration": 60
+        },
+        "api/sitemap.ts": {
+            "maxDuration": 15
+        },
+        "api/feed.ts": {
+            "maxDuration": 15
         },
         "api/rss.ts": {
             "maxDuration": 10
@@ -20,7 +32,19 @@
             "maxDuration": 15
         }
     },
-"rewrites": [
+    "rewrites": [
+        {
+            "source": "/sitemap.xml",
+            "destination": "/api/sitemap"
+        },
+        {
+            "source": "/rss.xml",
+            "destination": "/api/feed"
+        },
+        {
+            "source": "/feed.xml",
+            "destination": "/api/feed"
+        },
         {
             "source": "/api/(.*)",
             "destination": "/api/$1"
@@ -46,6 +70,32 @@
                 {
                     "key": "Cache-Control",
                     "value": "public, max-age=31536000, immutable"
+                }
+            ]
+        },
+        {
+            "source": "/llms.txt",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "text/plain; charset=utf-8"
+                },
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=86400, stale-while-revalidate=43200"
+                }
+            ]
+        },
+        {
+            "source": "/llms-full.txt",
+            "headers": [
+                {
+                    "key": "Content-Type",
+                    "value": "text/plain; charset=utf-8"
+                },
+                {
+                    "key": "Cache-Control",
+                    "value": "public, max-age=86400, stale-while-revalidate=43200"
                 }
             ]
         },

@@ -12,12 +12,12 @@ import { setCorsHeaders } from './cors.js';
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
 const CACHE_TTL = 25 * 60 * 60; // păstrăm suficient istoric cât să avem fallback dacă refresh-ul eșuează
-const STALE_AFTER = 30 * 60; // după 30 min primul vizitator declanșează refresh în background
+const STALE_AFTER = 10 * 60; // după 10 min primul vizitator declanșează refresh în background
 const MIN_SOURCES_THRESHOLD = 2; // matches frontend filter (sourcesCount > 1) — no point storing single-source stories
 const REFRESH_LOCK_KEY = `${CACHE_KEY}:refresh_lock`;
-const REFRESH_LOCK_TTL = 10 * 60;
-const EDGE_CACHE_S_MAXAGE = 120;
-const EDGE_CACHE_STALE_WHILE_REVALIDATE = 300;
+const REFRESH_LOCK_TTL = 5 * 60;
+const EDGE_CACHE_S_MAXAGE = 60;
+const EDGE_CACHE_STALE_WHILE_REVALIDATE = 120;
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
     const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));

@@ -30,7 +30,7 @@ const queryClient = new QueryClient({
     queries: {
       staleTime: 2 * 60 * 1000,   // 2 minute
       gcTime: 30 * 60 * 1000,     // 30 minute
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true, // Actualizare automată când utilizatorul revine pe tab
       retry: 1,
     },
   },

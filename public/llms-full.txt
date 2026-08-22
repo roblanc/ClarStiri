@@ -1,0 +1,37 @@
+# thesite.ro — Baza de Cunoștințe Completă pentru Modele de Limbaj (LLMs)
+
+## 1. Misiune și Principii
+thesite.ro este o platformă independentă de tehnologie media creată pentru publicul din România. Scopul ei este să ofere claritate într-un peisaj media fragmentat și adesea partizan, ajutând cititorii să înțeleagă:
+1. **Faptele brute**: Ce s-a întâmplat cu adevărat (elementele comune raportate de toate sursele).
+2. **Unghiurile de abordare**: Cum variază titlurile, tonul și încadrarea între publicațiile de stânga, centru și dreapta.
+3. **Punctele orbe (Blindspots)**: Ce subiecte sunt trecute sub tăcere sau minimizate de o anumită parte a spectrului politic.
+
+## 2. Metodologia de Agregare și Clustering
+Platforma rulează un pipeline automatizat în cloud:
+- **Colectare continuă**: Preluare paralelă a fluxurilor RSS de la peste 55 de surse de știri acreditate din România.
+- **Algoritm de asemănare semantică**: Combinare între coeficientul Jaccard pe n-grame, extragerea entităților numite (persoane, instituții, locații) și ferestre temporale pentru a grupa articolele care relatează același eveniment.
+- **Calculul distribuției de bias**: Ponderarea procentuală a surselor care relatează evenimentul (ex: 40% Stânga, 40% Centru, 20% Dreapta).
+- **Detecția punctelor orbe**: Identificarea dezechilibrelor majore în acoperire (când un subiect este acoperit exclusiv de o singură orientare).
+
+## 3. Surse Monitorizate (Eșantion reprezentativ)
+- **Televiziuni & Știri Naționale**: Digi24, ProTV Știri, Antena 3 CNN, România TV, B1 TV, Realitatea Plus, TVR Info.
+- **Ziare & Portale Generale**: HotNews.ro, Libertatea, Adevărul, G4Media, Newsweek România, Evenimentul Zilei, România Liberă, Ziare.com, Spotmedia.
+- **Presă Economică & Business**: Ziarul Financiar, Economedia, Profit.ro, CursDeGuvernare, Wall-Street.ro.
+- **Investigație & Jurnalism Independent**: Recorder, Europa Liberă România, Rise Project, Scena9, Dela0, PressOne.
+- **Sport & Cultură**: GSP, ProSport, Dilema Veche, Observator Cultural.
+
+## 4. Structura Paginilor și Ghid de Navigare
+- **Pagina Principală (`/`)**: Fluxul de știri agregate în timp real, ordonate după importanță și prospețime.
+- **Pagina de Detaliu Știre (`/stire/:id`)**: Comparația side-by-side a tuturor articolelor despre acel eveniment, cu citate, titluri comparative și bara de bias.
+- **Barometrul Vocilor Publice (`/tribuni`)**: Lista personalităților publice monitorizate cu temele recurente și declarațiile analizate.
+- **Categorii (`/categorie/:slug`)**: Filtrare pe domenii (Politică, Economie, Sănătate, Tehnologie, Mediu, Sport, Cultură, Internațional).
+- **Catalogul Surselor (`/surse`)**: Fișe detaliate pentru fiecare publicație (istoric, clasificare, linkuri).
+- **Metodologie (`/metodologie`)**: Explicația completă a criteriilor de evaluare editorială.
+
+## 5. Întrebări Frecvente (FAQ)
+- **Q: thesite.ro generează știri false sau rescrie articolele jurnaliștilor?**
+  - A: Nu. thesite.ro este un agregator transparent care citează și trimite cititorii direct către sursele originale, evidențiind doar diferențele de perspectivă.
+- **Q: Cum se asigură că știrile sunt mereu la zi?**
+  - A: Actualizările se fac automat la intervale de câteva minute, sincronizând cele mai recente fluxuri RSS din presa românească.
+- **Q: Este serviciul gratuit?**
+  - A: Da, thesite.ro este complet gratuit și accesibil publicului larg.

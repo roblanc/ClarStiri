@@ -36,6 +36,7 @@ export function NewsSchema({ story }: NewsSchemaProps) {
             }
         },
         "description": story.description,
+        "inLanguage": "ro-RO",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": story.url
@@ -51,6 +52,10 @@ export function NewsSchema({ story }: NewsSchemaProps) {
             <title>{pageTitle}</title>
             <meta name="description" content={description} />
             <link rel="canonical" href={story.url} />
+
+            {/* Geo Localization */}
+            <meta name="geo.region" content="RO" />
+            <meta name="geo.placename" content="Romania" />
 
             {/* Open Graph (Facebook, WhatsApp, Telegram) */}
             <meta property="og:type" content="article" />

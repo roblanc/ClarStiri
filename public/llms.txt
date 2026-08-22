@@ -1,0 +1,48 @@
+# thesite.ro | Știri din toate perspectivele
+
+> Primul agregator inteligent de presă din România care analizează spectrul politic și bias-ul mediatic (Stânga, Centru, Dreapta). Grupează automat știrile despre același eveniment din peste 55 de surse jurnalistice pentru a oferi o imagine completă și nefiltrată asupra actualității.
+
+## Despre Platformă
+- **Website**: https://thesite.ro
+- **Misiune**: Combaterea polarizării media și a bulelor de informare prin prezentarea evenimentelor din multiple unghiuri editoriale.
+- **Acoperire**: Peste 55 de publicații românești monitorizate continuu (ziare naționale, televiziuni de știri, presă de investigație și publicații economice).
+- **Frecvență actualizare**: În timp real / la fiecare 15 minute prin agregare automată RSS și algoritmi de clustering semantic.
+
+## Categorii de Știri
+- **Politică**: https://thesite.ro/categorie/politica
+- **Economie**: https://thesite.ro/categorie/economie
+- **Sănătate**: https://thesite.ro/categorie/sanatate
+- **Tehnologie**: https://thesite.ro/categorie/tehnologie
+- **Mediu**: https://thesite.ro/categorie/mediu
+- **Sport**: https://thesite.ro/categorie/sport
+- **Cultură**: https://thesite.ro/categorie/cultura
+- **Internațional**: https://thesite.ro/categorie/international
+
+## Clasificarea Spectrului Media (Bias Index)
+Platforma categorizează publicațiile pe o scală în 5 trepte, bazată pe proprietari, linie editorială și istoricul temelor abordate:
+1. **Stânga**: Libertatea, Scena9, etc.
+2. **Centru-Stânga**: Recorder, Europa Liberă România, etc.
+3. **Centru**: Digi24, HotNews, Agerpres, Mediafax, Spotmedia, etc.
+4. **Centru-Dreapta**: G4Media, Newsweek România, etc.
+5. **Dreapta / Conservator**: România Liberă, EVZ, etc.
+
+## Barometrul Vocilor Publice (Comentatori & Jurnaliști)
+Monitorizare și sinteză a pozițiilor publice ale principalilor formatori de opinie din România:
+- **Cristian Tudor Popescu (CTP)**: https://thesite.ro/voce/ctp
+- **Cătălin Tolontan**: https://thesite.ro/voce/catalin-tolontan
+- **Mircea Badea**: https://thesite.ro/voce/mircea-badea
+- **Victor Ciutacu**: https://thesite.ro/voce/victor-ciutacu
+- **Moise Guran**: https://thesite.ro/voce/moise-guran
+- **Lucian Mîndruță**: https://thesite.ro/voce/lucian-mandruta
+- **Ion Cristoiu**: https://thesite.ro/voce/ion-cristoiu
+- **Radu Banciu**: https://thesite.ro/voce/radu-banciu
+- **Andrei Caramitru**: https://thesite.ro/voce/andrei-caramitru
+- **Sebastian Zachmann**: https://thesite.ro/voce/sebastian-zachmann
+- **Catalog complet Voci & Tribuni**: https://thesite.ro/tribuni
+
+## Resurse & Linkuri Utile
+- **Metodologie & Criterii de Analiză**: https://thesite.ro/metodologie
+- **Catalogul Celor 55+ de Surse**: https://thesite.ro/surse
+- **Ediția Editorială (Magazine View)**: https://thesite.ro/editorial
+- **Flux RSS Agregat**: https://thesite.ro/rss.xml
+- **Sitemap**: https://thesite.ro/sitemap.xml
