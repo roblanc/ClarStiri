@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_OOOyxqmTVcSb8OttJJwXjTbTNBFA",
+  "orgId": "team_CjM3ZwnWQmq3CTr5vLZEIhp8",
+  "projectName": "clar-stiri",
+  "settings": {
+    "createdAt": 1766515329440,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

@@ -302,121 +302,137 @@ export default function InstagramStudio() {
 
                 {/* ─── SLIDE 2: COMPARAȚIE TITLURI (HEAD-TO-HEAD) ─── */}
                 {activeSlide === 2 && (
-                  <div className="w-full h-full flex flex-col justify-between p-6 bg-gradient-to-b from-[#0e1117] to-[#08090c]">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                      <span className="text-[11px] font-mono font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/40 px-3 py-1">
-                        COMPARAȚIE TITLURI
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-[#fafafc] text-slate-900" style={{ backgroundImage: 'radial-gradient(rgba(0,0,0,0.11) 1.5px, transparent 1.5px)', backgroundSize: '20px 20px' }}>
+                    <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <img src="/hero-illustration-headphones.webp" alt="logo" className="w-6 h-6 object-contain" />
+                        <span className="font-serif italic font-extrabold text-lg text-black">thesite.ro</span>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        PERSPECTIVE MEDIA • <span className="text-blue-600">02 / 03</span>
                       </span>
-                      <span className="font-serif italic font-bold text-lg text-white">thesite.ro</span>
                     </div>
 
                     <div className="space-y-1 my-2">
-                      <span className="text-[10px] font-mono font-bold uppercase text-amber-400 tracking-widest">PERSPECTIVE MEDIA</span>
-                      <h3 className="text-xl font-black text-white leading-tight">Același eveniment, unghiuri diferite:</h3>
+                      <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-blue-600 tracking-wider">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                        COMPARAȚIE TITLURI
+                      </div>
+                      <h3 className="text-xl font-serif font-extrabold text-black leading-tight">
+                        Același eveniment,<br/>
+                        <span className="text-blue-600 italic">3 unghiuri diferite</span>
+                      </h3>
                     </div>
 
                     {/* 3 Outlet Headline Cards */}
-                    <div className="space-y-3 my-auto">
+                    <div className="space-y-2.5 my-auto">
                       {/* Stânga */}
-                      <div className="p-4 bg-sky-950/20 border-l-4 border-sky-400 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-white flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-sky-400"></span>
+                      <div className="p-3.5 bg-white border border-black/10 rounded-xl relative overflow-hidden shadow-sm">
+                        <div className="flex items-center justify-between text-[11px] mb-2 relative z-10">
+                          <span className="font-bold text-black flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-md bg-sky-900 text-sky-200 font-black flex items-center justify-center text-[10px]">G4</span>
                             {sampleLeft.source?.name || "Presa de Stânga"}
                           </span>
-                          <span className="text-[10px] font-mono uppercase bg-sky-400/20 text-sky-300 px-2 py-0.5 font-bold">Stânga</span>
+                          <span className="text-[10px] font-black uppercase text-blue-600 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600"></span> STÂNGA
+                          </span>
                         </div>
-                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
-                          „{sampleLeft.title}”
-                        </p>
+                        <div className="flex gap-2.5 items-stretch relative z-10">
+                          <div className="w-1 bg-blue-600 rounded-full shrink-0"></div>
+                          <p className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
+                            „{sampleLeft.title}”
+                          </p>
+                        </div>
                       </div>
 
                       {/* Centru */}
-                      <div className="p-4 bg-slate-900/40 border-l-4 border-slate-200 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-white flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-slate-200"></span>
-                            {sampleCenter.source?.name || "Presa de Centru"}
+                      <div className="p-3.5 bg-white border border-black/10 rounded-xl relative overflow-hidden shadow-sm">
+                        <div className="flex items-center justify-between text-[11px] mb-2 relative z-10">
+                          <span className="font-bold text-black flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-md bg-rose-600 text-white font-black flex items-center justify-center text-[10px]">G</span>
+                            {sampleCenter.source?.name || "Gazeta de Sud"}
                           </span>
-                          <span className="text-[10px] font-mono uppercase bg-white/20 text-white px-2 py-0.5 font-bold">Centru</span>
+                          <span className="text-[10px] font-black uppercase text-black flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-black"></span> CENTRU
+                          </span>
                         </div>
-                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
-                          „{sampleCenter.title}”
-                        </p>
+                        <div className="flex gap-2.5 items-stretch relative z-10">
+                          <div className="w-1 bg-black rounded-full shrink-0"></div>
+                          <p className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
+                            „{sampleCenter.title}”
+                          </p>
+                        </div>
                       </div>
 
                       {/* Dreapta */}
-                      <div className="p-4 bg-rose-950/20 border-l-4 border-rose-500 border border-white/10 rounded-none space-y-1.5 backdrop-blur-sm">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-white flex items-center gap-1.5">
-                            <span className="w-2 h-2 rounded-full bg-rose-500"></span>
-                            {sampleRight.source?.name || "Presa de Dreapta"}
+                      <div className="p-3.5 bg-white border border-black/10 rounded-xl relative overflow-hidden shadow-sm">
+                        <div className="flex items-center justify-between text-[11px] mb-2 relative z-10">
+                          <span className="font-bold text-black flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-md bg-black text-amber-400 font-black flex items-center justify-center text-[10px]">PS</span>
+                            {sampleRight.source?.name || "PS News"}
                           </span>
-                          <span className="text-[10px] font-mono uppercase bg-rose-500/20 text-rose-300 px-2 py-0.5 font-bold">Dreapta</span>
+                          <span className="text-[10px] font-black uppercase text-rose-600 flex items-center gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-rose-600"></span> DREAPTA
+                          </span>
                         </div>
-                        <p className="text-xs font-semibold text-neutral-200 leading-snug line-clamp-2">
-                          „{sampleRight.title}”
-                        </p>
+                        <div className="flex gap-2.5 items-stretch relative z-10">
+                          <div className="w-1 bg-rose-600 rounded-full shrink-0"></div>
+                          <p className="text-xs font-bold text-slate-900 leading-snug line-clamp-2">
+                            „{sampleRight.title}”
+                          </p>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
-                      <span>Limbajul folosit schimbă percepția</span>
-                      <span className="text-amber-400 font-bold flex items-center gap-1">Glisează ➔</span>
+                    <div className="border-t border-black/10 pt-3 flex items-center justify-between text-[11px] font-medium">
+                      <span className="text-blue-600 underline">Vezi cum limbajul schimbă nuanța</span>
+                      <span className="text-black font-bold flex items-center gap-1">Glisează ➔</span>
                     </div>
                   </div>
                 )}
 
-                {/* ─── SLIDE 3: PUNCTUL ORB (BLINDSPOT ANALYSIS) ─── */}
+                {/* ─── SLIDE 3: PUNCTUL ORB / CTA ─── */}
                 {activeSlide === 3 && (
-                  <div className="w-full h-full flex flex-col justify-between p-6 bg-[#0b0d11]">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                      <span className="text-[11px] font-mono font-black uppercase bg-amber-400/20 text-amber-300 border border-amber-400/40 px-3 py-1">
-                        ANALIZĂ PUNCT ORB
+                  <div className="w-full h-full flex flex-col justify-between p-6 bg-[#fafafc] text-slate-900 text-center" style={{ backgroundImage: 'radial-gradient(rgba(0,0,0,0.11) 1.5px, transparent 1.5px)', backgroundSize: '20px 20px' }}>
+                    <div className="flex items-center justify-between border-b border-black/10 pb-3">
+                      <div className="flex items-center gap-2">
+                        <img src="/hero-illustration-headphones.webp" alt="logo" className="w-6 h-6 object-contain" />
+                        <span className="font-serif italic font-extrabold text-lg text-black">thesite.ro</span>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                        HARTA PRESEI • <span className="text-blue-600">03 / 03</span>
                       </span>
-                      <span className="font-serif italic font-bold text-lg text-white">thesite.ro</span>
                     </div>
 
-                    <div className="my-auto space-y-6">
-                      <div className="text-center space-y-2">
-                        <span className="text-xs font-mono uppercase text-neutral-400 tracking-wider">DISTRIBUȚIA PE PERSPECTIVE</span>
-                        <h3 className="text-2xl font-black text-white">
-                          {blindspot === 'left' ? 'Ignorat de publicațiile de Stânga' : 
-                           blindspot === 'right' ? 'Ignorat de publicațiile de Dreapta' : 
-                           'Acoperire extinsă în tot spectrul'}
-                        </h3>
+                    <div className="my-auto space-y-4">
+                      <div className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase text-emerald-600 tracking-widest bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        DECIDE TU CE SĂ CREZI
                       </div>
 
-                      {/* 3 Metric Cards */}
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="p-3.5 bg-[#28508a]/30 border border-[#28508a] text-center space-y-1">
-                          <span className="text-[10px] font-bold text-sky-300 uppercase block">Stânga</span>
-                          <span className="text-3xl font-black text-white">{left}%</span>
-                          <span className="text-[9px] text-neutral-400 block">{leftSources.length} surse</span>
-                        </div>
-                        <div className="p-3.5 bg-white/10 border border-white/30 text-center space-y-1">
-                          <span className="text-[10px] font-bold text-neutral-200 uppercase block">Centru</span>
-                          <span className="text-3xl font-black text-white">{center}%</span>
-                          <span className="text-[9px] text-neutral-400 block">{centerSources.length} surse</span>
-                        </div>
-                        <div className="p-3.5 bg-[#822727]/30 border border-[#822727] text-center space-y-1">
-                          <span className="text-[10px] font-bold text-rose-300 uppercase block">Dreapta</span>
-                          <span className="text-3xl font-black text-white">{right}%</span>
-                          <span className="text-[9px] text-neutral-400 block">{rightSources.length} surse</span>
-                        </div>
+                      <h3 className="text-2xl font-serif font-extrabold text-black leading-tight">
+                        Ieși din bula <span className="text-blue-600 italic">de știri.</span>
+                      </h3>
+
+                      <p className="text-xs text-slate-600 max-w-[280px] mx-auto leading-relaxed">
+                        Pe <strong>thesite.ro</strong> grupăm știrile pe subiecte, măsurăm distribuția politică și îți arătăm ce omit publicațiile tale preferate.
+                      </p>
+
+                      {/* 3 Solid Color Bars */}
+                      <div className="flex w-full h-9 rounded-lg overflow-hidden shadow-sm border border-black/10">
+                        <div className="bg-blue-600 text-white flex-1 flex items-center justify-center text-[10px] font-black tracking-wider">STÂNGA</div>
+                        <div className="bg-black text-white flex-1 flex items-center justify-center text-[10px] font-black tracking-wider">CENTRU</div>
+                        <div className="bg-rose-600 text-white flex-1 flex items-center justify-center text-[10px] font-black tracking-wider">DREAPTA</div>
                       </div>
 
-                      {/* Insight Box */}
-                      <div className="p-4 bg-white/5 border border-white/10 space-y-1 text-center">
-                        <p className="text-xs text-neutral-300 leading-relaxed">
-                          Algoritmul <strong>thesite.ro</strong> scanează automat zeci de fluxuri de știri din România pentru a detecta asimetriile de acoperire mediatică în timp real.
-                        </p>
+                      <div className="bg-black text-white font-black text-xs py-3 px-6 rounded-xl inline-flex items-center gap-2 shadow-md">
+                        <span>🔗 Link în bio: thesite.ro</span>
                       </div>
                     </div>
 
-                    <div className="border-t border-white/10 pt-3 flex items-center justify-between text-[11px] text-neutral-400 font-medium">
-                      <span>Date agregate din {totalSources} publicații</span>
-                      <span className="text-amber-400 font-bold">Glisează ➔</span>
+                    <div className="border-t border-black/10 pt-3 flex items-center justify-between text-[10px] text-slate-500 font-bold">
+                      <span>© thesite.ro</span>
+                      <span>@thesite.ro</span>
                     </div>
                   </div>
                 )}
