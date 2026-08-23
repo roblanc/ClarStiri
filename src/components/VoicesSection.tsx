@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { PUBLIC_FIGURES } from '@/data/publicFigures';
 import { ChevronRight } from 'lucide-react';
+import { VoiceAvatar } from '@/components/VoiceAvatar';
 
 export function VoicesSection() {
     return (
@@ -16,7 +17,7 @@ export function VoicesSection() {
                         </p>
                     </div>
                     <Link
-                        to="/influenceri"
+                        to="/tribuni"
                         className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground hover:opacity-50 transition-colors flex items-center gap-1"
                     >
                         Vezi toți
@@ -32,16 +33,15 @@ export function VoicesSection() {
                             className="flex flex-col items-center min-w-[120px] group transition-transform hover:-translate-y-1"
                         >
                             <div className="relative mb-4">
-                                <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border border-border group-hover:border-foreground transition-colors bg-secondary">
-                                    <img
-                                        src={figure.image}
-                                        alt={figure.name}
-                                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                                        loading="lazy"
-                                    />
-                                </div>
+                                <VoiceAvatar
+                                    src={figure.image}
+                                    name={figure.name}
+                                    score={figure.bias.score}
+                                    size="lg"
+                                    className="border border-border group-hover:border-foreground transition-colors"
+                                />
                                 {/* Bias Indicator Badge */}
-                                <div className={`absolute bottom-1 right-1 w-6 h-6 md:w-8 md:h-8 rounded-full border border-background flex items-center justify-center text-[10px] md:text-xs font-bold text-white
+                                <div className={`absolute bottom-0 right-0 w-6 h-6 rounded-full border border-background flex items-center justify-center text-[10px] font-mono font-bold text-white shadow-sm
                                   ${getScoreColor(figure.bias.score)}`}
                                     title={`Bias: ${figure.bias.leaning}`}
                                 >
@@ -49,10 +49,10 @@ export function VoicesSection() {
                                 </div>
                             </div>
 
-                            <h3 className="font-title font-bold text-lg text-center leading-tight group-hover:opacity-70 transition-opacity text-foreground">
+                            <h3 className="font-serif font-bold text-base text-center leading-tight group-hover:opacity-70 transition-opacity text-foreground">
                                 {figure.name}
                             </h3>
-                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center mt-2 max-w-[120px]">
+                            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground text-center mt-1.5 max-w-[120px]">
                                 {figure.role}
                             </p>
                         </Link>

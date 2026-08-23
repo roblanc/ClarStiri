@@ -12,6 +12,7 @@ import { Helmet } from "react-helmet-async";
 import { StyledLink } from "@/components/ui/styled-link";
 import { getStatementEvidence, getStatementEvidenceBadgeClass } from "@/utils/statementEvidence";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { VoiceAvatar } from "@/components/VoiceAvatar";
 import { cn } from "@/lib/utils";
 
 const VoiceProfile = () => {
@@ -91,17 +92,15 @@ const VoiceProfile = () => {
                     </Link>
 
                     <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-                        {/* Photo */}
+                        {/* Photo / Avatar */}
                         <div className="shrink-0 mx-auto md:mx-0">
-                            <div className={cn("relative w-36 h-36 md:w-48 md:h-48 rounded-2xl overflow-hidden border-2 shadow-xl", biasBorder)}>
-                                <img
-                                    src={figure.image}
-                                    alt={figure.name}
-                                    className="w-full h-full object-cover"
-                                />
-                                {/* bias indicator strip at bottom */}
-                                <div className={cn("absolute bottom-0 left-0 right-0 h-1", biasColor)} />
-                            </div>
+                            <VoiceAvatar
+                                src={figure.image}
+                                name={figure.name}
+                                score={figure.bias.score}
+                                size="xl"
+                                className={cn("border-2 shadow-xl", biasBorder)}
+                            />
                         </div>
 
                         {/* Info block */}
@@ -513,12 +512,12 @@ const VoiceProfile = () => {
                                         className="group surface-panel relative flex flex-col items-center overflow-hidden rounded-2xl p-5 text-center transition-all duration-200 hover:-translate-y-0.5 hover:bg-background/95"
                                     >
                                         <div className={cn("absolute top-0 left-0 right-0 h-0.5", sColor)} />
-                                        <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border/40 group-hover:border-primary/30 transition-colors mb-3 mt-1">
-                                            <img
+                                        <div className="mb-3 mt-1">
+                                            <VoiceAvatar
                                                 src={suggested.image}
-                                                alt={suggested.name}
-                                                className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
-                                                loading="lazy"
+                                                name={suggested.name}
+                                                score={suggested.bias.score}
+                                                size="md"
                                             />
                                         </div>
                                         <h3 className="font-bold text-sm leading-tight mb-1.5 truncate w-full">{suggested.name}</h3>

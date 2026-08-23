@@ -3,6 +3,7 @@ import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import { Link } from "react-router-dom";
 import { ArrowLeft, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { VoiceAvatar } from "@/components/VoiceAvatar";
 
 const VoicesPage = () => {
     return (
@@ -11,7 +12,7 @@ const VoicesPage = () => {
 
             <main className="container mx-auto px-4 py-8">
                 <div className="flex items-center gap-4 mb-8">
-                    <Link to="/">
+                    <Link to="/tribuni">
                         <Button variant="ghost" size="icon">
                             <ArrowLeft className="w-5 h-5" />
                         </Button>
@@ -35,16 +36,13 @@ const VoicesPage = () => {
                             className="group flex flex-col h-full items-center text-center py-6 px-2 hover:opacity-80 transition-all duration-300"
                         >
                             <div className="relative mb-4 group-hover:scale-105 transition-transform duration-300">
-                                <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden transition-all shadow-sm p-[3px] border border-border/40 group-hover:border-primary/20">
-                                    <div className="w-full h-full rounded-full overflow-hidden bg-muted/20">
-                                        <img
-                                            src={figure.image}
-                                            alt={figure.name}
-                                            className="w-full h-full object-cover grayscale transition-all duration-500 group-hover:grayscale-0"
-                                            loading="lazy"
-                                        />
-                                    </div>
-                                </div>
+                                <VoiceAvatar
+                                    src={figure.image}
+                                    name={figure.name}
+                                    score={figure.bias.score}
+                                    size="lg"
+                                />
+                            </div>
 
                                 <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background shadow-sm
                                     ${figure.bias.leaning.includes('left') ? 'bg-blue-500' :

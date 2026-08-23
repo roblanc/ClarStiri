@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
+import { VoiceAvatar } from "@/components/VoiceAvatar";
 import {
   MainFeedSkeleton,
 } from "@/components/Skeleton";
@@ -467,13 +468,13 @@ const Index = () => {
                 <Link
                   key={figure.id}
                   to={`/voce/${figure.slug}`}
-                  className="flex items-center gap-3 border border-border p-3 hover:bg-muted/40 transition-colors"
+                  className="flex items-center gap-3 rounded-xl border border-border/80 bg-card p-3 hover:border-foreground/40 transition-colors"
                 >
-                  <img
+                  <VoiceAvatar
                     src={figure.image}
-                    alt={figure.name}
-                    className="w-12 h-12 rounded-full object-cover border border-border/50"
-                    loading="lazy"
+                    name={figure.name}
+                    score={figure.bias.score}
+                    size="sm"
                   />
                   <div className="min-w-0">
                     <p className="font-semibold text-foreground truncate">{figure.name}</p>

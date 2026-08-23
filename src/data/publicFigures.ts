@@ -876,7 +876,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'ctp',
         name: 'C.T. Popescu',
         role: 'Gazetar / Scriitor',
-        image: 'https://hotnews.ro/wp-content/uploads/2025/09/ctp.webp',
+        image: '/images/voices/ctp.jpg',
         bias: {
             leaning: 'center-left',
             score: -40,
@@ -931,7 +931,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'catalin-tolontan',
         name: 'Cătălin Tolontan',
         role: 'Jurnalist Investigativ',
-        image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSvPgqSu73YZLHg73P4LDTySMg5cSu2zUr_A&s',
+        image: '/images/voices/catalin-tolontan.png',
         bias: {
             leaning: 'center',
             score: 5,
@@ -1004,7 +1004,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'rares-bogdan',
         name: 'Rareș Bogdan',
         role: 'Politician / Europarlamentar',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/1718281681350_20240612_BOGDAN_Rares_Ioan_RO_006.jpg',
+        image: '/images/voices/rares-bogdan.png',
         bias: {
             leaning: 'center-right',
             score: 45,
@@ -1039,7 +1039,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'lucian-mandruta',
         name: 'Lucian Mândruță',
         role: 'Jurnalist / Formator de Opinie',
-        image: 'http://larics.ro/wp-content/uploads/2017/05/Lucian-Mandruta-1.png',
+        image: '/images/voices/lucian-mandruta.png',
         bias: {
             leaning: 'center-left',
             score: -25,
@@ -1073,7 +1073,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'moise-guran',
         name: 'Moise Guran',
         role: 'Analist Economic',
-        image: 'https://www.romaniacurata.ro/wp-content/uploads/2014/05/moise-guran.jpg',
+        image: '/images/voices/moise-guran.png',
         bias: {
             leaning: 'center-right',
             score: 20,
