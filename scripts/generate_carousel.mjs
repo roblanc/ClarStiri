@@ -347,7 +347,7 @@ export function buildHtmlSlides(story) {
       ${commonStyle}
       body {
         background-color: #fafafc;
-        background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+        background-image: radial-gradient(rgba(0, 0, 0, 0.11) 1.5px, transparent 1.5px);
         background-size: 24px 24px;
         color: #0f172a;
       }
@@ -357,7 +357,7 @@ export function buildHtmlSlides(story) {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 60px 56px;
+        padding: 64px 64px 56px 64px;
       }
       
       /* Top Header */
@@ -374,20 +374,20 @@ export function buildHtmlSlides(story) {
         gap: 14px;
       }
       .brand-logo-img {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         object-fit: contain;
       }
       .brand-name {
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-size: 38px;
+        font-size: 44px;
         font-weight: 800;
         color: #000000;
         letter-spacing: -0.02em;
       }
       .header-right-meta {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 800;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -403,34 +403,32 @@ export function buildHtmlSlides(story) {
 
       /* Title Block */
       .title-block {
-        margin-top: 28px;
-        margin-bottom: 24px;
+        margin-top: 24px;
+        margin-bottom: 18px;
       }
-      .kicker-pill {
-        display: inline-flex;
+      .kicker-row {
+        display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 13px;
+        gap: 10px;
+        font-size: 14px;
         font-weight: 900;
-        letter-spacing: 0.16em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
         color: #2563eb;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
       }
-      .kicker-pill::before {
-        content: '';
-        display: inline-block;
-        width: 8px;
-        height: 8px;
+      .kicker-dot {
+        width: 9px;
+        height: 9px;
         background: #2563eb;
         border-radius: 50%;
       }
       .main-heading {
         font-family: 'Playfair Display', serif;
-        font-size: 54px;
+        font-size: 68px;
         font-weight: 800;
-        line-height: 1.12;
-        letter-spacing: -0.02em;
+        line-height: 1.08;
+        letter-spacing: -0.03em;
         color: #000000;
       }
       .main-heading .blue-italic {
@@ -446,42 +444,34 @@ export function buildHtmlSlides(story) {
         gap: 20px;
         flex: 1;
         justify-content: center;
+        margin: 12px 0;
       }
 
       .perspective-card {
         background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: 24px;
-        padding: 26px 32px;
+        padding: 28px 34px;
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        gap: 16px;
-        box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
+        gap: 18px;
+        box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.03);
       }
       
-      /* Subtle concentric arcs watermark in bottom right corner */
-      .perspective-card::after {
-        content: '';
+      .card-bg-rings {
         position: absolute;
-        right: -30px;
-        bottom: -30px;
-        width: 220px;
-        height: 220px;
-        border-radius: 50%;
+        right: 0;
+        bottom: 0;
+        width: 280px;
+        height: 280px;
         pointer-events: none;
-        opacity: 0.85;
+        z-index: 1;
       }
-      .card-left::after {
-        background: radial-gradient(circle, transparent 35%, rgba(37,99,235,0.06) 36%, transparent 48%, rgba(37,99,235,0.08) 49%, transparent 60%, rgba(37,99,235,0.12) 61%, rgba(37,99,235,0.04) 100%);
-      }
-      .card-center::after {
-        background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.04) 36%, transparent 48%, rgba(0,0,0,0.06) 49%, transparent 60%, rgba(0,0,0,0.08) 61%, rgba(0,0,0,0.03) 100%);
-      }
-      .card-right::after {
-        background: radial-gradient(circle, transparent 35%, rgba(225,29,72,0.06) 36%, transparent 48%, rgba(225,29,72,0.08) 49%, transparent 60%, rgba(225,29,72,0.12) 61%, rgba(225,29,72,0.04) 100%);
-      }
+      .card-left .card-bg-rings { color: #2563eb; }
+      .card-center .card-bg-rings { color: #64748b; }
+      .card-right .card-bg-rings { color: #e11d48; }
 
       .card-header-row {
         display: flex;
@@ -512,17 +502,17 @@ export function buildHtmlSlides(story) {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: 900;
       }
-      .av-left { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-      .av-center { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
-      .av-right { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+      .av-left { background: #0c4a6e; color: #7dd3fc; }
+      .av-center { background: #e11d48; color: #ffffff; }
+      .av-right { background: #000000; color: #facc15; }
 
       .outlet-title {
-        font-size: 21px;
-        font-weight: 800;
-        color: #0f172a;
+        font-size: 22px;
+        font-weight: 700;
+        color: #000000;
         letter-spacing: -0.01em;
       }
 
@@ -551,13 +541,13 @@ export function buildHtmlSlides(story) {
 
       .quote-container {
         display: flex;
-        gap: 16px;
+        gap: 18px;
         align-items: stretch;
         position: relative;
         z-index: 2;
       }
       .quote-bar {
-        width: 4px;
+        width: 5px;
         border-radius: 4px;
         flex-shrink: 0;
       }
@@ -566,11 +556,11 @@ export function buildHtmlSlides(story) {
       .bar-right { background: #e11d48; }
 
       .quote-text-content {
-        font-size: 24px;
+        font-size: 26px;
         font-weight: 800;
-        line-height: 1.36;
+        line-height: 1.34;
         color: #0f172a;
-        letter-spacing: -0.01em;
+        letter-spacing: -0.015em;
       }
 
       /* Footer */
@@ -615,7 +605,10 @@ export function buildHtmlSlides(story) {
 
       <!-- Title Block -->
       <div class="title-block">
-        <div class="kicker-pill">COMPARAȚIE TITLURI</div>
+        <div class="kicker-row">
+          <span class="kicker-dot"></span>
+          <span>COMPARAȚIE TITLURI</span>
+        </div>
         <h1 class="main-heading">
           Același eveniment,
           <span class="blue-italic">3 unghiuri diferite</span>
@@ -626,6 +619,11 @@ export function buildHtmlSlides(story) {
       <div class="cards-stack">
         <!-- Stânga -->
         <div class="perspective-card card-left">
+          <svg class="card-bg-rings" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="280" cy="280" r="260" fill="currentColor" fill-opacity="0.05" />
+            <circle cx="280" cy="280" r="190" fill="currentColor" fill-opacity="0.08" />
+            <circle cx="280" cy="280" r="120" fill="currentColor" fill-opacity="0.12" />
+          </svg>
           <div class="card-header-row">
             <div class="outlet-meta">
               ${leftLogo ? `<img class="outlet-logo-box" src="${leftLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-left">${leftInitials}</div>`}
@@ -645,6 +643,11 @@ export function buildHtmlSlides(story) {
 
         <!-- Centru -->
         <div class="perspective-card card-center">
+          <svg class="card-bg-rings" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="280" cy="280" r="260" fill="currentColor" fill-opacity="0.03" />
+            <circle cx="280" cy="280" r="190" fill="currentColor" fill-opacity="0.05" />
+            <circle cx="280" cy="280" r="120" fill="currentColor" fill-opacity="0.08" />
+          </svg>
           <div class="card-header-row">
             <div class="outlet-meta">
               ${centerLogo ? `<img class="outlet-logo-box" src="${centerLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-center">${centerInitials}</div>`}
@@ -664,6 +667,11 @@ export function buildHtmlSlides(story) {
 
         <!-- Dreapta -->
         <div class="perspective-card card-right">
+          <svg class="card-bg-rings" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="280" cy="280" r="260" fill="currentColor" fill-opacity="0.05" />
+            <circle cx="280" cy="280" r="190" fill="currentColor" fill-opacity="0.08" />
+            <circle cx="280" cy="280" r="120" fill="currentColor" fill-opacity="0.12" />
+          </svg>
           <div class="card-header-row">
             <div class="outlet-meta">
               ${rightLogo ? `<img class="outlet-logo-box" src="${rightLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-right">${rightInitials}</div>`}
@@ -702,7 +710,7 @@ export function buildHtmlSlides(story) {
       ${commonStyle}
       body {
         background-color: #fafafc;
-        background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
+        background-image: radial-gradient(rgba(0, 0, 0, 0.11) 1.5px, transparent 1.5px);
         background-size: 24px 24px;
         color: #0f172a;
       }
@@ -712,7 +720,7 @@ export function buildHtmlSlides(story) {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 60px 56px;
+        padding: 64px 64px 56px 64px;
         text-align: center;
       }
       .top-header {
@@ -728,19 +736,20 @@ export function buildHtmlSlides(story) {
         gap: 14px;
       }
       .brand-logo-img {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
         object-fit: contain;
       }
       .brand-title {
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-size: 38px;
+        font-size: 44px;
         font-weight: 800;
         color: #000000;
+        letter-spacing: -0.02em;
       }
       .tagline-minimal {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 800;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -759,7 +768,7 @@ export function buildHtmlSlides(story) {
         display: flex;
         flex-direction: column;
         align-items: center;
-        max-width: 860px;
+        max-width: 880px;
         margin-left: auto;
         margin-right: auto;
       }
@@ -784,9 +793,9 @@ export function buildHtmlSlides(story) {
       }
       .cta-heading {
         font-family: 'Playfair Display', serif;
-        font-size: 64px;
+        font-size: 68px;
         font-weight: 800;
-        line-height: 1.1;
+        line-height: 1.08;
         letter-spacing: -0.03em;
         margin-bottom: 24px;
         color: #000000;
@@ -796,7 +805,7 @@ export function buildHtmlSlides(story) {
         font-style: italic;
       }
       .cta-description {
-        font-size: 25px;
+        font-size: 26px;
         color: #475569;
         line-height: 1.55;
         margin-bottom: 44px;
@@ -824,9 +833,9 @@ export function buildHtmlSlides(story) {
       .action-button {
         background: #000000;
         color: #ffffff;
-        font-size: 23px;
+        font-size: 24px;
         font-weight: 900;
-        padding: 22px 56px;
+        padding: 24px 58px;
         border-radius: 16px;
         display: inline-flex;
         align-items: center;
