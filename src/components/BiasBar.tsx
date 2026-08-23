@@ -48,7 +48,11 @@ export function BiasBar({
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="w-full cursor-help">
+          <div
+            className="w-full cursor-help"
+            role="region"
+            aria-label={BIAS_TOOLTIP(left, center, right)}
+          >
             <div className={`flex ${heights[size]} rounded overflow-hidden ${textSizes[size]} font-medium`}>
               {left > 0 && (
                 <div
@@ -100,7 +104,11 @@ export function BiasBar({
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="w-full cursor-help">
+        <div
+          className="w-full cursor-help"
+          role="region"
+          aria-label={BIAS_TOOLTIP(left, center, right)}
+        >
           <div className={`bias-bar ${heights[size]}`}>
             {left > 0 && (
               <div

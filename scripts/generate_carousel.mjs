@@ -141,6 +141,10 @@ export function buildHtmlSlides(story) {
   const rightLogo = getOutletLogo(sampleRight, 'https://antena3.ro');
   const rightFavicon = getFaviconUrl(sampleRight.source?.url || sampleRight.url);
 
+  const titleLength = (story.title || '').length;
+  const slide1FontSize = titleLength > 150 ? '34px' : titleLength > 110 ? '38px' : titleLength > 75 ? '42px' : '46px';
+  const slide1LineHeight = titleLength > 150 ? '1.2' : '1.25';
+
   const commonStyle = `
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,700&family=Playfair+Display:ital,wght@1,600;1,700;1,800&display=swap');
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -239,9 +243,9 @@ export function buildHtmlSlides(story) {
         gap: 14px;
       }
       .story-title {
-        font-size: 46px;
+        font-size: ${slide1FontSize};
         font-weight: 900;
-        line-height: 1.25;
+        line-height: ${slide1LineHeight};
         color: #ffffff;
         letter-spacing: -0.02em;
         text-shadow: 0 4px 16px rgba(0,0,0,0.6);

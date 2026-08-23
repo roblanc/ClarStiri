@@ -20,8 +20,14 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
     minWidth: '2.6rem',
   });
 
+  const ariaText = `Distribuție acoperire media: ${pLeft}% Stânga, ${pCenter}% Centru, ${pRight}% Dreapta din ${sourcesCount} surse`;
+
   return (
-    <div className={cn("flex h-8 sm:h-9 w-full shadow-sm border border-border/20", className)}>
+    <div
+      role="region"
+      aria-label={ariaText}
+      className={cn("flex h-8 sm:h-9 w-full shadow-sm border border-border/20", className)}
+    >
 
       {pLeft > 0 && (
         <div

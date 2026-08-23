@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { z } from 'zod';
 import {
     BIAS_WEIGHT_MAP as SHARED_BIAS_WEIGHT_MAP,
     NEWS_SOURCES_BASE,
@@ -6,29 +7,41 @@ import {
 } from '../shared/newsSources.js';
 import { decodeHtmlEntities } from '../shared/htmlEntities.js';
 
-// Tipuri
+// Tipuri & Scheme Zod
 export type NewsSource = BaseNewsSource;
 
-export interface BiasAnalysis {
-    detectedEntities: Array<{ entity: string; count: number }>;
-    keywordScore: number;
-    entityScore: number;
-    overallBias: number;
-    confidence: number;
-    indicators: string[];
-}
+export const BiasAnalysisSchema = z.object({
+    detectedEntities: z.array(z.object({
+        entity: z.string(),
+        count: z.number(),
+    })).default([]),
+    keywordScore: z.number().default(0),
+    entityScore: z.number().default(0),
+    overallBias: z.number().default(0),
+    confidence: z.number().min(0).max(1).default(0),
+    indicators: z.array(z.string()).default([]),
+});
 
-export interface RSSNewsItem {
-    id: string;
-    title: string;
-    description: string;
-    link: string;
-    pubDate: string;
-    imageUrl?: string;
-    source: NewsSource;
-    category?: string;
-    author?: string;
-    biasAnalysis?: BiasAnalysis;
+export type BiasAnalysis = z.infer<typeof BiasAnalysisSchema>;
+
+export const RSSNewsItemSchema = z.object({
+    id: z.string(),
+    title: z.string().min(1),
+    description: z.string().default(''),
+    link: z.string().url().or(z.string().min(1)),
+    pubDate: z.string().default(() => new Date().toUTCString()),
+    imageUrl: z.string().optional(),
+    source: z.custom<NewsSource>(),
+    category: z.string().optional(),
+    author: z.string().optional(),
+    biasAnalysis: BiasAnalysisSchema.optional(),
+});
+
+export type RSSNewsItem = z.infer<typeof RSSNewsItemSchema>;
+
+export function safeValidateRSSItem(data: unknown): RSSNewsItem | null {
+    const result = RSSNewsItemSchema.safeParse(data);
+    return result.success ? result.data : null;
 }
 
 export const NEWS_SOURCES: NewsSource[] = NEWS_SOURCES_BASE.map((source) => ({ ...source }));
@@ -275,18 +288,23 @@ export function parseRSSXML(xmlString: string, source: NewsSource): RSSNewsItem[
         if (title && link) {
             const biasAnalysis = quickBiasAnalysis(title, description);
 
-            items.push({
+            const rawItem = {
                 id: `${source.id}-${hashUrl(link)}`,
                 title,
                 description,
                 link,
                 pubDate,
-                imageUrl,
+                imageUrl: imageUrl || undefined,
                 source,
                 category,
                 biasAnalysis: biasAnalysis.confidence > 0.1 ? biasAnalysis : undefined,
-            });
-            index++;
+            };
+
+            const validated = safeValidateRSSItem(rawItem);
+            if (validated) {
+                items.push(validated);
+                index++;
+            }
         }
     }
 

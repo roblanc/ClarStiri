@@ -32,3 +32,11 @@ social_export/
 # Environment
 .env
 .env*.local
+
+# Skills & Local Tools
+.agents/
+.claude/skills/
+skills-lock.json
+scripts/debug_*.mjs
+scripts/probe_ig.mjs
+scripts/login_with_code.mjs

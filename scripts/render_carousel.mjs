@@ -56,30 +56,6 @@ function recordPostedStory(story) {
   }
 }
 
-// Helper to send generated post & caption directly to Telegram
-async function sendToTelegram(images, caption) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!token || !chatId) return;
-
-  console.log('📱 Sending post notification to Telegram...');
-  // Send primary cover photo
-  try {
-    const formData = new FormData();
-    formData.append('chat_id', chatId);
-    formData.append('caption', caption);
-    formData.append('photo', new Blob([fs.readFileSync(images[0])]), 'cover.png');
-
-    await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-      method: 'POST',
-      body: formData,
-    });
-    console.log('✓ Post sent to Telegram successfully!');
-  } catch (err) {
-    console.error('Failed to send Telegram notification:', err.message);
-  }
-}
-
 async function run() {
   console.log('🚀 Fetching top news stories from thesite.ro...');
   const stories = await fetchTopStories();
@@ -179,10 +155,6 @@ async function run() {
   console.log('\n--- CAPTION GENERAT ---');
   console.log(caption);
   console.log('------------------------\n');
-  console.log(`🎉 Toate fișierele sunt salvate în: ${outDir}`);
-
-  // Send to Telegram if configured
-  await sendToTelegram(generatedImages, caption);
 }
 
 run().catch(console.error);

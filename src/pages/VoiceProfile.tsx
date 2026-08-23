@@ -63,13 +63,50 @@ const VoiceProfile = () => {
 
     const defaultTab = displayStatements.length > 0 ? "declaratii" : hasContext ? "context" : "profil";
 
+    const personSchema = {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "headline": `${figure.name} — Profil & Analiză Poziționare Editorială`,
+        "description": `Analiza poziționării politice și a declarațiilor lui ${figure.name} — ${biasLabel}, scor ${Math.abs(score)}/100.`,
+        "mainEntity": {
+            "@type": "Person",
+            "name": figure.name,
+            "jobTitle": figure.role,
+            "description": figure.bias.description,
+            "image": figure.image?.startsWith('http') ? figure.image : `https://www.thesite.ro${figure.image}`,
+            "url": `https://www.thesite.ro/voci/${figure.slug}`,
+            "sameAs": figure.socialMedia ? Object.values(figure.socialMedia).filter(Boolean) : [],
+        }
+    };
+
+    const ogImageUrl = figure.image?.startsWith('http') ? figure.image : `https://www.thesite.ro${figure.image}`;
+    const pageUrl = `https://www.thesite.ro/voci/${figure.slug}`;
+
     return (
         <div className="min-h-screen bg-background">
             <Helmet>
                 <title>{figure.name} | Profil & Bias | thesite.ro</title>
-                <meta name="description" content={`Analiza poziționării politice și a declarațiilor lui ${figure.name} — ${biasLabel}, scor ${Math.abs(score)}.`} />
+                <meta name="description" content={`Analiza poziționării politice și a declarațiilor lui ${figure.name} — ${biasLabel}, scor ${Math.abs(score)}/100.`} />
+                <link rel="canonical" href={pageUrl} />
+
+                {/* Open Graph */}
+                <meta property="og:type" content="profile" />
                 <meta property="og:title" content={`${figure.name} | thesite.ro`} />
                 <meta property="og:description" content={figure.bias.description} />
+                <meta property="og:image" content={ogImageUrl} />
+                <meta property="og:url" content={pageUrl} />
+                <meta property="og:site_name" content="thesite.ro" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={`${figure.name} | thesite.ro`} />
+                <meta name="twitter:description" content={figure.bias.description} />
+                <meta name="twitter:image" content={ogImageUrl} />
+
+                {/* JSON-LD Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify(personSchema)}
+                </script>
             </Helmet>
 
             <Header />
