@@ -240,7 +240,23 @@ export function buildHtmlSlides(story) {
   </html>
   `;
 
-  // SLIDE 2: Head-to-Head Headlines
+  const leftName = sampleLeft.source?.name || sampleLeft.name || 'Presa de Stânga';
+  const centerName = sampleCenter.source?.name || sampleCenter.name || 'Presa de Centru';
+  const rightName = sampleRight.source?.name || sampleRight.name || 'Presa de Dreapta';
+
+  const getInitials = (name) => {
+    if (!name) return 'NEWS';
+    const clean = name.replace(/^(Presa de|Ziarul|Cotidianul)\s+/i, '').trim();
+    const parts = clean.split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const leftInitials = getInitials(leftName);
+  const centerInitials = getInitials(centerName);
+  const rightInitials = getInitials(rightName);
+
+  // SLIDE 2: Modern Editorial Light (White background with dotted grid)
   const slide2 = `
   <!DOCTYPE html>
   <html>
@@ -248,180 +264,274 @@ export function buildHtmlSlides(story) {
     <meta charset="utf-8">
     <style>
       ${commonStyle}
-      .slide-container {
-        position: relative;
-        z-index: 2;
+      body {
+        background-color: #fafafc;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        color: #0f172a;
+      }
+      .slide-wrapper {
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 56px;
-        background: #090a0f;
+        padding: 60px 56px;
       }
-      .top-nav {
+      .header-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding-bottom: 24px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.06);
       }
-      .section-heading {
-        margin-top: 20px;
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .brand-name {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 34px;
+        font-weight: 800;
+        color: #000000;
+        letter-spacing: -0.02em;
+      }
+      .brand-badge {
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        background: #000000;
+        padding: 6px 14px;
+        border-radius: 6px;
+        color: #ffffff;
+      }
+      .slide-step {
+        font-size: 14px;
+        font-weight: 800;
+        color: #64748b;
+        letter-spacing: 0.05em;
+      }
+      
+      .title-block {
+        margin-top: 24px;
         margin-bottom: 20px;
       }
-      .section-subtitle {
+      .category-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
         font-size: 13px;
         font-weight: 900;
+        letter-spacing: 0.15em;
         text-transform: uppercase;
-        letter-spacing: 0.2em;
-        color: #f59e0b;
-        margin-bottom: 8px;
+        color: #2563eb;
+        margin-bottom: 10px;
       }
-      .section-title {
-        font-size: 36px;
+      .category-kicker::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #2563eb;
+        border-radius: 50%;
+      }
+      .main-heading {
+        font-size: 42px;
         font-weight: 900;
-        line-height: 1.2;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        color: #0f172a;
       }
-      .cards-stack {
+
+      .cards-container {
         display: flex;
         flex-direction: column;
         gap: 20px;
         flex: 1;
         justify-content: center;
       }
-      .headline-card {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 26px;
-        padding: 26px 32px;
+
+      .perspective-card {
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 18px;
+        padding: 28px 32px;
         position: relative;
+        overflow: hidden;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        gap: 14px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03);
       }
-      .card-left { border-left: 6px solid #38bdf8; }
-      .card-center { border-left: 6px solid #f8fafc; }
-      .card-right { border-left: 6px solid #f43f5e; }
-      
-      .card-meta {
+      .perspective-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 7px;
+      }
+      .card-left::before { background: #2563eb; }
+      .card-center::before { background: #0f172a; }
+      .card-right::before { background: #e11d48; }
+
+      .card-top {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        margin-bottom: 14px;
+        align-items: center;
       }
-      .outlet-info {
+      .outlet-wrap {
         display: flex;
         align-items: center;
         gap: 12px;
       }
       .favicon-img {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
         object-fit: cover;
         background: #fff;
         padding: 2px;
       }
-      .outlet-badge {
-        font-size: 12px;
-        font-weight: 900;
-        padding: 5px 14px;
+      .outlet-avatar {
+        width: 32px;
+        height: 32px;
         border-radius: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 900;
       }
-      .badge-left { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; border: 1px solid rgba(56, 189, 248, 0.4); }
-      .badge-center { background: rgba(255, 255, 255, 0.2); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.3); }
-      .badge-right { background: rgba(244, 63, 94, 0.2); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.4); }
+      .av-left { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+      .av-center { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
+      .av-right { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
 
       .outlet-name {
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 800;
-        color: #ffffff;
+        color: #0f172a;
+        letter-spacing: -0.01em;
       }
-      .headline-quote {
-        font-size: 21px;
+
+      .bias-tag {
+        font-size: 11px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 6px 14px;
+        border-radius: 6px;
+      }
+      .tag-left { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+      .tag-center { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; }
+      .tag-right { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+
+      .quote-text {
+        font-size: 23px;
         font-weight: 800;
         line-height: 1.35;
-        color: #ffffff;
+        color: #1e293b;
+        letter-spacing: -0.01em;
       }
-      .bottom-bar {
+
+      .footer-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 100px;
-        padding: 16px 32px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 14px;
+        padding: 18px 28px;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+      }
+      .footer-hint {
         font-size: 14px;
-        font-weight: 700;
-        backdrop-filter: blur(20px);
+        font-weight: 600;
+        color: #64748b;
+      }
+      .footer-action {
+        font-size: 14px;
+        font-weight: 900;
+        color: #000000;
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
     </style>
   </head>
   <body>
-    <div class="slide-container">
-      <div class="top-nav">
-        <div style="display: flex; gap: 12px;">
-          <span style="background: #3b82f6; color:#fff; font-weight:900; font-size:13px; padding:8px 18px; border-radius:100px;">COMPARAȚIE TITLURI</span>
+    <div class="slide-wrapper">
+      <div class="header-row">
+        <div class="brand-mark">
+          <span class="brand-name">thesite.ro</span>
+          <span class="brand-badge">Perspectivă 360°</span>
         </div>
-        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:22px; font-weight:800; color:#f0eee6;">thesite.ro</div>
+        <span class="slide-step">02 / 03</span>
       </div>
 
-      <div class="section-heading">
-        <div class="section-subtitle">Perspective media</div>
-        <h2 class="section-title">Același eveniment, unghiuri diferite</h2>
+      <div class="title-block">
+        <div class="category-kicker">Comparație Titluri</div>
+        <h1 class="main-heading">Același eveniment, 3 unghiuri diferite</h1>
       </div>
 
-      <div class="cards-stack">
-        <!-- Card 1: Stânga -->
-        <div class="headline-card card-left">
-          <div class="card-meta">
-            <div class="outlet-info">
-              ${leftFavicon ? `<img class="favicon-img" src="${leftFavicon}" alt="favicon" />` : ''}
-              <span class="outlet-name">${sampleLeft.source?.name || 'Sursă Stânga'}</span>
+      <div class="cards-container">
+        <!-- Stânga -->
+        <div class="perspective-card card-left">
+          <div class="card-top">
+            <div class="outlet-wrap">
+              ${leftFavicon ? `<img class="favicon-img" src="${leftFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-left">${leftInitials}</div>`}
+              <span class="outlet-name">${leftName}</span>
             </div>
-            <span class="outlet-badge badge-left">Stânga</span>
+            <span class="bias-tag tag-left">Stânga</span>
           </div>
-          <div class="headline-quote">„${sampleLeft.title}”</div>
+          <div class="quote-text">
+            „${sampleLeft.title}”
+          </div>
         </div>
 
-        <!-- Card 2: Centru -->
-        <div class="headline-card card-center">
-          <div class="card-meta">
-            <div class="outlet-info">
-              ${centerFavicon ? `<img class="favicon-img" src="${centerFavicon}" alt="favicon" />` : ''}
-              <span class="outlet-name">${sampleCenter.source?.name || 'Sursă Centru'}</span>
+        <!-- Centru -->
+        <div class="perspective-card card-center">
+          <div class="card-top">
+            <div class="outlet-wrap">
+              ${centerFavicon ? `<img class="favicon-img" src="${centerFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-center">${centerInitials}</div>`}
+              <span class="outlet-name">${centerName}</span>
             </div>
-            <span class="outlet-badge badge-center">Centru</span>
+            <span class="bias-tag tag-center">Centru</span>
           </div>
-          <div class="headline-quote">„${sampleCenter.title}”</div>
+          <div class="quote-text">
+            „${sampleCenter.title}”
+          </div>
         </div>
 
-        <!-- Card 3: Dreapta -->
-        <div class="headline-card card-right">
-          <div class="card-meta">
-            <div class="outlet-info">
-              ${rightFavicon ? `<img class="favicon-img" src="${rightFavicon}" alt="favicon" />` : ''}
-              <span class="outlet-name">${sampleRight.source?.name || 'Sursă Dreapta'}</span>
+        <!-- Dreapta -->
+        <div class="perspective-card card-right">
+          <div class="card-top">
+            <div class="outlet-wrap">
+              ${rightFavicon ? `<img class="favicon-img" src="${rightFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-right">${rightInitials}</div>`}
+              <span class="outlet-name">${rightName}</span>
             </div>
-            <span class="outlet-badge badge-right">Dreapta</span>
+            <span class="bias-tag tag-right">Dreapta</span>
           </div>
-          <div class="headline-quote">„${sampleRight.title}”</div>
+          <div class="quote-text">
+            „${sampleRight.title}”
+          </div>
         </div>
       </div>
 
-      <div class="bottom-bar">
-        <span style="color: rgba(255,255,255,0.7);">Vezi cum limbajul schimbă nuanța</span>
-        <span style="color: #fbbf24; font-weight:900;">Glisează pentru sinteză ➔</span>
+      <div class="footer-bar">
+        <span class="footer-hint">Vezi cum limbajul schimbă nuanța</span>
+        <span class="footer-action">Glisează pentru sinteză ➔</span>
       </div>
     </div>
   </body>
   </html>
   `;
 
-  // SLIDE 3: Call to Action & Conclusion
+  // SLIDE 3: White Dotted Authority CTA & Outro
   const slide3 = `
   <!DOCTYPE html>
   <html>
@@ -429,105 +539,157 @@ export function buildHtmlSlides(story) {
     <meta charset="utf-8">
     <style>
       ${commonStyle}
-      .slide-container {
-        position: relative;
-        z-index: 2;
+      body {
+        background-color: #fafafc;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1.5px, transparent 1.5px);
+        background-size: 24px 24px;
+        color: #0f172a;
+      }
+      .slide-wrapper {
         width: 100%;
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 56px;
-        background: #090a0f;
+        padding: 64px 56px;
+        text-align: center;
       }
-      .top-nav {
+      .top-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+        padding-bottom: 24px;
       }
-      .cta-center {
+      .brand-title {
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 34px;
+        font-weight: 800;
+        color: #000000;
+      }
+      .tagline-badge {
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #000000;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 6px 14px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      }
+
+      .main-cta-box {
+        margin: auto 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        margin: auto 0;
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.14);
-        border-radius: 36px;
-        padding: 52px 44px;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 24px;
+        padding: 56px 44px;
+        box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
       }
-      .app-badge {
+      .pill-kicker {
         background: #10b981;
-        color: #000;
+        color: #ffffff;
+        font-size: 12px;
         font-weight: 900;
-        font-size: 13px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
         padding: 8px 22px;
         border-radius: 100px;
         margin-bottom: 24px;
-        letter-spacing: 0.1em;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
       }
-      .cta-title {
-        font-size: 46px;
+      .cta-heading {
+        font-size: 50px;
         font-weight: 900;
-        line-height: 1.15;
+        line-height: 1.1;
         letter-spacing: -0.03em;
         margin-bottom: 20px;
+        color: #0f172a;
       }
-      .cta-desc {
-        font-size: 20px;
-        color: rgba(255,255,255,0.8);
+      .cta-description {
+        font-size: 21px;
+        color: #475569;
         line-height: 1.5;
-        max-width: 780px;
-        margin-bottom: 36px;
+        max-width: 760px;
+        margin-bottom: 40px;
         font-weight: 500;
       }
-      .cta-button {
-        background: #f2efe6;
-        color: #000;
-        font-size: 22px;
+      .cta-description strong {
+        color: #0f172a;
+        font-weight: 800;
+      }
+
+      .spectrum-preview {
+        width: 100%;
+        max-width: 600px;
+        display: flex;
+        height: 52px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 36px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+      .spec-left { background: #2563eb; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
+      .spec-center { background: #0f172a; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
+      .spec-right { background: #e11d48; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
+
+      .action-button {
+        background: #000000;
+        color: #ffffff;
+        font-size: 20px;
         font-weight: 900;
         padding: 20px 48px;
-        border-radius: 100px;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+        border-radius: 14px;
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        border: 2px solid #ffffff;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       }
-      .footer-brand {
+
+      .bottom-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-top: 2px solid rgba(0, 0, 0, 0.06);
         padding-top: 24px;
-        border-top: 1px solid rgba(255,255,255,0.12);
-        color: rgba(255,255,255,0.6);
+        color: #64748b;
         font-size: 14px;
         font-weight: 700;
       }
     </style>
   </head>
   <body>
-    <div class="slide-container">
-      <div class="top-nav">
-        <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:28px; font-weight:800; color:#f0eee6;">thesite.ro</div>
-        <span style="background: rgba(255,255,255,0.12); padding:8px 18px; border-radius:100px; font-size:13px; font-weight:800;">Harta presei românești</span>
+    <div class="slide-wrapper">
+      <div class="top-header">
+        <span class="brand-title">thesite.ro</span>
+        <span class="tagline-badge">Harta presei românești</span>
       </div>
 
-      <div class="cta-center">
-        <div class="app-badge">DECIDE TU CE SĂ CREZI</div>
-        <h2 class="cta-title">Ieși din bula de știri.</h2>
-        <p class="cta-desc">
+      <div class="main-cta-box">
+        <div class="pill-kicker">DECIDE TU CE SĂ CREZI</div>
+        <h2 class="cta-heading">Ieși din bula de știri.</h2>
+        <p class="cta-description">
           Pe <strong>thesite.ro</strong> grupăm știrile pe subiecte, măsurăm distribuția politică și îți arătăm ce omit publicațiile pe care le citești zilnic.
         </p>
 
-        <div class="cta-button">
+        <div class="spectrum-preview">
+          <div class="spec-left">STÂNGA</div>
+          <div class="spec-center">CENTRU</div>
+          <div class="spec-right">DREAPTA</div>
+        </div>
+
+        <div class="action-button">
           <span>🔗 Link în bio: thesite.ro</span>
         </div>
       </div>
 
-      <div class="footer-brand">
+      <div class="bottom-footer">
         <span>© thesite.ro — Toate perspectivele la un loc</span>
         <span>Urmărește @thesite.ro</span>
       </div>
