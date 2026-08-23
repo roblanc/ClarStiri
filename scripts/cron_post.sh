@@ -23,6 +23,9 @@ fi
 
 export PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
 
+echo "=== Pulling latest changes from main ==="
+git pull origin main || echo "[cron] Git pull warning, continuing..."
+
 echo "=== Postare $(date '+%F %T') ==="
 if npm run generate:social && node scripts/auto_post_playwright.mjs; then
   echo "=== SUCCESS $(date '+%F %T') ==="

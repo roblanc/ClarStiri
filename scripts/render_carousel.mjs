@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 async function fetchTopStories() {
   return new Promise((resolve, reject) => {
-    https.get('https://www.thesite.ro/api/news?limit=10', (res) => {
+    https.get('https://www.thesite.ro/api/news?limit=30', (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
@@ -23,6 +23,37 @@ async function fetchTopStories() {
       });
     }).on('error', reject);
   });
+}
+
+const HISTORY_FILE = path.join(__dirname, '..', 'social_export', 'posted_stories.json');
+
+function getPostedHistory() {
+  try {
+    if (fs.existsSync(HISTORY_FILE)) {
+      return JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
+    }
+  } catch (e) {
+    console.warn('⚠️ Nu am putut citi posted_stories.json, pornim cu istoric gol.');
+  }
+  return [];
+}
+
+function recordPostedStory(story) {
+  try {
+    const history = getPostedHistory();
+    history.push({
+      id: story.id,
+      title: story.title,
+      postedAt: new Date().toISOString(),
+    });
+    // Păstrăm ultimele 300 de postări în istoric
+    const trimmed = history.slice(-300);
+    fs.mkdirSync(path.dirname(HISTORY_FILE), { recursive: true });
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(trimmed, null, 2), 'utf8');
+    console.log(`📝 Știrea a fost salvată în istoricul de postări: [${story.id}] ${story.title}`);
+  } catch (e) {
+    console.warn('⚠️ Eroare la salvarea în posted_stories.json:', e.message);
+  }
 }
 
 // Helper to send generated post & caption directly to Telegram
@@ -57,15 +88,41 @@ async function run() {
     return;
   }
 
-  // Selectam stirea despre Nea Mihai (sau stirea de top cu blindspot / surse multe)
-  const targetStory = stories.find(s => 
-    s.id === 'story-20260821-8jef4i' ||
-    (s.title + ' ' + (s.description || '')).toLowerCase().includes('nea mihai') ||
-    (s.title + ' ' + (s.description || '')).toLowerCase().includes('merdene')
-  );
-  const story = targetStory || stories.find(s => s.blindspot && s.blindspot !== 'none') || stories[0];
+  const history = getPostedHistory();
+  const postedIds = new Set(history.map(h => h.id));
+  const postedTitles = new Set(history.map(h => (h.title || '').trim().toLowerCase()));
+
+  // Filtrăm doar știrile nepostate încă
+  const unposted = stories.filter(s => {
+    if (postedIds.has(s.id)) return false;
+    const cleanTitle = (s.title || '').trim().toLowerCase();
+    if (postedTitles.has(cleanTitle)) return false;
+    return true;
+  });
+
+  console.log(`📊 Găsite ${stories.length} știri, dintre care ${unposted.length} nepostate.`);
+
+  // Căutăm cea mai bună știre nepostată:
+  // 1. Știri cu blindspot (punct orb) și cel puțin 2-3 surse
+  // 2. Știri cu cele mai multe surse și acoperire diversă
+  // 3. Dacă toate au fost postate, luăm cea mai recentă din feed
+  const candidatePool = unposted.length > 0 ? unposted : stories;
+
+  // Sortăm candidații după relevanță editorială pentru social media
+  candidatePool.sort((a, b) => {
+    const aBlindspot = (a.blindspot && a.blindspot !== 'none') ? 10 : 0;
+    const bBlindspot = (b.blindspot && b.blindspot !== 'none') ? 10 : 0;
+    const aSources = (a.sourcesCount || a.sources?.length || 0);
+    const bSources = (b.sourcesCount || b.sources?.length || 0);
+    return (bBlindspot + bSources) - (aBlindspot + aSources);
+  });
+
+  const story = candidatePool[0];
   console.log('📌 Selected Story:', story.title);
   console.log(`   Surse: ${story.sourcesCount || story.sources?.length} | Blindspot: ${story.blindspot || 'none'}`);
+
+  // Salvăm în istoric pentru a preveni postarea duplicată
+  recordPostedStory(story);
 
   const outDir = path.join(__dirname, '..', 'social_export', 'latest');
   fs.mkdirSync(outDir, { recursive: true });
