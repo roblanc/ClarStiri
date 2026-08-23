@@ -5,11 +5,91 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const BRAND_LOGO_B64 = (() => {
+  try {
+    const p = path.join(__dirname, '..', 'public', 'hero-illustration-headphones.webp');
+    if (fs.existsSync(p)) {
+      return `data:image/webp;base64,${fs.readFileSync(p).toString('base64')}`;
+    }
+  } catch (e) {}
+  return null;
+})();
+
+const LOGO_MAP = {
+  'g4media': 'g4media.png',
+  'hotnews': 'hotnews.png',
+  'antena 3': 'antena3.png',
+  'antena3': 'antena3.png',
+  'digi24': 'digi24.png',
+  'digi 24': 'digi24.png',
+  'libertatea': 'libertatea.png',
+  'adevarul': 'adevarul.png',
+  'adevărul': 'adevarul.png',
+  'protv': 'protv.png',
+  'pro tv': 'protv.png',
+  'stirileprotv': 'protv.png',
+  'romaniatv': 'romaniatv.png',
+  'românia tv': 'romaniatv.png',
+  'realitatea': 'realitatea.png',
+  'spotmedia': 'spotmedia.png',
+  'stiripesurse': 'stiripesurse.png',
+  'recorder': 'recorder.png',
+  'profit': 'profit.png',
+  'profit.ro': 'profit.png',
+  'zf': 'zf.png',
+  'ziarul financiar': 'zf.png',
+  'agerpres': 'agerpres.png',
+  'b1tv': 'b1tv.png',
+  'b1 tv': 'b1tv.png',
+  'biziday': 'biziday.png',
+  'bursa': 'bursa.png',
+  'capital': 'capital.png',
+  'cotidianul': 'cotidianul.png',
+  'dcnews': 'dcnews.png',
+  'europafm': 'europafm.png',
+  'europa fm': 'europafm.png',
+  'gandul': 'gandul.png',
+  'gândul': 'gandul.png',
+  'jurnalul': 'jurnalul.png',
+  'mediafax': 'mediafax.png',
+  'romanialibera': 'romanialibera.png',
+  'românia liberă': 'romanialibera.png',
+  'ziaruldeiasi': 'ziaruldeiasi.png',
+  'aktual24': 'aktual24.png',
+};
+
+function getOutletLogo(sourceObj, fallbackUrl) {
+  const name = (sourceObj?.source?.name || sourceObj?.name || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  const cleanKey = name.replace(/^(presa de|ziarul|cotidianul|site-ul|stiri)\s+/i, '').replace(/[^a-z0-9]/g, '');
+  
+  // Search in local logos
+  for (const [key, file] of Object.entries(LOGO_MAP)) {
+    const normKey = key.replace(/[^a-z0-9]/g, '');
+    if (cleanKey.includes(normKey) || normKey.includes(cleanKey)) {
+      const logoPath = path.join(__dirname, '..', 'public', 'logos', file);
+      if (fs.existsSync(logoPath)) {
+        const b64 = fs.readFileSync(logoPath).toString('base64');
+        return `data:image/png;base64,${b64}`;
+      }
+    }
+  }
+
+  // Fallback to Google S2 favicons
+  const url = sourceObj?.source?.url || sourceObj?.url || fallbackUrl;
+  if (url) {
+    try {
+      const hostname = new URL(url).hostname;
+      return `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`;
+    } catch {}
+  }
+  return null;
+}
+
 function getFaviconUrl(url) {
   try {
     if (!url) return null;
     const hostname = new URL(url).hostname;
-    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=128`;
   } catch {
     return null;
   }
@@ -56,8 +136,9 @@ export function buildHtmlSlides(story) {
     title: story.title 
   };
 
-  const leftFavicon = getFaviconUrl(sampleLeft.source?.url || sampleLeft.url);
-  const centerFavicon = getFaviconUrl(sampleCenter.source?.url || sampleCenter.url);
+  const leftLogo = getOutletLogo(sampleLeft, 'https://g4media.ro');
+  const centerLogo = getOutletLogo(sampleCenter, 'https://hotnews.ro');
+  const rightLogo = getOutletLogo(sampleRight, 'https://antena3.ro');
   const rightFavicon = getFaviconUrl(sampleRight.source?.url || sampleRight.url);
 
   const commonStyle = `
@@ -256,7 +337,7 @@ export function buildHtmlSlides(story) {
   const centerInitials = getInitials(centerName);
   const rightInitials = getInitials(rightName);
 
-  // SLIDE 2: Modern Editorial Light (White background with dotted grid)
+  // SLIDE 2: Matching Exact User Mockup
   const slide2 = `
   <!DOCTYPE html>
   <html>
@@ -266,7 +347,7 @@ export function buildHtmlSlides(story) {
       ${commonStyle}
       body {
         background-color: #fafafc;
-        background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1.5px, transparent 1.5px);
+        background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
         background-size: 24px 24px;
         color: #0f172a;
       }
@@ -278,59 +359,65 @@ export function buildHtmlSlides(story) {
         justify-content: space-between;
         padding: 60px 56px;
       }
+      
+      /* Top Header */
       .header-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding-bottom: 24px;
-        border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+        border-bottom: 1.5px solid rgba(0, 0, 0, 0.06);
       }
-      .brand-mark {
+      .brand-group {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
+      }
+      .brand-logo-img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
       }
       .brand-name {
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-size: 34px;
+        font-size: 38px;
         font-weight: 800;
         color: #000000;
         letter-spacing: -0.02em;
       }
-      .brand-badge {
-        font-size: 11px;
-        font-weight: 900;
+      .header-right-meta {
+        font-size: 13px;
+        font-weight: 800;
         letter-spacing: 0.12em;
         text-transform: uppercase;
-        background: #000000;
-        padding: 6px 14px;
-        border-radius: 6px;
-        color: #ffffff;
-      }
-      .slide-step {
-        font-size: 14px;
-        font-weight: 800;
         color: #64748b;
-        letter-spacing: 0.05em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
       }
-      
+      .step-blue {
+        color: #2563eb;
+        font-weight: 900;
+      }
+
+      /* Title Block */
       .title-block {
-        margin-top: 24px;
-        margin-bottom: 20px;
+        margin-top: 28px;
+        margin-bottom: 24px;
       }
-      .category-kicker {
+      .kicker-pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         font-size: 13px;
         font-weight: 900;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         color: #2563eb;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
       }
-      .category-kicker::before {
+      .kicker-pill::before {
         content: '';
         display: inline-block;
         width: 8px;
@@ -339,14 +426,21 @@ export function buildHtmlSlides(story) {
         border-radius: 50%;
       }
       .main-heading {
-        font-size: 42px;
-        font-weight: 900;
-        line-height: 1.15;
-        letter-spacing: -0.03em;
-        color: #0f172a;
+        font-family: 'Playfair Display', serif;
+        font-size: 54px;
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        color: #000000;
+      }
+      .main-heading .blue-italic {
+        color: #2563eb;
+        font-style: italic;
+        display: block;
       }
 
-      .cards-container {
+      /* Cards Stack */
+      .cards-stack {
         display: flex;
         flex-direction: column;
         gap: 20px;
@@ -357,181 +451,248 @@ export function buildHtmlSlides(story) {
       .perspective-card {
         background: #ffffff;
         border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 18px;
-        padding: 28px 32px;
+        border-radius: 24px;
+        padding: 26px 32px;
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        gap: 14px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        gap: 16px;
+        box-shadow: 0 10px 25px -4px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
       }
-      .perspective-card::before {
+      
+      /* Subtle concentric arcs watermark in bottom right corner */
+      .perspective-card::after {
         content: '';
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 7px;
+        right: -30px;
+        bottom: -30px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0.85;
       }
-      .card-left::before { background: #2563eb; }
-      .card-center::before { background: #0f172a; }
-      .card-right::before { background: #e11d48; }
+      .card-left::after {
+        background: radial-gradient(circle, transparent 35%, rgba(37,99,235,0.06) 36%, transparent 48%, rgba(37,99,235,0.08) 49%, transparent 60%, rgba(37,99,235,0.12) 61%, rgba(37,99,235,0.04) 100%);
+      }
+      .card-center::after {
+        background: radial-gradient(circle, transparent 35%, rgba(0,0,0,0.04) 36%, transparent 48%, rgba(0,0,0,0.06) 49%, transparent 60%, rgba(0,0,0,0.08) 61%, rgba(0,0,0,0.03) 100%);
+      }
+      .card-right::after {
+        background: radial-gradient(circle, transparent 35%, rgba(225,29,72,0.06) 36%, transparent 48%, rgba(225,29,72,0.08) 49%, transparent 60%, rgba(225,29,72,0.12) 61%, rgba(225,29,72,0.04) 100%);
+      }
 
-      .card-top {
+      .card-header-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        position: relative;
+        z-index: 2;
       }
-      .outlet-wrap {
+      .outlet-meta {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
       }
-      .favicon-img {
-        width: 30px;
-        height: 30px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: #fff;
-        padding: 2px;
+      .outlet-logo-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        object-fit: contain;
+        background: #ffffff;
+        padding: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
       }
-      .outlet-avatar {
-        width: 32px;
-        height: 32px;
-        border-radius: 8px;
+      .outlet-avatar-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
+        font-size: 15px;
         font-weight: 900;
       }
       .av-left { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
       .av-center { background: #f1f5f9; color: #0f172a; border: 1px solid #cbd5e1; }
       .av-right { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
 
-      .outlet-name {
-        font-size: 18px;
+      .outlet-title {
+        font-size: 21px;
         font-weight: 800;
         color: #0f172a;
         letter-spacing: -0.01em;
       }
 
-      .bias-tag {
-        font-size: 11px;
+      .bias-label-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
         font-weight: 900;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 6px 14px;
-        border-radius: 6px;
       }
-      .tag-left { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
-      .tag-center { background: #f8fafc; color: #0f172a; border: 1px solid #cbd5e1; }
-      .tag-right { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+      .bias-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .color-left { color: #2563eb; }
+      .color-left .bias-dot { background: #2563eb; }
 
-      .quote-text {
-        font-size: 23px;
+      .color-center { color: #000000; }
+      .color-center .bias-dot { background: #000000; }
+
+      .color-right { color: #e11d48; }
+      .color-right .bias-dot { background: #e11d48; }
+
+      .quote-container {
+        display: flex;
+        gap: 16px;
+        align-items: stretch;
+        position: relative;
+        z-index: 2;
+      }
+      .quote-bar {
+        width: 4px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .bar-left { background: #2563eb; }
+      .bar-center { background: #000000; }
+      .bar-right { background: #e11d48; }
+
+      .quote-text-content {
+        font-size: 24px;
         font-weight: 800;
-        line-height: 1.35;
-        color: #1e293b;
+        line-height: 1.36;
+        color: #0f172a;
         letter-spacing: -0.01em;
       }
 
-      .footer-bar {
+      /* Footer */
+      .footer-row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 14px;
-        padding: 18px 28px;
-        margin-top: 20px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+        padding-top: 24px;
+        border-top: 1.5px solid rgba(0, 0, 0, 0.06);
       }
-      .footer-hint {
-        font-size: 14px;
-        font-weight: 600;
-        color: #64748b;
+      .footer-left-link {
+        font-size: 15px;
+        font-weight: 700;
+        color: #3b82f6;
+        text-decoration: underline;
+        text-underline-offset: 4px;
       }
-      .footer-action {
-        font-size: 14px;
+      .footer-right-action {
+        font-size: 16px;
         font-weight: 900;
         color: #000000;
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 8px;
       }
     </style>
   </head>
   <body>
     <div class="slide-wrapper">
+      <!-- Top Header -->
       <div class="header-row">
-        <div class="brand-mark">
+        <div class="brand-group">
+          ${BRAND_LOGO_B64 ? `<img class="brand-logo-img" src="${BRAND_LOGO_B64}" alt="thesite.ro" />` : ''}
           <span class="brand-name">thesite.ro</span>
-          <span class="brand-badge">Perspectivă 360°</span>
         </div>
-        <span class="slide-step">02 / 03</span>
+        <div class="header-right-meta">
+          <span>PERSPECTIVE MEDIA</span>
+          <span>•</span>
+          <span class="step-blue">02 / 03</span>
+        </div>
       </div>
 
+      <!-- Title Block -->
       <div class="title-block">
-        <div class="category-kicker">Comparație Titluri</div>
-        <h1 class="main-heading">Același eveniment, 3 unghiuri diferite</h1>
+        <div class="kicker-pill">COMPARAȚIE TITLURI</div>
+        <h1 class="main-heading">
+          Același eveniment,
+          <span class="blue-italic">3 unghiuri diferite</span>
+        </h1>
       </div>
 
-      <div class="cards-container">
+      <!-- Cards Stack -->
+      <div class="cards-stack">
         <!-- Stânga -->
         <div class="perspective-card card-left">
-          <div class="card-top">
-            <div class="outlet-wrap">
-              ${leftFavicon ? `<img class="favicon-img" src="${leftFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-left">${leftInitials}</div>`}
-              <span class="outlet-name">${leftName}</span>
+          <div class="card-header-row">
+            <div class="outlet-meta">
+              ${leftLogo ? `<img class="outlet-logo-box" src="${leftLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-left">${leftInitials}</div>`}
+              <span class="outlet-title">${leftName}</span>
             </div>
-            <span class="bias-tag tag-left">Stânga</span>
+            <div class="bias-label-right color-left">
+              <span class="bias-dot"></span> STÂNGA
+            </div>
           </div>
-          <div class="quote-text">
-            „${sampleLeft.title}”
+          <div class="quote-container">
+            <div class="quote-bar bar-left"></div>
+            <div class="quote-text-content">
+              „${sampleLeft.title}”
+            </div>
           </div>
         </div>
 
         <!-- Centru -->
         <div class="perspective-card card-center">
-          <div class="card-top">
-            <div class="outlet-wrap">
-              ${centerFavicon ? `<img class="favicon-img" src="${centerFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-center">${centerInitials}</div>`}
-              <span class="outlet-name">${centerName}</span>
+          <div class="card-header-row">
+            <div class="outlet-meta">
+              ${centerLogo ? `<img class="outlet-logo-box" src="${centerLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-center">${centerInitials}</div>`}
+              <span class="outlet-title">${centerName}</span>
             </div>
-            <span class="bias-tag tag-center">Centru</span>
+            <div class="bias-label-right color-center">
+              <span class="bias-dot"></span> CENTRU
+            </div>
           </div>
-          <div class="quote-text">
-            „${sampleCenter.title}”
+          <div class="quote-container">
+            <div class="quote-bar bar-center"></div>
+            <div class="quote-text-content">
+              „${sampleCenter.title}”
+            </div>
           </div>
         </div>
 
         <!-- Dreapta -->
         <div class="perspective-card card-right">
-          <div class="card-top">
-            <div class="outlet-wrap">
-              ${rightFavicon ? `<img class="favicon-img" src="${rightFavicon}" alt="favicon" />` : `<div class="outlet-avatar av-right">${rightInitials}</div>`}
-              <span class="outlet-name">${rightName}</span>
+          <div class="card-header-row">
+            <div class="outlet-meta">
+              ${rightLogo ? `<img class="outlet-logo-box" src="${rightLogo}" alt="logo" />` : `<div class="outlet-avatar-box av-right">${rightInitials}</div>`}
+              <span class="outlet-title">${rightName}</span>
             </div>
-            <span class="bias-tag tag-right">Dreapta</span>
+            <div class="bias-label-right color-right">
+              <span class="bias-dot"></span> DREAPTA
+            </div>
           </div>
-          <div class="quote-text">
-            „${sampleRight.title}”
+          <div class="quote-container">
+            <div class="quote-bar bar-right"></div>
+            <div class="quote-text-content">
+              „${sampleRight.title}”
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="footer-bar">
-        <span class="footer-hint">Vezi cum limbajul schimbă nuanța</span>
-        <span class="footer-action">Glisează pentru sinteză ➔</span>
+      <!-- Footer Row -->
+      <div class="footer-row">
+        <span class="footer-left-link">Vezi cum limbajul schimbă nuanța</span>
+        <span class="footer-right-action">Glisează pentru sinteză ➔</span>
       </div>
     </div>
   </body>
   </html>
   `;
 
-  // SLIDE 3: White Dotted Authority CTA & Outro
+  // SLIDE 3: Matching CTA Design
   const slide3 = `
   <!DOCTYPE html>
   <html>
@@ -541,7 +702,7 @@ export function buildHtmlSlides(story) {
       ${commonStyle}
       body {
         background-color: #fafafc;
-        background-image: radial-gradient(rgba(0, 0, 0, 0.14) 1.5px, transparent 1.5px);
+        background-image: radial-gradient(rgba(0, 0, 0, 0.12) 1.5px, transparent 1.5px);
         background-size: 24px 24px;
         color: #0f172a;
       }
@@ -551,115 +712,136 @@ export function buildHtmlSlides(story) {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 64px 56px;
+        padding: 60px 56px;
         text-align: center;
       }
       .top-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+        border-bottom: 1.5px solid rgba(0, 0, 0, 0.06);
         padding-bottom: 24px;
+      }
+      .brand-group {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .brand-logo-img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
       }
       .brand-title {
         font-family: 'Playfair Display', serif;
         font-style: italic;
-        font-size: 34px;
+        font-size: 38px;
         font-weight: 800;
         color: #000000;
       }
-      .tagline-badge {
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.1em;
+      .tagline-minimal {
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        color: #000000;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.12);
-        padding: 6px 14px;
-        border-radius: 6px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .step-blue {
+        color: #2563eb;
+        font-weight: 900;
       }
 
-      .main-cta-box {
+      .center-manifesto {
         margin: auto 0;
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: #ffffff;
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        border-radius: 24px;
-        padding: 56px 44px;
-        box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        max-width: 860px;
+        margin-left: auto;
+        margin-right: auto;
       }
-      .pill-kicker {
-        background: #10b981;
-        color: #ffffff;
-        font-size: 12px;
+      .kicker-tag {
+        font-size: 14px;
         font-weight: 900;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.18em;
         text-transform: uppercase;
-        padding: 8px 22px;
-        border-radius: 100px;
-        margin-bottom: 24px;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        color: #10b981;
+        margin-bottom: 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .kicker-tag::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #10b981;
+        border-radius: 50%;
       }
       .cta-heading {
-        font-size: 50px;
-        font-weight: 900;
+        font-family: 'Playfair Display', serif;
+        font-size: 64px;
+        font-weight: 800;
         line-height: 1.1;
         letter-spacing: -0.03em;
-        margin-bottom: 20px;
-        color: #0f172a;
+        margin-bottom: 24px;
+        color: #000000;
+      }
+      .cta-heading .blue-italic {
+        color: #2563eb;
+        font-style: italic;
       }
       .cta-description {
-        font-size: 21px;
+        font-size: 25px;
         color: #475569;
-        line-height: 1.5;
-        max-width: 760px;
-        margin-bottom: 40px;
+        line-height: 1.55;
+        margin-bottom: 44px;
         font-weight: 500;
       }
       .cta-description strong {
-        color: #0f172a;
+        color: #000000;
         font-weight: 800;
       }
 
       .spectrum-preview {
         width: 100%;
-        max-width: 600px;
+        max-width: 680px;
         display: flex;
-        height: 52px;
-        border-radius: 10px;
+        height: 58px;
+        border-radius: 14px;
         overflow: hidden;
-        margin-bottom: 36px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 44px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
       }
-      .spec-left { background: #2563eb; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
-      .spec-center { background: #0f172a; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
-      .spec-right { background: #e11d48; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: 0.08em; }
+      .spec-left { background: #2563eb; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; letter-spacing: 0.1em; }
+      .spec-center { background: #000000; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; letter-spacing: 0.1em; }
+      .spec-right { background: #e11d48; color: #ffffff; flex: 1; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; letter-spacing: 0.1em; }
 
       .action-button {
         background: #000000;
         color: #ffffff;
-        font-size: 20px;
+        font-size: 23px;
         font-weight: 900;
-        padding: 20px 48px;
-        border-radius: 14px;
+        padding: 22px 56px;
+        border-radius: 16px;
         display: inline-flex;
         align-items: center;
         gap: 12px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
       }
 
       .bottom-footer {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-top: 2px solid rgba(0, 0, 0, 0.06);
+        border-top: 1.5px solid rgba(0, 0, 0, 0.06);
         padding-top: 24px;
         color: #64748b;
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 700;
       }
     </style>
@@ -667,13 +849,22 @@ export function buildHtmlSlides(story) {
   <body>
     <div class="slide-wrapper">
       <div class="top-header">
-        <span class="brand-title">thesite.ro</span>
-        <span class="tagline-badge">Harta presei românești</span>
+        <div class="brand-group">
+          ${BRAND_LOGO_B64 ? `<img class="brand-logo-img" src="${BRAND_LOGO_B64}" alt="thesite.ro" />` : ''}
+          <span class="brand-title">thesite.ro</span>
+        </div>
+        <div class="tagline-minimal">
+          <span>Harta presei românești</span>
+          <span>•</span>
+          <span class="step-blue">03 / 03</span>
+        </div>
       </div>
 
-      <div class="main-cta-box">
-        <div class="pill-kicker">DECIDE TU CE SĂ CREZI</div>
-        <h2 class="cta-heading">Ieși din bula de știri.</h2>
+      <div class="center-manifesto">
+        <div class="kicker-tag">DECIDE TU CE SĂ CREZI</div>
+        <h2 class="cta-heading">
+          Ieși din bula <span class="blue-italic">de știri.</span>
+        </h2>
         <p class="cta-description">
           Pe <strong>thesite.ro</strong> grupăm știrile pe subiecte, măsurăm distribuția politică și îți arătăm ce omit publicațiile pe care le citești zilnic.
         </p>
