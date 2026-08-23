@@ -26,6 +26,9 @@ dist-ssr
 screenshots/
 social_export/
 
+# Vercel
+.vercel
+
 # Environment
 .env
 .env*.local
