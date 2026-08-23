@@ -966,7 +966,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'sebastian-zachmann',
         name: 'Sebastian Zachmann',
         role: 'Jurnalist Politic / Realizator TV',
-        image: 'https://romania2118.ro/wp-content/uploads/2018/12/214-ro.jpg',
+        image: '/images/voices/sebastian-zachmann.jpg',
         bias: {
             leaning: 'center',
             score: 0,
@@ -1401,7 +1401,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'bogdan-chirieac',
         name: 'Bogdan Chirieac',
         role: 'Analist Politic / Realizator TV',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Bogdan_Chirieac.jpg/220px-Bogdan_Chirieac.jpg',
+        image: '/images/voices/bogdan-chirieac.jpg',
         bias: {
             leaning: 'right',
             score: 65,
@@ -1446,7 +1446,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'cosmin-gusa',
         name: 'Cosmin Gușă',
         role: 'Consultant Politic / Analist',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Cosmin_Gu%C8%99%C4%83.jpg/220px-Cosmin_Gu%C8%99%C4%83.jpg',
+        image: '/images/voices/cosmin-gusa.jpg',
         bias: {
             leaning: 'right',
             score: 70,
@@ -1491,7 +1491,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'andrei-caramitru',
         name: 'Andrei Caramitru',
         role: 'Analist Politic / Antreprenor',
-        image: 'https://fra1.digitaloceanspaces.com/usr-cdn/national/assets/stiri/8150_caramitru-2.jpg',
+        image: '/images/voices/andrei-caramitru.jpg',
         bias: {
             leaning: 'center-left',
             score: -35,
@@ -1535,7 +1535,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'ion-cristoiu',
         name: 'Ion Cristoiu',
         role: 'Jurnalist / Analist Politic',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Ion_Cristoiu.jpg/220px-Ion_Cristoiu.jpg',
+        image: '/images/voices/ion-cristoiu.jpg',
         bias: {
             leaning: 'center-right',
             score: 45,
@@ -1571,7 +1571,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'traian-basescu',
         name: 'Traian Băsescu',
         role: 'Fost Președinte / Comentator Politic',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Traian_B%C4%83sescu_official_portrait.jpg/220px-Traian_B%C4%83sescu_official_portrait.jpg',
+        image: '/images/voices/traian-basescu.jpg',
         bias: {
             leaning: 'center-right',
             score: 55,
@@ -1615,7 +1615,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'dan-dungaciu',
         name: 'Dan Dungaciu',
         role: 'Geopolitician / Analist Internațional',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Dan_Dungaciu.jpg/220px-Dan_Dungaciu.jpg',
+        image: '/images/voices/dan-dungaciu.jpg',
         bias: {
             leaning: 'center-right',
             score: 30,
@@ -1659,7 +1659,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'cristian-pirvulescu',
         name: 'Cristian Pîrvulescu',
         role: 'Politolog / Analist Politic',
-        image: 'https://snspa.ro/wp-content/uploads/2017/12/cristian_pirvulescu-960x648.jpg',
+        image: '/images/voices/cristian-pirvulescu.jpg',
         bias: {
             leaning: 'center-left',
             score: -25,
@@ -1703,7 +1703,7 @@ export const PUBLIC_FIGURES: PublicFigure[] = [
         slug: 'sorin-rosca-stanescu',
         name: 'Sorin Roșca Stănescu',
         role: 'Jurnalist / Analist Politic',
-        image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Sorin_Ro%C8%99ca_St%C4%83nescu.jpg/220px-Sorin_Ro%C8%99ca_St%C4%83nescu.jpg',
+        image: '/images/voices/sorin-rosca-stanescu.jpg',
         bias: {
             leaning: 'right',
             score: 72,
