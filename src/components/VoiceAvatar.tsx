@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 interface VoiceAvatarProps {
@@ -63,6 +63,10 @@ export const VoiceAvatar = ({
     size = 'md',
 }: VoiceAvatarProps) => {
     const [imgError, setImgError] = useState(false);
+
+    useEffect(() => {
+        setImgError(false);
+    }, [src]);
     const initials = getInitials(name);
     const biasStyle = getBiasStyles(score);
     const sizeClasses = SIZE_MAP[size] || SIZE_MAP.md;
