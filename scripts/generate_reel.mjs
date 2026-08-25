@@ -123,9 +123,9 @@ function buildReelHtml(story) {
   /* Progress Bar */
   .reel-progress {
     position: absolute;
-    top: 36px;
-    left: 60px;
-    right: 60px;
+    top: 170px; /* Below status bar */
+    left: 70px;
+    right: 140px; /* Safe from right icons */
     height: 6px;
     background: rgba(255,255,255,0.25);
     border-radius: 4px;
@@ -162,8 +162,9 @@ function buildReelHtml(story) {
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 100px 70px 240px 70px; /* 240px safe zone at bottom for Instagram UI */
+    justify-content: flex-start;
+    gap: 40px;
+    padding: 240px 140px 420px 70px; /* Instagram Reels Golden Safe Zone */
     overflow: hidden;
   }
   .cover-bg-image {
@@ -177,7 +178,7 @@ function buildReelHtml(story) {
   .cover-gradient-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0.98) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 30%, rgba(0,0,0,0.88) 70%, rgba(0,0,0,0.98) 100%);
   }
 
   .cover-top-bar {
@@ -191,16 +192,16 @@ function buildReelHtml(story) {
   .cover-brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
   .cover-brand img {
-    width: 56px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
   }
   .cover-brand-text {
     font-family: 'Playfair Display', serif;
-    font-size: 44px;
+    font-size: 38px;
     font-weight: 900;
     font-style: italic;
     color: #ffffff;
@@ -208,13 +209,13 @@ function buildReelHtml(story) {
   }
   .cover-badges-group {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
   }
   .cover-badge {
-    padding: 10px 22px;
+    padding: 8px 18px;
     border-radius: 9999px;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.12em;
@@ -235,28 +236,29 @@ function buildReelHtml(story) {
     z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 36px;
+    margin-top: 10px;
   }
 
   .cover-headline-box {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
   }
   .cover-kicker {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     color: #60a5fa;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
   .cover-title {
     font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    font-size: 56px;
-    line-height: 1.18;
+    font-size: 50px;
+    line-height: 1.2;
     font-weight: 900;
     letter-spacing: -0.03em;
     color: #ffffff;
@@ -267,7 +269,7 @@ function buildReelHtml(story) {
   .cover-bias-card {
     display: flex;
     width: 100%;
-    height: 190px;
+    height: 180px;
     border-radius: 28px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.5);
@@ -287,19 +289,19 @@ function buildReelHtml(story) {
 
   .col-pct {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 54px;
+    font-size: 50px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.03em;
   }
   .col-name {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.16em;
   }
   .col-tag {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -314,38 +316,38 @@ function buildReelHtml(story) {
     background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
     background-size: 36px 36px;
     color: #09090b;
-    padding: 100px 70px 240px 70px; /* 240px safe zone */
+    padding: 240px 140px 420px 70px; /* Safe zone */
   }
 
   .scene-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
   }
   .scene-brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
   .scene-brand img {
-    width: 56px;
-    height: 56px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
   }
   .scene-brand-text {
     font-family: 'Playfair Display', serif;
-    font-size: 44px;
+    font-size: 38px;
     font-weight: 900;
     font-style: italic;
     color: #09090b;
     letter-spacing: -0.02em;
   }
   .scene-step-tag {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     color: #52525b;
   }
 
@@ -353,19 +355,19 @@ function buildReelHtml(story) {
      SCENE 2: 3 ANGLES COMPARISON
      ======================================================== */
   .scene2-title-wrap {
-    margin-bottom: 36px;
+    margin-bottom: 30px;
   }
   .scene2-kicker {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     color: #2563eb;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
   .scene2-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 56px;
+    font-size: 48px;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.03em;
@@ -381,10 +383,10 @@ function buildReelHtml(story) {
   .headline-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 32px;
-    padding: 34px 40px;
-    margin-bottom: 22px;
-    box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05);
+    border-radius: 28px;
+    padding: 26px 32px;
+    margin-bottom: 18px;
+    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.05);
     position: relative;
     overflow: hidden;
   }
@@ -392,9 +394,9 @@ function buildReelHtml(story) {
     position: absolute;
     top: 0;
     right: 0;
-    width: 250px;
+    width: 220px;
     height: 100%;
-    border-radius: 0 32px 32px 0;
+    border-radius: 0 28px 28px 0;
     pointer-events: none;
   }
   .arc-left { background: radial-gradient(circle at 100% 50%, rgba(37,99,235,0.14) 0%, rgba(37,99,235,0) 70%); }
@@ -405,32 +407,32 @@ function buildReelHtml(story) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
   .card-outlet-info {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
   }
   .card-outlet-logo {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     object-fit: cover;
     border: 1px solid rgba(0,0,0,0.08);
   }
   .card-outlet-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     color: #09090b;
     letter-spacing: -0.01em;
   }
   .card-pill-tag {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 9999px;
   }
   .pill-left { background: #dbeafe; color: #1e40af; }
@@ -439,13 +441,13 @@ function buildReelHtml(story) {
 
   .card-headline-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 25px;
-    line-height: 1.36;
+    font-size: 22px;
+    line-height: 1.35;
     font-weight: 700;
     color: #18181b;
     letter-spacing: -0.01em;
-    border-left: 5px solid #2563eb;
-    padding-left: 18px;
+    border-left: 4px solid #2563eb;
+    padding-left: 16px;
   }
   .quote-border-left { border-left-color: #2563eb; }
   .quote-border-center { border-left-color: #71717a; }
@@ -457,9 +459,9 @@ function buildReelHtml(story) {
   .outro-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 44px;
-    padding: 60px 44px;
-    box-shadow: 0 30px 70px -15px rgba(0,0,0,0.08);
+    border-radius: 40px;
+    padding: 50px 38px;
+    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -467,20 +469,20 @@ function buildReelHtml(story) {
     margin: auto 0;
   }
   .outro-kicker {
-    font-size: 22px;
+    font-size: 19px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.25em;
+    letter-spacing: 0.22em;
     color: #2563eb;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
   }
   .outro-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 64px;
+    font-size: 56px;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.03em;
-    margin-bottom: 26px;
+    margin-bottom: 22px;
     color: #09090b;
   }
   .outro-h1 span {
@@ -490,23 +492,23 @@ function buildReelHtml(story) {
     color: #2563eb;
   }
   .outro-desc {
-    font-size: 26px;
+    font-size: 24px;
     line-height: 1.45;
     color: #52525b;
-    max-width: 800px;
-    margin-bottom: 50px;
+    max-width: 760px;
+    margin-bottom: 44px;
   }
   .outro-cta-btn {
     background: #09090b;
     color: #ffffff;
-    padding: 24px 50px;
+    padding: 22px 46px;
     border-radius: 9999px;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 800;
     letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.18);
   }
   .outro-cta-btn span {
