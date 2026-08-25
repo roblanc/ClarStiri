@@ -107,14 +107,14 @@ function buildReelHtml(story) {
 <title>Reel 9:16 Video</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=IBM+Plex+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,700;1,800&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 1080px;
     height: 1920px;
     background: #000000;
-    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #18181b;
     overflow: hidden;
     position: relative;
@@ -249,12 +249,13 @@ function buildReelHtml(story) {
     gap: 10px;
   }
   .cover-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px;
-    line-height: 1.15;
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-size: 56px;
+    line-height: 1.18;
     font-weight: 900;
+    letter-spacing: -0.03em;
     color: #ffffff;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    text-shadow: 0 4px 24px rgba(0,0,0,0.85);
   }
 
   /* Bottom 3-Column Bias Bar */
@@ -277,10 +278,11 @@ function buildReelHtml(story) {
   .col-dreapta { background: #881337; color: #ffffff; }
 
   .col-pct {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 64px;
     font-weight: 900;
     line-height: 1;
+    letter-spacing: -0.03em;
   }
   .col-name {
     font-size: 20px;
@@ -354,14 +356,17 @@ function buildReelHtml(story) {
     margin-bottom: 12px;
   }
   .scene2-h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 58px;
     font-weight: 900;
-    line-height: 1.1;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
     color: #09090b;
   }
   .scene2-h1 span {
+    font-family: 'Playfair Display', serif;
     font-style: italic;
+    font-weight: 900;
     color: #2563eb;
   }
 
@@ -410,6 +415,7 @@ function buildReelHtml(story) {
     font-size: 26px;
     font-weight: 800;
     color: #09090b;
+    letter-spacing: -0.01em;
   }
   .card-pill-tag {
     font-size: 16px;
@@ -424,10 +430,12 @@ function buildReelHtml(story) {
   .pill-right { background: #ffe4e6; color: #9f1239; }
 
   .card-headline-quote {
-    font-size: 27px;
-    line-height: 1.35;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 26px;
+    line-height: 1.38;
     font-weight: 700;
     color: #18181b;
+    letter-spacing: -0.01em;
     border-left: 5px solid #2563eb;
     padding-left: 20px;
   }
@@ -459,15 +467,18 @@ function buildReelHtml(story) {
     margin-bottom: 24px;
   }
   .outro-h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 76px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 68px;
     font-weight: 900;
-    line-height: 1.1;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
     margin-bottom: 30px;
     color: #09090b;
   }
   .outro-h1 span {
+    font-family: 'Playfair Display', serif;
     font-style: italic;
+    font-weight: 900;
     color: #2563eb;
   }
   .outro-desc {
