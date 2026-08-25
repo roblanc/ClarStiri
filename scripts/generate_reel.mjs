@@ -123,9 +123,9 @@ function buildReelHtml(story) {
   /* Progress Bar */
   .reel-progress {
     position: absolute;
-    top: 170px; /* Below status bar */
-    left: 70px;
-    right: 140px; /* Safe from right icons */
+    top: 60px;
+    left: 80px;
+    right: 80px;
     height: 6px;
     background: rgba(255,255,255,0.25);
     border-radius: 4px;
@@ -150,7 +150,7 @@ function buildReelHtml(story) {
   }
 
   /* ========================================================
-     SCENE 1: COVER NEWS WITH REAL IMAGE (Exact Slide 1 Look)
+     SCENE 1: NEWS COVER WITH REAL IMAGE (Clean & Balanced)
      ======================================================== */
   #scene1 {
     display: flex;
@@ -163,8 +163,8 @@ function buildReelHtml(story) {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    gap: 40px;
-    padding: 240px 140px 420px 70px; /* Instagram Reels Golden Safe Zone */
+    gap: 60px;
+    padding: 250px 80px 420px 80px; /* Safe from top header & bottom caption */
     overflow: hidden;
   }
   .cover-bg-image {
@@ -178,7 +178,7 @@ function buildReelHtml(story) {
   .cover-gradient-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.35) 30%, rgba(0,0,0,0.88) 70%, rgba(0,0,0,0.98) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.98) 100%);
   }
 
   .cover-top-bar {
@@ -192,16 +192,16 @@ function buildReelHtml(story) {
   .cover-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
   .cover-brand img {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     object-fit: contain;
   }
   .cover-brand-text {
     font-family: 'Playfair Display', serif;
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 900;
     font-style: italic;
     color: #ffffff;
@@ -209,11 +209,11 @@ function buildReelHtml(story) {
   }
   .cover-badges-group {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     align-items: center;
   }
   .cover-badge {
-    padding: 8px 18px;
+    padding: 10px 20px;
     border-radius: 9999px;
     font-size: 15px;
     font-weight: 800;
@@ -236,8 +236,7 @@ function buildReelHtml(story) {
     z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 36px;
-    margin-top: 10px;
+    gap: 32px;
   }
 
   .cover-headline-box {
@@ -246,10 +245,10 @@ function buildReelHtml(story) {
     gap: 16px;
   }
   .cover-kicker {
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     color: #60a5fa;
     display: flex;
     align-items: center;
@@ -257,31 +256,31 @@ function buildReelHtml(story) {
   }
   .cover-title {
     font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    font-size: 50px;
-    line-height: 1.2;
+    font-size: 48px;
+    line-height: 1.22;
     font-weight: 900;
     letter-spacing: -0.03em;
     color: #ffffff;
     text-shadow: 0 4px 24px rgba(0,0,0,0.85);
   }
 
-  /* Floating 3-Column Bias Card */
+  /* Slim & Minimalist Clean Bias Bar */
   .cover-bias-card {
     display: flex;
     width: 100%;
-    height: 180px;
-    border-radius: 28px;
+    height: 110px;
+    border-radius: 22px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(255,255,255,0.25);
   }
   .bias-bar-col {
     flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
   }
   .col-stanga { background: #1e3a8a; color: #ffffff; }
   .col-centru { background: #f4f4f5; color: #09090b; }
@@ -289,23 +288,16 @@ function buildReelHtml(story) {
 
   .col-pct {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 50px;
+    font-size: 38px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.03em;
   }
   .col-name {
-    font-size: 17px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-  }
-  .col-tag {
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.9;
+    letter-spacing: 0.14em;
   }
 
   /* ========================================================
@@ -316,28 +308,28 @@ function buildReelHtml(story) {
     background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
     background-size: 36px 36px;
     color: #09090b;
-    padding: 240px 140px 420px 70px; /* Safe zone */
+    padding: 250px 80px 420px 80px;
   }
 
   .scene-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 36px;
   }
   .scene-brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 16px;
   }
   .scene-brand img {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     object-fit: contain;
   }
   .scene-brand-text {
     font-family: 'Playfair Display', serif;
-    font-size: 38px;
+    font-size: 40px;
     font-weight: 900;
     font-style: italic;
     color: #09090b;
@@ -367,9 +359,9 @@ function buildReelHtml(story) {
   }
   .scene2-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 48px;
+    font-size: 46px;
     font-weight: 900;
-    line-height: 1.12;
+    line-height: 1.15;
     letter-spacing: -0.03em;
     color: #09090b;
   }
@@ -382,11 +374,11 @@ function buildReelHtml(story) {
 
   .headline-card {
     background: #ffffff;
-    border: 2px solid #e4e4e7;
-    border-radius: 28px;
-    padding: 26px 32px;
+    border: 1.5px solid #e4e4e7;
+    border-radius: 26px;
+    padding: 24px 30px;
     margin-bottom: 18px;
-    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px -8px rgba(0,0,0,0.04);
     position: relative;
     overflow: hidden;
   }
@@ -394,41 +386,41 @@ function buildReelHtml(story) {
     position: absolute;
     top: 0;
     right: 0;
-    width: 220px;
+    width: 200px;
     height: 100%;
-    border-radius: 0 28px 28px 0;
+    border-radius: 0 26px 26px 0;
     pointer-events: none;
   }
-  .arc-left { background: radial-gradient(circle at 100% 50%, rgba(37,99,235,0.14) 0%, rgba(37,99,235,0) 70%); }
-  .arc-center { background: radial-gradient(circle at 100% 50%, rgba(113,113,122,0.14) 0%, rgba(113,113,122,0) 70%); }
-  .arc-right { background: radial-gradient(circle at 100% 50%, rgba(225,29,72,0.14) 0%, rgba(225,29,72,0) 70%); }
+  .arc-left { background: radial-gradient(circle at 100% 50%, rgba(37,99,235,0.12) 0%, rgba(37,99,235,0) 70%); }
+  .arc-center { background: radial-gradient(circle at 100% 50%, rgba(113,113,122,0.12) 0%, rgba(113,113,122,0) 70%); }
+  .arc-right { background: radial-gradient(circle at 100% 50%, rgba(225,29,72,0.12) 0%, rgba(225,29,72,0) 70%); }
 
   .card-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
   .card-outlet-info {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
   .card-outlet-logo {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     border-radius: 10px;
     object-fit: cover;
     border: 1px solid rgba(0,0,0,0.08);
   }
   .card-outlet-name {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     color: #09090b;
     letter-spacing: -0.01em;
   }
   .card-pill-tag {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -441,13 +433,13 @@ function buildReelHtml(story) {
 
   .card-headline-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 22px;
+    font-size: 21px;
     line-height: 1.35;
     font-weight: 700;
     color: #18181b;
     letter-spacing: -0.01em;
     border-left: 4px solid #2563eb;
-    padding-left: 16px;
+    padding-left: 14px;
   }
   .quote-border-left { border-left-color: #2563eb; }
   .quote-border-center { border-left-color: #71717a; }
@@ -459,9 +451,9 @@ function buildReelHtml(story) {
   .outro-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 40px;
-    padding: 50px 38px;
-    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.08);
+    border-radius: 36px;
+    padding: 50px 36px;
+    box-shadow: 0 20px 50px -15px rgba(0,0,0,0.06);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -469,20 +461,20 @@ function buildReelHtml(story) {
     margin: auto 0;
   }
   .outro-kicker {
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.22em;
     color: #2563eb;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
   .outro-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 56px;
+    font-size: 52px;
     font-weight: 900;
-    line-height: 1.12;
+    line-height: 1.15;
     letter-spacing: -0.03em;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
     color: #09090b;
   }
   .outro-h1 span {
@@ -492,38 +484,27 @@ function buildReelHtml(story) {
     color: #2563eb;
   }
   .outro-desc {
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1.45;
     color: #52525b;
-    max-width: 760px;
-    margin-bottom: 44px;
+    max-width: 700px;
+    margin-bottom: 40px;
   }
   .outro-cta-btn {
     background: #09090b;
     color: #ffffff;
-    padding: 22px 46px;
+    padding: 20px 44px;
     border-radius: 9999px;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 14px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
+    gap: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
   }
   .outro-cta-btn span {
     color: #60a5fa;
-  }
-
-  .scene-footer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 24px;
-    border-top: 1.5px solid #e4e4e7;
-    font-size: 20px;
-    font-weight: 700;
-    color: #71717a;
   }
 </style>
 </head>
@@ -535,7 +516,7 @@ function buildReelHtml(story) {
   </div>
 
   <!-- ========================================================
-       SCENE 1: NEWS COVER WITH IMAGE (0s - 4.5s)
+       SCENE 1: NEWS COVER WITH REAL IMAGE (Clean & Balanced)
        ======================================================== -->
   <div id="scene1" class="scene-container">
     <div class="cover-hero">
@@ -563,17 +544,14 @@ function buildReelHtml(story) {
           <div class="bias-bar-col col-stanga">
             <span class="col-pct">${left}%</span>
             <span class="col-name">Stânga</span>
-            <span class="col-tag">${story.blindspot === 'left' ? 'Punct Orb' : 'Acoperire'}</span>
           </div>
           <div class="bias-bar-col col-centru">
             <span class="col-pct">${center}%</span>
             <span class="col-name">Centru</span>
-            <span class="col-tag">Echilibru</span>
           </div>
           <div class="bias-bar-col col-dreapta">
             <span class="col-pct">${right}%</span>
             <span class="col-name">Dreapta</span>
-            <span class="col-tag">${story.blindspot === 'right' ? 'Punct Orb' : 'Acoperire'}</span>
           </div>
         </div>
       </div>
@@ -634,11 +612,6 @@ function buildReelHtml(story) {
         <div class="card-headline-quote quote-border-right">„${headlines.right.title}”</div>
       </div>
     </div>
-
-    <div class="scene-footer-row">
-      <span>thesite.ro</span>
-      <span>Glisează pentru sinteză →</span>
-    </div>
   </div>
 
   <!-- ========================================================
@@ -664,15 +637,9 @@ function buildReelHtml(story) {
         Citește pe <span>thesite.ro</span> ➔
       </div>
     </div>
-
-    <div class="scene-footer-row">
-      <span>Urmărește @thesite.ro</span>
-      <span>Salvează pentru mai târziu 🔖</span>
-    </div>
   </div>
 
   <script>
-    // Strict scene visibility switcher based on progress (0.0 to 1.0)
     window.setReelProgress = function(t) {
       document.getElementById('progressBar').style.width = (t * 100) + '%';
 
@@ -680,10 +647,6 @@ function buildReelHtml(story) {
       const s2 = document.getElementById('scene2');
       const s3 = document.getElementById('scene3');
 
-      // Timeline:
-      // 0.00 to 0.38 (0s to 4.5s)  -> Scene 1: Real News Cover with image
-      // 0.38 to 0.75 (4.5s to 9.0s) -> Scene 2: 3 Angles Comparison
-      // 0.75 to 1.00 (9.0s to 12.0s)-> Scene 3: Outro / CTA
       if (t < 0.38) {
         s1.style.display = 'flex';
         s2.style.display = 'none';
