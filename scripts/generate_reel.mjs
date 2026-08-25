@@ -163,7 +163,7 @@ function buildReelHtml(story) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 90px 70px 60px 70px;
+    padding: 100px 70px 240px 70px; /* 240px safe zone at bottom for Instagram UI */
     overflow: hidden;
   }
   .cover-bg-image {
@@ -172,12 +172,12 @@ function buildReelHtml(story) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.9);
+    filter: brightness(0.85);
   }
   .cover-gradient-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.92) 80%, rgba(0,0,0,0.98) 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 30%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,0.98) 100%);
   }
 
   .cover-top-bar {
@@ -230,13 +230,18 @@ function buildReelHtml(story) {
     color: #09090b;
   }
 
-  .cover-headline-box {
+  .cover-main-content {
     position: relative;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 32px;
+  }
+
+  .cover-headline-box {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
   }
   .cover-kicker {
     font-size: 20px;
@@ -258,12 +263,15 @@ function buildReelHtml(story) {
     text-shadow: 0 4px 24px rgba(0,0,0,0.85);
   }
 
-  /* Bottom 3-Column Bias Bar */
-  .cover-bias-bar {
+  /* Floating 3-Column Bias Card */
+  .cover-bias-card {
     display: flex;
     width: 100%;
-    height: 250px;
-    border-top: 3px solid #000;
+    height: 190px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    border: 2px solid rgba(255,255,255,0.2);
   }
   .bias-bar-col {
     flex: 1;
@@ -271,7 +279,7 @@ function buildReelHtml(story) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
   }
   .col-stanga { background: #1e3a8a; color: #ffffff; }
   .col-centru { background: #f4f4f5; color: #09090b; }
@@ -279,19 +287,19 @@ function buildReelHtml(story) {
 
   .col-pct {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 64px;
+    font-size: 54px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.03em;
   }
   .col-name {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 900;
     text-transform: uppercase;
     letter-spacing: 0.16em;
   }
   .col-tag {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -306,14 +314,14 @@ function buildReelHtml(story) {
     background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
     background-size: 36px 36px;
     color: #09090b;
-    padding: 90px 70px 70px 70px;
+    padding: 100px 70px 240px 70px; /* 240px safe zone */
   }
 
   .scene-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
   .scene-brand {
     display: flex;
@@ -345,7 +353,7 @@ function buildReelHtml(story) {
      SCENE 2: 3 ANGLES COMPARISON
      ======================================================== */
   .scene2-title-wrap {
-    margin-bottom: 40px;
+    margin-bottom: 36px;
   }
   .scene2-kicker {
     font-size: 20px;
@@ -357,7 +365,7 @@ function buildReelHtml(story) {
   }
   .scene2-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 58px;
+    font-size: 56px;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.03em;
@@ -373,9 +381,9 @@ function buildReelHtml(story) {
   .headline-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 36px;
-    padding: 38px 44px;
-    margin-bottom: 26px;
+    border-radius: 32px;
+    padding: 34px 40px;
+    margin-bottom: 22px;
     box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05);
     position: relative;
     overflow: hidden;
@@ -386,7 +394,7 @@ function buildReelHtml(story) {
     right: 0;
     width: 250px;
     height: 100%;
-    border-radius: 0 36px 36px 0;
+    border-radius: 0 32px 32px 0;
     pointer-events: none;
   }
   .arc-left { background: radial-gradient(circle at 100% 50%, rgba(37,99,235,0.14) 0%, rgba(37,99,235,0) 70%); }
@@ -397,7 +405,7 @@ function buildReelHtml(story) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
   }
   .card-outlet-info {
     display: flex;
@@ -405,24 +413,24 @@ function buildReelHtml(story) {
     gap: 16px;
   }
   .card-outlet-logo {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 12px;
     object-fit: cover;
     border: 1px solid rgba(0,0,0,0.08);
   }
   .card-outlet-name {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     color: #09090b;
     letter-spacing: -0.01em;
   }
   .card-pill-tag {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.14em;
-    padding: 6px 18px;
+    padding: 6px 16px;
     border-radius: 9999px;
   }
   .pill-left { background: #dbeafe; color: #1e40af; }
@@ -431,13 +439,13 @@ function buildReelHtml(story) {
 
   .card-headline-quote {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 26px;
-    line-height: 1.38;
+    font-size: 25px;
+    line-height: 1.36;
     font-weight: 700;
     color: #18181b;
     letter-spacing: -0.01em;
     border-left: 5px solid #2563eb;
-    padding-left: 20px;
+    padding-left: 18px;
   }
   .quote-border-left { border-left-color: #2563eb; }
   .quote-border-center { border-left-color: #71717a; }
@@ -449,8 +457,8 @@ function buildReelHtml(story) {
   .outro-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 48px;
-    padding: 70px 50px;
+    border-radius: 44px;
+    padding: 60px 44px;
     box-shadow: 0 30px 70px -15px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
@@ -468,11 +476,11 @@ function buildReelHtml(story) {
   }
   .outro-h1 {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 68px;
+    font-size: 64px;
     font-weight: 900;
     line-height: 1.12;
     letter-spacing: -0.03em;
-    margin-bottom: 30px;
+    margin-bottom: 26px;
     color: #09090b;
   }
   .outro-h1 span {
@@ -482,18 +490,18 @@ function buildReelHtml(story) {
     color: #2563eb;
   }
   .outro-desc {
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1.45;
     color: #52525b;
     max-width: 800px;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
   }
   .outro-cta-btn {
     background: #09090b;
     color: #ffffff;
-    padding: 26px 54px;
+    padding: 24px 50px;
     border-radius: 9999px;
-    font-size: 30px;
+    font-size: 28px;
     font-weight: 800;
     letter-spacing: -0.01em;
     display: inline-flex;
@@ -543,27 +551,29 @@ function buildReelHtml(story) {
         </div>
       </div>
 
-      <div class="cover-headline-box">
-        <div class="cover-kicker">• SPECTRU & ANALIZĂ MEDIATICĂ</div>
-        <h1 class="cover-title">${story.title}</h1>
-      </div>
-    </div>
+      <div class="cover-main-content">
+        <div class="cover-headline-box">
+          <div class="cover-kicker">• SPECTRU & ANALIZĂ MEDIATICĂ</div>
+          <h1 class="cover-title">${story.title}</h1>
+        </div>
 
-    <div class="cover-bias-bar">
-      <div class="bias-bar-col col-stanga">
-        <span class="col-pct">${left}%</span>
-        <span class="col-name">Stânga</span>
-        <span class="col-tag">${story.blindspot === 'left' ? 'Punct Orb' : 'Acoperire'}</span>
-      </div>
-      <div class="bias-bar-col col-centru">
-        <span class="col-pct">${center}%</span>
-        <span class="col-name">Centru</span>
-        <span class="col-tag">Echilibru</span>
-      </div>
-      <div class="bias-bar-col col-dreapta">
-        <span class="col-pct">${right}%</span>
-        <span class="col-name">Dreapta</span>
-        <span class="col-tag">${story.blindspot === 'right' ? 'Punct Orb' : 'Acoperire'}</span>
+        <div class="cover-bias-card">
+          <div class="bias-bar-col col-stanga">
+            <span class="col-pct">${left}%</span>
+            <span class="col-name">Stânga</span>
+            <span class="col-tag">${story.blindspot === 'left' ? 'Punct Orb' : 'Acoperire'}</span>
+          </div>
+          <div class="bias-bar-col col-centru">
+            <span class="col-pct">${center}%</span>
+            <span class="col-name">Centru</span>
+            <span class="col-tag">Echilibru</span>
+          </div>
+          <div class="bias-bar-col col-dreapta">
+            <span class="col-pct">${right}%</span>
+            <span class="col-name">Dreapta</span>
+            <span class="col-tag">${story.blindspot === 'right' ? 'Punct Orb' : 'Acoperire'}</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
