@@ -43,9 +43,12 @@ function getLogoUrl(sourceName = '', sourceId = '') {
 
 function getHeadlines(story) {
   const sources = story.sources || [];
-  const leftItem = sources.find(s => (s.source?.bias || '').includes('left'));
-  const centerItem = sources.find(s => (s.source?.bias || '').includes('center'));
-  const rightItem = sources.find(s => (s.source?.bias || '').includes('right'));
+  const leftItem = sources.find(s => (s.source?.bias || s.bias || '').includes('left'));
+  const centerItem = sources.find(s => {
+    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    return b.includes('center') || b === '' || (!b.includes('left') && !b.includes('right'));
+  });
+  const rightItem = sources.find(s => (s.source?.bias || s.bias || '').includes('right'));
 
   const fallbackLeft = {
     outlet: 'G4Media',
@@ -88,220 +91,276 @@ function buildReelHtml(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const headlines = getHeadlines(story);
+  
+  const coverImage = story.image || story.imageUrl || story.sources?.find(s => s.imageUrl)?.imageUrl || 'https://images.unsplash.com/photo-1585829365295-ab7cd400c167?w=1200';
+
+  let dominantBadge = 'ACOPERIRE ECHILIBRATĂ';
+  if (story.blindspot === 'left') dominantBadge = 'PUNCT ORBIT STÂNGA';
+  else if (story.blindspot === 'right') dominantBadge = 'PUNCT ORBIT DREAPTA';
+  else if (left > center && left > right) dominantBadge = 'PRELUAT DE STÂNGA';
+  else if (right > center && right > left) dominantBadge = 'PRELUAT DE DREAPTA';
 
   return `<!DOCTYPE html>
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>Reel Preview</title>
+<title>Reel 9:16 Video</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=IBM+Plex+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
+  html, body {
     width: 1080px;
     height: 1920px;
-    background-color: #fafafa;
-    background-image: radial-gradient(#d4d4d8 1.5px, transparent 1.5px);
-    background-size: 32px 32px;
+    background: #000000;
     font-family: 'IBM Plex Sans', -apple-system, sans-serif;
     color: #18181b;
     overflow: hidden;
     position: relative;
   }
 
-  /* Header Brand */
-  .header {
+  /* Progress Bar */
+  .reel-progress {
     position: absolute;
-    top: 90px;
-    left: 80px;
-    right: 80px;
+    top: 36px;
+    left: 60px;
+    right: 60px;
+    height: 6px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+    z-index: 100;
+  }
+  .reel-progress-fill {
+    height: 100%;
+    background: #3b82f6;
+    width: 0%;
+  }
+
+  /* Common Scene Wrapper */
+  .scene-container {
+    position: absolute;
+    inset: 0;
+    width: 1080px;
+    height: 1920px;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* ========================================================
+     SCENE 1: COVER NEWS WITH REAL IMAGE (Exact Slide 1 Look)
+     ======================================================== */
+  #scene1 {
+    display: flex;
+    background: #000000;
+  }
+  .cover-hero {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 90px 70px 60px 70px;
+    overflow: hidden;
+  }
+  .cover-bg-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9);
+  }
+  .cover-gradient-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.92) 80%, rgba(0,0,0,0.98) 100%);
+  }
+
+  .cover-top-bar {
+    position: relative;
+    z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 50;
+    width: 100%;
   }
-  .brand {
+  .cover-brand {
     display: flex;
     align-items: center;
     gap: 16px;
   }
-  .brand-logo {
-    width: 60px;
-    height: 60px;
+  .cover-brand img {
+    width: 56px;
+    height: 56px;
     object-fit: contain;
   }
-  .brand-name {
+  .cover-brand-text {
     font-family: 'Playfair Display', serif;
     font-size: 44px;
     font-weight: 900;
     font-style: italic;
+    color: #ffffff;
     letter-spacing: -0.02em;
+  }
+  .cover-badges-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .cover-badge {
+    padding: 10px 22px;
+    border-radius: 9999px;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .badge-dark {
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+  }
+  .badge-accent {
+    background: #ffffff;
     color: #09090b;
   }
-  .live-tag {
+
+  .cover-headline-box {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .cover-kicker {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: #60a5fa;
     display: flex;
     align-items: center;
     gap: 10px;
-    background: #ffffff;
-    border: 1.5px solid #e4e4e7;
-    padding: 10px 22px;
-    border-radius: 9999px;
-    font-size: 18px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #09090b;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   }
-  .pulse-dot {
-    width: 12px;
-    height: 12px;
-    background: #ef4444;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(1.3); }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    line-height: 1.15;
+    font-weight: 900;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
   }
 
-  /* Progress / Timer Bar on top */
-  .reel-progress {
-    position: absolute;
-    top: 40px;
-    left: 80px;
-    right: 80px;
-    height: 6px;
-    background: rgba(0,0,0,0.08);
-    border-radius: 4px;
-    overflow: hidden;
-    z-index: 60;
-  }
-  .reel-progress-fill {
-    height: 100%;
-    background: #2563eb;
-    width: 0%;
-  }
-
-  /* Scene Container */
-  .scene {
-    position: absolute;
-    top: 200px;
-    left: 80px;
-    right: 80px;
-    bottom: 120px;
+  /* Bottom 3-Column Bias Bar */
+  .cover-bias-bar {
     display: flex;
-    flex-col;
+    width: 100%;
+    height: 250px;
+    border-top: 3px solid #000;
+  }
+  .bias-bar-col {
+    flex: 1;
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  }
+  .col-stanga { background: #1e3a8a; color: #ffffff; }
+  .col-centru { background: #f4f4f5; color: #09090b; }
+  .col-dreapta { background: #881337; color: #ffffff; }
+
+  .col-pct {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .col-name {
+    font-size: 20px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+  .col-tag {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.9;
   }
 
-  /* SCENE 1: Hook & Story Topic */
-  #scene1 {
-    opacity: 1;
-    transform: translateY(0);
-    z-index: 10;
+  /* ========================================================
+     WHITE DOTTED THEME (Scenes 2 & 3)
+     ======================================================== */
+  .white-dotted-bg {
+    background-color: #fafafa;
+    background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
+    background-size: 36px 36px;
+    color: #09090b;
+    padding: 90px 70px 70px 70px;
   }
-  .kicker {
-    display: inline-flex;
+
+  .scene-header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    margin-bottom: 50px;
+  }
+  .scene-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .scene-brand img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+  }
+  .scene-brand-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    font-style: italic;
+    color: #09090b;
+    letter-spacing: -0.02em;
+  }
+  .scene-step-tag {
+    font-size: 18px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #52525b;
+  }
+
+  /* ========================================================
+     SCENE 2: 3 ANGLES COMPARISON
+     ======================================================== */
+  .scene2-title-wrap {
+    margin-bottom: 40px;
+  }
+  .scene2-kicker {
     font-size: 20px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.22em;
     color: #2563eb;
-    margin-bottom: 24px;
+    margin-bottom: 12px;
   }
-  .story-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 68px;
-    line-height: 1.15;
-    font-weight: 900;
-    color: #09090b;
-    margin-bottom: 40px;
-  }
-
-  /* Bias Breakdown Box */
-  .bias-box {
-    background: #ffffff;
-    border: 2px solid #e4e4e7;
-    border-radius: 36px;
-    padding: 44px;
-    box-shadow: 0 20px 40px -15px rgba(0,0,0,0.06);
-    margin-bottom: 30px;
-  }
-  .bias-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-  }
-  .bias-label {
-    font-size: 24px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #52525b;
-  }
-  .bias-count {
-    font-size: 24px;
-    font-weight: 700;
-    color: #09090b;
-  }
-  .bias-bar-track {
-    display: flex;
-    height: 36px;
-    border-radius: 18px;
-    overflow: hidden;
-    gap: 4px;
-    background: #f4f4f5;
-    margin-bottom: 36px;
-  }
-  .bar-seg {
-    height: 100%;
-    transition: width 1s ease;
-  }
-  .bar-left { background: #2563eb; }
-  .bar-center { background: #71717a; }
-  .bar-right { background: #e11d48; }
-
-  .bias-stats-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    text-align: center;
-  }
-  .stat-card {
-    padding: 20px;
-    border-radius: 20px;
-  }
-  .stat-left { background: #eff6ff; color: #1d4ed8; }
-  .stat-center { background: #f4f4f5; color: #3f3f46; }
-  .stat-right { background: #fff1f2; color: #be123c; }
-  .stat-val { font-size: 40px; font-weight: 900; font-family: 'Playfair Display', serif; }
-  .stat-name { font-size: 18px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
-
-  /* SCENE 2: Headlines Comparison */
-  #scene2 {
-    opacity: 0;
-    transform: translateY(40px);
-    pointer-events: none;
-    z-index: 20;
-  }
-  .scene-title-row {
-    margin-bottom: 30px;
-  }
-  .scene-h1 {
+  .scene2-h1 {
     font-family: 'Playfair Display', serif;
     font-size: 64px;
     font-weight: 900;
     line-height: 1.1;
+    color: #09090b;
   }
-  .scene-h1 span {
+  .scene2-h1 span {
     font-style: italic;
     color: #2563eb;
   }
@@ -309,93 +368,87 @@ function buildReelHtml(story) {
   .headline-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 32px;
-    padding: 36px 40px;
-    margin-bottom: 24px;
-    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.04);
+    border-radius: 36px;
+    padding: 38px 44px;
+    margin-bottom: 26px;
+    box-shadow: 0 15px 35px -10px rgba(0,0,0,0.05);
     position: relative;
     overflow: hidden;
-    transform: translateX(0);
-    transition: transform 0.4s ease;
   }
-  .card-arc-accent {
+  .card-radial-arc {
     position: absolute;
     top: 0;
     right: 0;
-    width: 220px;
+    width: 250px;
     height: 100%;
-    border-radius: 0 32px 32px 0;
+    border-radius: 0 36px 36px 0;
     pointer-events: none;
   }
   .arc-left { background: radial-gradient(circle at 100% 50%, rgba(37,99,235,0.14) 0%, rgba(37,99,235,0) 70%); }
   .arc-center { background: radial-gradient(circle at 100% 50%, rgba(113,113,122,0.14) 0%, rgba(113,113,122,0) 70%); }
   .arc-right { background: radial-gradient(circle at 100% 50%, rgba(225,29,72,0.14) 0%, rgba(225,29,72,0) 70%); }
 
-  .card-top {
+  .card-header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
-  .card-outlet {
+  .card-outlet-info {
     display: flex;
     align-items: center;
     gap: 16px;
   }
-  .outlet-logo {
-    width: 44px;
-    height: 44px;
+  .card-outlet-logo {
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     object-fit: cover;
     border: 1px solid rgba(0,0,0,0.08);
   }
-  .outlet-name {
+  .card-outlet-name {
     font-size: 26px;
     font-weight: 800;
     color: #09090b;
   }
-  .card-badge {
+  .card-pill-tag {
     font-size: 16px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    padding: 6px 16px;
+    letter-spacing: 0.14em;
+    padding: 6px 18px;
     border-radius: 9999px;
   }
-  .badge-left { background: #dbeafe; color: #1e40af; }
-  .badge-center { background: #e4e4e7; color: #27272a; }
-  .badge-right { background: #ffe4e6; color: #9f1239; }
+  .pill-left { background: #dbeafe; color: #1e40af; }
+  .pill-center { background: #e4e4e7; color: #27272a; }
+  .pill-right { background: #ffe4e6; color: #9f1239; }
 
-  .card-quote {
-    font-size: 28px;
+  .card-headline-quote {
+    font-size: 27px;
     line-height: 1.35;
     font-weight: 700;
     color: #18181b;
     border-left: 5px solid #2563eb;
     padding-left: 20px;
   }
-  .quote-left { border-left-color: #2563eb; }
-  .quote-center { border-left-color: #71717a; }
-  .quote-right { border-left-color: #e11d48; }
+  .quote-border-left { border-left-color: #2563eb; }
+  .quote-border-center { border-left-color: #71717a; }
+  .quote-border-right { border-left-color: #e11d48; }
 
-  /* SCENE 3: Outro / CTA */
-  #scene3 {
-    opacity: 0;
-    transform: scale(0.95);
-    pointer-events: none;
-    z-index: 30;
-    justify-content: center;
-    text-align: center;
-  }
-  .outro-box {
+  /* ========================================================
+     SCENE 3: OUTRO / CTA
+     ======================================================== */
+  .outro-card {
     background: #ffffff;
     border: 2px solid #e4e4e7;
-    border-radius: 44px;
-    padding: 60px 48px;
-    box-shadow: 0 25px 60px -15px rgba(0,0,0,0.08);
+    border-radius: 48px;
+    padding: 70px 50px;
+    box-shadow: 0 30px 70px -15px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    margin: auto 0;
   }
   .outro-kicker {
     font-size: 22px;
@@ -407,42 +460,41 @@ function buildReelHtml(story) {
   }
   .outro-h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 72px;
+    font-size: 76px;
     font-weight: 900;
     line-height: 1.1;
-    margin-bottom: 28px;
+    margin-bottom: 30px;
     color: #09090b;
   }
   .outro-h1 span {
     font-style: italic;
     color: #2563eb;
   }
-  .outro-sub {
+  .outro-desc {
     font-size: 28px;
     line-height: 1.45;
     color: #52525b;
-    max-width: 780px;
-    margin-bottom: 50px;
+    max-width: 800px;
+    margin-bottom: 60px;
   }
-  .cta-pill {
+  .outro-cta-btn {
     background: #09090b;
     color: #ffffff;
-    padding: 24px 50px;
+    padding: 26px 54px;
     border-radius: 9999px;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 800;
     letter-spacing: -0.01em;
     display: inline-flex;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.18);
   }
-  .cta-pill span {
+  .outro-cta-btn span {
     color: #60a5fa;
   }
 
-  /* Bottom Footer Indicator */
-  .footer-row {
+  .scene-footer-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -461,130 +513,143 @@ function buildReelHtml(story) {
     <div id="progressBar" class="reel-progress-fill"></div>
   </div>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="brand">
-      <img src="https://www.thesite.ro/hero-illustration-headphones.webp" class="brand-logo" alt="Logo">
-      <span class="brand-name">thesite.ro</span>
+  <!-- ========================================================
+       SCENE 1: NEWS COVER WITH IMAGE (0s - 4.5s)
+       ======================================================== -->
+  <div id="scene1" class="scene-container">
+    <div class="cover-hero">
+      <img src="${coverImage}" class="cover-bg-image" alt="">
+      <div class="cover-gradient-overlay"></div>
+
+      <div class="cover-top-bar">
+        <div class="cover-brand">
+          <img src="https://www.thesite.ro/hero-illustration-headphones.webp" alt="thesite.ro">
+          <span class="cover-brand-text">thesite.ro</span>
+        </div>
+        <div class="cover-badges-group">
+          <span class="cover-badge badge-dark">${totalSources} SURSE</span>
+          <span class="cover-badge badge-accent">${dominantBadge}</span>
+        </div>
+      </div>
+
+      <div class="cover-headline-box">
+        <div class="cover-kicker">• SPECTRU & ANALIZĂ MEDIATICĂ</div>
+        <h1 class="cover-title">${story.title}</h1>
+      </div>
     </div>
-    <div class="live-tag">
-      <div class="pulse-dot"></div>
-      <span>Analiză Media</span>
+
+    <div class="cover-bias-bar">
+      <div class="bias-bar-col col-stanga">
+        <span class="col-pct">${left}%</span>
+        <span class="col-name">Stânga</span>
+        <span class="col-tag">${story.blindspot === 'left' ? 'Punct Orb' : 'Acoperire'}</span>
+      </div>
+      <div class="bias-bar-col col-centru">
+        <span class="col-pct">${center}%</span>
+        <span class="col-name">Centru</span>
+        <span class="col-tag">Echilibru</span>
+      </div>
+      <div class="bias-bar-col col-dreapta">
+        <span class="col-pct">${right}%</span>
+        <span class="col-name">Dreapta</span>
+        <span class="col-tag">${story.blindspot === 'right' ? 'Punct Orb' : 'Acoperire'}</span>
+      </div>
     </div>
   </div>
 
-  <!-- SCENE 1: Hook & Topic -->
-  <div id="scene1" class="scene">
+  <!-- ========================================================
+       SCENE 2: 3 ANGLES COMPARISON (4.5s - 9.0s)
+       ======================================================== -->
+  <div id="scene2" class="scene-container white-dotted-bg">
     <div>
-      <div class="kicker">• PUNCT ORB & SPECTRU MEDIATIC</div>
-      <h1 class="story-title">${story.title}</h1>
-      
-      <div class="bias-box">
-        <div class="bias-header">
-          <span class="bias-label">Acoperire Publicații</span>
-          <span class="bias-count">${totalSources} Surse Verificate</span>
+      <div class="scene-header">
+        <div class="scene-brand">
+          <img src="https://www.thesite.ro/hero-illustration-headphones.webp" alt="thesite.ro">
+          <span class="scene-brand-text">thesite.ro</span>
         </div>
-        
-        <div class="bias-bar-track">
-          <div class="bar-seg bar-left" style="width: ${left}%;"></div>
-          <div class="bar-seg bar-center" style="width: ${center}%;"></div>
-          <div class="bar-seg bar-right" style="width: ${right}%;"></div>
-        </div>
-
-        <div class="bias-stats-grid">
-          <div class="stat-card stat-left">
-            <div class="stat-val">${left}%</div>
-            <div class="stat-name">Stânga</div>
-          </div>
-          <div class="stat-card stat-center">
-            <div class="stat-val">${center}%</div>
-            <div class="stat-name">Centru</div>
-          </div>
-          <div class="stat-card stat-right">
-            <div class="stat-val">${right}%</div>
-            <div class="stat-name">Dreapta</div>
-          </div>
-        </div>
+        <span class="scene-step-tag">PERSPECTIVE MEDIA • 02 / 03</span>
       </div>
-    </div>
 
-    <div class="footer-row">
-      <span>thesite.ro/stiri</span>
-      <span>Vezi unghiurile →</span>
-    </div>
-  </div>
-
-  <!-- SCENE 2: Headlines Comparison -->
-  <div id="scene2" class="scene">
-    <div>
-      <div class="scene-title-row">
-        <div class="kicker">• COMPARAȚIE TITLURI</div>
-        <h1 class="scene-h1">Același eveniment, <br><span>3 unghiuri diferite</span></h1>
+      <div class="scene2-title-wrap">
+        <div class="scene2-kicker">• COMPARAȚIE TITLURI</div>
+        <h1 class="scene2-h1">Același eveniment, <br><span>3 unghiuri diferite</span></h1>
       </div>
 
       <div class="headline-card">
-        <div class="card-arc-accent arc-left"></div>
-        <div class="card-top">
-          <div class="card-outlet">
-            <img src="${headlines.left.logo}" class="outlet-logo" alt="">
-            <span class="outlet-name">${headlines.left.outlet}</span>
+        <div class="card-radial-arc arc-left"></div>
+        <div class="card-header-row">
+          <div class="card-outlet-info">
+            <img src="${headlines.left.logo}" class="card-outlet-logo" alt="">
+            <span class="card-outlet-name">${headlines.left.outlet}</span>
           </div>
-          <span class="card-badge badge-left">Stânga</span>
+          <span class="card-pill-tag pill-left">Stânga</span>
         </div>
-        <div class="card-quote quote-left">„${headlines.left.title}”</div>
+        <div class="card-headline-quote quote-border-left">„${headlines.left.title}”</div>
       </div>
 
       <div class="headline-card">
-        <div class="card-arc-accent arc-center"></div>
-        <div class="card-top">
-          <div class="card-outlet">
-            <img src="${headlines.center.logo}" class="outlet-logo" alt="">
-            <span class="outlet-name">${headlines.center.outlet}</span>
+        <div class="card-radial-arc arc-center"></div>
+        <div class="card-header-row">
+          <div class="card-outlet-info">
+            <img src="${headlines.center.logo}" class="card-outlet-logo" alt="">
+            <span class="card-outlet-name">${headlines.center.outlet}</span>
           </div>
-          <span class="card-badge badge-center">Centru</span>
+          <span class="card-pill-tag pill-center">Centru</span>
         </div>
-        <div class="card-quote quote-center">„${headlines.center.title}”</div>
+        <div class="card-headline-quote quote-border-center">„${headlines.center.title}”</div>
       </div>
 
       <div class="headline-card">
-        <div class="card-arc-accent arc-right"></div>
-        <div class="card-top">
-          <div class="card-outlet">
-            <img src="${headlines.right.logo}" class="outlet-logo" alt="">
-            <span class="outlet-name">${headlines.right.outlet}</span>
+        <div class="card-radial-arc arc-right"></div>
+        <div class="card-header-row">
+          <div class="card-outlet-info">
+            <img src="${headlines.right.logo}" class="card-outlet-logo" alt="">
+            <span class="card-outlet-name">${headlines.right.outlet}</span>
           </div>
-          <span class="card-badge badge-right">Dreapta</span>
+          <span class="card-pill-tag pill-right">Dreapta</span>
         </div>
-        <div class="card-quote quote-right">„${headlines.right.title}”</div>
+        <div class="card-headline-quote quote-border-right">„${headlines.right.title}”</div>
       </div>
     </div>
 
-    <div class="footer-row">
+    <div class="scene-footer-row">
       <span>thesite.ro</span>
-      <span>Analiză în timp real →</span>
+      <span>Glisează pentru sinteză →</span>
     </div>
   </div>
 
-  <!-- SCENE 3: Outro / CTA -->
-  <div id="scene3" class="scene">
-    <div class="outro-box">
+  <!-- ========================================================
+       SCENE 3: OUTRO & CTA (9.0s - 12.0s)
+       ======================================================== -->
+  <div id="scene3" class="scene-container white-dotted-bg">
+    <div>
+      <div class="scene-header">
+        <div class="scene-brand">
+          <img src="https://www.thesite.ro/hero-illustration-headphones.webp" alt="thesite.ro">
+          <span class="scene-brand-text">thesite.ro</span>
+        </div>
+        <span class="scene-step-tag">SINTEZĂ • 03 / 03</span>
+      </div>
+    </div>
+
+    <div class="outro-card">
       <div class="outro-kicker">• PRESA FĂRĂ FILTRE</div>
       <h1 class="outro-h1">Vezi imaginea completă, <span>fără manipulare.</span></h1>
-      <p class="outro-sub">Descoperă unghiurile ascunse și bias-ul politic din spatele fiecărei știri din România.</p>
+      <p class="outro-desc">Descoperă unghiurile ascunse și bias-ul politic din spatele fiecărei știri din România.</p>
       
-      <div class="cta-pill">
+      <div class="outro-cta-btn">
         Citește pe <span>thesite.ro</span> ➔
       </div>
     </div>
 
-    <div class="footer-row" style="margin-top: 40px;">
+    <div class="scene-footer-row">
       <span>Urmărește @thesite.ro</span>
       <span>Salvează pentru mai târziu 🔖</span>
     </div>
   </div>
 
   <script>
-    // Animation controller by normalized time (0.0 to 1.0)
+    // Strict scene visibility switcher based on progress (0.0 to 1.0)
     window.setReelProgress = function(t) {
       document.getElementById('progressBar').style.width = (t * 100) + '%';
 
@@ -592,27 +657,22 @@ function buildReelHtml(story) {
       const s2 = document.getElementById('scene2');
       const s3 = document.getElementById('scene3');
 
-      // 0s to 4s: Scene 1 (t: 0 to 0.35)
-      // 4s to 8.5s: Scene 2 (t: 0.35 to 0.72)
-      // 8.5s to 12s: Scene 3 (t: 0.72 to 1.0)
-      if (t < 0.35) {
-        s1.style.opacity = '1';
-        s1.style.transform = 'translateY(0)';
-        s2.style.opacity = '0';
-        s2.style.transform = 'translateY(40px)';
-        s3.style.opacity = '0';
-      } else if (t < 0.72) {
-        s1.style.opacity = '0';
-        s1.style.transform = 'translateY(-40px)';
-        s2.style.opacity = '1';
-        s2.style.transform = 'translateY(0)';
-        s3.style.opacity = '0';
+      // Timeline:
+      // 0.00 to 0.38 (0s to 4.5s)  -> Scene 1: Real News Cover with image
+      // 0.38 to 0.75 (4.5s to 9.0s) -> Scene 2: 3 Angles Comparison
+      // 0.75 to 1.00 (9.0s to 12.0s)-> Scene 3: Outro / CTA
+      if (t < 0.38) {
+        s1.style.display = 'flex';
+        s2.style.display = 'none';
+        s3.style.display = 'none';
+      } else if (t < 0.75) {
+        s1.style.display = 'none';
+        s2.style.display = 'flex';
+        s3.style.display = 'none';
       } else {
-        s1.style.opacity = '0';
-        s2.style.opacity = '0';
-        s2.style.transform = 'translateY(-40px)';
-        s3.style.opacity = '1';
-        s3.style.transform = 'scale(1)';
+        s1.style.display = 'none';
+        s2.style.display = 'none';
+        s3.style.display = 'flex';
       }
     };
   </script>
