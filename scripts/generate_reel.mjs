@@ -150,40 +150,19 @@ function buildReelHtml(story) {
   }
 
   /* ========================================================
-     SCENE 1: NEWS COVER WITH REAL IMAGE (Clean & Balanced)
+     SCENE 1: NEWS COVER WITH CENTERED MAGAZINE CARD
      ======================================================== */
   #scene1 {
     display: flex;
-    background: #000000;
-  }
-  .cover-hero {
-    position: relative;
-    flex: 1;
-    width: 100%;
-    display: flex;
+    background-color: #fafafa;
+    background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
+    background-size: 36px 36px;
+    padding: 210px 70px 240px 70px;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 60px;
-    padding: 250px 80px 420px 80px; /* Safe from top header & bottom caption */
-    overflow: hidden;
-  }
-  .cover-bg-image {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: brightness(0.85);
-  }
-  .cover-gradient-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.25) 30%, rgba(0,0,0,0.85) 68%, rgba(0,0,0,0.98) 100%);
+    justify-content: space-between;
   }
 
   .cover-top-bar {
-    position: relative;
-    z-index: 10;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -195,16 +174,16 @@ function buildReelHtml(story) {
     gap: 16px;
   }
   .cover-brand img {
-    width: 52px;
-    height: 52px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
   }
   .cover-brand-text {
     font-family: 'Playfair Display', serif;
-    font-size: 40px;
+    font-size: 38px;
     font-weight: 900;
     font-style: italic;
-    color: #ffffff;
+    color: #09090b;
     letter-spacing: -0.02em;
   }
   .cover-badges-group {
@@ -221,58 +200,73 @@ function buildReelHtml(story) {
     letter-spacing: 0.12em;
   }
   .badge-dark {
-    background: rgba(15, 23, 42, 0.85);
+    background: #09090b;
     color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.15);
-    backdrop-filter: blur(8px);
   }
   .badge-accent {
+    background: #2563eb;
+    color: #ffffff;
+  }
+
+  /* Centered Main News Card */
+  .cover-center-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: -20px;
+  }
+  .cover-news-card {
     background: #ffffff;
-    color: #09090b;
+    border: 2px solid #e4e4e7;
+    border-radius: 40px;
+    padding: 34px;
+    box-shadow: 0 25px 60px -10px rgba(0,0,0,0.09);
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    width: 100%;
   }
-
-  .cover-main-content {
+  .cover-img-box {
+    width: 100%;
+    height: 500px;
+    border-radius: 28px;
+    overflow: hidden;
     position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
   }
-
-  .cover-headline-box {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  .cover-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
   .cover-kicker {
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: #60a5fa;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    letter-spacing: 0.2em;
+    color: #2563eb;
+    margin-bottom: 8px;
   }
   .cover-title {
     font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    font-size: 48px;
-    line-height: 1.22;
+    font-size: 44px;
+    line-height: 1.2;
     font-weight: 900;
     letter-spacing: -0.03em;
-    color: #ffffff;
-    text-shadow: 0 4px 24px rgba(0,0,0,0.85);
+    color: #09090b;
   }
 
-  /* Slim & Minimalist Clean Bias Bar */
+  /* Embedded Slim Clean Bias Bar */
   .cover-bias-card {
     display: flex;
     width: 100%;
-    height: 110px;
-    border-radius: 22px;
+    height: 94px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    border: 1.5px solid rgba(255,255,255,0.25);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
   }
   .bias-bar-col {
     flex: 1;
@@ -281,20 +275,21 @@ function buildReelHtml(story) {
     justify-content: center;
     align-items: center;
     gap: 12px;
+    color: #ffffff;
   }
-  .col-stanga { background: #1e3a8a; color: #ffffff; }
-  .col-centru { background: #f4f4f5; color: #09090b; }
-  .col-dreapta { background: #881337; color: #ffffff; }
+  .col-stanga { background: #2563eb; }
+  .col-centru { background: #e4e4e7; color: #09090b; }
+  .col-dreapta { background: #e11d48; }
 
   .col-pct {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 38px;
+    font-size: 35px;
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.03em;
   }
   .col-name {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.14em;
@@ -516,26 +511,27 @@ function buildReelHtml(story) {
   </div>
 
   <!-- ========================================================
-       SCENE 1: NEWS COVER WITH REAL IMAGE (Clean & Balanced)
+       SCENE 1: NEWS COVER WITH CENTERED MAGAZINE CARD
        ======================================================== -->
   <div id="scene1" class="scene-container">
-    <div class="cover-hero">
-      <img src="${coverImage}" class="cover-bg-image" alt="">
-      <div class="cover-gradient-overlay"></div>
-
-      <div class="cover-top-bar">
-        <div class="cover-brand">
-          <img src="https://www.thesite.ro/hero-illustration-headphones.webp" alt="thesite.ro">
-          <span class="cover-brand-text">thesite.ro</span>
-        </div>
-        <div class="cover-badges-group">
-          <span class="cover-badge badge-dark">${totalSources} SURSE</span>
-          <span class="cover-badge badge-accent">${dominantBadge}</span>
-        </div>
+    <div class="cover-top-bar">
+      <div class="cover-brand">
+        <img src="https://www.thesite.ro/hero-illustration-headphones.webp" alt="thesite.ro">
+        <span class="cover-brand-text">thesite.ro</span>
       </div>
+      <div class="cover-badges-group">
+        <span class="cover-badge badge-dark">${totalSources} SURSE</span>
+        <span class="cover-badge badge-accent">${dominantBadge}</span>
+      </div>
+    </div>
 
-      <div class="cover-main-content">
-        <div class="cover-headline-box">
+    <div class="cover-center-wrap">
+      <div class="cover-news-card">
+        <div class="cover-img-box">
+          <img src="${coverImage}" alt="">
+        </div>
+
+        <div>
           <div class="cover-kicker">• SPECTRU & ANALIZĂ MEDIATICĂ</div>
           <h1 class="cover-title">${story.title}</h1>
         </div>
@@ -556,6 +552,8 @@ function buildReelHtml(story) {
         </div>
       </div>
     </div>
+
+    <div></div>
   </div>
 
   <!-- ========================================================
@@ -689,8 +687,8 @@ async function renderReelVideo(story, outputPath) {
   for (let i = 0; i < totalFrames; i++) {
     const t = i / totalFrames;
     await page.evaluate(progress => window.setReelProgress(progress), t);
-    const frameFile = path.join(tempDir, `frame_${String(i).padStart(4, '0')}.png`);
-    await page.screenshot({ path: frameFile, type: 'png' });
+    const frameFile = path.join(tempDir, `frame_${String(i).padStart(4, '0')}.jpg`);
+    await page.screenshot({ path: frameFile, type: 'jpeg', quality: 85 });
     if (i % 30 === 0) {
       process.stdout.write(`  Frame ${i}/${totalFrames} (${Math.round(t * 100)}%)\r`);
     }
@@ -700,7 +698,7 @@ async function renderReelVideo(story, outputPath) {
 
   // Stitch with FFmpeg
   console.log('🎞️ Encoding MP4 video with FFmpeg...');
-  const ffmpegCmd = `ffmpeg -y -framerate ${fps} -i "${tempDir}/frame_%04d.png" -c:v libx264 -preset fast -profile:v high -level:v 4.2 -pix_fmt yuv420p -movflags +faststart "${outputPath}"`;
+  const ffmpegCmd = `ffmpeg -y -framerate ${fps} -i "${tempDir}/frame_%04d.jpg" -c:v libx264 -preset fast -profile:v high -level:v 4.2 -pix_fmt yuv420p -movflags +faststart "${outputPath}"`;
   execSync(ffmpegCmd, { stdio: 'inherit' });
 
   // Cleanup temp frames
