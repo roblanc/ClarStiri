@@ -157,7 +157,7 @@ function buildReelHtml(story) {
     background-color: #fafafa;
     background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
     background-size: 36px 36px;
-    padding: 210px 70px 240px 70px;
+    padding: 340px 70px 240px 70px;
     flex-direction: column;
     justify-content: space-between;
   }
@@ -216,7 +216,7 @@ function buildReelHtml(story) {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: -20px;
+    margin-top: 0px;
   }
   .cover-news-card {
     background: #ffffff;
@@ -303,7 +303,7 @@ function buildReelHtml(story) {
     background-image: radial-gradient(#d4d4d8 1.8px, transparent 1.8px);
     background-size: 36px 36px;
     color: #09090b;
-    padding: 250px 80px 420px 80px;
+    padding: 340px 70px 380px 70px;
   }
 
   .scene-header {
