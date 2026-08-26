@@ -240,7 +240,7 @@ export function buildHtmlSlides(story) {
         z-index: 10;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 16px;
       }
       .story-title {
         font-size: ${slide1FontSize};
@@ -255,69 +255,75 @@ export function buildHtmlSlides(story) {
         font-weight: 600;
         color: rgba(255,255,255,0.85);
       }
-      .bottom-bias-bar {
+      .floating-bias-bar {
         display: flex;
         width: 100%;
-        height: 210px;
-        border-top: 2px solid #000;
+        height: 120px;
+        border-radius: 24px;
+        overflow: hidden;
+        margin-top: 16px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+        border: 1.5px solid rgba(255,255,255,0.25);
       }
       .bias-col {
         flex: 1;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 6px;
+        gap: 12px;
       }
-      .col-left { background: #23497d; color: #ffffff; }
-      .col-center { background: #ffffff; color: #1e293b; }
-      .col-right { background: #7e2226; color: #ffffff; }
+      .col-left { background: #1e3a8a; color: #ffffff; }
+      .col-center { background: #f4f4f5; color: #09090b; }
+      .col-right { background: #881337; color: #ffffff; }
       
+      .col-pct {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 40px;
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
       .col-label {
         font-size: 16px;
-        font-weight: 900;
-        letter-spacing: 0.15em;
+        font-weight: 800;
+        letter-spacing: 0.14em;
         text-transform: uppercase;
-      }
-      .col-percent {
-        font-size: 56px;
-        font-weight: 900;
-        line-height: 1;
       }
     </style>
   </head>
   <body>
     <div class="card-container">
       <div class="hero-section">
-        <img class="hero-bg-img" src="${image}" alt="hero" />
+        <img src="${image}" class="hero-bg-img" alt="">
         <div class="hero-gradient"></div>
 
         <div class="top-badges-row">
           <div class="left-badges">
-            <div class="badge-sources">${totalSources} SURSE</div>
-            <div class="badge-time">${story.timeAgo || 'acum 20 min'}</div>
+            <span class="badge-sources">${totalSources} SURSE</span>
+            <span class="badge-time">acum 1 zi</span>
           </div>
-          <div class="badge-dominant">${dominantBadgeLabel}</div>
+          <span class="badge-dominant">${dominantBadgeLabel}</span>
         </div>
 
         <div class="headline-area">
           <h1 class="story-title">${story.title}</h1>
           <div class="watermark-site">thesite.ro</div>
-        </div>
-      </div>
 
-      <div class="bottom-bias-bar">
-        <div class="bias-col col-left">
-          <span class="col-label">STÂNGA</span>
-          <span class="col-percent">${left}%</span>
-        </div>
-        <div class="bias-col col-center">
-          <span class="col-label">CENTRU</span>
-          <span class="col-percent">${center}%</span>
-        </div>
-        <div class="bias-col col-right">
-          <span class="col-label">DREAPTA</span>
-          <span class="col-percent">${right}%</span>
+          <div class="floating-bias-bar">
+            <div class="bias-col col-left">
+              <span class="col-pct">${left}%</span>
+              <span class="col-label">Stânga</span>
+            </div>
+            <div class="bias-col col-center">
+              <span class="col-pct">${center}%</span>
+              <span class="col-label">Centru</span>
+            </div>
+            <div class="bias-col col-right">
+              <span class="col-pct">${right}%</span>
+              <span class="col-label">Dreapta</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

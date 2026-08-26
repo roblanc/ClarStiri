@@ -226,17 +226,28 @@ async function autoPostToInstagram() {
   await page.waitForTimeout(4000);
   await snap(page, 'ig_07_uploaded.png');
 
-  // Ajustare aspect ratio la 4:5
-  const cropBtn = page.locator('button svg[aria-label="Select crop"], button svg[aria-label="Selectează decuparea"], svg[aria-label="Select crop"], svg[aria-label="Selectează decuparea"]').first();
-  if (await cropBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-    console.log('📌 Ajustăm decuparea la 4:5 (Portrait)...');
-    await cropBtn.click();
-    await page.waitForTimeout(500);
-    const portraitOption = page.locator('button:has-text("4:5"), span:has-text("4:5"), div[role="button"]:has-text("4:5"), button:has-text("Original"), span:has-text("Original")').first();
-    if (await portraitOption.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await portraitOption.click();
-      await page.waitForTimeout(500);
+  // Ajustare aspect ratio la 4:5 (Portrait)
+  console.log('📌 Ajustăm decuparea la 4:5 (Portrait)...');
+  try {
+    const cropBtn = page.locator('button:has(svg[aria-label*="crop" i]), button:has(svg[aria-label*="decup" i]), svg[aria-label*="Select crop"], svg[aria-label*="Selectează decuparea"]').first();
+    if (await cropBtn.isVisible({ timeout: 4000 }).catch(() => false)) {
+      await cropBtn.click();
+      await page.waitForTimeout(600);
+      
+      const clicked = await page.evaluate(() => {
+        const buttons = Array.from(document.querySelectorAll('button, div[role="button"], span'));
+        const p45 = buttons.find(b => b.textContent.includes('4:5') || b.textContent.trim() === 'Portrait' || b.textContent.trim() === 'Portret' || b.textContent.trim() === 'Original');
+        if (p45) {
+          p45.click();
+          return true;
+        }
+        return false;
+      });
+      console.log('✓ Aspect ratio 4:5 selectat:', clicked);
+      await page.waitForTimeout(600);
     }
+  } catch (e) {
+    console.warn('⚠️ Crop selector warning:', e.message);
   }
 
   // Next (x2: crop -> filters -> caption)
