@@ -12,6 +12,7 @@
     "generate:social": "node scripts/render_carousel.mjs",
     "generate:reel": "node scripts/generate_reel.mjs",
     "post:browser": "node scripts/auto_post_playwright.mjs",
+    "post:reel": "node scripts/auto_post_reel.mjs",
     "post:replace": "node scripts/delete_last_post_and_repost.mjs"
   },
   "dependencies": {

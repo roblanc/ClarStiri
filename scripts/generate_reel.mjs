@@ -706,17 +706,86 @@ async function renderReelVideo(story, outputPath) {
   console.log(`\n🎉 Reel MP4 video ready: ${outputPath}`);
 }
 
+const HISTORY_FILE = path.join(__dirname, '..', 'social_export', 'posted_stories.json');
+
+function getPostedHistory() {
+  try {
+    if (fs.existsSync(HISTORY_FILE)) {
+      return JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8'));
+    }
+  } catch (e) {
+    console.warn('⚠️ Nu am putut citi posted_stories.json, pornim cu istoric gol.');
+  }
+  return [];
+}
+
 async function main() {
   console.log('📰 Fetching stories for Reel generation...');
   const stories = await fetchTopStories();
-  const story = stories.find(s => s.blindspot && s.blindspot !== 'none') || stories[0];
+  if (!stories || stories.length === 0) {
+    console.error('❌ No stories found!');
+    return;
+  }
 
+  const history = getPostedHistory();
+  const postedIds = new Set(history.map(h => h.id));
+  const postedTitles = new Set(history.map(h => (h.title || '').trim().toLowerCase()));
+
+  // Filtrăm doar știrile nepostate încă
+  const unposted = stories.filter(s => {
+    if (postedIds.has(s.id)) return false;
+    const cleanTitle = (s.title || '').trim().toLowerCase();
+    if (postedTitles.has(cleanTitle)) return false;
+    return true;
+  });
+
+  console.log(`📊 Găsite ${stories.length} știri, dintre care ${unposted.length} nepostate.`);
+
+  const candidatePool = unposted.length > 0 ? unposted : stories;
+
+  // Sortăm candidații după relevanță editorială pentru social media
+  candidatePool.sort((a, b) => {
+    const aBlindspot = (a.blindspot && a.blindspot !== 'none') ? 10 : 0;
+    const bBlindspot = (b.blindspot && b.blindspot !== 'none') ? 10 : 0;
+    const aSources = (a.sourcesCount || a.sources?.length || 0);
+    const bSources = (b.sourcesCount || b.sources?.length || 0);
+    return (bBlindspot + bSources) - (aBlindspot + aSources);
+  });
+
+  const story = candidatePool[0];
   console.log('📌 Selected Story for Reel:', story.title);
+  console.log(`   Surse: ${story.sourcesCount || story.sources?.length} | Blindspot: ${story.blindspot || 'none'}`);
+
   const outDir = path.join(__dirname, '..', 'social_export', 'latest');
   fs.mkdirSync(outDir, { recursive: true });
   const videoPath = path.join(outDir, 'reel.mp4');
 
   await renderReelVideo(story, videoPath);
+
+  // Generare și salvare caption & story metadata pentru auto_post_reel.mjs
+  const left = Math.round(story.bias?.left || 0);
+  const center = Math.round(story.bias?.center || 0);
+  const right = Math.round(story.bias?.right || 0);
+  const totalSources = story.sourcesCount || story.sources?.length || 0;
+
+  const caption = `thesite.ro ${story.title}. Vezi știrea din toate perspectivele pe thesite.ro.
+
+📊 ${totalSources} publicații au acoperit subiectul:
+• Stânga: ${left}%${story.blindspot === 'left' ? ' (Punct orb)' : ''}
+• Centru: ${center}%
+• Dreapta: ${right}%${story.blindspot === 'right' ? ' (Punct orb)' : ''}
+
+🔗 Link în bio pentru comparația completă a titlurilor!
+
+#stiri #romania #actualitate #reels #media #bias #presaromana #thesite`;
+
+  const captionPath = path.join(outDir, 'caption.txt');
+  fs.writeFileSync(captionPath, caption, 'utf8');
+  console.log('📝 Caption salvat pentru Reel în:', captionPath);
+
+  const storyMetaPath = path.join(outDir, 'story.json');
+  fs.writeFileSync(storyMetaPath, JSON.stringify(story, null, 2), 'utf8');
+  console.log('📝 Story metadata salvat în:', storyMetaPath);
 }
 
 main();
