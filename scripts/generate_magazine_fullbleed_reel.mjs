@@ -167,13 +167,12 @@ function buildHtml() {
     box-shadow: 0 0 8px rgba(255,255,255,0.9);
   }
 
-  /* Magazine Masthead Bar (Inside Safe Zone) */
+  /* Magazine Masthead Bar (Inside Safe Zone: Only Logo + thesite.ro) */
   .mag-masthead {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding-bottom: 20px;
+    padding-bottom: 18px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   }
   .masthead-left {
@@ -193,22 +192,6 @@ function buildHtml() {
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #ffffff;
-  }
-  .masthead-edition {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.7);
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
-    padding-left: 14px;
-  }
-  .masthead-meta {
-    font-size: 22px;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 0.05em;
   }
 
   /* Scenes Container */
@@ -573,33 +556,34 @@ function buildHtml() {
     max-width: 680px;
     margin-bottom: 32px;
   }
-  .mag-bio-pill {
+  /* Clean Text-Only CTA (No Capsule Container) */
+  .mag-bio-clean {
     width: 100%;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 24px;
-    padding: 20px 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 14px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
+    padding-top: 14px;
   }
-  .mag-bio-badge {
-    background: #2563eb;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 900;
-    padding: 7px 16px;
-    border-radius: 9999px;
-    letter-spacing: 0.05em;
+  .mag-bio-clean-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
+    color: #60a5fa;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
-  .mag-bio-label {
-    font-size: 22px;
+  .mag-bio-clean-sep {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 20px;
+  }
+  .mag-bio-clean-label {
+    font-size: 24px;
     font-weight: 700;
     color: #ffffff;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
   }
 
   /* ========================================================
@@ -795,14 +779,12 @@ function buildHtml() {
       <div id="progressFill" class="mag-progress-fill"></div>
     </div>
 
-    <!-- Magazine Masthead (Cleaned & Safe) -->
+    <!-- Magazine Masthead (Clean: Only Logo + thesite.ro) -->
     <div class="mag-masthead">
       <div class="masthead-left">
         <img src="${logoBase64}" class="masthead-emblem" alt="">
         <span class="masthead-wordmark">thesite.ro</span>
-        <span class="masthead-edition">${story.magazineIssue}</span>
       </div>
-      <div class="masthead-meta">0:16</div>
     </div>
 
     <!-- ========================================================
@@ -940,9 +922,10 @@ function buildHtml() {
           <div class="mag-seg right">DREAPTA</div>
         </div>
 
-        <div class="mag-bio-pill">
-          <span class="mag-bio-badge">Link în bio</span>
-          <span class="mag-bio-label">thesite.ro • Toate perspectivele</span>
+        <div class="mag-bio-clean">
+          <span class="mag-bio-clean-tag">Link în bio</span>
+          <span class="mag-bio-clean-sep">•</span>
+          <span class="mag-bio-clean-label">thesite.ro • Toate perspectivele</span>
         </div>
       </div>
     </div>
