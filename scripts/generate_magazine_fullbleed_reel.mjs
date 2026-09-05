@@ -329,16 +329,16 @@ function buildHtml() {
   }
 
   /* ========================================================
-     SCENE 2: THREE HEADLINES SPREAD (FRAUNCES + CARDS)
+     SCENE 2: THREE HEADLINES SPREAD (FRAUNCES + CARDS - LARGER FONTS)
      ======================================================== */
   .mag-spread-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 46px;
+    font-size: 52px;
     font-weight: 800;
-    line-height: 1.15;
+    line-height: 1.14;
     letter-spacing: -0.025em;
     color: #ffffff;
-    margin-bottom: 24px;
+    margin-bottom: 26px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.9);
   }
   .mag-spread-title span {
@@ -349,7 +349,7 @@ function buildHtml() {
   .mag-cards-stack {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
     margin-bottom: 24px;
   }
   .mag-card-glass {
@@ -357,22 +357,22 @@ function buildHtml() {
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 22px;
-    padding: 24px 28px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+    padding: 26px 32px;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     position: relative;
   }
   .mag-card-glass.accent-blue {
-    border-left: 6px solid #3b82f6;
+    border-left: 7px solid #3b82f6;
   }
   .mag-card-glass.accent-gray {
-    border-left: 6px solid #94a3b8;
+    border-left: 7px solid #94a3b8;
   }
   .mag-card-glass.accent-red {
-    border-left: 6px solid #ef4444;
+    border-left: 7px solid #ef4444;
   }
 
   .mcard-top {
@@ -383,27 +383,27 @@ function buildHtml() {
   .mcard-outlet-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
   }
   .mcard-logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
   .mcard-name {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 800;
     color: #ffffff;
   }
   .mcard-tag {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 900;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 5px 14px;
+    padding: 6px 16px;
     border-radius: 9999px;
   }
   .tag-blue { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
@@ -412,14 +412,14 @@ function buildHtml() {
 
   .mcard-quote {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 24px;
-    line-height: 1.32;
+    font-size: 29px;
+    line-height: 1.34;
     font-weight: 700;
     color: #f8fafc;
     letter-spacing: -0.01em;
   }
   .mcard-meta {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     color: #94a3b8;
   }
@@ -429,12 +429,12 @@ function buildHtml() {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 9999px;
-    padding: 16px 24px;
+    padding: 18px 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-size: 20px;
+    gap: 12px;
+    font-size: 22px;
     font-weight: 700;
     color: #ffffff;
     backdrop-filter: blur(16px);
@@ -500,24 +500,18 @@ function buildHtml() {
     justify-content: center;
     text-align: center;
   }
-  .mag-seal-emblem {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.25);
+  /* Clean Floating Logo (No Circle / No Emblem Frame) */
+  .mag-outro-logo-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
-    box-shadow: 0 0 44px rgba(96, 165, 250, 0.25);
-    backdrop-filter: blur(16px);
+    margin-bottom: 22px;
   }
-  .mag-seal-emblem img {
-    width: 88px;
-    height: 88px;
+  .mag-outro-logo-img {
+    width: 120px;
+    height: 120px;
     object-fit: contain;
-    filter: invert(1);
+    filter: invert(1) drop-shadow(0 6px 26px rgba(96, 165, 250, 0.45));
   }
   .mag-outro-title {
     font-family: 'Fraunces', Georgia, serif;
@@ -901,8 +895,8 @@ function buildHtml() {
          ======================================================== -->
     <div id="scene4" class="mag-scene">
       <div class="mag-outro-box">
-        <div class="mag-seal-emblem">
-          <img src="${logoBase64}" alt="">
+        <div class="mag-outro-logo-wrap">
+          <img src="${logoBase64}" class="mag-outro-logo-img" alt="">
         </div>
         <div class="mag-outro-title">thesite.ro</div>
         <div class="mag-outro-subtitle">ȘTIRI CU CONTEXT • ROMÂNIA</div>
