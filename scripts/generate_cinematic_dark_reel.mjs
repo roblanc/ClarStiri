@@ -385,22 +385,56 @@ function buildHtml() {
     color: #94a3b8;
   }
 
-  .dark-pill-cta {
+  .dark-pill-banner {
     width: 100%;
-    height: 94px;
-    background: rgba(255,255,255,0.08);
-    border: 1.5px solid rgba(255,255,255,0.2);
+    height: 84px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    font-weight: 800;
-    color: #ffffff;
-    gap: 16px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #94a3b8;
+    gap: 10px;
     backdrop-filter: blur(12px);
-    margin-top: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    margin-top: 26px;
+  }
+  .dark-pill-banner b {
+    color: #3b82f6;
+    font-weight: 800;
+  }
+
+  .dark-bio-banner {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 28px;
+    padding: 22px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+    backdrop-filter: blur(14px);
+  }
+  .dark-bio-badge {
+    background: #3b82f6;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 900;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    box-shadow: 0 0 16px rgba(59,130,246,0.4);
+  }
+  .dark-bio-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
   }
 
   /* ========================================================
@@ -634,9 +668,8 @@ function buildHtml() {
         </div>
       </div>
 
-      <div class="dark-pill-cta">
-        <span>Citește analiza completă</span>
-        <span>➔</span>
+      <div class="dark-pill-banner">
+        <span>Comparația completă a titlurilor • <b>Link în bio</b></span>
       </div>
     </div>
 
@@ -693,9 +726,9 @@ function buildHtml() {
           <div class="bias-cell right">DREAPTA</div>
         </div>
 
-        <div class="white-cta-btn">
-          <span>Descoperă pe thesite.ro</span>
-          <span>➔</span>
+        <div class="dark-bio-banner">
+          <span class="dark-bio-badge">Link în bio</span>
+          <span class="dark-bio-text">thesite.ro • Toate perspectivele</span>
         </div>
       </div>
     </div>

@@ -419,26 +419,57 @@ function buildHtml() {
     color: #86868b;
   }
 
-  .apple-pill-button {
+  .apple-pill-banner {
     width: 100%;
-    height: 90px;
+    height: 84px;
     background: #ffffff;
-    border: 1.5px solid rgba(0, 0, 0, 0.12);
+    border: 1.5px solid rgba(0, 0, 0, 0.08);
     border-radius: 9999px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    font-weight: 700;
-    color: #1d1d1f;
-    gap: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-    margin-top: 30px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #515154;
+    gap: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    margin-top: 26px;
+  }
+  .apple-pill-banner b {
+    color: #0071e3;
+    font-weight: 800;
   }
 
-  /* ========================================================
-     SCENE 3: APPLE NEWS KEY TAKEAWAY / HERO QUOTE
-     ======================================================== */
+  .apple-bio-banner {
+    width: 100%;
+    background: #f2f2f7;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 28px;
+    padding: 22px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .apple-bio-badge {
+    background: #0071e3;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .apple-bio-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: -0.01em;
+  }
+
+  /* Scene 3: Quote Canvas */
   .apple-quote-canvas {
     flex: 1;
     display: flex;
@@ -482,9 +513,7 @@ function buildHtml() {
     color: #86868b;
   }
 
-  /* ========================================================
-     SCENE 4: APPLE NEWS BRANDED OUTRO / CTA
-     ======================================================== */
+  /* Scene 4: Outro Wrap */
   .apple-outro-wrap {
     flex: 1;
     display: flex;
@@ -546,23 +575,6 @@ function buildHtml() {
     max-width: 740px;
     margin-bottom: 46px;
   }
-  .apple-blue-cta-btn {
-    width: 100%;
-    height: 94px;
-    background: #0071e3;
-    color: #ffffff;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    gap: 14px;
-    box-shadow: 0 12px 35px rgba(0, 113, 227, 0.3);
-    margin-top: 24px;
-  }
-
 </style>
 </head>
 <body>
@@ -668,9 +680,8 @@ function buildHtml() {
         </div>
       </div>
 
-      <div class="apple-pill-button">
-        <span>Citește analiza completă</span>
-        <span>➔</span>
+      <div class="apple-pill-banner">
+        <span>Comparația completă a titlurilor • <b>Link în bio</b></span>
       </div>
     </div>
 
@@ -729,9 +740,9 @@ function buildHtml() {
           <div class="apple-segment right">DREAPTA</div>
         </div>
 
-        <div class="apple-blue-cta-btn">
-          <span>Deschide thesite.ro</span>
-          <span>➔</span>
+        <div class="apple-bio-banner">
+          <span class="apple-bio-badge">Link în bio</span>
+          <span class="apple-bio-text">thesite.ro • Toate perspectivele</span>
         </div>
       </div>
     </div>
