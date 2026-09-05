@@ -25,7 +25,7 @@ const dcnewsLogoBase64 = getBase64DataUri(path.join(__dirname, '..', 'public', '
 // Story data
 const story = {
   magazineIssue: 'DOSARUL ZILEI • EDIȚIA #42',
-  kicker: 'ANALIZĂ & PERSPECTIVĂ EDITORIALĂ',
+  kicker: 'PERSPECTIVĂ EDITORIALĂ COMPARATĂ',
   titleHero: 'Planul de pace.',
   titleSub: 'Misiune la Moscova.',
   leadText: 'Cum este reflectată trimiterea emisarilor speciali ai lui Donald Trump în presa din România?',
@@ -61,10 +61,10 @@ function buildHtml() {
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>ClarStiri Full-Bleed Magazine Reel</title>
+<title>ClarStiri Full-Bleed Magazine Reel - Instagram Safe Zone</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&family=Newsreader:ital,opsz,wght@0,6..72,700;0,6..72,800;1,6..72,700;1,6..72,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -91,52 +91,68 @@ function buildHtml() {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transform: scale(1.04);
-    filter: brightness(0.92) contrast(110%);
+    transform: scale(1.05);
+    filter: brightness(0.88) contrast(110%);
     transition: transform 0.1s linear;
   }
 
-  /* Magazine Dual Vignette: Dark at top for masthead, deep filmic black gradient at bottom for text */
+  /* Magazine Multi-Stop Scrim Gradient
+     Engineered for Instagram Safe Zone:
+     - Top scrim for Reels back button & title (0 - 220px)
+     - Clean window for imagery in middle (220px - 750px)
+     - Rich dark gradient starting at 800px so content is hyper-legible
+     - Solid dark base from 1440px to 1920px so Instagram caption & handle pop cleanly */
   .magazine-scrim {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.75) 0%,
-      rgba(0, 0, 0, 0.2) 20%,
-      rgba(0, 0, 0, 0.3) 45%,
-      rgba(0, 0, 0, 0.85) 75%,
-      #040507 100%
+      rgba(0, 0, 0, 0.72) 0%,
+      rgba(0, 0, 0, 0.25) 12%,
+      rgba(0, 0, 0, 0.2) 35%,
+      rgba(3, 7, 18, 0.78) 55%,
+      rgba(3, 7, 18, 0.94) 75%,
+      rgba(2, 4, 10, 0.98) 100%
     );
     pointer-events: none;
   }
 
-  /* Fine magazine grain effect */
   .magazine-overlay-texture {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.5) 100%);
+    background: radial-gradient(circle at 50% 40%, transparent 50%, rgba(0,0,0,0.55) 100%);
     pointer-events: none;
   }
 
-  /* Safe Area Screen Content */
+  /* ========================================================
+     INSTAGRAM SAFE ZONE CONTAINER:
+     - Top: 150px (under top navigation bar)
+     - Left: 64px
+     - Right: 180px (COMPLETELY CLEARS the right vertical action column: Like, Comment, Share, Save)
+     - Bottom: 490px (COMPLETELY CLEARS Instagram username, caption box, audio ticker & bottom navigation)
+     ======================================================== */
   .magazine-layout {
-    position: relative;
-    z-index: 10;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 1080px;
     height: 1920px;
-    padding: 80px 72px 80px 72px;
+    padding-top: 150px;
+    padding-left: 64px;
+    padding-right: 184px;
+    padding-bottom: 490px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 10;
   }
 
-  /* Top Progress Bar (Fine editorial red/gold or system line) */
+  /* Top Progress Bar (Reel timeline) */
   .mag-progress-track {
     position: absolute;
-    top: 36px;
-    left: 72px;
-    right: 72px;
+    top: 50px;
+    left: 64px;
+    right: 64px;
     height: 4px;
     background: rgba(255, 255, 255, 0.25);
     border-radius: 9999px;
@@ -148,49 +164,50 @@ function buildHtml() {
     width: 0%;
     background: #ffffff;
     border-radius: 9999px;
-    box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    box-shadow: 0 0 8px rgba(255,255,255,0.9);
   }
 
-  /* Magazine Masthead Bar */
+  /* Magazine Masthead Bar (Inside Safe Zone) */
   .mag-masthead {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding-bottom: 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
   }
   .masthead-left {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 14px;
   }
   .masthead-emblem {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
     filter: invert(1);
   }
   .masthead-wordmark {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
-    font-weight: 900;
-    letter-spacing: -0.01em;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
     color: #ffffff;
   }
   .masthead-edition {
-    font-size: 15px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.7);
     border-left: 1px solid rgba(255, 255, 255, 0.3);
-    padding-left: 16px;
+    padding-left: 14px;
   }
   .masthead-meta {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(255, 255, 255, 0.7);
     letter-spacing: 0.05em;
   }
 
@@ -200,9 +217,9 @@ function buildHtml() {
     display: none;
     flex-direction: column;
     justify-content: flex-end;
-    padding-bottom: 20px;
+    padding-top: 20px;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .mag-scene.active {
@@ -212,35 +229,37 @@ function buildHtml() {
   }
 
   /* ========================================================
-     SCENE 1: FULL-BLEED MAGAZINE COVER
+     SCENE 1: COVER (FRAUNCES EDITORIAL)
      ======================================================== */
   .mag-kicker-pill {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 0.2em;
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #60a5fa;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
   .kicker-rule {
-    width: 28px;
+    width: 24px;
     height: 3px;
     background: #60a5fa;
+    border-radius: 2px;
   }
 
   .mag-hero-h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 96px;
-    font-weight: 900;
-    line-height: 1.02;
-    letter-spacing: -0.035em;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 82px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
     color: #ffffff;
-    margin-bottom: 22px;
-    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9);
+    margin-bottom: 20px;
+    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
   }
   .mag-hero-h1 em {
     font-style: italic;
@@ -249,12 +268,12 @@ function buildHtml() {
   }
 
   .mag-lead-deck {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.38;
     color: #e2e8f0;
-    max-width: 920px;
-    margin-bottom: 40px;
+    max-width: 780px;
+    margin-bottom: 32px;
     text-shadow: 0 2px 12px rgba(0,0,0,0.8);
   }
 
@@ -262,39 +281,40 @@ function buildHtml() {
   .mag-bias-segmented {
     display: flex;
     width: 100%;
-    height: 84px;
-    border-radius: 24px;
+    height: 74px;
+    border-radius: 20px;
     overflow: hidden;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
   }
   .mag-seg {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 21px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 19px;
     font-weight: 900;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   .mag-seg.left {
-    background: rgba(37, 99, 235, 0.85);
+    background: rgba(37, 99, 235, 0.9);
     color: #ffffff;
     flex: 0.85;
   }
   .mag-seg.center {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.16);
     color: #ffffff;
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
-    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.16);
+    border-right: 1px solid rgba(255, 255, 255, 0.16);
     flex: 1.3;
   }
   .mag-seg.right {
-    background: rgba(239, 68, 68, 0.85);
+    background: rgba(239, 68, 68, 0.9);
     color: #ffffff;
     flex: 1;
   }
@@ -303,40 +323,39 @@ function buildHtml() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
-    padding-top: 8px;
+    margin-top: 22px;
   }
   .mag-footer-text {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #f1f5f9;
     letter-spacing: -0.01em;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
   .mag-circle-indicator {
-    width: 68px;
-    height: 68px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     background: #ffffff;
     color: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 24px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
 
   /* ========================================================
-     SCENE 2: MAGAZINE MULTI-PERSPECTIVE SPREAD
+     SCENE 2: THREE HEADLINES SPREAD (FRAUNCES + CARDS)
      ======================================================== */
   .mag-spread-title {
-    font-family: 'Newsreader', 'Playfair Display', serif;
-    font-size: 52px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 46px;
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.025em;
     color: #ffffff;
-    margin-bottom: 36px;
+    margin-bottom: 24px;
     text-shadow: 0 4px 20px rgba(0,0,0,0.9);
   }
   .mag-spread-title span {
@@ -347,30 +366,30 @@ function buildHtml() {
   .mag-cards-stack {
     display: flex;
     flex-direction: column;
-    gap: 28px;
-    margin-bottom: 32px;
+    gap: 18px;
+    margin-bottom: 24px;
   }
   .mag-card-glass {
-    background: rgba(10, 14, 24, 0.85);
+    background: rgba(12, 18, 32, 0.88);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 28px;
-    padding: 34px 38px;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 22px;
+    padding: 24px 28px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 12px;
     position: relative;
   }
   .mag-card-glass.accent-blue {
-    border-left: 8px solid #3b82f6;
+    border-left: 6px solid #3b82f6;
   }
   .mag-card-glass.accent-gray {
-    border-left: 8px solid #94a3b8;
+    border-left: 6px solid #94a3b8;
   }
   .mag-card-glass.accent-red {
-    border-left: 8px solid #ef4444;
+    border-left: 6px solid #ef4444;
   }
 
   .mcard-top {
@@ -381,26 +400,27 @@ function buildHtml() {
   .mcard-outlet-group {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
   .mcard-logo {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
   .mcard-name {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 800;
     color: #ffffff;
   }
   .mcard-tag {
-    font-size: 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
     font-weight: 900;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 6px 18px;
+    padding: 5px 14px;
     border-radius: 9999px;
   }
   .tag-blue { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
@@ -408,15 +428,15 @@ function buildHtml() {
   .tag-red { background: rgba(239, 68, 68, 0.25); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
 
   .mcard-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 29px;
-    line-height: 1.34;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 24px;
+    line-height: 1.32;
     font-weight: 700;
     color: #f8fafc;
     letter-spacing: -0.01em;
   }
   .mcard-meta {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #94a3b8;
   }
@@ -426,12 +446,12 @@ function buildHtml() {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 9999px;
-    padding: 20px 30px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    font-size: 23px;
+    gap: 10px;
+    font-size: 20px;
     font-weight: 700;
     color: #ffffff;
     backdrop-filter: blur(16px);
@@ -448,41 +468,42 @@ function buildHtml() {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 30px 0;
+    padding: 16px 0;
   }
   .mag-pull-mark {
-    font-family: 'Playfair Display', serif;
-    font-size: 180px;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 140px;
     line-height: 0.6;
     color: #60a5fa;
     font-weight: 900;
-    margin-bottom: 24px;
-    text-shadow: 0 0 40px rgba(96, 165, 250, 0.5);
+    margin-bottom: 20px;
+    text-shadow: 0 0 36px rgba(96, 165, 250, 0.5);
   }
   .mag-pull-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 64px;
-    line-height: 1.2;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 52px;
+    line-height: 1.22;
     font-style: italic;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.025em;
-    margin-bottom: 40px;
+    margin-bottom: 28px;
     text-shadow: 0 4px 24px rgba(0,0,0,0.9);
   }
   .mag-speaker-title {
-    font-size: 28px;
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
     font-weight: 900;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #ffffff;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .mag-speaker-sub {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
     color: #cbd5e1;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
   }
 
   /* ========================================================
@@ -497,87 +518,263 @@ function buildHtml() {
     text-align: center;
   }
   .mag-seal-emblem {
-    width: 170px;
-    height: 170px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
-    box-shadow: 0 0 50px rgba(96, 165, 250, 0.25);
+    margin-bottom: 20px;
+    box-shadow: 0 0 44px rgba(96, 165, 250, 0.25);
     backdrop-filter: blur(16px);
   }
   .mag-seal-emblem img {
-    width: 110px;
-    height: 110px;
+    width: 88px;
+    height: 88px;
     object-fit: contain;
     filter: invert(1);
   }
   .mag-outro-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 66px;
-    font-weight: 900;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 56px;
+    font-weight: 800;
     letter-spacing: -0.02em;
     color: #ffffff;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
   .mag-outro-subtitle {
-    font-size: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #94a3b8;
-    margin-bottom: 44px;
+    margin-bottom: 32px;
   }
   .mag-outro-slogan {
-    font-family: 'Playfair Display', serif;
-    font-size: 58px;
-    font-weight: 900;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 50px;
+    font-weight: 800;
     line-height: 1.18;
     color: #ffffff;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
   }
   .mag-outro-slogan em {
     font-style: italic;
     color: #93c5fd;
   }
   .mag-outro-desc {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 500;
     line-height: 1.45;
     color: #cbd5e1;
-    max-width: 760px;
-    margin-bottom: 48px;
+    max-width: 680px;
+    margin-bottom: 32px;
   }
   .mag-bio-pill {
     width: 100%;
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 28px;
-    padding: 24px 34px;
+    border-radius: 24px;
+    padding: 20px 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 14px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.4);
   }
   .mag-bio-badge {
     background: #2563eb;
     color: #ffffff;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 900;
-    padding: 8px 18px;
+    padding: 7px 16px;
     border-radius: 9999px;
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
   .mag-bio-label {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #ffffff;
+  }
+
+  /* ========================================================
+     REALISTIC INSTAGRAM REEL UI SIMULATION OVERLAY
+     ======================================================== */
+  .ig-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    display: none; /* toggled via JS/CSS */
+  }
+  .ig-overlay.active {
+    display: block;
+  }
+
+  /* Instagram Top Bar */
+  .ig-top-bar {
+    position: absolute;
+    top: 60px;
+    left: 48px;
+    right: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ig-top-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  .ig-camera-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  /* Instagram Right Action Rail */
+  .ig-action-rail {
+    position: absolute;
+    right: 28px;
+    bottom: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+  }
+  .ig-action-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ig-action-icon {
+    width: 44px;
+    height: 44px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+  }
+  .ig-action-count {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  }
+  .ig-audio-disc {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 2px solid #ffffff;
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  }
+
+  /* Instagram Bottom Caption Area */
+  .ig-bottom-content {
+    position: absolute;
+    left: 48px;
+    right: 170px;
+    bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .ig-user-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .ig-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #2563eb;
+    border: 2px solid #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 22px;
+  }
+  .ig-username {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  }
+  .ig-follow-btn {
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    background: transparent;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 10px;
+  }
+  .ig-caption {
+    font-size: 22px;
+    line-height: 1.4;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  }
+  .ig-caption span {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 600;
+  }
+  .ig-audio-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+  }
+
+  /* Instagram Bottom Navigation Bar */
+  .ig-bottom-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 90px;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 20px;
+  }
+  .ig-nav-icon {
+    width: 36px;
+    height: 36px;
+    opacity: 0.9;
+  }
+
+  /* Safe Zone Guide Boundary Overlay (for debug / inspection) */
+  .safe-zone-guide {
+    position: absolute;
+    top: 150px;
+    left: 64px;
+    right: 184px;
+    bottom: 490px;
+    border: 2px dashed rgba(59, 130, 246, 0.4);
+    pointer-events: none;
+    border-radius: 16px;
+    display: none;
+  }
+  .safe-zone-guide.active {
+    display: block;
   }
 
 </style>
@@ -598,7 +795,7 @@ function buildHtml() {
       <div id="progressFill" class="mag-progress-fill"></div>
     </div>
 
-    <!-- Magazine Masthead -->
+    <!-- Magazine Masthead (Cleaned & Safe) -->
     <div class="mag-masthead">
       <div class="masthead-left">
         <img src="${logoBase64}" class="masthead-emblem" alt="">
@@ -702,7 +899,7 @@ function buildHtml() {
       </div>
 
       <div>
-        <div style="font-size: 18px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 20px; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
+        <div style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 16px; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
           DISTRIBUȚIA OPINIILOR ÎN REDACȚIILE DIN ROMÂNIA
         </div>
         <div class="mag-bias-segmented">
@@ -737,7 +934,7 @@ function buildHtml() {
           Analizăm presa din România din toate unghiurile ca tu să vezi imaginea completă, fără distorsiuni.
         </p>
 
-        <div class="mag-bias-segmented" style="width: 100%; margin-top: 0; margin-bottom: 30px;">
+        <div class="mag-bias-segmented" style="width: 100%; margin-top: 0; margin-bottom: 24px;">
           <div class="mag-seg left">STÂNGA</div>
           <div class="mag-seg center">CENTRU</div>
           <div class="mag-seg right">DREAPTA</div>
@@ -752,12 +949,125 @@ function buildHtml() {
 
   </div>
 
+  <!-- Safe Zone Visual Guide -->
+  <div id="safeGuide" class="safe-zone-guide"></div>
+
+  <!-- Instagram Reel UI Overlay Simulation -->
+  <div id="igOverlay" class="ig-overlay">
+    <!-- Top Bar -->
+    <div class="ig-top-bar">
+      <div class="ig-top-left">
+        <span>‹</span>
+        <span>Reels</span>
+      </div>
+      <svg class="ig-camera-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+    </div>
+
+    <!-- Right Action Rail -->
+    <div class="ig-action-rail">
+      <!-- Like -->
+      <div class="ig-action-item">
+        <svg class="ig-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="ig-action-count">18.4K</span>
+      </div>
+
+      <!-- Comment -->
+      <div class="ig-action-item">
+        <svg class="ig-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span class="ig-action-count">421</span>
+      </div>
+
+      <!-- Share -->
+      <div class="ig-action-item">
+        <svg class="ig-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        <span class="ig-action-count">2.1K</span>
+      </div>
+
+      <!-- Save -->
+      <div class="ig-action-item">
+        <svg class="ig-action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+
+      <!-- More -->
+      <div class="ig-action-item">
+        <svg class="ig-action-icon" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="2"></circle>
+          <circle cx="19" cy="12" r="2"></circle>
+          <circle cx="5" cy="12" r="2"></circle>
+        </svg>
+      </div>
+
+      <!-- Music Disc -->
+      <div class="ig-audio-disc">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18V5l12-2v13"></path>
+          <circle cx="6" cy="18" r="3"></circle>
+          <circle cx="18" cy="16" r="3"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Bottom Caption Area -->
+    <div class="ig-bottom-content">
+      <div class="ig-user-row">
+        <div class="ig-avatar">C</div>
+        <span class="ig-username">thesite.ro</span>
+        <button class="ig-follow-btn">Urmărește</button>
+      </div>
+
+      <div class="ig-caption">
+        Planul de pace ajunge la Moscova. Emisarii lui Donald Trump au sosit pentru negocieri... <span>mai mult</span>
+      </div>
+
+      <div class="ig-audio-row">
+        <span>🎵</span>
+        <span>Sunet original • thesite.ro - Dosarul Zilei</span>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="ig-bottom-bar">
+      <!-- Home -->
+      <svg class="ig-nav-icon" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+      <!-- Search -->
+      <svg class="ig-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <!-- Reels Active -->
+      <svg class="ig-nav-icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <polygon points="10 8 16 12 10 16 10 8" fill="#ffffff"></polygon>
+      </svg>
+      <!-- Heart -->
+      <svg class="ig-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+      <!-- Profile -->
+      <div style="width: 32px; height: 32px; border-radius: 50%; background: #ffffff; border: 1px solid #ffffff;"></div>
+    </div>
+  </div>
+
   <script>
     window.setReelProgress = function(t) {
       document.getElementById('progressFill').style.width = (t * 100) + '%';
 
       // Cinematic slow Ken Burns zoom
-      const zoom = 1.04 + (t * 0.08);
+      const zoom = 1.05 + (t * 0.08);
       document.getElementById('bgFull').style.transform = 'scale(' + zoom + ')';
 
       const s1 = document.getElementById('scene1');
@@ -795,6 +1105,20 @@ function buildHtml() {
       });
       document.getElementById('progressFill').style.width = ((n / 4) * 100) + '%';
     };
+
+    window.toggleInstagramOverlay = function(show) {
+      const el = document.getElementById('igOverlay');
+      if (el) {
+        el.className = show ? 'ig-overlay active' : 'ig-overlay';
+      }
+    };
+
+    window.toggleSafeGuide = function(show) {
+      const el = document.getElementById('safeGuide');
+      if (el) {
+        el.className = show ? 'safe-zone-guide active' : 'safe-zone-guide';
+      }
+    };
   </script>
 </body>
 </html>`;
@@ -807,31 +1131,55 @@ async function renderFullBleedMagazineReel() {
   fs.mkdirSync(publicReelsDir, { recursive: true });
   fs.mkdirSync(tempFramesDir, { recursive: true });
 
-  console.log('🚀 Rendering FULL-BLEED MAGAZINE REEL (4 Scenes, 16s, 24 FPS)...');
+  console.log('🚀 Rendering FULL-BLEED MAGAZINE REEL with Fraunces & Instagram Safe Zone...');
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
     viewport: { width: 1080, height: 1920 },
     deviceScaleFactor: 1,
   });
   const page = await context.newPage();
-  await page.setContent(html, { waitUntil: 'load' });
+  await page.setContent(html, { waitUntil: 'networkidle' });
   await page.waitForTimeout(600);
 
-  // 1. Capture 4 static scene slides
+  // 1. Capture 4 clean production scene slides (No IG overlay)
+  console.log('  📸 Capturing 4 Clean Production Slides...');
   for (let s = 1; s <= 4; s++) {
-    await page.evaluate(num => window.showScene(num), s);
-    await page.waitForTimeout(150);
+    await page.evaluate(num => {
+      window.showScene(num);
+      window.toggleInstagramOverlay(false);
+      window.toggleSafeGuide(false);
+    }, s);
+    await page.waitForTimeout(100);
     const pngPath = path.join(publicReelsDir, `magazine_fullbleed_scene${s}.png`);
     await page.screenshot({ path: pngPath, type: 'png' });
-    console.log(`  ✓ Scene ${s} PNG: ${pngPath}`);
+    console.log(`    ✓ Clean Scene ${s}: ${pngPath}`);
   }
 
-  // 2. Capture video frames
+  // 2. Capture 4 SIMULATED INSTAGRAM REEL SLIDES (With Instagram Overlay)
+  console.log('  📱 Capturing 4 Simulated Instagram Reel Slides with UI Overlay...');
+  for (let s = 1; s <= 4; s++) {
+    await page.evaluate(num => {
+      window.showScene(num);
+      window.toggleInstagramOverlay(true);
+      window.toggleSafeGuide(false);
+    }, s);
+    await page.waitForTimeout(100);
+    const igPngPath = path.join(publicReelsDir, `magazine_fullbleed_ig_simulated_scene${s}.png`);
+    await page.screenshot({ path: igPngPath, type: 'png' });
+    console.log(`    ✓ Simulated IG Scene ${s}: ${igPngPath}`);
+  }
+
+  // 3. Capture video frames for MP4 (Clean, no IG overlay)
+  await page.evaluate(() => {
+    window.toggleInstagramOverlay(false);
+    window.toggleSafeGuide(false);
+  });
+
   const fps = 24;
   const duration = 16;
   const totalFrames = fps * duration;
 
-  console.log(`  🎬 Capturing ${totalFrames} frames...`);
+  console.log(`  🎬 Capturing ${totalFrames} frames for clean MP4...`);
   for (let i = 0; i < totalFrames; i++) {
     const t = i / totalFrames;
     await page.evaluate(progress => window.setReelProgress(progress), t);
@@ -844,13 +1192,13 @@ async function renderFullBleedMagazineReel() {
   console.log(`\n  ✓ All ${totalFrames} frames captured.`);
   await browser.close();
 
-  // 3. Encode MP4
+  // 4. Encode MP4
   const outputMp4 = path.join(publicReelsDir, 'magazine_fullbleed_reel.mp4');
   console.log(`  🎞️ Encoding ${outputMp4}...`);
   const ffmpegMp4 = `ffmpeg -y -framerate ${fps} -i "${tempFramesDir}/frame_%04d.jpg" -c:v libx264 -preset fast -profile:v high -level:v 4.2 -pix_fmt yuv420p -movflags +faststart "${outputMp4}"`;
   execSync(ffmpegMp4, { stdio: 'ignore' });
 
-  // 4. Encode GIF preview
+  // 5. Encode GIF preview
   const outputGif = path.join(publicReelsDir, 'magazine_fullbleed_reel.gif');
   console.log(`  🎞️ Encoding GIF preview ${outputGif}...`);
   const ffmpegGif = `ffmpeg -y -i "${outputMp4}" -vf "fps=10,scale=360:640:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" "${outputGif}"`;
@@ -862,6 +1210,7 @@ async function renderFullBleedMagazineReel() {
   fs.copyFileSync(outputGif, path.join(artifactsDir, 'magazine_fullbleed_reel.gif'));
   for (let s = 1; s <= 4; s++) {
     fs.copyFileSync(path.join(publicReelsDir, `magazine_fullbleed_scene${s}.png`), path.join(artifactsDir, `magazine_fullbleed_scene${s}.png`));
+    fs.copyFileSync(path.join(publicReelsDir, `magazine_fullbleed_ig_simulated_scene${s}.png`), path.join(artifactsDir, `magazine_fullbleed_ig_simulated_scene${s}.png`));
   }
 
   // Cleanup
@@ -869,6 +1218,7 @@ async function renderFullBleedMagazineReel() {
   console.log('\n🎉 FULL-BLEED MAGAZINE REEL GENERATED SUCCESSFULLY!');
   console.log('  MP4:', outputMp4);
   console.log('  GIF:', outputGif);
+  console.log('  Simulated IG Slides: magazine_fullbleed_ig_simulated_scene[1-4].png');
 }
 
 renderFullBleedMagazineReel().catch(err => {
