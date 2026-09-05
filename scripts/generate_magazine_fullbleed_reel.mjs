@@ -79,49 +79,79 @@ function buildHtml() {
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Full-Bleed Photo Canvas */
+  /* Centered Photo Canvas with Dual Black Fade */
   .fullbleed-layer {
     position: absolute;
     inset: 0;
     width: 1080px;
     height: 1920px;
+    background: #000000;
     overflow: hidden;
   }
+
+  .photo-center-stage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 1080px;
+    height: 1260px;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+  }
+
   .fullbleed-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 25%;
     transform: scale(1.05);
-    filter: brightness(0.88) contrast(110%);
+    filter: brightness(0.92) contrast(110%);
     transition: transform 0.1s linear;
   }
 
-  /* Magazine Multi-Stop Scrim Gradient
-     Engineered for Instagram Safe Zone:
-     - Top scrim for Reels back button & title (0 - 220px)
-     - Clean window for imagery in middle (220px - 750px)
-     - Rich dark gradient starting at 800px so content is hyper-legible
-     - Solid dark base from 1440px to 1920px so Instagram caption & handle pop cleanly */
-  .magazine-scrim {
+  /* Deep Atmospheric Black Fades Top & Bottom */
+  .black-fade-top {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 480px;
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.25) 12%,
-      rgba(0, 0, 0, 0.2) 35%,
-      rgba(3, 7, 18, 0.78) 55%,
-      rgba(3, 7, 18, 0.94) 75%,
-      rgba(2, 4, 10, 0.98) 100%
+      #000000 0%,
+      #000000 35%,
+      rgba(0, 0, 0, 0.86) 60%,
+      rgba(0, 0, 0, 0.35) 82%,
+      transparent 100%
     );
     pointer-events: none;
+    z-index: 2;
+  }
+
+  .black-fade-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1120px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(0, 0, 0, 0.4) 15%,
+      rgba(0, 0, 0, 0.88) 35%,
+      #000000 55%,
+      #000000 100%
+    );
+    pointer-events: none;
+    z-index: 2;
   }
 
   .magazine-overlay-texture {
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 40%, transparent 50%, rgba(0,0,0,0.55) 100%);
+    background: radial-gradient(circle at 50% 45%, transparent 50%, rgba(0,0,0,0.65) 100%);
     pointer-events: none;
+    z-index: 3;
   }
 
   /* ========================================================
@@ -197,7 +227,7 @@ function buildHtml() {
   /* Scenes Container */
   .mag-scene {
     flex: 1;
-    display: none;
+    display: none !important;
     flex-direction: column;
     justify-content: flex-end;
     padding-top: 20px;
@@ -206,17 +236,25 @@ function buildHtml() {
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .mag-scene.active {
-    display: flex;
+    display: flex !important;
     opacity: 1;
     transform: translateY(0);
   }
 
   /* ========================================================
-     SCENE 1: COVER (FRAUNCES EDITORIAL)
+     SCENE 1: COVER (FRAUNCES EDITORIAL - CENTERED)
      ======================================================== */
+  #scene1.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+  }
   .mag-kicker-pill {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     font-family: 'Syne', sans-serif;
     font-size: 16px;
@@ -224,7 +262,7 @@ function buildHtml() {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #60a5fa;
-    margin-bottom: 18px;
+    margin: 0 auto 18px auto;
     text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
   .kicker-rule {
@@ -242,6 +280,7 @@ function buildHtml() {
     letter-spacing: -0.03em;
     color: #ffffff;
     margin-bottom: 20px;
+    text-align: center;
     text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
   }
   .mag-hero-h1 em {
@@ -256,7 +295,8 @@ function buildHtml() {
     line-height: 1.38;
     color: #e2e8f0;
     max-width: 780px;
-    margin-bottom: 32px;
+    margin: 0 auto 32px auto;
+    text-align: center;
     text-shadow: 0 2px 12px rgba(0,0,0,0.8);
   }
 
@@ -304,8 +344,9 @@ function buildHtml() {
 
   .mag-footer-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    gap: 16px;
     margin-top: 22px;
   }
   .mag-footer-text {
@@ -759,10 +800,13 @@ function buildHtml() {
 </head>
 <body>
 
-  <!-- Full-Bleed Edge-to-Edge Image Layer -->
+  <!-- Centered Edge-to-Edge Image Layer with Top & Bottom Black Fade -->
   <div class="fullbleed-layer">
-    <img id="bgFull" src="${storyImageBase64}" class="fullbleed-img" alt="">
-    <div class="magazine-scrim"></div>
+    <div class="photo-center-stage">
+      <img id="bgFull" src="${storyImageBase64}" class="fullbleed-img" alt="">
+    </div>
+    <div class="black-fade-top"></div>
+    <div class="black-fade-bottom"></div>
     <div class="magazine-overlay-texture"></div>
   </div>
 
@@ -785,7 +829,7 @@ function buildHtml() {
          SCENE 1: FULL-BLEED MAGAZINE COVER (0 - 4.5s)
          ======================================================== -->
     <div id="scene1" class="mag-scene active">
-      <div>
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;">
         <div class="mag-kicker-pill">
           <span class="kicker-rule"></span> ${story.kicker}
         </div>
@@ -795,7 +839,7 @@ function buildHtml() {
         <p class="mag-lead-deck">${story.leadText}</p>
       </div>
 
-      <div>
+      <div style="width: 100%;">
         <div class="mag-bias-segmented">
           <div class="mag-seg left">STÂNGA ${story.bias.left}%</div>
           <div class="mag-seg center">CENTRU ${story.bias.center}%</div>
