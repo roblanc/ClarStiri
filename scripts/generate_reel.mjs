@@ -113,10 +113,8 @@ export function buildReelHtml(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const headlines = getHeadlines(story);
-
   const coverImage = story.image || story.imageUrl || story.sources?.find(s => s.imageUrl)?.imageUrl || 'https://www.thesite.ro/hero-illustration-headphones.webp';
 
-  // Title split into hero and sub
   let titleHero = (story.title || '').trim();
   let titleSub = '';
   const splitDelimiters = [': ', ' - ', ' — ', ' | '];
@@ -136,7 +134,7 @@ export function buildReelHtml(story) {
   }
 
   const titleLength = (story.title || '').length;
-  const heroFontSize = titleLength > 120 ? '44px' : titleLength > 80 ? '48px' : '52px';
+  const heroFontSize = titleLength > 120 ? '42px' : titleLength > 80 ? '46px' : '50px';
 
   const kicker = (story.category ? `${story.category.toUpperCase()} • ` : '') + 'PERSPECTIVĂ EDITORIALĂ COMPARATĂ';
   let leadText = story.summary || story.description || 'Cum este reflectat acest subiect în principalele redacții din presa românească?';
@@ -156,13 +154,18 @@ export function buildReelHtml(story) {
   }
 
   const speaker = story.speaker || 'ANALIZĂ DE PRESĂ';
-  const speakerRole = story.speakerRole || `Monitorizare pe ${totalSources || 12} redacții naționale • thesite.ro`;
+  const speakerRole = story.speakerRole || `Monitorizare pe ${totalSources || 8} redacții naționale • thesite.ro`;
+
+  // Segment proportions: ensure at least 22 flex so even tiny percentages have a wide enough pill
+  const leftFlex = Math.max(left, 22);
+  const centerFlex = Math.max(center, 22);
+  const rightFlex = Math.max(right, 22);
 
   return `<!DOCTYPE html>
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>ClarStiri Centered Magazine Reel</title>
+<title>ClarStiri Perfectly Centered Reel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
@@ -180,13 +183,13 @@ export function buildReelHtml(story) {
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Photo Section in Upper Half - completely dedicated, zero text overlap */
+  /* Photo Section in Upper Half - 780px tall for perfect optical balance */
   .fullbleed-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 1080px;
-    height: 860px;
+    height: 780px;
     background: #000000;
     overflow: hidden;
     z-index: 1;
@@ -196,7 +199,7 @@ export function buildReelHtml(story) {
     position: absolute;
     inset: 0;
     width: 1080px;
-    height: 860px;
+    height: 780px;
     overflow: hidden;
   }
 
@@ -210,13 +213,12 @@ export function buildReelHtml(story) {
     transition: transform 0.1s linear;
   }
 
-  /* Deep Atmospheric Black Fades Top & Bottom of photo */
   .black-fade-top {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 240px;
+    height: 220px;
     background: linear-gradient(
       180deg,
       #000000 0%,
@@ -232,29 +234,29 @@ export function buildReelHtml(story) {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 320px;
+    height: 280px;
     background: linear-gradient(
       180deg,
       transparent 0%,
-      rgba(0, 0, 0, 0.35) 30%,
-      rgba(0, 0, 0, 0.85) 70%,
+      rgba(0, 0, 0, 0.35) 25%,
+      rgba(0, 0, 0, 0.88) 65%,
       #000000 100%
     );
     pointer-events: none;
     z-index: 2;
   }
 
-  /* Instagram Reel Safe Zone Layout - Symmetrical margins: 90px left & right */
+  /* Instagram Reel Layout - Perfectly Symmetrical (80px margins) */
   .magazine-layout {
     position: absolute;
     top: 0;
     left: 0;
     width: 1080px;
     height: 1920px;
-    padding-top: 140px;
-    padding-left: 90px;
-    padding-right: 90px;
-    padding-bottom: 490px;
+    padding-top: 130px;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-bottom: 440px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -265,8 +267,8 @@ export function buildReelHtml(story) {
   .mag-progress-track {
     position: absolute;
     top: 50px;
-    left: 90px;
-    right: 90px;
+    left: 80px;
+    right: 80px;
     height: 4px;
     background: rgba(255, 255, 255, 0.25);
     border-radius: 9999px;
@@ -287,7 +289,7 @@ export function buildReelHtml(story) {
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-bottom: 18px;
+    padding-bottom: 16px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
     position: relative;
     z-index: 20;
@@ -312,9 +314,9 @@ export function buildReelHtml(story) {
   }
   .masthead-right-tag {
     font-family: 'Syne', sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #94a3b8;
   }
@@ -333,15 +335,15 @@ export function buildReelHtml(story) {
     transform: translateY(0);
   }
 
-  /* SCENE 1: COVER - Symmetrically centered text below photo */
+  /* SCENE 1: COVER - Optically centered in the bottom half */
   #scene1.active {
     display: flex !important;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     text-align: center;
     height: 100%;
-    padding-top: 660px;
+    padding-top: 560px; /* perfectly positions cluster in center of lower half */
   }
   .mag-kicker-pill {
     display: inline-flex;
@@ -349,15 +351,15 @@ export function buildReelHtml(story) {
     justify-content: center;
     gap: 10px;
     font-family: 'Syne', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #60a5fa;
-    margin: 0 auto 16px auto;
+    margin: 0 auto 14px auto;
   }
   .kicker-rule {
-    width: 24px;
+    width: 22px;
     height: 3px;
     background: #60a5fa;
     border-radius: 2px;
@@ -381,7 +383,7 @@ export function buildReelHtml(story) {
   }
 
   .mag-lead-deck {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 500;
     line-height: 1.35;
     color: #cbd5e1;
@@ -390,70 +392,92 @@ export function buildReelHtml(story) {
     text-align: center;
   }
 
-  /* Segmented Bias Bar - 100% Centered with balanced proportions */
+  /* Segmented Bias Bar - 100% Symmetrical with Smart Stacked Labels */
   .mag-bias-segmented {
     display: flex;
     width: 100%;
-    height: 64px;
-    border-radius: 18px;
+    max-width: 920px;
+    height: 72px;
+    border-radius: 20px;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
     margin: 0 auto;
   }
   .mag-seg {
-    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 18px;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    overflow: hidden;
+    min-width: 140px;
+    padding: 0 10px;
   }
   .mag-seg.left {
     background: rgba(37, 99, 235, 0.95);
     color: #ffffff;
-    flex: ${Math.max(left, 15)};
+    flex: ${leftFlex};
   }
   .mag-seg.center {
     background: rgba(255, 255, 255, 0.16);
     color: #ffffff;
     border-left: 1px solid rgba(255, 255, 255, 0.16);
     border-right: 1px solid rgba(255, 255, 255, 0.16);
-    flex: ${Math.max(center, 15)};
+    flex: ${centerFlex};
   }
   .mag-seg.right {
     background: rgba(239, 68, 68, 0.95);
     color: #ffffff;
-    flex: ${Math.max(right, 15)};
+    flex: ${rightFlex};
+  }
+
+  /* Inner Stacked Format: Pct + Label - Fits in any pill size without overflow */
+  .seg-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .seg-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .seg-pct {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #ffffff;
   }
 
   .mag-footer-row {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     margin: 18px auto 0 auto;
   }
   .mag-footer-text {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 700;
     color: #f1f5f9;
     letter-spacing: -0.01em;
   }
   .mag-circle-indicator {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: #ffffff;
     color: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 20px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.5);
   }
 
@@ -461,13 +485,13 @@ export function buildReelHtml(story) {
   #scene2.active {
     display: flex !important;
     flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 30px;
+    justify-content: center;
+    padding-top: 20px;
     height: 100%;
   }
   .mag-spread-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 48px;
+    font-size: 46px;
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.025em;
@@ -580,39 +604,37 @@ export function buildReelHtml(story) {
   #scene3.active {
     display: flex !important;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     text-align: center;
-    padding-top: 40px;
     height: 100%;
   }
   .mag-quote-center {
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 16px 0;
+    padding: 24px 0 32px 0;
   }
   .mag-pull-mark {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 130px;
+    font-size: 120px;
     line-height: 0.6;
     color: #60a5fa;
     font-weight: 900;
-    margin: 0 auto 24px auto;
+    margin: 0 auto 20px auto;
     text-shadow: 0 0 36px rgba(96, 165, 250, 0.5);
   }
   .mag-pull-text {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 46px;
+    font-size: 44px;
     line-height: 1.25;
     font-style: italic;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.025em;
-    margin: 0 auto 28px auto;
+    margin: 0 auto 24px auto;
     text-align: center;
   }
   .mag-speaker-title {
@@ -640,7 +662,6 @@ export function buildReelHtml(story) {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding-top: 40px;
     height: 100%;
   }
   .mag-outro-box {
@@ -655,17 +676,17 @@ export function buildReelHtml(story) {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .mag-outro-logo-img {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
     filter: invert(1) drop-shadow(0 6px 26px rgba(96, 165, 250, 0.45));
   }
   .mag-outro-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #ffffff;
@@ -673,32 +694,32 @@ export function buildReelHtml(story) {
   }
   .mag-outro-subtitle {
     font-family: 'Syne', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #94a3b8;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
   .mag-outro-slogan {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 46px;
+    font-size: 44px;
     font-weight: 800;
     line-height: 1.18;
     color: #ffffff;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
   .mag-outro-slogan em {
     font-style: italic;
     color: #93c5fd;
   }
   .mag-outro-desc {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: 500;
     line-height: 1.45;
     color: #cbd5e1;
     max-width: 680px;
-    margin-bottom: 28px;
+    margin-bottom: 26px;
   }
   .mag-bio-clean {
     width: 100%;
@@ -710,7 +731,7 @@ export function buildReelHtml(story) {
   }
   .mag-bio-clean-tag {
     font-family: 'Syne', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -718,10 +739,10 @@ export function buildReelHtml(story) {
   }
   .mag-bio-clean-sep {
     color: rgba(255, 255, 255, 0.35);
-    font-size: 20px;
+    font-size: 18px;
   }
   .mag-bio-clean-label {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.01em;
@@ -769,9 +790,24 @@ export function buildReelHtml(story) {
 
       <div style="width: 100%;">
         <div class="mag-bias-segmented">
-          <div class="mag-seg left">STÂNGA ${left}%</div>
-          <div class="mag-seg center">CENTRU ${center}%</div>
-          <div class="mag-seg right">DREAPTA ${right}%</div>
+          <div class="mag-seg left">
+            <div class="seg-inner">
+              <span class="seg-label">STÂNGA</span>
+              <span class="seg-pct">${left}%</span>
+            </div>
+          </div>
+          <div class="mag-seg center">
+            <div class="seg-inner">
+              <span class="seg-label">CENTRU</span>
+              <span class="seg-pct">${center}%</span>
+            </div>
+          </div>
+          <div class="mag-seg right">
+            <div class="seg-inner">
+              <span class="seg-label">DREAPTA</span>
+              <span class="seg-pct">${right}%</span>
+            </div>
+          </div>
         </div>
 
         <div class="mag-footer-row">
@@ -843,16 +879,31 @@ export function buildReelHtml(story) {
       </div>
 
       <div style="width: 100%;">
-        <div style="font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin: 0 auto 14px auto; text-align: center;">
+        <div style="font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin: 0 auto 14px auto; text-align: center;">
           DISTRIBUȚIA ÎN REDACȚIILE DIN ROMÂNIA
         </div>
         <div class="mag-bias-segmented">
-          <div class="mag-seg left">STÂNGA ${left}%</div>
-          <div class="mag-seg center">CENTRU ${center}%</div>
-          <div class="mag-seg right">DREAPTA ${right}%</div>
+          <div class="mag-seg left">
+            <div class="seg-inner">
+              <span class="seg-label">STÂNGA</span>
+              <span class="seg-pct">${left}%</span>
+            </div>
+          </div>
+          <div class="mag-seg center">
+            <div class="seg-inner">
+              <span class="seg-label">CENTRU</span>
+              <span class="seg-pct">${center}%</span>
+            </div>
+          </div>
+          <div class="mag-seg right">
+            <div class="seg-inner">
+              <span class="seg-label">DREAPTA</span>
+              <span class="seg-pct">${right}%</span>
+            </div>
+          </div>
         </div>
         <div class="mag-footer-row">
-          <span class="mag-footer-text">Analiză pe ${totalSources || 12} redacții naționale.</span>
+          <span class="mag-footer-text">Analiză pe ${totalSources || 8} redacții naționale.</span>
           <div class="mag-circle-indicator">➔</div>
         </div>
       </div>
@@ -878,9 +929,24 @@ export function buildReelHtml(story) {
 
         <!-- PERCENTAGES INCLUDED IN SCENE 4 -->
         <div class="mag-bias-segmented" style="width: 100%; margin-top: 0; margin-bottom: 24px;">
-          <div class="mag-seg left">STÂNGA ${left}%</div>
-          <div class="mag-seg center">CENTRU ${center}%</div>
-          <div class="mag-seg right">DREAPTA ${right}%</div>
+          <div class="mag-seg left">
+            <div class="seg-inner">
+              <span class="seg-label">STÂNGA</span>
+              <span class="seg-pct">${left}%</span>
+            </div>
+          </div>
+          <div class="mag-seg center">
+            <div class="seg-inner">
+              <span class="seg-label">CENTRU</span>
+              <span class="seg-pct">${center}%</span>
+            </div>
+          </div>
+          <div class="mag-seg right">
+            <div class="seg-inner">
+              <span class="seg-label">DREAPTA</span>
+              <span class="seg-pct">${right}%</span>
+            </div>
+          </div>
         </div>
 
         <div class="mag-bio-clean">
