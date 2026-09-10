@@ -107,7 +107,7 @@ function escapeHtml(str = '') {
     .replace(/"/g, '&quot;');
 }
 
-function buildReelHtml(story) {
+export function buildReelHtml(story) {
   const left = Math.round(story.bias?.left || 0);
   const center = Math.round(story.bias?.center || 0);
   const right = Math.round(story.bias?.right || 0);
@@ -135,8 +135,14 @@ function buildReelHtml(story) {
     titleSub = words.slice(mid).join(' ');
   }
 
+  const titleLength = (story.title || '').length;
+  const heroFontSize = titleLength > 120 ? '44px' : titleLength > 80 ? '48px' : '52px';
+
   const kicker = (story.category ? `${story.category.toUpperCase()} • ` : '') + 'PERSPECTIVĂ EDITORIALĂ COMPARATĂ';
-  const leadText = story.summary || story.description || 'Cum este reflectat acest subiect în principalele redacții din presa românească?';
+  let leadText = story.summary || story.description || 'Cum este reflectat acest subiect în principalele redacții din presa românească?';
+  if (leadText.length > 120) {
+    leadText = leadText.slice(0, 115).trim() + '...';
+  }
 
   let quoteText = story.quote || story.keyQuote;
   if (!quoteText) {
@@ -174,23 +180,23 @@ function buildReelHtml(story) {
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Centered Photo Canvas with Dual Black Fade */
+  /* Photo Section in Upper Half - completely dedicated, zero text overlap */
   .fullbleed-layer {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
     width: 1080px;
-    height: 1920px;
+    height: 860px;
     background: #000000;
     overflow: hidden;
+    z-index: 1;
   }
 
   .photo-center-stage {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    inset: 0;
     width: 1080px;
-    height: 1260px;
-    transform: translate(-50%, -50%);
+    height: 860px;
     overflow: hidden;
   }
 
@@ -198,25 +204,23 @@ function buildReelHtml(story) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 25%;
+    object-position: center 20%;
     transform: scale(1.05);
-    filter: brightness(0.92) contrast(110%);
+    filter: brightness(0.96) contrast(105%);
     transition: transform 0.1s linear;
   }
 
-  /* Deep Atmospheric Black Fades Top & Bottom */
+  /* Deep Atmospheric Black Fades Top & Bottom of photo */
   .black-fade-top {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 480px;
+    height: 240px;
     background: linear-gradient(
       180deg,
       #000000 0%,
-      #000000 35%,
-      rgba(0, 0, 0, 0.86) 60%,
-      rgba(0, 0, 0, 0.35) 82%,
+      rgba(0, 0, 0, 0.75) 45%,
       transparent 100%
     );
     pointer-events: none;
@@ -228,25 +232,16 @@ function buildReelHtml(story) {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 1120px;
+    height: 320px;
     background: linear-gradient(
       180deg,
       transparent 0%,
-      rgba(0, 0, 0, 0.4) 15%,
-      rgba(0, 0, 0, 0.88) 35%,
-      #000000 55%,
+      rgba(0, 0, 0, 0.35) 30%,
+      rgba(0, 0, 0, 0.85) 70%,
       #000000 100%
     );
     pointer-events: none;
     z-index: 2;
-  }
-
-  .magazine-overlay-texture {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 45%, transparent 50%, rgba(0,0,0,0.65) 100%);
-    pointer-events: none;
-    z-index: 3;
   }
 
   /* Instagram Reel Safe Zone Layout */
@@ -256,7 +251,7 @@ function buildReelHtml(story) {
     left: 0;
     width: 1080px;
     height: 1920px;
-    padding-top: 150px;
+    padding-top: 140px;
     padding-left: 64px;
     padding-right: 184px;
     padding-bottom: 490px;
@@ -290,9 +285,12 @@ function buildReelHtml(story) {
   .mag-masthead {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     padding-bottom: 18px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    position: relative;
+    z-index: 20;
   }
   .masthead-left {
     display: flex;
@@ -317,9 +315,6 @@ function buildReelHtml(story) {
   .mag-scene {
     flex: 1;
     display: none !important;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-top: 20px;
     opacity: 0;
     transform: translateY(10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -330,27 +325,27 @@ function buildReelHtml(story) {
     transform: translateY(0);
   }
 
-  /* SCENE 1: COVER */
+  /* SCENE 1: COVER - Text strictly in lower half below photo */
   #scene1.active {
     display: flex !important;
     flex-direction: column;
     justify-content: flex-end;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
+    height: 100%;
+    padding-top: 660px; /* leaves upper 840px strictly for photo */
   }
   .mag-kicker-pill {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     gap: 10px;
     font-family: 'Syne', sans-serif;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #60a5fa;
-    margin: 0 auto 18px auto;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    margin-bottom: 14px;
   }
   .kicker-rule {
     width: 24px;
@@ -361,14 +356,13 @@ function buildReelHtml(story) {
 
   .mag-hero-h1 {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 82px;
+    font-size: ${heroFontSize};
     font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
     color: #ffffff;
-    margin-bottom: 20px;
-    text-align: center;
-    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.95);
+    margin-bottom: 16px;
+    text-align: left;
   }
   .mag-hero-h1 em {
     font-style: italic;
@@ -377,28 +371,25 @@ function buildReelHtml(story) {
   }
 
   .mag-lead-deck {
-    font-size: 26px;
+    font-size: 22px;
     font-weight: 500;
-    line-height: 1.38;
-    color: #e2e8f0;
-    max-width: 780px;
-    margin: 0 auto 32px auto;
-    text-align: center;
-    text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+    line-height: 1.35;
+    color: #cbd5e1;
+    max-width: 820px;
+    margin-bottom: 24px;
+    text-align: left;
   }
 
   /* Segmented Bias Bar */
   .mag-bias-segmented {
     display: flex;
     width: 100%;
-    height: 74px;
-    border-radius: 20px;
+    height: 64px;
+    border-radius: 18px;
     overflow: hidden;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   }
   .mag-seg {
     flex: 1;
@@ -406,13 +397,13 @@ function buildReelHtml(story) {
     align-items: center;
     justify-content: center;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 900;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
   .mag-seg.left {
-    background: rgba(37, 99, 235, 0.9);
+    background: rgba(37, 99, 235, 0.95);
     color: #ffffff;
     flex: ${Math.max(left, 15)};
   }
@@ -424,48 +415,54 @@ function buildReelHtml(story) {
     flex: ${Math.max(center, 15)};
   }
   .mag-seg.right {
-    background: rgba(239, 68, 68, 0.9);
+    background: rgba(239, 68, 68, 0.95);
     color: #ffffff;
     flex: ${Math.max(right, 15)};
   }
 
   .mag-footer-row {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 16px;
-    margin-top: 22px;
+    margin-top: 18px;
   }
   .mag-footer-text {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: #f1f5f9;
     letter-spacing: -0.01em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
   .mag-circle-indicator {
-    width: 58px;
-    height: 58px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: #ffffff;
     color: #000000;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    font-size: 22px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
   }
 
-  /* SCENE 2: THREE HEADLINES */
+  /* SCENE 2: THREE HEADLINES - Pure dark editorial, zero photo underneath */
+  #scene2.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 30px;
+    height: 100%;
+  }
   .mag-spread-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 800;
-    line-height: 1.14;
+    line-height: 1.15;
     letter-spacing: -0.025em;
     color: #ffffff;
-    margin-bottom: 26px;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+    margin-bottom: 24px;
+    text-align: left;
   }
   .mag-spread-title span {
     font-style: italic;
@@ -475,30 +472,28 @@ function buildReelHtml(story) {
   .mag-cards-stack {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     margin-bottom: 24px;
   }
   .mag-card-glass {
-    background: rgba(12, 18, 32, 0.88);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
+    background: #0f172a;
     border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 24px;
-    padding: 26px 32px;
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 22px 26px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     position: relative;
   }
   .mag-card-glass.accent-blue {
-    border-left: 7px solid #3b82f6;
+    border-left: 6px solid #3b82f6;
   }
   .mag-card-glass.accent-gray {
-    border-left: 7px solid #94a3b8;
+    border-left: 6px solid #94a3b8;
   }
   .mag-card-glass.accent-red {
-    border-left: 7px solid #ef4444;
+    border-left: 6px solid #ef4444;
   }
 
   .mcard-top {
@@ -509,28 +504,28 @@ function buildReelHtml(story) {
   .mcard-outlet-group {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
   }
   .mcard-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 9px;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: #ffffff;
   }
   .mcard-name {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     color: #ffffff;
   }
   .mcard-tag {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 900;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 9999px;
   }
   .tag-blue { background: rgba(59, 130, 246, 0.25); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
@@ -539,38 +534,44 @@ function buildReelHtml(story) {
 
   .mcard-quote {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 29px;
-    line-height: 1.34;
+    font-size: 26px;
+    line-height: 1.3;
     font-weight: 700;
     color: #f8fafc;
     letter-spacing: -0.01em;
   }
   .mcard-meta {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #94a3b8;
   }
 
   .mag-social-banner {
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
     border-radius: 9999px;
-    padding: 18px 28px;
+    padding: 16px 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
     color: #ffffff;
-    backdrop-filter: blur(16px);
   }
   .mag-social-banner b {
     color: #60a5fa;
   }
 
   /* SCENE 3: PULL-QUOTE */
+  #scene3.active {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 40px;
+    height: 100%;
+  }
   .mag-quote-center {
     flex: 1;
     display: flex;
@@ -580,27 +581,26 @@ function buildReelHtml(story) {
   }
   .mag-pull-mark {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 140px;
+    font-size: 130px;
     line-height: 0.6;
     color: #60a5fa;
     font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     text-shadow: 0 0 36px rgba(96, 165, 250, 0.5);
   }
   .mag-pull-text {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 52px;
-    line-height: 1.22;
+    font-size: 46px;
+    line-height: 1.25;
     font-style: italic;
     font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.025em;
     margin-bottom: 28px;
-    text-shadow: 0 4px 24px rgba(0,0,0,0.9);
   }
   .mag-speaker-title {
     font-family: 'Syne', sans-serif;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 900;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -608,40 +608,49 @@ function buildReelHtml(story) {
     margin-bottom: 6px;
   }
   .mag-speaker-sub {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     color: #cbd5e1;
     letter-spacing: 0.02em;
   }
 
   /* SCENE 4: OUTRO */
+  #scene4.active {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-top: 40px;
+    height: 100%;
+  }
   .mag-outro-box {
-    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
+    width: 100%;
   }
   .mag-outro-logo-wrap {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .mag-outro-logo-img {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     object-fit: contain;
     filter: invert(1) drop-shadow(0 6px 26px rgba(96, 165, 250, 0.45));
   }
   .mag-outro-title {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 56px;
+    font-size: 52px;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #ffffff;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
   .mag-outro-subtitle {
     font-family: 'Syne', sans-serif;
@@ -650,27 +659,27 @@ function buildReelHtml(story) {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: #94a3b8;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
   .mag-outro-slogan {
     font-family: 'Fraunces', Georgia, serif;
-    font-size: 50px;
+    font-size: 46px;
     font-weight: 800;
     line-height: 1.18;
     color: #ffffff;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
   .mag-outro-slogan em {
     font-style: italic;
     color: #93c5fd;
   }
   .mag-outro-desc {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 1.45;
     color: #cbd5e1;
     max-width: 680px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
   .mag-bio-clean {
     width: 100%;
@@ -687,31 +696,28 @@ function buildReelHtml(story) {
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #60a5fa;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
   }
   .mag-bio-clean-sep {
     color: rgba(255, 255, 255, 0.35);
     font-size: 20px;
   }
   .mag-bio-clean-label {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.01em;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
   }
 </style>
 </head>
 <body>
 
-  <!-- Centered Image Layer with Dual Black Fade -->
+  <!-- Top Dedicated Photo Layer (Scene 1 only) -->
   <div class="fullbleed-layer">
     <div class="photo-center-stage">
       <img id="bgFull" src="${coverImage}" class="fullbleed-img" alt="" onerror="this.src='https://www.thesite.ro/hero-illustration-headphones.webp'">
     </div>
     <div class="black-fade-top"></div>
     <div class="black-fade-bottom"></div>
-    <div class="magazine-overlay-texture"></div>
   </div>
 
   <div class="magazine-layout">
@@ -731,7 +737,7 @@ function buildReelHtml(story) {
 
     <!-- SCENE 1: COVER (0 - 4.5s) -->
     <div id="scene1" class="mag-scene active">
-      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; width: 100%;">
+      <div style="display: flex; flex-direction: column; align-items: flex-start; text-align: left; width: 100%;">
         <div class="mag-kicker-pill">
           <span class="kicker-rule"></span> ${escapeHtml(kicker)}
         </div>
@@ -817,7 +823,7 @@ function buildReelHtml(story) {
       </div>
 
       <div>
-        <div style="font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 16px; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">
+        <div style="font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #94a3b8; margin-bottom: 14px;">
           DISTRIBUȚIA ÎN REDACȚIILE DIN ROMÂNIA
         </div>
         <div class="mag-bias-segmented">
@@ -876,27 +882,32 @@ function buildReelHtml(story) {
       const bg = document.getElementById('bgFull');
       if (bg) bg.style.transform = 'scale(' + zoom + ')';
 
+      const bgLayer = document.querySelector('.fullbleed-layer');
       const s1 = document.getElementById('scene1');
       const s2 = document.getElementById('scene2');
       const s3 = document.getElementById('scene3');
       const s4 = document.getElementById('scene4');
 
       if (t < 0.28) {
+        if (bgLayer) { bgLayer.style.display = 'block'; bgLayer.style.opacity = '1'; }
         if (s1) s1.className = 'mag-scene active';
         if (s2) s2.className = 'mag-scene';
         if (s3) s3.className = 'mag-scene';
         if (s4) s4.className = 'mag-scene';
       } else if (t < 0.56) {
+        if (bgLayer) { bgLayer.style.display = 'none'; bgLayer.style.opacity = '0'; }
         if (s1) s1.className = 'mag-scene';
         if (s2) s2.className = 'mag-scene active';
         if (s3) s3.className = 'mag-scene';
         if (s4) s4.className = 'mag-scene';
       } else if (t < 0.82) {
+        if (bgLayer) { bgLayer.style.display = 'none'; bgLayer.style.opacity = '0'; }
         if (s1) s1.className = 'mag-scene';
         if (s2) s2.className = 'mag-scene';
         if (s3) s3.className = 'mag-scene active';
         if (s4) s4.className = 'mag-scene';
       } else {
+        if (bgLayer) { bgLayer.style.display = 'none'; bgLayer.style.opacity = '0'; }
         if (s1) s1.className = 'mag-scene';
         if (s2) s2.className = 'mag-scene';
         if (s3) s3.className = 'mag-scene';
