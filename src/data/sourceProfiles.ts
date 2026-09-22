@@ -741,12 +741,21 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   defapt: {
     id: 'defapt',
-    currentOwner: 'Independent',
+    currentOwner: 'Independent / structură privată',
+    ownershipHistory:
+      'Defapt.ro este o publicație independentă de fact-checking. Structura de proprietate nu este complet transparentă public.',
     editorialLine:
-      'Publicație de fact-checking și verificare a declarațiilor politice.',
+      'Publicație de fact-checking și verificare a declarațiilor politice și publice. Metodologie bazată pe verificarea surselor și a datelor publice.',
     biasRationale:
-      'Defapt.ro se prezintă ca publicație de fact-checking independentă. Orientarea ușor centru-dreapta poate fi subtilă prin alegerea subiectelor verificate.',
+      'Ca publicație de fact-checking, Defapt încearcă să opereze obiectiv. Alegerea subiectelor de verificat și frecvența cu care sunt verificate declarațiile unor actori față de alții poate introduce un bias implicit. Orientarea ușor centru-dreapta este o inferență bazată pe pattern-ul de subiecte, nu pe o poziționare explicită.',
+    notablePatterns: [
+      'Verificarea declarațiilor politicienilor',
+      'Metodologie bazată pe surse oficiale',
+      'Abordare relativ transpartinică',
+    ],
+    strengths: ['Fact-checking metodic', 'Transparență metodologică parțială'],
     biasScore: 20,
+    factualityRationale: 'Factualitate ridicată prin natura fact-checking-ului.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
@@ -754,11 +763,20 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   dailybusiness: {
     id: 'dailybusiness',
     currentOwner: 'Proprietate privată',
+    ownershipHistory:
+      'Daily Business este o publicație online de știri economice și de business. Structura de proprietate nu este complet transparentă public.',
     editorialLine:
-      'Publicație de business și știri economice.',
+      'Publicație de business axată pe știri economice, corporate, finanțe și investiții. Acoperire a mediului de afaceri românesc și internațional.',
     biasRationale:
-      'Publicație economic-orientată cu tendință centru-dreapta specifică jurnalismului de business. Pro-piață liberă, pro-investiții.',
+      'Publicație economic-orientată fără partizanism politic explicit. Tendința centru-dreapta este specifică jurnalismului de business: accent pe piața liberă, investiții, economie de piață. Nu promovează o agendă politică de partid.',
+    notablePatterns: [
+      'Acoperire predominant economică și corporate',
+      'Ton pro-business și pro-investiții',
+      'Puțin conținut politic sau social',
+    ],
+    strengths: ['Specializare în economie de business', 'Ton profesional'],
     biasScore: 20,
+    factualityRationale: 'Factualitate relativ ridicată în domeniul economic.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
@@ -854,11 +872,19 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   flux24: {
     id: 'flux24',
     currentOwner: 'Proprietate privată',
+    ownershipHistory:
+      'Flux24.ro este un site de știri cu orientare conservatoare-naționalistă. Proprietatea nu este transparentă public.',
     editorialLine:
-      'Site de știri cu orientare dreapta-naționalistă.',
+      'Site de știri cu orientare dreapta-naționalistă. Promovează teme conservatoare, identitare și critice față de UE și establishmentul politic mainstream.',
     biasRationale:
-      'Flux24 acoperă știri cu framing naționalist și conservator. Tendința de dreapta este vizibilă în alegerea subiectelor și tonul editorial.',
+      'Flux24 se încadrează în categoria publicațiilor de dreapta-conservatoare. Alegerea subiectelor, framing-ul și tonul editorial reflectă o orientare naționalistă. Mai moderat decât Antena3 sau ActiveNews, dar cu un bias clar de dreapta vizibil.',
+    notablePatterns: [
+      'Tematici naționaliste și conservatoare',
+      'Critică a establishmentului politic liberal',
+      'Amplificarea narativelor de dreapta',
+    ],
     biasScore: 60,
+    factualityRationale: 'Factualitate mixtă — bias editorial influențează selecția și framing-ul știrilor.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
@@ -936,16 +962,22 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   academiacatavencu: {
     id: 'academiacatavencu',
     foundedYear: 1990,
-    founders: ['Ion Iuga', 'Ioana Bâldea Constantinescu', 'alții'],
+    founders: ['Ion Iuga', 'Ioana Bâldea Constantinescu', 'Mircea Toma', 'alții'],
     currentOwner: 'Proprietate privată',
     ownershipHistory:
-      'Una dintre primele publicații satirice post-comuniste. Precursor sau legat editorial de Cațavencii.',
+      'Academia Cațavencu este publicația satirică fondată în 1990, imediat după Revoluție, ca revistă de satiră politică. A fost una dintre primele voci critice libere ale României post-comuniste. Ulterior a apărut și Cațavencii ca publicație soră/derivată, cu echipe editoriale parțial suprapuse. Ambele funcționează ca entități editoriale independente.',
     editorialLine:
-      'Satiră politică clasică. Critică transpartinică a politicienilor și a clasei dirigente.',
+      'Satiră politică și socială de tradiție. Critică acerbă, cu umor și ironie, a clasei politice fără distincție de culoare. Articole de opinie și pamflete literare de calitate.',
     biasRationale:
-      'Similar cu Cațavencii — satiră care lovește transpartisan. Calitate literară ridicată. Bias politic minim.',
+      'Ca publicație de satiră cu tradiție, Academia Cațavencu lovește transpartisan. Nu are o agendă politică explicită. Critica generalizată a corupției și a incompetenței politice poate fi percepută ca ușor centristă în context românesc.',
+    notablePatterns: [
+      'Satiră literară de calitate ridicată',
+      'Critică transpartinică sistematică',
+      'Ironie și umor ca instrumente editoriale principale',
+    ],
+    strengths: ['Independență editorială', 'Calitate literară', 'Tradiție post-decembristă'],
     biasScore: 0,
-    confidence: 'low',
+    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -954,12 +986,19 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   wowbiz: {
     id: 'wowbiz',
     currentOwner: 'Proprietate privată',
+    ownershipHistory:
+      'WOWbiz.ro este un tabloid online de entertainment. Proprietatea exactă nu este transparentă public.',
     editorialLine:
-      'Tabloid de entertainment și celebrities. Conținut de divertisment, vedete, scandal.',
+      'Tabloid de entertainment și celebrities. Conținut de divertisment, vedete, scandal monden, viața personală a persoanelor publice.',
     biasRationale:
-      'Tabloid cu focus pe entertainment. Bias politic minimal — conținutul este preponderent apolitical. Factualitate mixtă specifică tabloide.',
+      'Tabloid cu focus exclusiv pe entertainment. Conținutul este preponderent apolitical — bias politic practic absent. Factualitatea este mixtă, specifică tabloidelor de divertisment: informații corecte dar deseori senzaționalizate.',
+    notablePatterns: [
+      'Focalizare pe vieți private ale vedetelor',
+      'Titluri clickbait',
+      'Conținut fără relevanță politică',
+    ],
     biasScore: 0,
-    factualityRationale: 'Factualitate mixtă — tabloid entertainment.',
+    factualityRationale: 'Factualitate mixtă — senzaționalism tipic tabloidelor de entertainment.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
@@ -967,11 +1006,19 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
   actualitate: {
     id: 'actualitate',
     currentOwner: 'Proprietate privată',
+    ownershipHistory:
+      'Actualitate.net este un site generalist de știri. Proprietatea nu este transparentă public și nu există informații verificabile despre fondatori sau structura acționariată.',
     editorialLine:
-      'Site de știri generale. Conținut mixt.',
+      'Agregator și publicator de știri generale. Acoperire largă: politică, social, economic, divertisment. Fără linie editorială distinctă.',
     biasRationale:
-      'Publicație generalistă fără orientare politică clară documentată. Tendință ușor centristă.',
+      'Lipsa de informații transparente despre proprietate și linia editorială neclară fac dificilă o evaluare precisă. Conținutul pare să urmeze știrile mainstream fără o poziție politică consistentă.',
+    notablePatterns: [
+      'Agregare știri din surse multiple',
+      'Linie editorială neclară',
+      'Acoperire generalistă fără specializare',
+    ],
     biasScore: 5,
+    factualityRationale: 'Factualitate mixtă — variantă în funcție de sursele agregate.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
@@ -992,13 +1039,28 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
 
   jurnalul: {
     id: 'jurnalul',
-    foundedYear: 1990,
-    currentOwner: 'Proprietate privată',
+    foundedYear: 1993,
+    founders: ['Dan Voiculescu'],
+    currentOwner: 'Proprietate privată (schimbată post-2018)',
+    parentCompany: 'Anterior: Intact Media Group',
+    ownershipHistory:
+      'Jurnalul Național a fost fondat în 1993 de Dan Voiculescu ca ziar de tip broadsheet și a fost multă vreme parte a Intact Media Group. După condamnarea lui Voiculescu în 2014, publicația a trecut prin schimbări de proprietate. Versiunea digitală actuală (jurnalul.ro) funcționează sub o altă structură acționariată, cu legăturile directe cu Intact mult diminuate.',
+    politicalConnections: [
+      'Fondator: Dan Voiculescu — condamnat pentru colaborare cu Securitatea, fondator PC',
+      'Istoric legat de Intact Media Group',
+      'Orientare actuală neclară post-restructurare',
+    ],
+    fundingSources: ['Publicitate', 'Publicitate online'],
     editorialLine:
-      'Ziar național de știri generale. Acoperire politică și socială.',
+      'Ziar național de știri generale, cu acoperire politică, socială și economică. Linia editorială actuală este mai moderată față de trecutul înrudit cu Intact.',
     biasRationale:
-      'Jurnalul are o orientare generală centristă cu ușoară tendință conservatoare în anumite perioade. Proprietatea și conexiunile politice nu sunt complet transparente.',
+      'Istoricul proprietății legate de Dan Voiculescu și Intact conferă o amprentă de dreapta conservatoare. Post-restructurare, orientarea este mai greu de clasificat, cu tendință centristă sau ușor conservatoare. Confidența este scăzută din cauza lipsei de transparență privind structura actuală.',
+    notablePatterns: [
+      'Transformare din print în digital',
+      'Linie editorială moderată față de originile Intact',
+    ],
     biasScore: 10,
+    factualityRationale: 'Factualitate mixtă. Standarde jurnalistice variabile.',
     confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
