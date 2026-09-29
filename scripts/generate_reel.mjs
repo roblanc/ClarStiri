@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 async function fetchTopStories() {
   return new Promise((resolve, reject) => {
-    https.get('https://www.thesite.ro/api/news?limit=30', (res) => {
+    https.get('https://thesite.ro/api/news?limit=30', (res) => {
       let data = '';
       res.on('data', chunk => data += chunk);
       res.on('end', () => {
