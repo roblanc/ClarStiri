@@ -221,9 +221,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Archive individual stories for 30 days — enables lookup even after expiry from main feed
         const STORY_ARCHIVE_TTL = 30 * 24 * 60 * 60;
-        Promise.allSettled(
+        // Awaited: un-awaited writes can be dropped when the function freezes after responding.
+        const archiveResults = await Promise.allSettled(
             allStories.map(story => redis!.set(`story:${story.id}`, story, { ex: STORY_ARCHIVE_TTL }))
-        ).catch(e => console.error('[CRON] Story archive write failed:', e));
+        );
+        const archiveFailures = archiveResults.filter(r => r.status === 'rejected').length;
+        if (archiveFailures > 0) console.error(`[CRON] Story archive write failed for ${archiveFailures} stories`);
 
         const duration = Date.now() - startTime;
         console.log(`[CRON] Cache refreshed in ${duration}ms`);

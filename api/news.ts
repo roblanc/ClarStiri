@@ -17,6 +17,8 @@ const STALE_AFTER = 10 * 60; // după 10 min primul vizitator declanșează refr
 const MIN_SOURCES_THRESHOLD = 2; // matches frontend filter (sourcesCount > 1) — no point storing single-source stories
 const REFRESH_LOCK_KEY = `${CACHE_KEY}:refresh_lock`;
 const REFRESH_LOCK_TTL = 5 * 60;
+const REFRESH_TRIGGER_KEY = `${CACHE_KEY}:refresh_trigger`;
+const REFRESH_TRIGGER_TTL = 5 * 60;
 const EDGE_CACHE_S_MAXAGE = 60;
 const EDGE_CACHE_STALE_WHILE_REVALIDATE = 120;
 
@@ -78,6 +80,39 @@ async function buildAndStoreLatestNews(redis: Redis, limit: number): Promise<Agg
     }
 
     return storiesToStore;
+}
+
+/**
+ * Refresh a stale cache in the background. Prefers the full cron pipeline
+ * (/api/cron/refresh-news), which merges with existing stories and writes the
+ * 30-day `story:<id>` archive, so story links shared on social media keep working.
+ * A short trigger key throttles this to one call per window across all visitors.
+ */
+async function triggerStaleRefresh(redis: Redis, req: VercelRequest): Promise<void> {
+    try {
+        const cronSecret = process.env.CRON_SECRET;
+        if (cronSecret) {
+            const claimed = await redis.set(REFRESH_TRIGGER_KEY, Date.now(), { nx: true, ex: REFRESH_TRIGGER_TTL });
+            if (claimed !== 'OK') return;
+            const host = (req.headers['x-forwarded-host'] as string) || req.headers.host;
+            const response = await fetch(`https://${host}/api/cron/refresh-news`, {
+                headers: { Authorization: `Bearer ${cronSecret}` },
+            });
+            if (!response.ok) console.error('Background cron refresh failed:', response.status);
+            return;
+        }
+
+        // No CRON_SECRET (local dev): rebuild in-process.
+        const lockId = await acquireRefreshLock(redis);
+        if (!lockId) return;
+        try {
+            await buildAndStoreLatestNews(redis, 50);
+        } finally {
+            await releaseRefreshLock(redis, lockId);
+        }
+    } catch (error) {
+        console.error('Background refresh failed:', error);
+    }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -153,20 +188,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             if (isStale && redis) {
                 // waitUntil keeps the function alive after the response is sent,
                 // otherwise Vercel may freeze the instance mid-refresh.
-                waitUntil(
-                    acquireRefreshLock(redis)
-                        .then(async (lockId) => {
-                            if (!lockId) return;
-                            try {
-                                await buildAndStoreLatestNews(redis, 50);
-                            } catch (error) {
-                                console.error('Background refresh failed:', error);
-                            } finally {
-                                await releaseRefreshLock(redis, lockId);
-                            }
-                        })
-                        .catch((error) => console.error('Background refresh lock failed:', error))
-                );
+                waitUntil(triggerStaleRefresh(redis, req));
             }
             return;
         }
