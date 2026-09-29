@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
 import type { AggregatedStory } from './_lib/aggregation.js';
+import { loadArchivedStory } from './_lib/storyArchive.js';
 
 /**
  * Server-side meta injection for /stire/:id, served only to crawlers and link-preview bots
@@ -49,16 +50,23 @@ async function loadIndexHtml(host: string): Promise<string | null> {
 
 async function findStory(id: string): Promise<AggregatedStory | null> {
     const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = process.env;
-    if (!UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) return null;
-    const url = UPSTASH_REDIS_REST_URL.startsWith('http') ? UPSTASH_REDIS_REST_URL : `https://${UPSTASH_REDIS_REST_URL}`;
-    const redis = new Redis({ url, token: UPSTASH_REDIS_REST_TOKEN });
+    if (UPSTASH_REDIS_REST_URL && UPSTASH_REDIS_REST_TOKEN) {
+        const url = UPSTASH_REDIS_REST_URL.startsWith('http') ? UPSTASH_REDIS_REST_URL : `https://${UPSTASH_REDIS_REST_URL}`;
+        const redis = new Redis({ url, token: UPSTASH_REDIS_REST_TOKEN });
+        try {
+            const archived = await redis.get<AggregatedStory>(`story:${id}`);
+            if (archived) return archived;
+            const latest = await redis.get<AggregatedStory[]>(CACHE_KEY);
+            const found = latest?.find(s => s.id === id);
+            if (found) return found;
+        } catch (e) {
+            console.error('[story-page] Redis read failed:', e);
+        }
+    }
     try {
-        const archived = await redis.get<AggregatedStory>(`story:${id}`);
-        if (archived) return archived;
-        const latest = await redis.get<AggregatedStory[]>(CACHE_KEY);
-        return latest?.find(s => s.id === id) ?? null;
+        return await loadArchivedStory(id);
     } catch (e) {
-        console.error('[story-page] Redis read failed:', e);
+        console.error('[story-page] Permanent archive read failed:', e);
         return null;
     }
 }

@@ -8,6 +8,7 @@ import {
 } from './_lib/shared.js';
 import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo, resolveStoryImageFromSources } from './_lib/aggregation.js';
 import { setCorsHeaders } from './_lib/cors.js';
+import { loadArchivedStory } from './_lib/storyArchive.js';
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news_v2';
@@ -143,11 +144,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Per-story archive lookup: GET /api/news?id=<storyId>
         const storyId = req.query.id as string | undefined;
         if (storyId) {
-            if (!redis) return res.status(503).json({ success: false, error: 'Redis unavailable' });
-            const story = await redis.get<AggregatedStory>(`story:${storyId}`);
+            let story: AggregatedStory | null = null;
+            let servedFrom: 'redis' | 'db' = 'redis';
+            if (redis) {
+                try {
+                    story = await redis.get<AggregatedStory>(`story:${storyId}`);
+                } catch (e) {
+                    console.error('Redis story read failed:', e);
+                }
+            }
+            if (!story) {
+                // Permanent archive: stories older than the 30-day Redis TTL.
+                try {
+                    story = await loadArchivedStory(storyId);
+                    servedFrom = 'db';
+                } catch (e) {
+                    console.error('Permanent archive read failed:', e);
+                }
+            }
             if (story) {
                 res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
-                return res.status(200).json({ success: true, data: story, fromArchive: true });
+                return res.status(200).json({ success: true, data: story, fromArchive: true, servedFrom });
             }
             return res.status(404).json({ success: false, error: 'Story not found in archive' });
         }

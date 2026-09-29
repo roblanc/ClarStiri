@@ -7,6 +7,7 @@ import {
 } from '../_lib/shared.js';
 import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo } from '../_lib/aggregation.js';
 import { mergeWithExisting } from '../_lib/storyMerge.js';
+import { archiveStories } from '../_lib/storyArchive.js';
 
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
@@ -163,12 +164,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const archiveFailures = archiveResults.filter(r => r.status === 'rejected').length;
         if (archiveFailures > 0) console.error(`[CRON] Story archive write failed for ${archiveFailures} stories`);
 
+        // Permanent archive in Postgres. Best-effort: a DB failure must never fail the refresh.
+        let dbArchive: { stories: number; sources: number } | { error: string } | null = null;
+        try {
+            dbArchive = await archiveStories(allStories);
+        } catch (e) {
+            console.error('[CRON] Permanent archive write failed:', e);
+            dbArchive = { error: e instanceof Error ? e.message : String(e) };
+        }
+
         const duration = Date.now() - startTime;
         console.log(`[CRON] Cache refreshed in ${duration}ms`);
 
         return res.status(200).json({
             success: true,
             message: 'Cache refreshed with source accumulation',
+            dbArchive,
             stats: {
                 newsItems: allNews.length,
                 freshStories: freshStories.length,
