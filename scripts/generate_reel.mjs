@@ -4,6 +4,9 @@ import https from 'https';
 import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
 import { execSync } from 'child_process';
+import { buildReelHtml as buildReelHtmlV2 } from './social_v2.mjs';
+import { nextDesign } from './design_rotation.mjs';
+import { filterUnposted, recordPostedLinks } from './post_dedupe.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1007,7 +1010,7 @@ export function buildReelHtml(story) {
 }
 
 async function renderReelVideo(story, outputPath) {
-  const html = buildReelHtml(story);
+  const html = nextDesign('reel') === 'v2' ? buildReelHtmlV2(story) : buildReelHtml(story);
   const tempDir = path.join(__dirname, '..', 'social_export', 'temp_frames');
   fs.mkdirSync(tempDir, { recursive: true });
 
@@ -1070,20 +1073,19 @@ async function main() {
   }
 
   const history = getPostedHistory();
-  const postedIds = new Set(history.map(h => h.id));
-  const postedTitles = new Set(history.map(h => (h.title || '').trim().toLowerCase()));
 
-  // Filtrăm doar știrile nepostate încă
-  const unposted = stories.filter(s => {
-    if (postedIds.has(s.id)) return false;
-    const cleanTitle = (s.title || '').trim().toLowerCase();
-    if (postedTitles.has(cleanTitle)) return false;
-    return true;
-  });
+  // Filtrăm știrile deja postate, inclusiv același eveniment sub alt id sau alt titlu
+  const unposted = filterUnposted(stories, history);
 
   console.log(`📊 Găsite ${stories.length} știri, dintre care ${unposted.length} nepostate.`);
 
-  const candidatePool = unposted.length > 0 ? unposted : stories;
+  // Fără știri noi nu postăm nimic: nu repetăm o știre deja publicată.
+  if (unposted.length === 0) {
+    console.error('❌ Nicio știre nouă de postat, toate au fost deja publicate. Sar peste această postare.');
+    process.exitCode = 1;
+    return;
+  }
+  const candidatePool = unposted;
 
   // Sortăm candidații după relevanță editorială pentru social media
   candidatePool.sort((a, b) => {
@@ -1095,6 +1097,7 @@ async function main() {
   });
 
   const story = candidatePool[0];
+  recordPostedLinks(story);
   console.log('📌 Selected Story for Reel:', story.title);
   console.log(`   Surse: ${story.sourcesCount || story.sources?.length} | Blindspot: ${story.blindspot || 'none'}`);
 

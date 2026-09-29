@@ -4,6 +4,9 @@ import https from 'https';
 import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
 import { buildHtmlSlides } from './generate_carousel.mjs';
+import { buildHtmlSlides as buildHtmlSlidesV2 } from './social_v2.mjs';
+import { nextDesign } from './design_rotation.mjs';
+import { filterUnposted, recordPostedLinks } from './post_dedupe.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,24 +68,23 @@ async function run() {
   }
 
   const history = getPostedHistory();
-  const postedIds = new Set(history.map(h => h.id));
-  const postedTitles = new Set(history.map(h => (h.title || '').trim().toLowerCase()));
 
-  // Filtrăm doar știrile nepostate încă
-  const unposted = stories.filter(s => {
-    if (postedIds.has(s.id)) return false;
-    const cleanTitle = (s.title || '').trim().toLowerCase();
-    if (postedTitles.has(cleanTitle)) return false;
-    return true;
-  });
+  // Filtrăm știrile deja postate, inclusiv același eveniment sub alt id sau alt titlu
+  const unposted = filterUnposted(stories, history);
 
   console.log(`📊 Găsite ${stories.length} știri, dintre care ${unposted.length} nepostate.`);
 
   // Căutăm cea mai bună știre nepostată:
   // 1. Știri cu blindspot (punct orb) și cel puțin 2-3 surse
   // 2. Știri cu cele mai multe surse și acoperire diversă
-  // 3. Dacă toate au fost postate, luăm cea mai recentă din feed
-  const candidatePool = unposted.length > 0 ? unposted : stories;
+  // 3. Dacă toate au fost postate, nu postăm nimic (fără repetări)
+  // Fără știri noi nu postăm nimic: nu repetăm o știre deja publicată.
+  if (unposted.length === 0) {
+    console.error('❌ Nicio știre nouă de postat, toate au fost deja publicate. Sar peste această postare.');
+    process.exitCode = 1;
+    return;
+  }
+  const candidatePool = unposted;
 
   // Sortăm candidații după relevanță editorială pentru social media
   candidatePool.sort((a, b) => {
@@ -99,11 +101,13 @@ async function run() {
 
   // Salvăm în istoric pentru a preveni postarea duplicată
   recordPostedStory(story);
+  recordPostedLinks(story);
 
   const outDir = path.join(__dirname, '..', 'social_export', 'latest');
   fs.mkdirSync(outDir, { recursive: true });
 
-  const { slide1, slide2, slide3 } = buildHtmlSlides(story);
+  const build = nextDesign('carousel') === 'v2' ? buildHtmlSlidesV2 : buildHtmlSlides;
+  const { slide1, slide2, slide3 } = build(story);
 
   console.log('📷 Launching Playwright browser...');
   const browser = await chromium.launch({ headless: true });
