@@ -112,6 +112,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
     }
 
+    let status = 500;
+    let body: Record<string, unknown> = { success: false, error: 'Unknown error' };
     try {
         console.log('[CRON] Starting news refresh with source accumulation...');
         const startTime = Date.now();
@@ -176,7 +178,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const duration = Date.now() - startTime;
         console.log(`[CRON] Cache refreshed in ${duration}ms`);
 
-        return res.status(200).json({
+        status = 200;
+        body = {
             success: true,
             message: 'Cache refreshed with source accumulation',
             dbArchive,
@@ -189,14 +192,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 durationMs: duration,
                 timestamp: new Date().toISOString()
             }
-        });
+        };
     } catch (error) {
         console.error('[CRON] Error refreshing cache:', error);
-        return res.status(500).json({
+        body = {
             success: false,
             error: error instanceof Error ? error.message : 'Unknown error'
-        });
+        };
     } finally {
+        // Release before responding: Vercel may freeze the function as soon as the
+        // response is sent, which left the lock stuck for its full 10-minute TTL.
         await releaseRefreshLock(redis, lockId);
     }
+    return res.status(status).json(body);
 }
