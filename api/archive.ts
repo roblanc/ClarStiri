@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { setCorsHeaders } from './cors.js';
+import { setCorsHeaders } from './_lib/cors.js';
 
 interface WaybackCapture {
     timestamp: string;

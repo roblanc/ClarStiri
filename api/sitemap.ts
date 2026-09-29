@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
-import type { AggregatedStory } from './aggregation.js';
+import type { AggregatedStory } from './_lib/aggregation.js';
 
 const CACHE_KEY = 'aggregated_news_v2';
 

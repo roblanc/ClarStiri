@@ -1,8 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Parser from 'rss-parser';
 import { Redis } from '@upstash/redis';
-import { NEWS_SOURCES, fetchRSSFeed } from './shared.js';
-import { setCorsHeaders } from './cors.js';
+import { NEWS_SOURCES, fetchRSSFeed } from './_lib/shared.js';
+import { setCorsHeaders } from './_lib/cors.js';
 
 const parser = new Parser();
 

@@ -4,8 +4,8 @@ import {
     RSSNewsItem,
     NEWS_SOURCES,
     fetchRSSFeed
-} from '../shared.js';
-import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo, calculateBiasDistribution, calculateBlindspot } from '../aggregation.js';
+} from '../_lib/shared.js';
+import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo, calculateBiasDistribution, calculateBlindspot } from '../_lib/aggregation.js';
 
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';

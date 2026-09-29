@@ -4,8 +4,8 @@ import {
     BIAS_WEIGHT_MAP as SHARED_BIAS_WEIGHT_MAP,
     NEWS_SOURCES_BASE,
     type BaseNewsSource,
-} from '../shared/newsSources.js';
-import { decodeHtmlEntities } from '../shared/htmlEntities.js';
+} from '../../shared/newsSources.js';
+import { decodeHtmlEntities } from '../../shared/htmlEntities.js';
 
 // Tipuri & Scheme Zod
 export type NewsSource = BaseNewsSource;

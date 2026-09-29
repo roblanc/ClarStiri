@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { lookup } from 'node:dns/promises';
 import { isIP } from 'node:net';
-import { setCorsHeaders } from './cors.js';
+import { setCorsHeaders } from './_lib/cors.js';
 
 const MAX_REDIRECTS = 4;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;

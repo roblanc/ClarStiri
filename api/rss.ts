@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { NEWS_SOURCES } from './shared.js';
-import { setCorsHeaders } from './cors.js';
+import { NEWS_SOURCES } from './_lib/shared.js';
+import { setCorsHeaders } from './_lib/cors.js';
 
 // Build an allowlist from the known RSS feed hostnames — no arbitrary URLs accepted
 const ALLOWED_RSS_HOSTS = new Set([

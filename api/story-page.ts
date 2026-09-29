@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
-import type { AggregatedStory } from './aggregation.js';
+import type { AggregatedStory } from './_lib/aggregation.js';
 
 /**
  * Server-side meta injection for /stire/:id, served only to crawlers and link-preview bots

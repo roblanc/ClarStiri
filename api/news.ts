@@ -5,9 +5,9 @@ import {
     RSSNewsItem,
     NEWS_SOURCES,
     fetchRSSFeed
-} from './shared.js';
-import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo, resolveStoryImageFromSources } from './aggregation.js';
-import { setCorsHeaders } from './cors.js';
+} from './_lib/shared.js';
+import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo, resolveStoryImageFromSources } from './_lib/aggregation.js';
+import { setCorsHeaders } from './_lib/cors.js';
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news_v2';
