@@ -40,3 +40,7 @@ skills-lock.json
 scripts/debug_*.mjs
 scripts/probe_ig.mjs
 scripts/login_with_code.mjs
+
+# Local backups & agent worktrees (never commit)
+.git_backup/
+.claude/worktrees/

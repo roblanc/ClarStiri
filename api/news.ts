@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
+import { waitUntil } from '@vercel/functions';
 import {
     RSSNewsItem,
     NEWS_SOURCES,
@@ -150,14 +151,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             });
 
             if (isStale && redis) {
-                acquireRefreshLock(redis)
-                    .then((lockId) => {
-                        if (!lockId) return;
-                        void buildAndStoreLatestNews(redis, 50)
-                            .catch((error) => console.error('Background refresh failed:', error))
-                            .finally(() => releaseRefreshLock(redis, lockId));
-                    })
-                    .catch((error) => console.error('Background refresh lock failed:', error));
+                // waitUntil keeps the function alive after the response is sent,
+                // otherwise Vercel may freeze the instance mid-refresh.
+                waitUntil(
+                    acquireRefreshLock(redis)
+                        .then(async (lockId) => {
+                            if (!lockId) return;
+                            try {
+                                await buildAndStoreLatestNews(redis, 50);
+                            } catch (error) {
+                                console.error('Background refresh failed:', error);
+                            } finally {
+                                await releaseRefreshLock(redis, lockId);
+                            }
+                        })
+                        .catch((error) => console.error('Background refresh lock failed:', error))
+                );
             }
             return;
         }

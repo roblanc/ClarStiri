@@ -30,6 +30,9 @@
         },
         "api/status.ts": {
             "maxDuration": 15
+        },
+        "api/story-page.ts": {
+            "maxDuration": 10
         }
     },
     "rewrites": [
@@ -48,6 +51,17 @@
         {
             "source": "/api/(.*)",
             "destination": "/api/$1"
+        },
+        {
+            "source": "/stire/:id",
+            "has": [
+                {
+                    "type": "header",
+                    "key": "user-agent",
+                    "value": ".*([Bb]ot|[Cc]rawl|[Ss]pider|facebookexternalhit|WhatsApp|Slack|Discord|Pinterest|Embedly|[Pp]review|Skype|vkShare|Google-InspectionTool).*"
+                }
+            ],
+            "destination": "/api/story-page?id=:id"
         },
         {
             "source": "/((?!api/|social_preview/).*)",

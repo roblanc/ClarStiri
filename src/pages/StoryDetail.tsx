@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { BiasBar } from "@/components/BiasBar";
 import { useAggregatedNews } from "@/hooks/useNews";
 import type { AggregatedStory } from "@/types/news";
-import { normalizeStorySlug, toStorySlug, buildStoryHref } from "@/utils/storyRoute";
+import { normalizeStorySlug, toStorySlug } from "@/utils/storyRoute";
 import { ArrowLeft, ArrowRight, Clock, ExternalLink, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -408,7 +408,7 @@ const StoryDetail = () => {
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
         publisherLogo: 'https://thesite.ro/ethics-logo.png',
-        url: `https://thesite.ro${buildStoryHref(resolvedStory.id, resolvedStory.title)}`
+        url: `https://thesite.ro/stire/${encodeURIComponent(resolvedStory.id)}`
       }} />
 
       <main className="mx-auto w-full max-w-[1240px] overflow-x-hidden px-4 py-6 md:px-6 md:py-10">
