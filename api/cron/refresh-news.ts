@@ -5,7 +5,8 @@ import {
     NEWS_SOURCES,
     fetchRSSFeed
 } from '../_lib/shared.js';
-import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo, calculateBiasDistribution, calculateBlindspot } from '../_lib/aggregation.js';
+import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo } from '../_lib/aggregation.js';
+import { mergeWithExisting } from '../_lib/storyMerge.js';
 
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
@@ -30,52 +31,6 @@ async function fetchAllNews(): Promise<RSSNewsItem[]> {
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
 
     return allNews;
-}
-
-/**
- * Găsește o poveste existentă care se referă la același eveniment ca o poveste proaspătă.
- * Criteriu: ≥1 URL de sursă comun → același eveniment.
- */
-function findMatchingExistingStory(
-    freshStory: AggregatedStory,
-    existingStories: AggregatedStory[]
-): AggregatedStory | null {
-    // Caută mai întâi după ID exact (dacă clusterul a produs același hash)
-    const byId = existingStories.find(s => s.id === freshStory.id);
-    if (byId) return byId;
-
-    // Altfel, caută overlap de URL-uri de surse
-    const freshUrls = new Set(freshStory.sources.map(s => s.link));
-    return existingStories.find(s =>
-        s.sources.some(src => freshUrls.has(src.link))
-    ) ?? null;
-}
-
-/**
- * Îmbogățește o poveste proaspătă cu sursele din varianta anterioară care nu mai apar în RSS.
- * Sursele noi (fresh) primează — le păstrăm pe toate. Adăugăm și cele vechi absente.
- */
-function mergeWithExistingSources(
-    freshStory: AggregatedStory,
-    existingStory: AggregatedStory
-): AggregatedStory {
-    const freshUrls = new Set(freshStory.sources.map(s => s.link));
-    // Surse din rularea anterioară care nu mai sunt în RSS-ul curent
-    const droppedSources = existingStory.sources.filter(s => !freshUrls.has(s.link));
-
-    if (droppedSources.length === 0) return freshStory; // nimic nou de adăugat
-
-    const mergedSources = [...freshStory.sources, ...droppedSources];
-    const bias = calculateBiasDistribution(mergedSources);
-    const blindspot = calculateBlindspot(bias, mergedSources.length);
-
-    return {
-        ...freshStory,
-        sources: mergedSources,
-        sourcesCount: mergedSources.length,
-        bias,
-        blindspot,
-    };
 }
 
 /**
@@ -173,33 +128,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const freshStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD));
         console.log(`[CRON] Aggregated ${freshStories.length} fresh stories`);
 
-        // 4. Merge: pentru fiecare poveste proaspătă, adaugă sursele căzute din RSS
+        // 4. Merge with cached stories (strict overlap, one-to-one, stable ids — see _lib/storyMerge.ts)
+        //    and carry forward old stories not seen in this run, as long as they are < 7 days old.
         const now = Date.now();
-        const mergedFreshStories = freshStories.map(fresh => {
-            const existing = findMatchingExistingStory(fresh, existingStories);
-            if (!existing) return fresh;
-            const merged = mergeWithExistingSources(fresh, existing);
-            if (merged.sourcesCount > fresh.sourcesCount) {
-                console.log(`[CRON] "${fresh.title.slice(0, 50)}" acumulat ${merged.sourcesCount - fresh.sourcesCount} surse extra`);
-            }
-            return merged;
-        });
+        const { merged: mergedFreshStories, unmatched } = mergeWithExisting(freshStories, existingStories);
 
-        // 5. Carry-forward: păstrează poveștile existente care NU au apărut în rularea curentă
-        //    (nu mai sunt în RSS dar sunt < 7 zile — nu vrem să le pierdem)
-        const freshStoryIds = new Set(mergedFreshStories.map(s => s.id));
-        const freshSourceUrls = new Set(mergedFreshStories.flatMap(s => s.sources.map(src => src.link)));
-
-        const carryForwardStories = existingStories
-            .filter(existing => {
-                // Expirat?
-                const age = now - new Date(existing.publishedAt).getTime();
-                if (age > MAX_STORY_AGE_MS) return false;
-                // Deja inclus în fresh (prin ID sau URL overlap)?
-                if (freshStoryIds.has(existing.id)) return false;
-                if (existing.sources.some(src => freshSourceUrls.has(src.link))) return false;
-                return true;
-            })
+        const carryForwardStories = unmatched
+            .filter(existing => now - new Date(existing.publishedAt).getTime() <= MAX_STORY_AGE_MS)
             .map(s => ({
                 ...s,
                 timeAgo: getTimeAgo(s.publishedAt), // recalculează timeAgo
