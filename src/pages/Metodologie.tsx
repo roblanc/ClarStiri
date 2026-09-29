@@ -9,6 +9,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NEWS_SOURCES } from "@/types/news";
+import { FACTUALITY_RULE_UPDATED, FACTUALITY_RULE_VERSION, getFactuality } from "@/data/sourceFactuality";
+
+const factualityOf = (sourceId: string) => getFactuality(sourceId).rating;
 
 const SECTION_LINKS = [
     { id: "ce-este", label: "Ce agregăm" },
@@ -64,19 +67,25 @@ const FACTUALITY_META = {
         name: "Ridicată",
         color: "text-emerald-600",
         pill: "border-emerald-200 bg-emerald-50 text-emerald-700",
-        description: "Rar publică informații false și corectează erorile când apar.",
+        description: "Media Bias/Fact Check o evaluează cu factualitate ridicată sau are certificare JTI, fără amenzi CNA în ultimul an raportat.",
     },
     mixed: {
         name: "Mixtă",
         color: "text-amber-600",
         pill: "border-amber-200 bg-amber-50 text-amber-700",
-        description: "Alternează între materiale solide și episoade de senzaționalism sau informații neconfirmate.",
+        description: "Între 1 și 9 amenzi CNA în ultimul an raportat, sau factualitate „Mixed” la Media Bias/Fact Check.",
     },
     low: {
         name: "Scăzută",
         color: "text-red-600",
         pill: "border-red-200 bg-red-50 text-red-700",
-        description: "Publică frecvent informații slabe, înșelătoare sau greu de verificat.",
+        description: "Cel puțin 10 amenzi CNA în ultimul an raportat, sau factualitate scăzută la Media Bias/Fact Check.",
+    },
+    insufficient: {
+        name: "Date insuficiente",
+        color: "text-slate-500",
+        pill: "border-slate-200 bg-slate-50 text-slate-600",
+        description: "Nu avem încă date publice verificabile. Lipsa datelor nu spune nimic despre calitatea sursei.",
     },
 } as const;
 
@@ -128,6 +137,7 @@ const FACTUALITY_POINTS = [
     { key: "high", title: "Ridicată" },
     { key: "mixed", title: "Mixtă" },
     { key: "low", title: "Scăzută" },
+    { key: "insufficient", title: "Date insuficiente" },
 ] as const;
 
 const SOURCES_BY_BIAS = {
@@ -140,10 +150,10 @@ const SOURCES_BY_BIAS = {
 
 const FACTUALITY_COUNTS = NEWS_SOURCES.reduce(
     (counts, source) => {
-        counts[source.factuality] += 1;
+        counts[factualityOf(source.id)] += 1;
         return counts;
     },
-    { high: 0, mixed: 0, low: 0 },
+    { high: 0, mixed: 0, low: 0, insufficient: 0 },
 );
 
 const OVERVIEW_STATS = [
@@ -518,10 +528,10 @@ export default function Metodologie() {
                             <SectionHeader
                                 eyebrow="Factualitate"
                                 title="Cum notăm fiabilitatea surselor"
-                                description="Pe lângă bias, evaluăm cât de constant publică o redacție informații verificabile și corecte."
+                                description="Eticheta de factualitate rezultă automat din date publice, verificabile, legate la sursă. Nu e o opinie editorială."
                             />
 
-                            <div className="grid gap-4 md:grid-cols-3">
+                            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                                 {FACTUALITY_POINTS.map((item) => {
                                     const meta = FACTUALITY_META[item.key];
 
@@ -537,17 +547,36 @@ export default function Metodologie() {
                                                 {meta.description}
                                             </p>
                                             <p className={`mt-4 text-sm font-medium ${meta.color}`}>
-                                                {FACTUALITY_COUNTS[item.key]} surse în această categorie
+                                                {FACTUALITY_COUNTS[item.key]} {FACTUALITY_COUNTS[item.key] === 1 ? "sursă" : "surse"} în această categorie
                                             </p>
                                         </div>
                                     );
                                 })}
                             </div>
 
-                            <p className="text-sm leading-relaxed text-muted-foreground">
-                                Clasificările de factualitate folosesc istoricul publicației, corecțiile ulterioare,
-                                standardele editoriale observabile și episoadele cunoscute de dezinformare.
-                            </p>
+                            <div className="surface-panel space-y-3 rounded-[1.75rem] p-5 text-sm leading-relaxed text-muted-foreground">
+                                <p className="font-medium text-foreground">
+                                    Regula {FACTUALITY_RULE_VERSION}, actualizată {FACTUALITY_RULE_UPDATED}
+                                </p>
+                                <p>
+                                    Folosim trei tipuri de date publice: amenzile aplicate de CNA (din raportul anual al
+                                    Consiliului), evaluarea „Factual Reporting” de la Media Bias/Fact Check și certificarea
+                                    Journalism Trust Initiative. Fiecare dovadă apare pe pagina sursei, cu link și data verificării.
+                                </p>
+                                <p>
+                                    Amenzile CNA acoperă toate tipurile de încălcări ale Codului audiovizualului, nu doar
+                                    informarea incorectă, și se aplică postului TV, nu site-ului. Media Bias/Fact Check
+                                    evaluează site-ul. Datele istorice (ActiveWatch, 2011–2022) sunt afișate ca context și
+                                    nu schimbă eticheta. O sursă absentă dintr-o listă publică nu e considerată fără sancțiuni.
+                                </p>
+                                <p>
+                                    Reprezentați o publicație și aveți o corecție sau o dovadă nouă?{" "}
+                                    <Link to="/contact" className="text-primary hover:underline">
+                                        Scrieți-ne
+                                    </Link>
+                                    . Actualizăm eticheta după verificare.
+                                </p>
+                            </div>
                         </section>
 
                         <section id="surse" className="space-y-6">
@@ -570,10 +599,10 @@ export default function Metodologie() {
 
                                     const localFactualityCounts = sources.reduce(
                                         (counts, source) => {
-                                            counts[source.factuality] += 1;
+                                            counts[factualityOf(source.id)] += 1;
                                             return counts;
                                         },
-                                        { high: 0, mixed: 0, low: 0 },
+                                        { high: 0, mixed: 0, low: 0, insufficient: 0 },
                                     );
 
                                     return (
@@ -635,8 +664,8 @@ export default function Metodologie() {
                                                                     {SOURCE_CATEGORY_LABELS[source.category]}
                                                                 </p>
                                                             </div>
-                                                            <span className={`text-xs font-medium ${FACTUALITY_META[source.factuality].color}`}>
-                                                                {FACTUALITY_META[source.factuality].name}
+                                                            <span className={`text-xs font-medium ${FACTUALITY_META[factualityOf(source.id)].color}`}>
+                                                                {FACTUALITY_META[factualityOf(source.id)].name}
                                                             </span>
                                                         </Link>
                                                     ))}

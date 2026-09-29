@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import { SourceFavicon } from '@/components/SourceFavicon';
 import { getConfidenceLabel, scoreToBiasCategory, type SourceProfile } from '@/data/sourceProfiles';
 import type { NewsSource } from '@/types/news';
+import { FACTUALITY_LABELS, factualityPillClass } from '@/data/sourceFactuality';
 
 interface SourceProfileCardProps {
   source: NewsSource;
@@ -24,17 +25,6 @@ const biasClassMap: Record<ReturnType<typeof scoreToBiasCategory>, string> = {
   right: 'bg-red-100 text-red-700 border-red-200',
 };
 
-const factualityClassMap: Record<NewsSource['factuality'], string> = {
-  high: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  mixed: 'bg-amber-100 text-amber-700 border-amber-200',
-  low: 'bg-rose-100 text-rose-700 border-rose-200',
-};
-
-const factualityLabelMap: Record<NewsSource['factuality'], string> = {
-  high: 'Factualitate ridicată',
-  mixed: 'Factualitate mixtă',
-  low: 'Factualitate scăzută',
-};
 
 function SectionList({ title, items }: { title: string; items?: string[] }) {
   if (!items || items.length === 0) return null;
@@ -84,8 +74,8 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
           <span className={`px-2.5 py-1 text-xs rounded-full border ${biasClassMap[biasCategory]}`}>
             {biasLabelMap[biasCategory]} ({profile.biasScore})
           </span>
-          <span className={`px-2.5 py-1 text-xs rounded-full border ${factualityClassMap[source.factuality]}`}>
-            {factualityLabelMap[source.factuality]}
+          <span className={`px-2.5 py-1 text-xs rounded-full border ${factualityPillClass[source.factuality]}`}>
+            {FACTUALITY_LABELS[source.factuality]}
           </span>
           <span className="surface-subtle px-2.5 py-1 text-xs rounded-full text-muted-foreground">
             Încredere {getConfidenceLabel(profile.confidence).toLowerCase()}
@@ -125,11 +115,6 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
           {profile.founders && profile.founders.length > 0 && (
             <p className="text-muted-foreground">
               <span className="text-foreground font-medium">Fondatori:</span> {profile.founders.join(', ')}
-            </p>
-          )}
-          {profile.factualityRationale && (
-            <p className="text-muted-foreground">
-              <span className="text-foreground font-medium">Factualitate:</span> {profile.factualityRationale}
             </p>
           )}
         </div>

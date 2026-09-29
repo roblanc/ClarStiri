@@ -71,12 +71,14 @@ const factualityLabelMap: Record<NewsSource['factuality'], string> = {
   high: 'Factualitate ridicată',
   mixed: 'Factualitate mixtă',
   low: 'Factualitate scăzută',
+  insufficient: 'Date insuficiente',
 };
 
 const factualityClassMap: Record<NewsSource['factuality'], string> = {
   high: 'bg-emerald-100 text-emerald-700 border-emerald-200',
   mixed: 'bg-amber-100 text-amber-700 border-amber-200',
   low: 'bg-rose-100 text-rose-700 border-rose-200',
+  insufficient: 'bg-slate-100 text-slate-600 border-slate-200',
 };
 
 const confidenceLabelMap = {

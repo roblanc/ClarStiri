@@ -4,6 +4,8 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { SourceProfileCard } from '@/components/SourceProfileCard';
 import { SourceArchive } from '@/components/SourceArchive';
+import { SourceFactualityPanel } from '@/components/SourceFactualityPanel';
+import { FACTUALITY_SHORT_LABELS } from '@/data/sourceFactuality';
 import { SOURCE_CATALOG_BY_ID } from '@/data/sourceCatalog';
 import { Helmet } from 'react-helmet-async';
 
@@ -38,8 +40,8 @@ export default function SourceDetail() {
         'center': 'Centru', 'center-right': 'Centru-Dreapta', 'right': 'Dreapta',
     };
     const pageTitle = `${source.name} | Profil Editorial | thesite.ro`;
-    const pageDesc = `Profil editorial ${source.name} — orientare ${biasLabel[source.bias] ?? source.bias}, factualitate ${source.factuality}. Analiză de bias și arhivă de știri pe thesite.ro.`;
-    const pageUrl = `https://thesite.ro/surses/${source.id}`;
+    const pageDesc = `Profil editorial ${source.name} — orientare ${biasLabel[source.bias] ?? source.bias}, factualitate: ${FACTUALITY_SHORT_LABELS[source.factuality].toLowerCase()}. Analiză de bias și arhivă de știri pe thesite.ro.`;
+    const pageUrl = `https://thesite.ro/surse/${source.id}`;
 
     return (
         <div className="min-h-screen bg-background">
@@ -66,6 +68,8 @@ export default function SourceDetail() {
                 </Link>
 
                 <SourceProfileCard source={source} profile={source.profile} />
+
+                <SourceFactualityPanel sourceId={source.id} />
 
                 <SourceArchive sourceId={source.id} domain={source.url} />
             </main>

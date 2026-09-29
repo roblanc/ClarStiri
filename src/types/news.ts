@@ -12,7 +12,7 @@ export interface NewsSource {
   rssUrl: string;
   logo?: string;
   bias: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
-  factuality: 'high' | 'mixed' | 'low';
+  factuality: 'high' | 'mixed' | 'low' | 'insufficient';
   category: 'mainstream' | 'independent' | 'tabloid' | 'public';
   profile?: SourceProfile;
 }
