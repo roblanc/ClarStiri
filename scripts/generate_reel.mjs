@@ -1069,6 +1069,7 @@ async function main() {
   const stories = await fetchTopStories();
   if (!stories || stories.length === 0) {
     console.error('❌ No stories found!');
+    process.exitCode = 1;
     return;
   }
 
@@ -1133,4 +1134,7 @@ async function main() {
   console.log('📝 Story metadata salvat în:', storyMetaPath);
 }
 
-main();
+main().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+});

@@ -64,6 +64,7 @@ async function run() {
   const stories = await fetchTopStories();
   if (!stories || stories.length === 0) {
     console.error('❌ No stories found!');
+    process.exitCode = 1;
     return;
   }
 
@@ -161,4 +162,9 @@ async function run() {
   console.log('------------------------\n');
 }
 
-run().catch(console.error);
+// Any failure must exit non-zero: cron_post.sh only posts after a successful generation,
+// otherwise it would publish the stale images left in social_export/latest.
+run().catch((e) => {
+  console.error(e);
+  process.exitCode = 1;
+});
