@@ -101,7 +101,9 @@ export function buildHtmlSlides(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const blindspot = story.blindspot;
-  const image = story.image || 'https://picsum.photos/seed/clarstiri/1200/800';
+  const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
+  const image = [story.image, ...(story.sources || []).map(s => s.imageUrl)]
+    .find(url => url && /^https?:\/\//.test(url) && !isVideo(url)) || 'https://thesite.ro/hero-illustration-headphones.webp';
 
   let dominantBadgeLabel = 'Preluat de Centru';
   if (blindspot === 'left') dominantBadgeLabel = 'Punct Orbit Stânga';
@@ -123,22 +125,28 @@ export function buildHtmlSlides(story) {
     return b.includes('right');
   });
 
-  const sampleLeft = leftSources[0] || { 
-    source: { name: 'Presa de Stânga', url: 'https://g4media.ro', bias: 'left' }, 
-    title: story.title 
+  // No outlet from this camp: say so, never quote the story title under an invented outlet.
+  const sampleLeft = leftSources[0] || {
+    missing: true,
+    source: { name: 'Presa de stânga' },
+    title: 'Nicio publicație de stânga n-a relatat această știre',
   };
-  const sampleCenter = centerSources[0] || { 
-    source: { name: 'Presa de Centru', url: 'https://hotnews.ro', bias: 'center' }, 
-    title: story.title 
+  // No outlet from this camp: say so, never quote the story title under an invented outlet.
+  const sampleCenter = centerSources[0] || {
+    missing: true,
+    source: { name: 'Presa de centru' },
+    title: 'Nicio publicație de centru n-a relatat această știre',
   };
-  const sampleRight = rightSources[0] || { 
-    source: { name: 'Presa de Dreapta', url: 'https://antena3.ro', bias: 'right' }, 
-    title: story.title 
+  // No outlet from this camp: say so, never quote the story title under an invented outlet.
+  const sampleRight = rightSources[0] || {
+    missing: true,
+    source: { name: 'Presa de dreapta' },
+    title: 'Nicio publicație de dreapta n-a relatat această știre',
   };
 
-  const leftLogo = getOutletLogo(sampleLeft, 'https://g4media.ro');
-  const centerLogo = getOutletLogo(sampleCenter, 'https://hotnews.ro');
-  const rightLogo = getOutletLogo(sampleRight, 'https://antena3.ro');
+  const leftLogo = sampleLeft.missing ? null : getOutletLogo(sampleLeft, null);
+  const centerLogo = sampleCenter.missing ? null : getOutletLogo(sampleCenter, null);
+  const rightLogo = sampleRight.missing ? null : getOutletLogo(sampleRight, null);
   const rightFavicon = getFaviconUrl(sampleRight.source?.url || sampleRight.url);
 
   const titleLength = (story.title || '').length;
@@ -343,9 +351,11 @@ export function buildHtmlSlides(story) {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
-  const leftInitials = getInitials(leftName);
-  const centerInitials = getInitials(centerName);
-  const rightInitials = getInitials(rightName);
+  const leftInitials = sampleLeft.missing ? '—' : getInitials(leftName);
+  const centerInitials = sampleCenter.missing ? '—' : getInitials(centerName);
+  const rightInitials = sampleRight.missing ? '—' : getInitials(rightName);
+  const esc = (str = '') => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const quoteOf = (sample) => (sample.missing ? esc(sample.title) : `„${esc(sample.title)}”`);
 
   // SLIDE 2: Matching Exact User Mockup
   const slide2 = `
@@ -646,7 +656,7 @@ export function buildHtmlSlides(story) {
           <div class="quote-container">
             <div class="quote-bar bar-left"></div>
             <div class="quote-text-content">
-              „${sampleLeft.title}”
+              ${quoteOf(sampleLeft)}
             </div>
           </div>
         </div>
@@ -670,7 +680,7 @@ export function buildHtmlSlides(story) {
           <div class="quote-container">
             <div class="quote-bar bar-center"></div>
             <div class="quote-text-content">
-              „${sampleCenter.title}”
+              ${quoteOf(sampleCenter)}
             </div>
           </div>
         </div>
@@ -694,7 +704,7 @@ export function buildHtmlSlides(story) {
           <div class="quote-container">
             <div class="quote-bar bar-right"></div>
             <div class="quote-text-content">
-              „${sampleRight.title}”
+              ${quoteOf(sampleRight)}
             </div>
           </div>
         </div>

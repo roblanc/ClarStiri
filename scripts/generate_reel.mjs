@@ -55,51 +55,56 @@ function getLogoUrl(sourceName = '', sourceId = '') {
   return '';
 }
 
+const CAMP_OF = { left: 'left', 'center-left': 'left', center: 'center', 'center-right': 'right', right: 'right' };
+const CAMP_NAME = { left: 'stânga', center: 'centru', right: 'dreapta' };
+
+function faviconFor(url) {
+  try {
+    return url ? `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=128` : '';
+  } catch {
+    return '';
+  }
+}
+
+// One real headline per camp: the earliest article whose outlet belongs to that camp
+// (center-left counts as left, center-right as right). The same outlet or title is never
+// shown twice, and a camp without coverage says so instead of borrowing another headline.
 function getHeadlines(story) {
-  const sources = story.sources || [];
-  const leftItem = sources.find(s => (s.source?.bias || s.bias || '').includes('left'));
-  const centerItem = sources.find(s => {
-    const b = (s.source?.bias || s.bias || '').toLowerCase();
-    return b.includes('center') || b === '' || (!b.includes('left') && !b.includes('right'));
-  });
-  const rightItem = sources.find(s => (s.source?.bias || s.bias || '').includes('right'));
-
-  const fallbackLeft = {
-    outlet: 'G4Media.ro',
-    logo: 'https://www.thesite.ro/logos/g4media.png',
-    title: leftItem?.title || story.title
-  };
-  const fallbackCenter = {
-    outlet: 'Digi24.ro',
-    logo: 'https://www.thesite.ro/logos/digi24.png',
-    title: centerItem?.title || story.title
-  };
-  const fallbackRight = {
-    outlet: 'DCNews.ro',
-    logo: 'https://www.thesite.ro/logos/dcnews.png',
-    title: rightItem?.title || story.title
-  };
-
-  return {
-    left: {
-      outlet: leftItem?.source?.name || fallbackLeft.outlet,
-      logo: getLogoUrl(leftItem?.source?.name, leftItem?.source?.id) || fallbackLeft.logo,
-      title: leftItem?.title || fallbackLeft.title,
-      time: 'perspectivă stânga'
-    },
-    center: {
-      outlet: centerItem?.source?.name || fallbackCenter.outlet,
-      logo: getLogoUrl(centerItem?.source?.name, centerItem?.source?.id) || fallbackCenter.logo,
-      title: centerItem?.title || fallbackCenter.title,
-      time: 'perspectivă centru'
-    },
-    right: {
-      outlet: rightItem?.source?.name || fallbackRight.outlet,
-      logo: getLogoUrl(rightItem?.source?.name, rightItem?.source?.id) || fallbackRight.logo,
-      title: rightItem?.title || fallbackRight.title,
-      time: 'perspectivă dreapta'
+  const sorted = [...(story.sources || [])].sort((a, b) => (Date.parse(a.pubDate) || 0) - (Date.parse(b.pubDate) || 0));
+  const usedOutlets = new Set();
+  const usedTitles = new Set();
+  const result = {};
+  for (const camp of ['left', 'center', 'right']) {
+    const inCamp = sorted.filter(s => CAMP_OF[(s.source?.bias || s.bias || 'center').toLowerCase()] === camp && s.title);
+    const item =
+      inCamp.find(s => !usedOutlets.has(s.source?.name) && !usedTitles.has(s.title.trim().toLowerCase())) ||
+      inCamp.find(s => !usedTitles.has(s.title.trim().toLowerCase()));
+    if (item) {
+      usedOutlets.add(item.source?.name);
+      usedTitles.add(item.title.trim().toLowerCase());
+      result[camp] = {
+        outlet: item.source?.name || 'Sursă',
+        logo: getLogoUrl(item.source?.name, item.source?.id) || faviconFor(item.source?.url),
+        title: item.title,
+        time: `perspectivă ${CAMP_NAME[camp]}`,
+      };
+    } else {
+      result[camp] = {
+        missing: true,
+        outlet: `Presa de ${CAMP_NAME[camp]}`,
+        logo: '',
+        title: `Nicio publicație de ${CAMP_NAME[camp]} n-a relatat această știre`,
+        time: 'unghi mort',
+      };
     }
-  };
+  }
+  return result;
+}
+
+function pickCoverImage(story) {
+  const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
+  const candidates = [story.image, story.imageUrl, ...(story.sources || []).map(s => s.imageUrl)];
+  return candidates.find(url => url && /^https?:\/\//.test(url) && !isVideo(url)) || 'https://thesite.ro/hero-illustration-headphones.webp';
 }
 
 function escapeHtml(str = '') {
@@ -116,7 +121,7 @@ export function buildReelHtml(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const headlines = getHeadlines(story);
-  const coverImage = story.image || story.imageUrl || story.sources?.find(s => s.imageUrl)?.imageUrl || 'https://www.thesite.ro/hero-illustration-headphones.webp';
+  const coverImage = pickCoverImage(story);
 
   let titleHero = (story.title || '').trim();
   let titleSub = '';
@@ -836,7 +841,7 @@ export function buildReelHtml(story) {
             </div>
             <span class="mcard-tag tag-blue">STÂNGA</span>
           </div>
-          <div class="mcard-quote">„${escapeHtml(headlines.left.title)}”</div>
+          <div class="mcard-quote">${headlines.left.missing ? escapeHtml(headlines.left.title) : `„${escapeHtml(headlines.left.title)}”`}</div>
           <div class="mcard-meta">${escapeHtml(headlines.left.time)}</div>
         </div>
 
@@ -849,7 +854,7 @@ export function buildReelHtml(story) {
             </div>
             <span class="mcard-tag tag-gray">CENTRU</span>
           </div>
-          <div class="mcard-quote">„${escapeHtml(headlines.center.title)}”</div>
+          <div class="mcard-quote">${headlines.center.missing ? escapeHtml(headlines.center.title) : `„${escapeHtml(headlines.center.title)}”`}</div>
           <div class="mcard-meta">${escapeHtml(headlines.center.time)}</div>
         </div>
 
@@ -862,7 +867,7 @@ export function buildReelHtml(story) {
             </div>
             <span class="mcard-tag tag-red">DREAPTA</span>
           </div>
-          <div class="mcard-quote">„${escapeHtml(headlines.right.title)}”</div>
+          <div class="mcard-quote">${headlines.right.missing ? escapeHtml(headlines.right.title) : `„${escapeHtml(headlines.right.title)}”`}</div>
           <div class="mcard-meta">${escapeHtml(headlines.right.time)}</div>
         </div>
       </div>
