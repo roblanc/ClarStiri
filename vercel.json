@@ -1,11 +1,5 @@
 {
     "regions": ["fra1"],
-    "crons": [
-        {
-            "path": "/api/cron/refresh-news",
-            "schedule": "*/15 * * * *"
-        }
-    ],
     "functions": {
         "api/news.ts": {
             "maxDuration": 60
