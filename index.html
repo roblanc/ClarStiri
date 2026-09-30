@@ -33,10 +33,10 @@
         link.crossOrigin = "anonymous";
         head.appendChild(link);
       }
-      // Must be byte-identical to the URL requested by useAggregatedNews(40) in
-      // src/pages/Index.tsx -> fetchAggregatedNewsFromAPI (services/newsApiService.ts),
+      // Must be byte-identical to newsListUrl("card") in
+      // src/services/newsApiService.ts (the homepage's useAggregatedNews("card")),
       // otherwise the browser downloads the feed twice.
-      preload("preload", "/api/news?limit=40", "fetch");
+      preload("preload", "/api/news?view=card&limit=100", "fetch");
       // Hero illustration (above the fold on "/"; other pages only show the
       // small header rendition, so they no longer download it).
       var hero = document.createElement("link");
