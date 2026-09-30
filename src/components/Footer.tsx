@@ -47,8 +47,12 @@ export function Footer() {
           <div className="md:col-span-2 space-y-6">
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <img
-                src="/hero-illustration-headphones.webp"
+                src="/hero-illustration-headphones-144.webp"
                 alt=""
+                width={143}
+                height={144}
+                loading="lazy"
+                decoding="async"
                 className="h-10 w-auto"
               />
               <span className="font-serif italic text-2xl font-semibold text-black tracking-tight group-hover:opacity-80 transition-opacity">

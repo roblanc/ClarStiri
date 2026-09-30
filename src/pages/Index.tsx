@@ -307,94 +307,94 @@ const Index = () => {
                 
                 {/* --- CENTER BUBBLE --- */}
                 <div className="bubble top-[50%] left-[50%] z-40 w-14 h-14 lg:w-16 lg:h-16">
-                  <img src="/logos/hotnews.png" alt="HotNews" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/hotnews.webp" width={128} height={128} alt="HotNews" className="p-1"  loading="lazy" />
                 </div>
 
                 {/* --- RING 1 --- */}
                 <div className="bubble top-[27%] left-[50%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/biziday.png" alt="Biziday" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/biziday.webp" width={128} height={128} alt="Biziday" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[38%] left-[70%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/libertatea.png" alt="Libertatea" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/libertatea.webp" width={128} height={128} alt="Libertatea" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[62%] left-[70%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/recorder.png" alt="Recorder"  loading="lazy" />
+                  <img src="/logos/sm/recorder.webp" width={128} height={128} alt="Recorder"  loading="lazy" />
                 </div>
                 <div className="bubble top-[73%] left-[50%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/gandul.png" alt="Gandul" className="p-2"  loading="lazy" />
+                  <img src="/logos/sm/gandul.webp" width={128} height={128} alt="Gandul" className="p-2"  loading="lazy" />
                 </div>
                 <div className="bubble top-[62%] left-[30%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/adevarul.png" alt="Adevărul" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/adevarul.webp" width={128} height={128} alt="Adevărul" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[38%] left-[30%] z-30 w-12 h-12 lg:w-14 lg:h-14">
-                  <img src="/logos/digi24.png" alt="Digi24"  loading="lazy" />
+                  <img src="/logos/sm/digi24.webp" width={128} height={128} alt="Digi24"  loading="lazy" />
                 </div>
 
                 {/* --- RING 2 --- */}
                 <div className="bubble top-[50%] left-[88%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/spotmedia.png" alt="SpotMedia" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/spotmedia.webp" width={128} height={128} alt="SpotMedia" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[69%] left-[83%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/zf.png" alt="Ziarul Financiar" className="p-0.5"  loading="lazy" />
+                  <img src="/logos/sm/zf.webp" width={128} height={128} alt="Ziarul Financiar" className="p-0.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[83%] left-[69%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/bursa.png" alt="Bursa" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/bursa.webp" width={128} height={128} alt="Bursa" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[88%] left-[50%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/protv.png" alt="ProTV"  loading="lazy" />
+                  <img src="/logos/sm/protv.webp" width={128} height={128} alt="ProTV"  loading="lazy" />
                 </div>
                 <div className="bubble top-[83%] left-[31%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/mediafax.png" alt="Mediafax" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/mediafax.webp" width={128} height={128} alt="Mediafax" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[69%] left-[17%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/g4media.png" alt="G4Media" className="p-0.5"  loading="lazy" />
+                  <img src="/logos/sm/g4media.webp" width={128} height={128} alt="G4Media" className="p-0.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[50%] left-[12%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/europafm.png" alt="EuropaFM" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/europafm.webp" width={128} height={128} alt="EuropaFM" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[31%] left-[17%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/agerpres.png" alt="Agerpres" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/agerpres.webp" width={128} height={128} alt="Agerpres" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[17%] left-[31%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/jurnalul.png" alt="Jurnalul" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/jurnalul.webp" width={128} height={128} alt="Jurnalul" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[12%] left-[50%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/dcnews.png" alt="DCNews" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/dcnews.webp" width={128} height={128} alt="DCNews" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[17%] left-[69%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/antena3.png" alt="Antena 3" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/antena3.webp" width={128} height={128} alt="Antena 3" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[31%] left-[83%] z-20 w-9 h-9 lg:w-10 lg:h-10">
-                  <img src="/logos/romaniatv.png" alt="Romania TV" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/romaniatv.webp" width={128} height={128} alt="Romania TV" className="p-1"  loading="lazy" />
                 </div>
 
                 {/* --- RING 3 (Tiny satellites) --- */}
                 <div className="bubble top-[8%] left-[85%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/capital.png" alt="Capital" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/capital.webp" width={128} height={128} alt="Capital" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[8%] left-[15%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/profit.png" alt="Profit.ro" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/profit.webp" width={128} height={128} alt="Profit.ro" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[92%] left-[85%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/stiripesurse.png" alt="Stiripesurse" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/stiripesurse.webp" width={128} height={128} alt="Stiripesurse" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[92%] left-[15%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/romanialibera.png" alt="Romania Libera" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/romanialibera.webp" width={128} height={128} alt="Romania Libera" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[5%] left-[70%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/cotidianul.png" alt="Cotidianul" className="p-1.5"  loading="lazy" />
+                  <img src="/logos/sm/cotidianul.webp" width={128} height={128} alt="Cotidianul" className="p-1.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[5%] left-[30%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/b1tv.png" alt="B1TV" className="p-0.5"  loading="lazy" />
+                  <img src="/logos/sm/b1tv.webp" width={128} height={128} alt="B1TV" className="p-0.5"  loading="lazy" />
                 </div>
                 <div className="bubble top-[95%] left-[30%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/realitatea.png" alt="Realitatea" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/realitatea.webp" width={128} height={128} alt="Realitatea" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[95%] left-[70%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/aktual24.png" alt="Aktual24" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/aktual24.webp" width={128} height={128} alt="Aktual24" className="p-1"  loading="lazy" />
                 </div>
                 <div className="bubble top-[50%] left-[2%] z-10 w-7 h-7 lg:w-8 lg:h-8">
-                  <img src="/logos/ziaruldeiasi.png" alt="Ziarul de Iasi" className="p-1"  loading="lazy" />
+                  <img src="/logos/sm/ziaruldeiasi.webp" width={128} height={128} alt="Ziarul de Iasi" className="p-1"  loading="lazy" />
                 </div>
 
               </div>

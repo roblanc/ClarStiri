@@ -70,7 +70,7 @@ export function NewsImage({
   if (failed) {
     return (
       <img
-        src="/default-news.png"
+        src="/default-news.webp"
         alt={alt || 'Ilustrație știre'}
         className={className}
         style={style}

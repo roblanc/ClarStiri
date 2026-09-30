@@ -106,10 +106,10 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 shrink-0 group" aria-label="thesite.ro — pagina principală">
             <img
-              src="/hero-illustration-headphones.webp"
+              src="/hero-illustration-headphones-144.webp"
               alt=""
-              width={480}
-              height={482}
+              width={143}
+              height={144}
               className="h-10 md:h-12 w-auto object-contain pointer-events-none"
             />
             <div className="flex items-center gap-0 font-berthold text-3xl md:text-4xl font-normal text-black tracking-tight group-hover:opacity-80 transition-opacity">
