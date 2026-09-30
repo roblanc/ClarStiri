@@ -36,6 +36,10 @@
             "destination": "/api/sitemap"
         },
         {
+            "source": "/sitemap-stories.xml",
+            "destination": "/api/sitemap?type=stories"
+        },
+        {
             "source": "/rss.xml",
             "destination": "/api/feed"
         },

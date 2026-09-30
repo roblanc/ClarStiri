@@ -1,104 +1,58 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
 import type { AggregatedStory } from './_lib/aggregation.js';
+import { listArchivedStoriesForSitemap } from './_lib/storyArchive.js';
+import { buildSitemapIndex, buildStorySitemap, type SitemapStory } from './_lib/sitemapXml.js';
+
+/**
+ * /sitemap.xml          -> sitemap index (this function, no query)
+ * /sitemap-pages.xml    -> static file from scripts/generate-sitemap.js (fixed pages)
+ * /sitemap-stories.xml  -> this function with ?type=stories: live stories from Redis plus the
+ *                          permanent Postgres archive, so /stire/:id pages stay discoverable.
+ */
 
 const CACHE_KEY = 'aggregated_news_v2';
+const ARCHIVE_LIMIT = 5000;
 
-const staticPages = [
-    { loc: 'https://thesite.ro', priority: '1.0', changefreq: 'always' },
-    { loc: 'https://thesite.ro/editorial', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/tribuni', priority: '0.9', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/surse', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://thesite.ro/metodologie', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://thesite.ro/despre', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://thesite.ro/contact', priority: '0.8', changefreq: 'weekly' },
-    { loc: 'https://thesite.ro/cauta', priority: '0.8', changefreq: 'daily' },
+async function loadLiveStories(): Promise<SitemapStory[]> {
+    const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = process.env;
+    if (!UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) return [];
+    try {
+        const url = UPSTASH_REDIS_REST_URL.startsWith('http') ? UPSTASH_REDIS_REST_URL : `https://${UPSTASH_REDIS_REST_URL}`;
+        const redis = new Redis({ url, token: UPSTASH_REDIS_REST_TOKEN });
+        const stories = (await redis.get<AggregatedStory[]>(CACHE_KEY)) || [];
+        return stories.map(s => ({ id: s.id, lastmod: s.publishedAt }));
+    } catch (e) {
+        console.error('[Sitemap API] Redis read failed:', e);
+        return [];
+    }
+}
 
-    // Categorii
-    { loc: 'https://thesite.ro/categorie/politica', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/economie', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/sanatate', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/tehnologie', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/mediu', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/sport', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/cultura', priority: '0.9', changefreq: 'hourly' },
-    { loc: 'https://thesite.ro/categorie/international', priority: '0.9', changefreq: 'hourly' },
-
-    // Voci
-    { loc: 'https://thesite.ro/voce/ctp', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/catalin-tolontan', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/mircea-badea', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/victor-ciutacu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/dana-budeanu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/moise-guran', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/lucian-mandruta', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/sebastian-zachmann', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/rares-bogdan', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/anca-alexandrescu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/calin-georgescu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/radu-banciu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/bogdan-chirieac', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/cosmin-gusa', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/andrei-caramitru', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/ion-cristoiu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/traian-basescu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/dan-dungaciu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/cristian-pirvulescu', priority: '0.8', changefreq: 'daily' },
-    { loc: 'https://thesite.ro/voce/sorin-rosca-stanescu', priority: '0.8', changefreq: 'daily' },
-];
+async function loadArchive(): Promise<SitemapStory[]> {
+    try {
+        return await listArchivedStoriesForSitemap(ARCHIVE_LIMIT);
+    } catch (e) {
+        console.error('[Sitemap API] Archive read failed:', e);
+        return [];
+    }
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'GET') {
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const today = new Date().toISOString().split('T')[0];
-
-    let redis: Redis | null = null;
-    try {
-        if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-            let url = process.env.UPSTASH_REDIS_REST_URL;
-            if (!url.startsWith('http')) url = `https://${url}`;
-            redis = new Redis({ url, token: process.env.UPSTASH_REDIS_REST_TOKEN });
-        }
-    } catch (e) {
-        console.error('[Sitemap API] Redis init failed:', e);
+    let xml: string;
+    if (req.query.type === 'stories') {
+        const [live, archived] = await Promise.all([loadLiveStories(), loadArchive()]);
+        xml = buildStorySitemap([...live, ...archived]);
+    } else {
+        xml = buildSitemapIndex();
     }
-
-    let stories: AggregatedStory[] = [];
-    if (redis) {
-        try {
-            stories = (await redis.get<AggregatedStory[]>(CACHE_KEY)) || [];
-        } catch (e) {
-            console.error('[Sitemap API] Redis read failed:', e);
-        }
-    }
-
-    const storyEntries = stories.slice(0, 100).map(s => {
-        const date = s.publishedAt ? new Date(s.publishedAt).toISOString().split('T')[0] : today;
-        return `  <url>
-    <loc>https://thesite.ro/stire/${s.id}</loc>
-    <lastmod>${date}</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.9</priority>
-  </url>`;
-    });
-
-    const staticEntries = staticPages.map(page => `  <url>
-    <loc>${page.loc}</loc>
-    <lastmod>${today}</lastmod>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`);
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticEntries.join('\n')}
-${storyEntries.join('\n')}
-</urlset>`;
 
     res.setHeader('Content-Type', 'application/xml; charset=utf-8');
     res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=7200');
+    if (req.method === 'HEAD') return res.status(200).end();
     res.status(200).send(xml);
 }
