@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { NewsCard, type NewsItem } from "@/components/NewsCard";
@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
-import { PUBLIC_FIGURES } from "@/data/publicFigures";
+import type { PublicFigure } from "@/data/publicFigures";
 import { VoiceAvatar } from "@/components/VoiceAvatar";
 import { FeedSkeleton } from "@/components/Skeleton";
 import { FEED_GRID_CLASS } from "@/lib/feedLayout";
@@ -175,10 +175,24 @@ const Index = () => {
     })) || [];
   }, [stories, hasSearchQuery, normalizedQuery, useDemoContent]);
 
-  const matchedVoices = useMemo(() => {
-    if (!hasSearchQuery) return [];
+  // The public-figures dataset (~88 KB) is only needed to match a search
+  // query, so it is fetched the first time someone actually searches.
+  const [publicFigures, setPublicFigures] = useState<PublicFigure[] | null>(null);
+  useEffect(() => {
+    if (!hasSearchQuery || publicFigures) return;
+    let cancelled = false;
+    import("@/data/publicFigures").then(({ PUBLIC_FIGURES }) => {
+      if (!cancelled) setPublicFigures(PUBLIC_FIGURES);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [hasSearchQuery, publicFigures]);
 
-    return PUBLIC_FIGURES.filter((figure) => {
+  const matchedVoices = useMemo(() => {
+    if (!hasSearchQuery || !publicFigures) return [];
+
+    return publicFigures.filter((figure) => {
       const inName = normalizeSearchText(figure.name).includes(normalizedQuery);
       const inRole = normalizeSearchText(figure.role).includes(normalizedQuery);
       const inDesc = normalizeSearchText(figure.description).includes(normalizedQuery);
@@ -186,7 +200,7 @@ const Index = () => {
 
       return inName || inRole || inDesc || inTargets;
     });
-  }, [hasSearchQuery, normalizedQuery]);
+  }, [hasSearchQuery, normalizedQuery, publicFigures]);
 
   const searchTitle = hasSearchQuery
     ? `„${query}" — Căutare | thesite.ro`
@@ -453,7 +467,7 @@ const Index = () => {
         )}
 
         {/* No Search Results */}
-        {!isLoading && stories?.length && hasSearchQuery && convertedStories.length === 0 && matchedVoices.length === 0 && (
+        {!isLoading && stories?.length && hasSearchQuery && convertedStories.length === 0 && publicFigures && matchedVoices.length === 0 && (
           <div className="flex flex-col items-center justify-center py-20 border border-border bg-card rounded-none">
             <SearchX className="w-12 h-12 text-muted-foreground mb-4" />
             <p className="font-serif text-2xl mb-2 text-foreground">Niciun rezultat</p>
