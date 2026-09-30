@@ -1,5 +1,6 @@
 import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP, shouldFilterNews } from './shared.js';
 import { createStoryId } from './storyId.js';
+import { clusterArticles, DEFAULT_CLUSTER_THRESHOLD } from './clustering.js';
 import { generateAggregatedTitle, getEmbeddingsBatch } from './llm.js';
 
 const ogImageCache = new Map<string, { image: string; expires: number }>();
@@ -177,124 +178,15 @@ function filterRecentNews(news: RSSNewsItem[]): RSSNewsItem[] {
     });
 }
 
-// Clusterizare avansată Ground News style cu semantic fallback
-export async function findSimilarStories(news: RSSNewsItem[], threshold = 0.32, maxTimeDiffMs = 48 * 60 * 60 * 1000): Promise<RSSNewsItem[][]> {
-    const stopwords = new Set([
-        'care', 'fost', 'este', 'sunt', 'după', 'pentru', 'prin', 'aceasta', 'acest', 'cele', 'această', 'către', 'după', 'până', 'decât', 'atunci', 'întreg', 'când', 'cum', 'dacă', 'doar', 'după', 'unde', 'nici', 'acestuia', 'acestea', 'acele',
-        'și', 'sau', 'dar', 'iar', 'încă', 'tot', 'mai', 'chiar', 'atât', 'încât', 'deci', 'însă', 'ori', 'fie', 'nici',
-        'un', 'o', 'unui', 'unei', 'unor', 'niște', 'al', 'ai', 'ale', 'lor', 'lui', 'ei', 'nostru', 'vostru', 'său', 'sa',
-        'pe', 'la', 'în', 'din', 'de', 'cu', 'spre', 'prin', 'sub', 'peste', 'între', 'fără', 'contra', 'asupra', 'împotriva',
-        'cine', 'ce', 'care', 'cineva', 'ceva', 'oricine', 'orice', 'nimeni', 'nimic', 'unde', 'când', 'cum', 'cât', 'câți', 'câte',
-        'eu', 'tu', 'el', 'ea', 'noi', 'voi', 'ei', 'ele', 'mie', 'ție', 'îi', 'îl', 'le', 'ne', 'vă', 'l-a', 's-a'
-    ]);
-
-    const genericEntities = new Set([
-        'foto', 'video', 'romania', 'astazi', 'ieri', 'maine', 'azi', 'update', 'breaking', 'news',
-        'bucuresti', 'echipa', 'oficial', 'surse', 'ziua', 'lumea', 'omul', 'femeia', 'copilul',
-        'tara', 'guvernul', 'premierul', 'presedintele'
-    ]);
-
-    const extractEntities = (title: string) => {
-        return title.split(/\s+/)
-            .filter(w => w.length > 3 && /^[^\p{L}]*\p{Lu}/u.test(w))
-            .map(w => normalizeTitle(w))
-            .filter(w => !genericEntities.has(w));
-    };
-
-    const itemData = news.map(item => {
-        const normalized = normalizeTitle(item.title);
-        const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
-        const bigrams = [];
-
-        for (let i = 0; i < words.length - 1; i++) {
-            bigrams.push(`${words[i]}_${words[i + 1]}`);
-        }
-
-        return {
-            item,
-            tokens: new Set(words),
-            bigrams: new Set(bigrams),
-            entities: new Set(extractEntities(item.title)),
-            time: new Date(item.pubDate).getTime(),
-        };
-    });
-
-    // Calculăm embeddings semantic o singură dată pentru toate titlurile.
-    // Dacă Groq nu e disponibil, embeddings e null și scoring rămâne pur lexical.
-    const normalizedTitles = itemData.map(d => d.item.title);
-    const embeddings = await getEmbeddingsSafe(normalizedTitles);
-
-    const groups: RSSNewsItem[][] = [];
-    const processed = new Set<string>();
-
-    itemData.forEach((dataI, i) => {
-        if (processed.has(dataI.item.id)) return;
-
-        const group: RSSNewsItem[] = [dataI.item];
-        processed.add(dataI.item.id);
-
-        for (let j = i + 1; j < itemData.length; j++) {
-            const dataJ = itemData[j];
-            if (processed.has(dataJ.item.id)) continue;
-            if (Math.abs(dataI.time - dataJ.time) > maxTimeDiffMs) continue;
-
-            const intersectWords = new Set([...dataI.tokens].filter(x => dataJ.tokens.has(x)));
-            const wordScore = intersectWords.size / (Math.min(dataI.tokens.size, dataJ.tokens.size) || 1);
-
-            const intersectEntities = new Set([...dataI.entities].filter(x => dataJ.entities.has(x)));
-            const entityScore = intersectEntities.size > 0
-                ? intersectEntities.size / (Math.max(dataI.entities.size, dataJ.entities.size) || 1)
-                : 0;
-
-            const intersectBigrams = new Set([...dataI.bigrams].filter(x => dataJ.bigrams.has(x)));
-            const bigramScore = intersectBigrams.size > 0
-                ? intersectBigrams.size / (Math.max(dataI.bigrams.size, dataJ.bigrams.size) || 1)
-                : 0;
-
-            let finalScore = (wordScore * 0.45) + (entityScore * 0.35) + (bigramScore * 0.2);
-
-            if (dataI.entities.size > 0 && dataJ.entities.size > 0 && wordScore < 0.35) {
-                const uniqueToI = [...dataI.entities].filter(e => !dataJ.entities.has(e));
-                const uniqueToJ = [...dataJ.entities].filter(e => !dataI.entities.has(e));
-
-                if (uniqueToI.length >= 1 && uniqueToJ.length >= 1 && intersectEntities.size === 0) {
-                    finalScore *= 0.5;
-                }
-            }
-
-            // --- Semantic layer ---
-            // Boost: articole semantic similare (>=0.78) dar formulate diferit → merge forțat
-            // Penalizare: overlap lexical ridicat dar conținut semantic diferit (<0.52) → previne merge greșit
-            if (embeddings) {
-                const semantic = cosineSimilarity(embeddings[i], embeddings[j]);
-                if (semantic >= 0.78) {
-                    finalScore = Math.max(finalScore, threshold + 0.05);
-                } else if (semantic < 0.52 && finalScore >= threshold) {
-                    finalScore *= (semantic / 0.52);
-                }
-            }
-
-            const hasSignificantOverlap = intersectEntities.size >= 2 ||
-                (intersectEntities.size === 1 && wordScore > 0.4);
-            const effectiveThreshold = hasSignificantOverlap ? threshold * 0.8 : threshold;
-
-            if (finalScore >= effectiveThreshold) {
-                group.push(dataJ.item);
-                processed.add(dataJ.item.id);
-            }
-        }
-
-        groups.push(group);
-    });
-
-    return groups.map(group => {
-        const seen = new Set<string>();
-        return group.filter(item => {
-            if (seen.has(item.source.id)) return false;
-            seen.add(item.source.id);
-            return true;
-        });
-    });
+/**
+ * Groups articles about the same event across outlets (see ./clustering.ts for the algorithm).
+ * Order-independent; at most one article per outlet per group; single-article groups included.
+ * The Groq embedding layer, when available, keeps its semantics: cosine >= 0.78 links two
+ * articles, < 0.52 dampens a lexical match.
+ */
+export async function findSimilarStories(news: RSSNewsItem[], threshold = DEFAULT_CLUSTER_THRESHOLD, maxTimeDiffMs = 48 * 60 * 60 * 1000): Promise<RSSNewsItem[][]> {
+    const embeddings = await getEmbeddingsSafe(news.map(item => item.title));
+    return clusterArticles(news, { threshold, maxTimeDiffMs, embeddings });
 }
 
 /** Run tasks in sequential batches to avoid hitting provider RPM limits. */
