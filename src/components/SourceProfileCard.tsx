@@ -143,7 +143,7 @@ export function SourceProfileCard({ source, profile }: SourceProfileCardProps) {
           <ol className="space-y-1.5">
             {profile.references.map((ref, i) => (
               <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                <span className="text-muted-foreground/50 shrink-0 tabular-nums w-4 text-right">{i + 1}.</span>
+                <span className="text-muted-foreground shrink-0 tabular-nums w-4 text-right">{i + 1}.</span>
                 <a
                   href={ref.url}
                   target="_blank"

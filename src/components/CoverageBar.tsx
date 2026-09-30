@@ -24,7 +24,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
 
   return (
     <div
-      role="region"
+      role="img"
       aria-label={ariaText}
       className={cn("flex h-8 sm:h-9 w-full shadow-sm border border-border/20", className)}
     >
@@ -48,7 +48,7 @@ export function CoverageBar({ bias, sourcesCount, className = '' }: CoverageBarP
           className="flex flex-col items-center justify-center bg-white dark:bg-[#e2e8f0] text-[#1f2937] dark:text-[#0f172a] border-x border-border/10 overflow-hidden"
           style={seg(pCenter)}
         >
-          <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.08em] font-bold text-[#1f2937]/60 dark:text-[#0f172a]/60 leading-none mb-[2px] whitespace-nowrap">
+          <span className="text-[7px] sm:text-[8px] uppercase tracking-[0.08em] font-bold text-[#1f2937]/75 dark:text-[#0f172a]/75 leading-none mb-[2px] whitespace-nowrap">
             Centru
           </span>
           <span className="text-[10px] sm:text-[11px] font-black leading-none whitespace-nowrap">
