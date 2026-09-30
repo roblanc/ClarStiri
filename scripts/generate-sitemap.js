@@ -55,7 +55,9 @@ function extractSourceProfileIds() {
     [...readRepoFile('shared/newsSources.ts').matchAll(/\{\s*id:\s*['"]([^'"]+)['"]/g)].map((m) => m[1])
   );
   const profiles = readRepoFile('src/data/sourceProfiles.ts');
-  const start = profiles.indexOf('export const SOURCE_PROFILES');
+  // Profile entries live in PROFILE_TEXTS (SOURCE_PROFILES is built from it); keep the old name as a fallback.
+  const markers = ['const PROFILE_TEXTS', 'export const SOURCE_PROFILES'];
+  const start = markers.map((m) => profiles.indexOf(m)).find((i) => i !== -1) ?? -1;
   if (start === -1) return [];
   const block = profiles.slice(start, profiles.indexOf('\n};', start));
   const profileIds = [...block.matchAll(/^\s{4}id:\s*['"]([^'"]+)['"]/gm)].map((m) => m[1]);
