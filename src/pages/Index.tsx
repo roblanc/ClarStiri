@@ -9,9 +9,8 @@ import { SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
 import { PUBLIC_FIGURES } from "@/data/publicFigures";
 import { VoiceAvatar } from "@/components/VoiceAvatar";
-import {
-  MainFeedSkeleton,
-} from "@/components/Skeleton";
+import { FeedSkeleton } from "@/components/Skeleton";
+import { FEED_GRID_CLASS } from "@/lib/feedLayout";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { Helmet } from "react-helmet-async";
 
@@ -116,6 +115,10 @@ const Index = () => {
   const normalizedQuery = normalizeSearchText(query || "");
   const hasSearchQuery = normalizedQuery.length > 0;
   const hasFetchedStories = (stories?.length ?? 0) > 0;
+  // Demo stories are only a fallback for when the feed failed / came back
+  // empty — never while it is still loading (they used to render under the
+  // skeleton, download picsum images and then jump when the real feed landed).
+  const useDemoContent = !isLoading && !hasFetchedStories;
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
@@ -127,6 +130,8 @@ const Index = () => {
     }
 
     if (!filtered.length) {
+      if (!useDemoContent) return [];
+
       const demoFiltered = hasSearchQuery
         ? DEMO_STORIES.filter((story) => {
             const titleMatch = normalizeSearchText(story.title).includes(normalizedQuery);
@@ -168,9 +173,7 @@ const Index = () => {
         bias: s.source.bias,
       })),
     })) || [];
-  }, [stories, hasSearchQuery, normalizedQuery]);
-
-  const useDemoContent = !isLoading && !hasFetchedStories;
+  }, [stories, hasSearchQuery, normalizedQuery, useDemoContent]);
 
   const matchedVoices = useMemo(() => {
     if (!hasSearchQuery) return [];
@@ -386,51 +389,8 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Skeleton Loading State */}
-        {isLoading && (
-          <div className="space-y-12">
-            <MainFeedSkeleton />
-            <MainFeedSkeleton />
-          </div>
-        )}
-
-        {/* Banner actualizare — arată când e date din cache dar se fetchează fresh */}
-        {isLoadingFresh && (
-          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs w-fit mx-auto mb-4">
-            <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="shrink-0 text-muted-foreground" style={{ animation: 'claudeAsteriskPulse 1.8s ease-in-out infinite' }}>
-              {[0, 60, 120, 180, 240, 300].map((angle) => (
-                <rect key={angle} x="7.5" y="1.5" width="3" height="6.5" rx="1.5" transform={`rotate(${angle} 9 9)`} />
-              ))}
-            </svg>
-            <span className="claude-shimmer-text">Se actualizează știrile…</span>
-            <style>{`
-              @keyframes claudeAsteriskPulse {
-                0%, 100% { transform: scale(0.85); opacity: 0.55; }
-                50% { transform: scale(1.05); opacity: 1; }
-              }
-              .claude-shimmer-text {
-                background: linear-gradient(
-                  90deg,
-                  hsl(var(--muted-foreground) / 0.45) 0%,
-                  hsl(var(--muted-foreground) / 0.45) 35%,
-                  hsl(var(--foreground)) 50%,
-                  hsl(var(--muted-foreground) / 0.45) 65%,
-                  hsl(var(--muted-foreground) / 0.45) 100%
-                );
-                background-size: 200% 100%;
-                -webkit-background-clip: text;
-                background-clip: text;
-                -webkit-text-fill-color: transparent;
-                color: transparent;
-                animation: claudeShimmer 2.2s linear infinite;
-              }
-              @keyframes claudeShimmer {
-                from { background-position: 200% 0; }
-                to { background-position: -200% 0; }
-              }
-            `}</style>
-          </div>
-        )}
+        {/* Loading state: same grid as the feed, so nothing moves when it lands */}
+        {isLoading && <FeedSkeleton />}
 
         {useDemoContent && (
           <div className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
@@ -511,10 +471,29 @@ const Index = () => {
           <>
             {/* Screen-reader heading so the h3 story titles don't skip a level after the hero h1. */}
             <h2 className="sr-only">Ultimele știri</h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-12 px-0 md:px-8 lg:px-12 xl:px-16">
-              {convertedStories.slice(0, visible).map((news, index) => (
-                <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} />
-              ))}
+            <div className="relative">
+              {/* Banner actualizare — date din cache, se aduc cele proaspete.
+                  Absolutely positioned in the gap above the grid so showing /
+                  hiding it never pushes the cards around. */}
+              {isLoadingFresh && (
+                <div
+                  role="status"
+                  className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-1 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-card px-4 py-2 text-xs"
+                >
+                  <svg width="16" height="16" viewBox="0 0 18 18" fill="currentColor" className="refresh-pill-icon shrink-0 text-muted-foreground" aria-hidden="true">
+                    {[0, 60, 120, 180, 240, 300].map((angle) => (
+                      <rect key={angle} x="7.5" y="1.5" width="3" height="6.5" rx="1.5" transform={`rotate(${angle} 9 9)`} />
+                    ))}
+                  </svg>
+                  <span className="refresh-pill-text">Se actualizează știrile…</span>
+                </div>
+              )}
+
+              <div className={FEED_GRID_CLASS}>
+                {convertedStories.slice(0, visible).map((news, index) => (
+                  <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} />
+                ))}
+              </div>
             </div>
 
             {visible < convertedStories.length && (

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { buildStoryHref } from "@/utils/storyRoute";
 import { getPosterTitleSizing } from "@/utils/posterTypography";
 import { useTextFit } from "@/hooks/useTextFit";
+import { POSTER_CARD_ARTICLE_CLASS, POSTER_CARD_OUTER_CLASS } from "@/lib/feedLayout";
 
 const POSTER_FONT_CONFIG = {
   fontFamily: "\"VICE Grotesk\", Helvetica, Arial, sans-serif",
@@ -59,8 +60,8 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
 
   if (variant === 'poster') {
     return (
-      <Link to={buildStoryHref(news.id, news.title)} className="group block h-full w-[calc(100%+2rem)] -mx-4 md:mx-0 md:w-full">
-        <article data-story-id={news.id} className="group relative flex h-full w-full flex-col overflow-hidden rounded-none border-none md:border-[#e5e5e5] bg-background md:shadow-[0_18px_40px_-20px_rgba(0,0,0,0.18)] transition-transform duration-300 hover:-translate-y-1 md:rounded-none md:border">
+      <Link to={buildStoryHref(news.id, news.title)} className={POSTER_CARD_OUTER_CLASS}>
+        <article data-story-id={news.id} className={`group transition-transform duration-300 hover:-translate-y-1 ${POSTER_CARD_ARTICLE_CLASS}`}>
           
           {/* Mobile Layout */}
           <div className="flex md:hidden flex-col h-full px-4 py-5 w-full">

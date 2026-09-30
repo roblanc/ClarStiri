@@ -312,6 +312,155 @@
   .btn-gold {
     @apply bg-primary text-primary-foreground hover:opacity-90 transition-opacity;
   }
+
+  /* ---- Feed loading skeleton (components/Skeleton.tsx → FeedSkeleton) ----
+     A press-proof look: halftone "photo" plates that a light roller sweeps
+     across, headline bars that breathe like drying ink, and a coverage bar
+     whose stânga / centru / dreapta segments trade width. Cards are staggered
+     through --skel-delay. Everything is static with prefers-reduced-motion. */
+  .feed-skel-ink {
+    display: block;
+    background-color: hsl(var(--foreground) / 0.1);
+    animation: feed-skel-ink 1.8s ease-in-out infinite;
+    animation-delay: var(--skel-delay, 0ms);
+  }
+
+  .feed-skel-photo {
+    position: relative;
+    overflow: hidden;
+    background-color: hsl(var(--muted));
+    background-image: radial-gradient(circle, hsl(var(--foreground) / 0.07) 1px, transparent 1.2px);
+    background-size: 6px 6px;
+  }
+
+  .feed-skel-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 20%, hsl(var(--background) / 0.55) 50%, transparent 80%);
+    transform: translateX(-100%);
+    animation: feed-skel-sweep 1.8s ease-in-out infinite;
+    animation-delay: var(--skel-delay, 0ms);
+  }
+
+  .feed-skel-chip {
+    display: block;
+    background-color: hsl(var(--foreground) / 0.1);
+  }
+
+  .feed-skel-bias {
+    display: block;
+    height: 100%;
+    animation-duration: 6s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: var(--skel-delay, 0ms);
+  }
+
+  .feed-skel-bias-left {
+    flex-grow: 30;
+    background-color: rgb(40 80 138 / 0.28);
+    animation-name: feed-skel-bias-left;
+  }
+
+  .feed-skel-bias-center {
+    flex-grow: 40;
+    background-color: hsl(var(--foreground) / 0.05);
+    animation-name: feed-skel-bias-center;
+  }
+
+  .feed-skel-bias-right {
+    flex-grow: 30;
+    background-color: rgb(130 39 39 / 0.28);
+    animation-name: feed-skel-bias-right;
+  }
+
+  .dark .feed-skel-bias-left {
+    background-color: rgb(40 80 138 / 0.5);
+  }
+
+  .dark .feed-skel-bias-right {
+    background-color: rgb(130 39 39 / 0.5);
+  }
+
+  @keyframes feed-skel-ink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  @keyframes feed-skel-sweep {
+    0% { transform: translateX(-100%); }
+    60%, 100% { transform: translateX(100%); }
+  }
+
+  @keyframes feed-skel-bias-left {
+    0%, 100% { flex-grow: 30; }
+    33% { flex-grow: 20; }
+    66% { flex-grow: 38; }
+  }
+
+  @keyframes feed-skel-bias-center {
+    0%, 100% { flex-grow: 40; }
+    33% { flex-grow: 54; }
+    66% { flex-grow: 32; }
+  }
+
+  @keyframes feed-skel-bias-right {
+    0%, 100% { flex-grow: 30; }
+    33% { flex-grow: 26; }
+    66% { flex-grow: 30; }
+  }
+
+  /* "Se actualizează știrile…" pill shown over cached stories (pages/Index.tsx) */
+  .refresh-pill-icon {
+    animation: refresh-pill-pulse 1.8s ease-in-out infinite;
+  }
+
+  .refresh-pill-text {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted-foreground) / 0.45) 0%,
+      hsl(var(--muted-foreground) / 0.45) 35%,
+      hsl(var(--foreground)) 50%,
+      hsl(var(--muted-foreground) / 0.45) 65%,
+      hsl(var(--muted-foreground) / 0.45) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: refresh-pill-shimmer 2.2s linear infinite;
+  }
+
+  @keyframes refresh-pill-pulse {
+    0%, 100% { transform: scale(0.85); opacity: 0.55; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  @keyframes refresh-pill-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .feed-skel-ink,
+    .feed-skel-bias,
+    .refresh-pill-icon,
+    .refresh-pill-text {
+      animation: none;
+    }
+
+    .feed-skel-photo::after {
+      display: none;
+    }
+
+    .refresh-pill-text {
+      -webkit-text-fill-color: currentColor;
+      color: hsl(var(--muted-foreground));
+      background: none;
+    }
+  }
 }
 
 @layer utilities {
