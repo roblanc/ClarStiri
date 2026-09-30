@@ -172,7 +172,7 @@ const VoiceProfile = () => {
                                         }}
                                     />
                                 </div>
-                                <div className="flex justify-between text-[9px] uppercase font-bold text-muted-foreground/60 mt-1.5 tracking-wider">
+                                <div className="flex justify-between text-[9px] uppercase font-bold text-muted-foreground mt-1.5 tracking-wider">
                                     <span>Stânga</span>
                                     <span>Centru</span>
                                     <span>Dreapta</span>

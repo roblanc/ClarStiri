@@ -26,13 +26,18 @@
             "maxDuration": 15
         },
         "api/story-page.ts": {
-            "maxDuration": 10
+            "maxDuration": 15,
+            "includeFiles": "api/_lib/og-fonts/**"
         }
     },
     "rewrites": [
         {
             "source": "/sitemap.xml",
             "destination": "/api/sitemap"
+        },
+        {
+            "source": "/sitemap-stories.xml",
+            "destination": "/api/sitemap?type=stories"
         },
         {
             "source": "/rss.xml",

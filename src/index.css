@@ -67,12 +67,12 @@
     /* NO ROUNDED CORNERS */
     --radius: 0rem;
 
-    /* Bias colors - muted editorial variants */
-    --bias-left: 195 60% 50%;
+    /* Bias colors - muted editorial variants, deep enough for white labels (WCAG AA >= 4.5:1) */
+    --bias-left: 197 75% 35%;
     /* Muted teal/blue */
-    --bias-center: 0 0% 60%;
+    --bias-center: 0 0% 45%;
     /* Flat gray */
-    --bias-right: 0 60% 60%;
+    --bias-right: 0 55% 48%;
     /* Muted brick red */
 
     /* Badges */
@@ -126,9 +126,10 @@
     --input: 0 0% 18%;
     --ring: 0 0% 60%;
 
-    --bias-left: 195 50% 60%;
-    --bias-center: 0 0% 55%;
-    --bias-right: 0 50% 65%;
+    /* Used as fills behind white labels (BiasBar), so kept >= 4.5:1 against white. */
+    --bias-left: 197 60% 38%;
+    --bias-center: 0 0% 44%;
+    --bias-right: 0 52% 50%;
 
     --badge-left: 0 0% 10%;
     --badge-left-foreground: 0 0% 90%;
@@ -151,6 +152,11 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  /* <main> receives programmatic focus from the skip link; the jump itself is the feedback. */
+  main[tabindex="-1"]:focus {
+    outline: none;
   }
 
   html,

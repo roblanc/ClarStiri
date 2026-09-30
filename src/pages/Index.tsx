@@ -222,7 +222,7 @@ const Index = () => {
               <div className="md:hidden float-right w-40 min-h-[160px] -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
                   src="/hero-illustration-headphones.webp"
-                  alt="thesite.ro Ascultător"
+                  alt=""
                   width={480}
                   height={482}
                   loading="eager"
@@ -241,7 +241,7 @@ const Index = () => {
                 <div className="hidden md:flex shrink-0 w-40 h-52 lg:w-48 lg:h-64 items-center justify-center transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
                   <img
                     src="/hero-illustration-headphones.webp"
-                    alt="thesite.ro Ascultător"
+                    alt=""
                     width={480}
                     height={482}
                     className="w-full h-full object-contain dark:invert pointer-events-none"
@@ -509,6 +509,8 @@ const Index = () => {
         {/* Flat Feed - Added gap for better separation on mobile */}
         {convertedStories.length > 0 && (
           <>
+            {/* Screen-reader heading so the h3 story titles don't skip a level after the hero h1. */}
+            <h2 className="sr-only">Ultimele știri</h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-12 px-0 md:px-8 lg:px-12 xl:px-16">
               {convertedStories.slice(0, visible).map((news, index) => (
                 <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} />

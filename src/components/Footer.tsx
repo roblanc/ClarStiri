@@ -48,7 +48,7 @@ export function Footer() {
             <Link to="/" className="flex items-center gap-3 group w-fit">
               <img
                 src="/hero-illustration-headphones.webp"
-                alt="thesite.ro Logo"
+                alt=""
                 className="h-10 w-auto"
               />
               <span className="font-serif italic text-2xl font-semibold text-black tracking-tight group-hover:opacity-80 transition-opacity">
@@ -67,7 +67,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="p-2.5 bg-black/5 rounded-full text-black/60 hover:text-black hover:bg-black/10 transition-all border border-black/10"
                   title={social.label}
-                  aria-label={social.label}
+                  aria-label={`${social.label} (se deschide într-o filă nouă)`}
                 >
                   <social.icon className="w-5 h-5" />
                 </a>
@@ -78,15 +78,15 @@ export function Footer() {
           {/* Links Cols */}
           {sections.map((section) => (
             <div key={section.title} className="space-y-6">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/40">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-black/70">
                 {section.title}
-              </h3>
+              </h2>
               <ul className="space-y-4">
                 {section.links.map((link) => (
                   <li key={link.to}>
                     <Link
                       to={link.to}
-                      className="text-sm text-black/60 hover:text-black transition-colors font-medium"
+                      className="text-sm text-black/75 hover:text-black transition-colors font-medium"
                     >
                       {link.label}
                     </Link>
@@ -99,13 +99,13 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-black/10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/40">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/70">
             © {currentYear} THESITE.RO — TOATE DREPTURILE REZERVATE
           </p>
           <div className="flex items-center gap-8">
              <a 
               href="mailto:contact@thesite.ro" 
-              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60 hover:text-black transition-colors"
+              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/75 hover:text-black transition-colors"
             >
               <Mail className="w-3.5 h-3.5" /> contact@thesite.ro
             </a>

@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import { HelmetProvider } from "react-helmet-async";
 import { Loader2 } from "lucide-react";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
+import { RouteMeta } from "@/components/RouteMeta";
+import { SkipLink } from "@/components/SkipLink";
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const StudioPreview = lazy(() => import("./pages/StudioPreview"));
 const InstagramStudio = lazy(() => import("./pages/InstagramStudio"));
@@ -51,6 +53,8 @@ const RoutedApp = () => {
 
   return (
     <AppErrorBoundary key={`${location.pathname}${location.search}`}>
+      <SkipLink />
+      <RouteMeta />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />

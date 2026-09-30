@@ -107,7 +107,7 @@ export default function Despre() {
               >
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 flex flex-col items-center gap-2">
-                    <span className="text-[10px] font-black text-muted-foreground/40 tracking-widest">{step}</span>
+                    <span className="text-[10px] font-black text-muted-foreground tracking-widest">{step}</span>
                     <div className="p-2 bg-muted rounded-xl">
                       <Icon className="w-4 h-4 text-foreground/70" />
                     </div>

@@ -495,11 +495,11 @@ export default function Sources() {
 
                         <div className="mt-5 grid gap-3 text-sm text-muted-foreground sm:grid-cols-2">
                           <div className="surface-subtle rounded-2xl p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground/80">Proprietar</p>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Proprietar</p>
                             <p className="mt-2 leading-relaxed text-foreground">{owner}</p>
                           </div>
                           <div className="surface-subtle rounded-2xl p-3">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground/80">Ultima analiză</p>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted-foreground">Ultima analiză</p>
                             <p className="mt-2 leading-relaxed text-foreground">{formatDateLabel(profile.lastAnalysed)}</p>
                           </div>
                         </div>
@@ -573,9 +573,9 @@ export default function Sources() {
                               biasClassMap[item.key],
                             )}
                           >
-                            <p className="text-[10px] font-bold uppercase tracking-[0.16em] opacity-75">{item.range}</p>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.16em]">{item.range}</p>
                             <p className="mt-2 text-sm font-semibold">{item.label}</p>
-                            <p className="mt-2 text-xs leading-relaxed opacity-90">{item.description}</p>
+                            <p className="mt-2 text-xs leading-relaxed">{item.description}</p>
                           </div>
                         ))}
                       </div>
