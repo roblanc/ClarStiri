@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -54,6 +55,10 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [react(), preloadHomeRoute()],
+  test: {
+    // Agent worktrees live under .claude/ and would otherwise be collected twice.
+    exclude: ["**/node_modules/**", "**/dist/**", ".claude/**"],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
