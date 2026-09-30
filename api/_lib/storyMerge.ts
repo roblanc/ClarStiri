@@ -1,4 +1,5 @@
 import { AggregatedStory, calculateBiasDistribution, calculateBlindspot } from './aggregation.js';
+import { linkSet, matchStories } from './storyMatch.js';
 
 /**
  * Merging a fresh aggregation run with the stories already in the cache.
@@ -9,32 +10,14 @@ import { AggregatedStory, calculateBiasDistribution, calculateBlindspot } from '
  * two days a single "story" held 100+ articles about different events.
  *
  * Rules now:
- * - A fresh story matches an old one only on substantial link overlap, measured against
- *   both sides, so a small fresh cluster can no longer latch onto a bloated old one.
- * - Matching is one-to-one: each old story is inherited by at most one fresh story.
- * - Only old sources published close to the fresh cluster's time window are re-added.
+ * - A fresh story matches an old one only on substantial link overlap, one-to-one
+ *   (see ./storyMatch.ts).
+ * - Only old sources published close to the fresh cluster's time window are re-added, and
+ *   only for outlets the fresh cluster does not already have: one article per outlet.
  * - The matched story keeps its original id, so /stire/<id> links stay stable.
  */
 
-const MIN_OVERLAP_OF_SMALLER = 0.5;
-const MIN_OVERLAP_OF_LARGER = 0.25;
 const REATTACH_WINDOW_MS = 24 * 60 * 60 * 1000;
-
-function linkSet(story: AggregatedStory): Set<string> {
-    return new Set(story.sources.map(s => s.link));
-}
-
-function overlapScore(fresh: Set<string>, existing: Set<string>): number {
-    let shared = 0;
-    for (const link of fresh) if (existing.has(link)) shared++;
-    if (shared === 0) return 0;
-    // A single shared link is only enough when one side is tiny (2-source stories).
-    if (shared < 2 && Math.min(fresh.size, existing.size) > 2) return 0;
-    const ofSmaller = shared / Math.min(fresh.size, existing.size);
-    const ofLarger = shared / Math.max(fresh.size, existing.size);
-    if (ofSmaller < MIN_OVERLAP_OF_SMALLER || ofLarger < MIN_OVERLAP_OF_LARGER) return 0;
-    return shared / (fresh.size + existing.size - shared); // Jaccard, used to rank candidates
-}
 
 function timeOf(pubDate: string): number {
     const t = Date.parse(pubDate);
@@ -43,14 +26,19 @@ function timeOf(pubDate: string): number {
 
 function mergeSources(fresh: AggregatedStory, existing: AggregatedStory): AggregatedStory {
     const freshLinks = linkSet(fresh);
+    const outlets = new Set(fresh.sources.map(s => s.source?.id));
     const freshTimes = fresh.sources.map(s => timeOf(s.pubDate)).filter(t => !Number.isNaN(t));
     const windowStart = freshTimes.length ? Math.min(...freshTimes) - REATTACH_WINDOW_MS : -Infinity;
     const windowEnd = freshTimes.length ? Math.max(...freshTimes) + REATTACH_WINDOW_MS : Infinity;
 
     const dropped = existing.sources.filter(s => {
         if (freshLinks.has(s.link)) return false;
+        const outlet = s.source?.id;
+        if (outlet !== undefined && outlets.has(outlet)) return false;
         const t = timeOf(s.pubDate);
-        return Number.isNaN(t) || (t >= windowStart && t <= windowEnd);
+        if (!Number.isNaN(t) && (t < windowStart || t > windowEnd)) return false;
+        outlets.add(outlet);
+        return true;
     });
 
     const sources = dropped.length ? [...fresh.sources, ...dropped] : fresh.sources;
@@ -72,26 +60,8 @@ export interface MergeResult {
 }
 
 export function mergeWithExisting(fresh: AggregatedStory[], existing: AggregatedStory[]): MergeResult {
-    const existingLinks = existing.map(linkSet);
-
-    // Score every plausible pair, then assign greedily from the strongest overlap down.
-    const pairs: { f: number; e: number; score: number }[] = [];
-    fresh.forEach((story, f) => {
-        const links = linkSet(story);
-        existingLinks.forEach((other, e) => {
-            const score = overlapScore(links, other);
-            if (score > 0) pairs.push({ f, e, score });
-        });
-    });
-    pairs.sort((a, b) => b.score - a.score);
-
-    const freshToExisting = new Map<number, number>();
-    const takenExisting = new Set<number>();
-    for (const { f, e } of pairs) {
-        if (freshToExisting.has(f) || takenExisting.has(e)) continue;
-        freshToExisting.set(f, e);
-        takenExisting.add(e);
-    }
+    const freshToExisting = matchStories(fresh, existing);
+    const takenExisting = new Set(freshToExisting.values());
 
     const usedIds = new Set<string>();
     const merged = fresh.map((story, f) => {
