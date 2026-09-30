@@ -404,7 +404,7 @@ const Index = () => {
 
               <div className={FEED_GRID_CLASS}>
                 {convertedStories.slice(0, visible).map((news, index) => (
-                  <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} />
+                  <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} eager={index < 3} />
                 ))}
               </div>
             </div>

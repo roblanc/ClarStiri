@@ -115,24 +115,47 @@ export function optimizeImageUrl(
 }
 
 /**
- * Generează srcset pentru imagini responsive
+ * Generează srcset pentru imagini responsive: câte o redare wsrv.nl pentru
+ * fiecare lățime, toate decupate la același raport (înălțime / lățime), ca
+ * browserul să aleagă după `sizes` și densitatea ecranului.
+ * Returnează '' pentru imagini care nu trec prin wsrv.nl (locale, placeholder).
  */
 export function getResponsiveSrcSet(
     url: string | undefined,
-    baseWidth: number = 400
+    widths: readonly number[],
+    aspectRatio: number,
+    quality = 75
 ): string {
-    if (!url) return '';
+    if (!url || !shouldOptimize(url)) return '';
 
-    const sizes = [1, 1.5, 2]; // 1x, 1.5x, 2x pentru retina displays
-
-    return sizes
-        .map(multiplier => {
-            const width = Math.round(baseWidth * multiplier);
-            const optimized = optimizeImageUrl(url, { width, quality: multiplier > 1 ? 70 : 75 });
-            return `${optimized} ${width}w`;
+    return widths
+        .map((width) => {
+            const height = Math.round(width * aspectRatio);
+            return `${optimizeImageUrl(url, { width, height, quality, fit: 'cover' })} ${width}w`;
         })
         .join(', ');
 }
+
+/**
+ * Poster card (desktop/tablet grid): the box is ~270–460 CSS px wide × 256 px.
+ * 400w is the old single rendition (keeps wsrv's CDN cache warm); 660w / 800w
+ * cover 2x screens. Same 4:3 crop as IMAGE_SIZES.thumbnail.
+ */
+export const POSTER_IMAGE = {
+    widths: [400, 660, 800],
+    aspectRatio: IMAGE_SIZES.thumbnail.height / IMAGE_SIZES.thumbnail.width,
+    sizes: '(min-width: 1280px) 330px, (min-width: 1024px) 30vw, (min-width: 768px) 46vw, 100vw',
+} as const;
+
+/**
+ * Mobile card thumbnail, shown at 124×82 CSS px. 260w is the old single
+ * rendition (2x); 130w / 390w serve 1x and 3x screens.
+ */
+export const CARD_THUMB_IMAGE = {
+    widths: [130, 260, 390],
+    aspectRatio: IMAGE_SIZES.cardThumb.height / IMAGE_SIZES.cardThumb.width,
+    sizes: '124px',
+} as const;
 
 /**
  * Helper pentru Featured Story (LCP element)

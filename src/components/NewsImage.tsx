@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Newspaper } from 'lucide-react';
 import { getImageProxyUrl } from '@/utils/imageOptimizer';
 import { PLACEHOLDER_IMAGE_WEBP } from '@/lib/constants';
@@ -42,6 +42,13 @@ interface NewsImageProps {
   sizes?: string;
 }
 
+/**
+ * wsrv.nl is a free proxy and occasionally takes 5–8 s for a single image.
+ * If an image that is on screen still hasn't loaded after this long, switch
+ * to our own /api/image proxy (the same fallback used when wsrv errors).
+ */
+const SLOW_IMAGE_MS = 6000;
+
 export function NewsImage({
   src,
   seed = '',
@@ -59,6 +66,7 @@ export function NewsImage({
   const [displaySrc, setDisplaySrc] = useState(src);
   const [failed, setFailed] = useState(!src);
   const [didTryProxyFallback, setDidTryProxyFallback] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     setDisplaySrc(src);
@@ -67,6 +75,37 @@ export function NewsImage({
   }, [src]);
 
   const [c1, c2] = GRADIENTS[hashCode(seed || src) % GRADIENTS.length];
+
+  const switchToProxy = useCallback((): boolean => {
+    const proxyUrl = getImageProxyUrl(displaySrc);
+    if (!proxyUrl || proxyUrl === displaySrc) return false;
+    setDisplaySrc(proxyUrl);
+    setDidTryProxyFallback(true);
+    return true;
+  }, [displaySrc]);
+
+  // Slow-image watchdog: start the clock once the image is actually visible
+  // (lazy images outside the viewport, or in a display:none layout, never start).
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img || failed || didTryProxyFallback || !displaySrc.includes('wsrv.nl')) return;
+    if (typeof IntersectionObserver === 'undefined') return;
+
+    let timer: number | undefined;
+    const observer = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      timer = window.setTimeout(() => {
+        if (!img.complete) switchToProxy();
+      }, SLOW_IMAGE_MS);
+    });
+    observer.observe(img);
+
+    return () => {
+      observer.disconnect();
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
+  }, [displaySrc, failed, didTryProxyFallback, switchToProxy]);
 
   if (failed) {
     return (
@@ -80,20 +119,13 @@ export function NewsImage({
   }
 
   const handleError = () => {
-    if (!didTryProxyFallback) {
-      const proxyUrl = getImageProxyUrl(displaySrc);
-      if (proxyUrl && proxyUrl !== displaySrc) {
-        setDisplaySrc(proxyUrl);
-        setDidTryProxyFallback(true);
-        return;
-      }
-    }
-
+    if (!didTryProxyFallback && switchToProxy()) return;
     setFailed(true);
   };
 
   return (
     <img
+      ref={imgRef}
       src={displaySrc}
       alt={alt}
       className={className}
@@ -102,8 +134,9 @@ export function NewsImage({
       decoding={decoding}
       width={width}
       height={height}
-      srcSet={srcSet}
-      sizes={sizes}
+      // The wsrv.nl renditions in srcSet would win over the proxy URL in src.
+      srcSet={didTryProxyFallback ? undefined : srcSet}
+      sizes={didTryProxyFallback ? undefined : sizes}
       {...(fetchPriority ? { fetchPriority } : {})}
       onError={handleError}
     />

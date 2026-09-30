@@ -2,7 +2,7 @@ import { useRef, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { BiasBadge } from "./BiasBadge";
 import { CoverageBar } from "./CoverageBar";
-import { getThumbnailUrl, getCardThumbUrl } from "@/utils/imageOptimizer";
+import { getThumbnailUrl, getCardThumbUrl, getResponsiveSrcSet, POSTER_IMAGE, CARD_THUMB_IMAGE } from "@/utils/imageOptimizer";
 import { NewsImage } from "./NewsImage";
 import { AlertTriangle, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -39,10 +39,26 @@ export interface NewsItem {
 interface NewsCardProps {
   news: NewsItem;
   variant?: 'default' | 'featured' | 'compact' | 'poster';
+  /** The likely LCP card: load its image eagerly with fetchpriority=high. */
   priority?: boolean;
+  /** Above the fold: load the image eagerly (without raising its priority). */
+  eager?: boolean;
 }
 
-export function NewsCard({ news, variant = 'default', priority = false }: NewsCardProps) {
+// Tailwind's `md` breakpoint: the poster layout shows from here up, the
+// mobile row layout below it (the other one is display:none).
+const MD_UP_QUERY = "(min-width: 768px)";
+
+export function NewsCard({ news, variant = 'default', priority = false, eager = false }: NewsCardProps) {
+  // Both layouts are in the DOM; only the visible one may load eagerly, or
+  // the first cards download two renditions of the same photo.
+  const mdUp = typeof window !== "undefined" && window.matchMedia(MD_UP_QUERY).matches;
+  const imageLoadingProps = (visibleLayout: boolean) => {
+    if (!visibleLayout || (!priority && !eager)) return { loading: 'lazy', decoding: 'async' } as const;
+    return priority
+      ? ({ loading: 'eager', decoding: 'sync', fetchPriority: 'high' } as const)
+      : ({ loading: 'eager', decoding: 'async' } as const);
+  };
   const posterTitleContainerRef = useRef<HTMLDivElement>(null);
   const fittedFontSize = useTextFit(
     posterTitleContainerRef,
@@ -84,12 +100,12 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
               <div className="w-[124px] h-[82px] shrink-0 rounded-none overflow-hidden relative shadow-sm border border-border/40">
                 <NewsImage
                   src={getCardThumbUrl(news.image)}
+                  srcSet={getResponsiveSrcSet(news.image, CARD_THUMB_IMAGE.widths, CARD_THUMB_IMAGE.aspectRatio) || undefined}
+                  sizes={CARD_THUMB_IMAGE.sizes}
                   seed={news.title}
                   width={124}
                   height={82}
-                  loading={priority ? 'eager' : 'lazy'}
-                  decoding={priority ? 'sync' : 'async'}
-                  fetchPriority={priority ? 'high' : undefined}
+                  {...imageLoadingProps(!mdUp)}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                 />
                 {blindspotLabel && (
@@ -114,12 +130,12 @@ export function NewsCard({ news, variant = 'default', priority = false }: NewsCa
             <div className="relative flex-1 min-h-[16rem] w-full overflow-hidden">
               <NewsImage
                 src={getThumbnailUrl(news.image)}
+                srcSet={getResponsiveSrcSet(news.image, POSTER_IMAGE.widths, POSTER_IMAGE.aspectRatio) || undefined}
+                sizes={POSTER_IMAGE.sizes}
                 seed={news.title}
-                width={800}
-                height={400}
-                loading={priority ? 'eager' : 'lazy'}
-                decoding={priority ? 'sync' : 'async'}
-                fetchPriority={priority ? 'high' : undefined}
+                width={400}
+                height={300}
+                {...imageLoadingProps(mdUp)}
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               />
 
