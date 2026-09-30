@@ -44,3 +44,6 @@ scripts/login_with_code.mjs
 # Local backups & agent worktrees (never commit)
 .git_backup/
 .claude/worktrees/
+
+# Vite temp config bundles
+vite.config.ts.timestamp-*
