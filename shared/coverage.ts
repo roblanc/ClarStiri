@@ -62,7 +62,8 @@ export function sideOfScore(score: number): Side {
 
 export interface CoverageSource { id: string; bias?: SourceBias; biasScore?: number }
 export interface CoverageItem {
-    title: string;
+    /** Missing on listing "cards", which keep only the outlet. */
+    title?: string;
     description?: string;
     pubDate?: string;
     link?: string;
@@ -121,7 +122,7 @@ export function detectWireAttribution(text: string): string | null {
  */
 const QUOTED = /[„“"”«][^„“"”«»]{0,600}[”"“»]/g;
 
-function normalizeWords(text: string): string[] {
+function normalizeWords(text?: string): string[] {
     return (text || '')
         .replace(QUOTED, ' ')
         .toLowerCase()
@@ -200,7 +201,7 @@ export function groupReports(items: CoverageItem[]): ReportUnit[] {
 
     // Which agency each item comes from: the agency itself, or an explicit credit in the text.
     const agencyOf = items.map((it) =>
-        WIRE_AGENCIES[it.source.id] ? it.source.id : detectWireAttribution(`${it.title} ${it.description ?? ''}`));
+        WIRE_AGENCIES[it.source.id] ? it.source.id : detectWireAttribution(`${it.title ?? ''} ${it.description ?? ''}`));
 
     const firstByKey = new Map<string, number>();
     items.forEach((it, i) => {
@@ -432,4 +433,60 @@ export function storyRankScore(
 ): number {
     const hours = (now - new Date(story.publishedAt).getTime()) / 3_600_000;
     return Math.pow(story.independentCount ?? story.sourcesCount, 1.5) * Math.exp(-hours / 18);
+}
+
+// ─── 6. View for the site ────────────────────────────────────────────────────
+
+export interface CoverageView {
+    bias: BiasSplit;
+    /** Independent reports behind the bar. */
+    independent: number;
+    /** Distinct outlets listed. */
+    outlets: number;
+    /** Distinct outlets per side (same grouping as filters and blindspots). */
+    outletsBySide: Record<Side, number>;
+    /** Per item: republished copy? */
+    syndicated: boolean[];
+    /** Per item: side of its outlet. */
+    sides: Side[];
+}
+
+/**
+ * What a story page shows. Uses the server's figures (bar, independent count, copy flags)
+ * when the story carries them, so the page matches the cards; stories cached before those
+ * fields existed are recomputed here with the same functions.
+ */
+export function coverageView(story: { sources: CoverageItem[]; bias?: BiasSplit; independentCount?: number }): CoverageView {
+    const items = story.sources;
+    const sides = items.map((it) => sideOfScore(scoreOfSource(it.source)));
+    const outletsBySide: Record<Side, number> = { left: 0, center: 0, right: 0 };
+    const seen = new Set<string>();
+    items.forEach((it, i) => {
+        if (seen.has(it.source.id)) return;
+        seen.add(it.source.id);
+        outletsBySide[sides[i]]++;
+    });
+
+    // Server figures, or a listing card (outlets only, no text to detect copies in).
+    const isCard = items.every((it) => it.title === undefined);
+    if (story.bias && (typeof story.independentCount === 'number' || isCard)) {
+        return {
+            bias: story.bias,
+            independent: story.independentCount ?? seen.size,
+            outlets: seen.size,
+            outletsBySide,
+            syndicated: items.map((it) => it.syndicated === true),
+            sides,
+        };
+    }
+    const units = groupReports(items);
+    const summary = summarizeCoverage(items);
+    return {
+        bias: summary.bias,
+        independent: summary.independent,
+        outlets: seen.size,
+        outletsBySide,
+        syndicated: syndicationFlags(items, units),
+        sides,
+    };
 }
