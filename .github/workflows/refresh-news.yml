@@ -8,9 +8,31 @@ on:
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 8
     steps:
       - name: Trigger cache refresh
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          curl -s -f \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            https://thesite.ro/api/cron/refresh-news
+          set -euo pipefail
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "::error::CRON_SECRET repository secret is not set"
+            exit 1
+          fi
+
+          # --fail-with-body: non-zero exit on HTTP >= 400 but still print the error JSON.
+          curl -sS --fail-with-body --max-time 90 --retry 2 --retry-delay 10 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            -o response.json \
+            https://thesite.ro/api/cron/refresh-news || { cat response.json 2>/dev/null; exit 1; }
+          cat response.json; echo
+
+          # A 200 is not enough: fail if the handler reports failure, or if the refresh
+          # ran but no RSS source returned anything (all feeds blocked/down).
+          jq -e '
+            .success == true
+            and (.skipped == true or ((.stats.newsItems // 0) > 0))
+          ' response.json > /dev/null || {
+            echo "::error::Refresh returned 200 but reported failure or zero RSS items"
+            exit 1
+          }

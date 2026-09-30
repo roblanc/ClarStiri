@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 import xml.etree.ElementTree as ET
 import urllib.request
 from email.utils import parsedate_to_datetime
@@ -72,12 +73,14 @@ def main():
     if not os.path.exists(ARCHIVE_DIR):
         os.makedirs(ARCHIVE_DIR)
 
+    succeeded = []
     for src in SOURCES:
         print(f"Processing {src['id']}...")
         xml = fetch_rss(src['rss'])
         if xml:
             articles = parse_rss(xml)
             if articles:
+                succeeded.append(src['id'])
                 file_path = os.path.join(ARCHIVE_DIR, f"{src['id']}.json")
                 
                 # Load existing if exists to avoid duplicates
@@ -113,6 +116,13 @@ def main():
                 with open(file_path, 'w', encoding='utf-8') as f:
                     json.dump(combined, f, ensure_ascii=False, separators=(',', ':'))
                 print(f"  Added {len(new_articles)} new articles to {src['id']}.json")
+
+    failed = [src['id'] for src in SOURCES if src['id'] not in succeeded]
+    print(f"Archived {len(succeeded)}/{len(SOURCES)} sources" + (f"; failed: {', '.join(failed)}" if failed else ""))
+    # Fail the workflow when nothing could be fetched instead of committing nothing and going green.
+    if not succeeded:
+        print("ERROR: no RSS source returned articles", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

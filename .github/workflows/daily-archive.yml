@@ -9,6 +9,7 @@ on:
 jobs:
   archive:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       contents: write # Permisiune pentru a face push înapoi în repo
 

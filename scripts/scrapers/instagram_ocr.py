@@ -39,7 +39,7 @@ def scrape_instagram(username, limit=3):
         return posts
     except Exception as e:
         print(f"Eroare scraping {username}: {e}")
-        return []
+        return None
 
 def get_image_path(username, post_shortcode):
     # Instaloader salvează fișierele cu timestamp și shortcode
@@ -161,6 +161,9 @@ if __name__ == "__main__":
     user = args.username
     print(f"Încep scraping-ul pentru {user}...")
     posts = scrape_instagram(user)
+    if posts is None:
+        # Exit non-zero so the GitHub Actions step (and the workflow) is marked failed.
+        sys.exit(1)
     
     for post in posts:
         img_path = get_image_path(user, post.shortcode)
