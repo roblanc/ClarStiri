@@ -9,7 +9,8 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const STATE_FILE = path.join(__dirname, '..', 'social_export', 'design_rotation.json');
 
-export const DESIGNS = ['v2', 'current'];
+// Carousels stay on the current design (v2 carousel dropped on 30 Sep); reels alternate.
+export const DESIGNS_BY_KIND = { reel: ['v2', 'current'], carousel: ['current'] };
 
 function readState() {
   try {
@@ -22,14 +23,15 @@ function readState() {
 /** Returns the design for this post and advances the counter for `kind` ('reel' | 'carousel'). */
 export function nextDesign(kind) {
   const forced = process.env.SOCIAL_DESIGN;
-  if (forced && DESIGNS.includes(forced)) {
+  const designs = DESIGNS_BY_KIND[kind] || ['current'];
+  if (forced && designs.includes(forced)) {
     console.log(`🎨 Design forțat prin SOCIAL_DESIGN: ${forced}`);
     return forced;
   }
 
   const state = readState();
   const count = Number.isInteger(state[kind]) ? state[kind] : 0;
-  const design = DESIGNS[count % DESIGNS.length];
+  const design = designs[count % designs.length];
   try {
     fs.mkdirSync(path.dirname(STATE_FILE), { recursive: true });
     fs.writeFileSync(STATE_FILE, JSON.stringify({ ...state, [kind]: count + 1 }, null, 2), 'utf8');

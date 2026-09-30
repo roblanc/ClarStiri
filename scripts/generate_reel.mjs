@@ -101,10 +101,16 @@ function getHeadlines(story) {
   return result;
 }
 
-function pickCoverImage(story) {
+// Candidate cover photos; the <img> falls through them on error because some outlets block
+// the posting server's IP. Videos and small thumbnails are skipped.
+function pickCoverImages(story) {
   const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
-  const candidates = [story.image, story.imageUrl, ...(story.sources || []).map(s => s.imageUrl)];
-  return candidates.find(url => url && /^https?:\/\//.test(url) && !isVideo(url)) || 'https://thesite.ro/hero-illustration-headphones.webp';
+  const isThumb = url => /-(\d{2,3})x(\d{2,3})\.(jpe?g|png|webp)/i.test(url || '');
+  const seen = new Set();
+  return [story.image, story.imageUrl, ...(story.sources || []).map(s => s.imageUrl)]
+    .filter(url => url && /^https?:\/\//.test(url) && !isVideo(url) && !isThumb(url))
+    .filter(url => !seen.has(url) && seen.add(url))
+    .slice(0, 10);
 }
 
 function escapeHtml(str = '') {
@@ -121,7 +127,9 @@ export function buildReelHtml(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const headlines = getHeadlines(story);
-  const coverImage = pickCoverImage(story);
+  const coverImages = pickCoverImages(story);
+  const coverImage = coverImages[0] || 'https://thesite.ro/hero-illustration-headphones.webp';
+  const coverNext = escapeHtml(JSON.stringify(coverImages.slice(1)));
 
   let titleHero = (story.title || '').trim();
   let titleSub = '';
@@ -762,7 +770,7 @@ export function buildReelHtml(story) {
   <!-- Top Dedicated Photo Layer (Scene 1 only) -->
   <div class="fullbleed-layer">
     <div class="photo-center-stage">
-      <img id="bgFull" src="${coverImage}" class="fullbleed-img" alt="" onerror="this.src='https://www.thesite.ro/hero-illustration-headphones.webp'">
+      <img id="bgFull" src="${coverImage}" data-next="${coverNext}" class="fullbleed-img" alt="" onerror="var n=JSON.parse(this.dataset.next||'[]');if(n.length){this.dataset.next=JSON.stringify(n.slice(1));this.src=n[0];}else{this.onerror=null;this.src='https://thesite.ro/hero-illustration-headphones.webp';}">
     </div>
     <div class="black-fade-top"></div>
     <div class="black-fade-bottom"></div>

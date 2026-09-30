@@ -57,10 +57,19 @@ function parseTime(pubDate) {
   return Number.isNaN(t) ? NaN : t;
 }
 
-function pickImage(story) {
+/**
+ * Candidate photos in order of preference. Some outlets (e.g. antena3.ro) block the posting
+ * server's IP, so the <img> walks this list on error instead of relying on a single URL.
+ * Videos and small thumbnails (e.g. -150x150) are skipped.
+ */
+function pickImages(story) {
   const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
-  const candidates = [story.image, ...(story.sources || []).map(s => s.imageUrl)];
-  return candidates.find(url => url && /^https?:\/\//.test(url) && !isVideo(url)) || '';
+  const isThumb = url => /-(\d{2,3})x(\d{2,3})\.(jpe?g|png|webp)/i.test(url || '');
+  const seen = new Set();
+  return [story.image, ...(story.sources || []).map(s => s.imageUrl)]
+    .filter(url => url && /^https?:\/\//.test(url) && !isVideo(url) && !isThumb(url))
+    .filter(url => !seen.has(url) && seen.add(url))
+    .slice(0, 10);
 }
 
 /** One real headline per camp (earliest published), or null when the camp has no sources. */
@@ -197,9 +206,10 @@ function doc(width, height, body, script = '') {
 <body>${body}<script>${GRAIN_SCRIPT}${script}</script></body></html>`;
 }
 
-function photoTag(url, heightPct) {
-  if (!url) return '';
-  return `<img class="photo" src="${esc(url)}" style="height:${heightPct}%" onerror="this.remove()" alt="">`;
+function photoTag(urls, heightPct) {
+  if (!urls.length) return '';
+  const onerror = "var n=JSON.parse(this.dataset.next||'[]');if(n.length){this.dataset.next=JSON.stringify(n.slice(1));this.src=n[0];}else{this.onerror=null;this.remove();}";
+  return `<img class="photo" src="${esc(urls[0])}" data-next="${esc(JSON.stringify(urls.slice(1)))}" style="height:${heightPct}%" onerror="${onerror}" alt="">`;
 }
 
 // ---------------------------------------------------------------- Reel (1080x1920)
@@ -211,7 +221,7 @@ const SAFE = { top: 130, bottom: 440, left: 80, right: 150 };
 export function buildReelHtml(story) {
   const b = biasPercents(story);
   const total = story.sourcesCount || story.sources?.length || 0;
-  const image = pickImage(story);
+  const images = pickImages(story);
   const heads = pickHeadlines(story);
   const timeline = buildTimeline(story);
   const date = storyDate(story);
@@ -297,8 +307,8 @@ export function buildReelHtml(story) {
 
   const body = `
   <div class="frame">
-    <div id="photoWrap" class="abs">${photoTag(image, 64)}</div>
-    <div id="mesh" class="abs" style="background:${meshLayer(b, { photo: !!image })}"></div>
+    <div id="photoWrap" class="abs">${photoTag(images, 64)}</div>
+    <div id="mesh" class="abs" style="background:${meshLayer(b, { photo: images.length > 0 })}"></div>
     ${scenes.map((s, i) => `<div class="scene abs" id="scene${i}" style="opacity:${i === 0 ? 1 : 0}">${s}</div>`).join('')}
     <div class="grain"></div>
   </div>`;
@@ -332,7 +342,7 @@ export function buildReelHtml(story) {
 export function buildHtmlSlides(story) {
   const b = biasPercents(story);
   const total = story.sourcesCount || story.sources?.length || 0;
-  const image = pickImage(story);
+  const images = pickImages(story);
   const heads = pickHeadlines(story);
   const date = storyDate(story);
   const title = story.title || '';
@@ -345,8 +355,8 @@ export function buildHtmlSlides(story) {
 
   const slide1 = doc(1080, 1350, `
   <div class="frame">
-    ${photoTag(image, 66)}
-    <div class="abs" style="background:${meshLayer(b, { photo: !!image })}"></div>
+    ${photoTag(images, 66)}
+    <div class="abs" style="background:${meshLayer(b, { photo: images.length > 0 })}"></div>
     <div class="abs" style="${pad};display:flex;flex-direction:column">
       ${top('<span class="logo">thesite<b>.ro</b></span>', '1/3')}
       <div style="margin-top:auto">
