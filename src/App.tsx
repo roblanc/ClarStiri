@@ -1,7 +1,4 @@
 import { Suspense, lazy } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -10,6 +7,10 @@ import { Loader2 } from "lucide-react";
 import { AppErrorBoundary } from "@/components/AppErrorBoundary";
 import { RouteMeta } from "@/components/RouteMeta";
 import { SkipLink } from "@/components/SkipLink";
+// Toasts are only raised by ShareButton; the Radix toast viewport loads in the
+// background instead of sitting in the entry bundle. (Toasts fired before it
+// mounts are kept in the use-toast store and shown once it does.)
+const Toaster = lazy(() => import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })));
 const StoryDetail = lazy(() => import("./pages/StoryDetail"));
 const StudioPreview = lazy(() => import("./pages/StudioPreview"));
 const InstagramStudio = lazy(() => import("./pages/InstagramStudio"));
@@ -85,13 +86,12 @@ const App = () => (
   <ThemeProvider>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
+        <Suspense fallback={null}>
           <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <RoutedApp />
-          </BrowserRouter>
-        </TooltipProvider>
+        </Suspense>
+        <BrowserRouter>
+          <RoutedApp />
+        </BrowserRouter>
       </QueryClientProvider>
     </HelmetProvider>
   </ThemeProvider>

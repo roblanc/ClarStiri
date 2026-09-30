@@ -5,7 +5,13 @@ import { cn } from "@/lib/utils";
 
 const TooltipProvider = TooltipPrimitive.Provider;
 
-const Tooltip = TooltipPrimitive.Root;
+// Each Tooltip brings its own Provider so the app shell doesn't have to mount
+// one (and pull Radix Tooltip + floating-ui into every page's entry bundle).
+const Tooltip = (props: React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Root>) => (
+  <TooltipPrimitive.Provider>
+    <TooltipPrimitive.Root {...props} />
+  </TooltipPrimitive.Provider>
+);
 
 const TooltipTrigger = TooltipPrimitive.Trigger;
 
