@@ -72,13 +72,36 @@ function pickImages(story) {
     .slice(0, 10);
 }
 
-/** One real headline per camp (earliest published), or null when the camp has no sources. */
+function titleTokens(title = '') {
+  return new Set(
+    title.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s]/g, ' ')
+      .split(/\s+/).filter(w => w.length >= 4),
+  );
+}
+
+function similarity(a, b) {
+  if (!a.size || !b.size) return 0;
+  let shared = 0;
+  for (const w of a) if (b.has(w)) shared++;
+  return shared / (a.size + b.size - shared);
+}
+
+/**
+ * One real headline per camp, or null when the camp has no sources. Within a camp we take
+ * the article closest to the story's own title (clusters can also hold earlier, related
+ * articles), then the earliest one; the same title is never shown twice.
+ */
 function pickHeadlines(story) {
-  const sorted = [...(story.sources || [])].sort((a, b) => (parseTime(a.pubDate) || 0) - (parseTime(b.pubDate) || 0));
+  const storyTokens = titleTokens(story.title);
+  const ranked = [...(story.sources || [])]
+    .filter(s => s.title)
+    .map(s => ({ s, score: similarity(titleTokens(s.title), storyTokens), t: parseTime(s.pubDate) || 0 }))
+    .sort((a, b) => b.score - a.score || a.t - b.t)
+    .map(x => x.s);
   const used = new Set();
   const result = {};
   for (const camp of ['left', 'center', 'right']) {
-    const inCamp = sorted.filter(s => campOf(s) === camp && s.title);
+    const inCamp = ranked.filter(s => campOf(s) === camp);
     const item = inCamp.find(s => !used.has(s.title.trim().toLowerCase())) || inCamp[0];
     if (item) used.add(item.title.trim().toLowerCase());
     result[camp] = item
