@@ -102,7 +102,7 @@ function buildHead(story: AggregatedStory, id: string): string {
         publisher: {
             '@type': 'Organization',
             name: 'thesite.ro',
-            logo: { '@type': 'ImageObject', url: `${SITE}/ethics-logo.png` },
+            logo: { '@type': 'ImageObject', url: `${SITE}/logo.png`, width: 640, height: 640 },
         },
         ...(story.mainCategory ? { articleSection: story.mainCategory } : {}),
         inLanguage: 'ro-RO',

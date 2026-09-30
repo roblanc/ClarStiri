@@ -407,7 +407,7 @@ const StoryDetail = () => {
         dateModified: storyPublishedAt.toISOString(),
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
-        publisherLogo: 'https://thesite.ro/ethics-logo.png',
+        publisherLogo: 'https://thesite.ro/logo.png',
         url: `https://thesite.ro/stire/${encodeURIComponent(resolvedStory.id)}`,
         id: resolvedStory.id,
         bias: resolvedStory.bias,
