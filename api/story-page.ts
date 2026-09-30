@@ -2,6 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
 import type { AggregatedStory } from './_lib/aggregation.js';
 import { loadArchivedStory } from './_lib/storyArchive.js';
+import { renderStoryCard } from './_lib/ogCard.js';
+import { buildStoryOgImageUrl, OG_IMAGE_HEIGHT, OG_IMAGE_WIDTH, storyOgVersion } from '../shared/ogImage.js';
 
 /**
  * Server-side meta injection for /stire/:id, served only to crawlers and link-preview bots
@@ -10,6 +12,10 @@ import { loadArchivedStory } from './_lib/storyArchive.js';
  * The SPA is client-rendered, so without this bots only ever see the homepage title,
  * description and OG image for every story. Injected tags carry data-rh="true" so
  * react-helmet-async adopts and replaces them once the app hydrates (Googlebot renders JS).
+ *
+ * With `?og=1` the same function renders the story's 1200x630 share card (PNG) instead; the
+ * og:image / twitter:image tags point there. Kept in this function to stay within the Hobby
+ * plan's function limit.
  */
 
 const SITE = 'https://thesite.ro';
@@ -79,6 +85,9 @@ function buildHead(story: AggregatedStory, id: string): string {
         200
     );
     const image = story.image && /^https?:\/\//.test(story.image) ? story.image : DEFAULT_IMAGE;
+    // Share previews get the generated card; JSON-LD keeps the editorial photo.
+    const cardImage = buildStoryOgImageUrl({ id, title: story.title, bias: story.bias, sourcesCount: story.sourcesCount });
+    const imageAlt = truncate(`${story.title} — acoperire stânga / centru / dreapta pe thesite.ro`, 300);
     const published = story.publishedAt ? new Date(story.publishedAt) : null;
     const publishedIso = published && !isNaN(published.getTime()) ? published.toISOString() : null;
 
@@ -95,14 +104,17 @@ function buildHead(story: AggregatedStory, id: string): string {
             name: 'thesite.ro',
             logo: { '@type': 'ImageObject', url: `${SITE}/ethics-logo.png` },
         },
+        ...(story.mainCategory ? { articleSection: story.mainCategory } : {}),
         inLanguage: 'ro-RO',
+        isAccessibleForFree: true,
         mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
     };
 
     const t = escapeHtml(title);
     const d = escapeHtml(description);
     const u = escapeHtml(pageUrl);
-    const i = escapeHtml(image);
+    const i = escapeHtml(cardImage);
+    const ia = escapeHtml(imageAlt);
     // Escape "<" so story text can never close the script tag.
     const jsonLd = JSON.stringify(schema).replace(/</g, '\\u003c');
 
@@ -114,11 +126,16 @@ function buildHead(story: AggregatedStory, id: string): string {
         `<meta data-rh="true" property="og:title" content="${t}" />`,
         `<meta data-rh="true" property="og:description" content="${d}" />`,
         `<meta data-rh="true" property="og:image" content="${i}" />`,
+        `<meta data-rh="true" property="og:image:type" content="image/png" />`,
+        `<meta data-rh="true" property="og:image:width" content="${OG_IMAGE_WIDTH}" />`,
+        `<meta data-rh="true" property="og:image:height" content="${OG_IMAGE_HEIGHT}" />`,
+        `<meta data-rh="true" property="og:image:alt" content="${ia}" />`,
         `<meta data-rh="true" property="og:url" content="${u}" />`,
         publishedIso ? `<meta data-rh="true" property="article:published_time" content="${publishedIso}" />` : '',
         `<meta data-rh="true" name="twitter:title" content="${t}" />`,
         `<meta data-rh="true" name="twitter:description" content="${d}" />`,
         `<meta data-rh="true" name="twitter:image" content="${i}" />`,
+        `<meta data-rh="true" name="twitter:image:alt" content="${ia}" />`,
         `<script data-rh="true" type="application/ld+json">${jsonLd}</script>`,
     ].filter(Boolean).join('\n  ');
 }
@@ -127,8 +144,40 @@ function injectHead(html: string, head: string): string {
     const stripped = html
         .replace(/<title>[\s\S]*?<\/title>/i, '')
         .replace(/<meta\s+name="description"[\s\S]*?\/>/i, '')
-        .replace(/<meta\s+(?:property="og:(?:type|title|description|image|url)"|name="twitter:(?:title|description|image)")[\s\S]*?\/>/gi, '');
+        .replace(/<meta\s+(?:property="og:(?:type|title|description|image(?::\w+)?|url)"|name="twitter:(?:title|description|image(?::alt)?)")[\s\S]*?\/>/gi, '');
     return stripped.replace('</head>', `  ${head}\n</head>`);
+}
+
+/**
+ * PNG share card for /stire/:id. The URL carries a content hash (`v`), so a rendered card can be
+ * cached at the CDN for a week. On any failure, redirect to the source photo (or the site card)
+ * with a short cache so a transient error doesn't stick.
+ */
+async function sendOgImage(req: VercelRequest, res: VercelResponse, id: string) {
+    const story = id ? await findStory(id) : null;
+    const fallback = story?.image && /^https?:\/\//.test(story.image) ? story.image : DEFAULT_IMAGE;
+
+    if (story) {
+        // Only the current version is rendered; any other `v` (stale, or random cache-busting)
+        // is sent to the canonical URL so each story costs at most one render per change.
+        const input = { id, title: story.title, bias: story.bias, sourcesCount: story.sourcesCount };
+        if (req.query.v !== storyOgVersion(input)) {
+            res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+            return res.redirect(302, buildStoryOgImageUrl(input, ''));
+        }
+        try {
+            const png = await renderStoryCard(story);
+            res.setHeader('Content-Type', 'image/png');
+            res.setHeader('Content-Length', String(png.length));
+            res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=604800');
+            return req.method === 'HEAD' ? res.status(200).end() : res.status(200).send(png);
+        } catch (e) {
+            console.error('[story-page] OG card render failed:', e);
+        }
+    }
+
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=300');
+    return res.redirect(302, fallback);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -137,6 +186,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const id = typeof req.query.id === 'string' ? req.query.id : '';
+    if (req.query.og === '1') return sendOgImage(req, res, id);
+
     const host = (req.headers['x-forwarded-host'] as string) || req.headers.host || 'thesite.ro';
 
     const [html, story] = await Promise.all([

@@ -408,7 +408,11 @@ const StoryDetail = () => {
         authorName: 'thesite.ro',
         publisherName: 'thesite.ro',
         publisherLogo: 'https://thesite.ro/ethics-logo.png',
-        url: `https://thesite.ro/stire/${encodeURIComponent(resolvedStory.id)}`
+        url: `https://thesite.ro/stire/${encodeURIComponent(resolvedStory.id)}`,
+        id: resolvedStory.id,
+        bias: resolvedStory.bias,
+        sourcesCount: resolvedStory.sourcesCount,
+        section: resolvedStory.mainCategory,
       }} />
 
       <main className="mx-auto w-full max-w-[1240px] overflow-x-hidden px-4 py-6 md:px-6 md:py-10">
