@@ -124,22 +124,9 @@ interface SourceRow {
     first_seen_at: Date;
 }
 
-export async function loadArchivedStory(id: string): Promise<AggregatedStory | null> {
-    const sql = getSql();
-    if (!sql) return null;
-
-    const [story] = await sql<StoryRow[]>`
-        select id, title, description, image, main_category, blindspot, published_at, first_seen_at
-        from thesite.stories where id = ${id}`;
-    if (!story) return null;
-
-    const rows = await sql<SourceRow[]>`
-        select link, source_id, title, description, image_url, pub_date, first_seen_at
-        from thesite.story_sources where story_id = ${id}
-        order by pub_date desc nulls last`;
-
+function toStory(story: StoryRow, rows: SourceRow[]): AggregatedStory {
     const sources: RSSNewsItem[] = rows.map((r, i) => ({
-        id: `${id}-${i}`,
+        id: `${story.id}-${i}`,
         title: r.title,
         description: r.description,
         link: r.link,
@@ -163,4 +150,54 @@ export async function loadArchivedStory(id: string): Promise<AggregatedStory | n
         publishedAt,
         timeAgo: getTimeAgo(publishedAt),
     };
+}
+
+export async function loadArchivedStory(id: string): Promise<AggregatedStory | null> {
+    const sql = getSql();
+    if (!sql) return null;
+
+    const [story] = await sql<StoryRow[]>`
+        select id, title, description, image, main_category, blindspot, published_at, first_seen_at
+        from thesite.stories where id = ${id}`;
+    if (!story) return null;
+
+    const rows = await sql<SourceRow[]>`
+        select link, source_id, title, description, image_url, pub_date, first_seen_at
+        from thesite.story_sources where story_id = ${id}
+        order by pub_date desc nulls last`;
+
+    return toStory(story, rows);
+}
+
+/**
+ * Durable snapshot of the live feed, used by /api/news when the Redis cache is empty so a
+ * visitor never waits for a full RSS rebuild. The cron upserts every story it stores and bumps
+ * last_seen_at, so the most recently seen stories are the last feed it produced. Read-only.
+ */
+export async function loadRecentArchivedStories(limit: number, maxAgeDays = 7): Promise<AggregatedStory[]> {
+    const sql = getSql();
+    if (!sql || limit <= 0) return [];
+
+    const stories = await sql<StoryRow[]>`
+        select id, title, description, image, main_category, blindspot, published_at, first_seen_at
+        from thesite.stories
+        where coalesce(last_seen_at, first_seen_at) > now() - make_interval(days => ${maxAgeDays})
+          and coalesce(published_at, first_seen_at) > now() - make_interval(days => ${maxAgeDays})
+        order by coalesce(last_seen_at, first_seen_at) desc
+        limit ${limit}`;
+    if (stories.length === 0) return [];
+
+    const rows = await sql<(SourceRow & { story_id: string })[]>`
+        select story_id, link, source_id, title, description, image_url, pub_date, first_seen_at
+        from thesite.story_sources where story_id in ${sql(stories.map(s => s.id))}
+        order by pub_date desc nulls last`;
+
+    const byStory = new Map<string, SourceRow[]>();
+    for (const row of rows) {
+        const list = byStory.get(row.story_id);
+        if (list) list.push(row);
+        else byStory.set(row.story_id, [row]);
+    }
+
+    return stories.map(story => toStory(story, byStory.get(story.id) ?? []));
 }

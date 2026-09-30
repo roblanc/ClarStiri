@@ -8,6 +8,7 @@ import {
 import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo } from '../_lib/aggregation.js';
 import { mergeWithExisting } from '../_lib/storyMerge.js';
 import { archiveStories } from '../_lib/storyArchive.js';
+import { sortByImportance } from '../_lib/newsResponse.js';
 
 const CACHE_KEY = 'aggregated_news_v2';
 const CACHE_KEY_TS = 'aggregated_news_v2_ts';
@@ -32,21 +33,6 @@ async function fetchAllNews(): Promise<RSSNewsItem[]> {
     allNews.sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
 
     return allNews;
-}
-
-/**
- * Re-sortează poveștile după formula: sourcesCount^1.5 × e^(-ore/18)
- * Identică cu cea din aggregation.ts pentru consistență.
- */
-function sortByImportance(stories: AggregatedStory[]): AggregatedStory[] {
-    const now = Date.now();
-    return [...stories].sort((a, b) => {
-        const hoursA = (now - new Date(a.publishedAt).getTime()) / 3_600_000;
-        const hoursB = (now - new Date(b.publishedAt).getTime()) / 3_600_000;
-        const scoreA = Math.pow(a.sourcesCount, 1.5) * Math.exp(-hoursA / 18);
-        const scoreB = Math.pow(b.sourcesCount, 1.5) * Math.exp(-hoursB / 18);
-        return scoreB - scoreA;
-    });
 }
 
 async function acquireRefreshLock(redis: Redis): Promise<string | null> {

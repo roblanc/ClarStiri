@@ -8,7 +8,17 @@ import {
 } from './_lib/shared.js';
 import { aggregateNewsBuildTopics, AggregatedStory, calculateBiasDistribution, getTimeAgo, resolveStoryImageFromSources } from './_lib/aggregation.js';
 import { setCorsHeaders } from './_lib/cors.js';
-import { loadArchivedStory } from './_lib/storyArchive.js';
+import { loadArchivedStory, loadRecentArchivedStories } from './_lib/storyArchive.js';
+import {
+    parseListQuery,
+    projectStories,
+    sortByImportance,
+    storyCacheControl,
+    FALLBACK_LIST_CACHE_CONTROL,
+    LIST_CACHE_CONTROL,
+    MAX_LIST_LIMIT,
+    NO_STORE,
+} from './_lib/newsResponse.js';
 
 // Cache key și durata
 const CACHE_KEY = 'aggregated_news_v2';
@@ -20,8 +30,16 @@ const REFRESH_LOCK_KEY = `${CACHE_KEY}:refresh_lock`;
 const REFRESH_LOCK_TTL = 5 * 60;
 const REFRESH_TRIGGER_KEY = `${CACHE_KEY}:refresh_trigger`;
 const REFRESH_TRIGGER_TTL = 5 * 60;
-const EDGE_CACHE_S_MAXAGE = 60;
-const EDGE_CACHE_STALE_WHILE_REVALIDATE = 120;
+// Upper bound for the Postgres snapshot read on a cache miss; past it we answer with an empty list.
+const ARCHIVE_FALLBACK_TIMEOUT_MS = 4000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms}ms`)), ms);
+    });
+    return Promise.race([promise, timeout]).finally(() => clearTimeout(timer));
+}
 
 async function fetchAllNews(): Promise<RSSNewsItem[]> {
     const results = await Promise.allSettled(NEWS_SOURCES.map(s => fetchRSSFeed(s)));
@@ -163,13 +181,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 }
             }
             if (story) {
-                res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+                res.setHeader('Cache-Control', storyCacheControl(story, servedFrom));
                 return res.status(200).json({ success: true, data: story, fromArchive: true, servedFrom });
             }
             return res.status(404).json({ success: false, error: 'Story not found in archive' });
         }
 
-        const limit = parseInt(req.query.limit as string) || 50;
+        // ?view=card returns the slim projection used by listing pages (see shared/storyCard.ts);
+        // the default full shape is kept for the social scripts and other consumers.
+        const { view, limit } = parseListQuery(req.query);
 
         // Redis read — graceful if unavailable
         let cached: AggregatedStory[] | null = null;
@@ -193,10 +213,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             // Recalculate timeAgo at serve time — prevents stale relative timestamps from Redis
             const freshened = cached.map(s => ({ ...s, timeAgo: getTimeAgo(s.publishedAt) }));
             // Instant delivery via Vercel Edge Cache
-            res.setHeader('Cache-Control', `public, s-maxage=${EDGE_CACHE_S_MAXAGE}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE}`);
+            res.setHeader('Cache-Control', LIST_CACHE_CONTROL);
             res.status(200).json({
                 success: true,
-                data: freshened.slice(0, limit),
+                data: projectStories(freshened, view, limit),
                 fromCache: true,
                 stale: isStale,
                 cacheAgeSeconds: Math.round(cacheAge),
@@ -210,16 +230,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return;
         }
 
-        // Cache miss — fetch fresh
-        console.log('Cache miss — fetching fresh news');
+        if (redis) {
+            // Cache miss (Redis empty/expired or unreadable). Never make a visitor wait for the
+            // full RSS + embeddings + LLM rebuild: serve the last durable snapshot from Postgres
+            // (or an empty list) right away and rebuild in the background, like the stale path.
+            console.log('Cache miss — serving archive snapshot and refreshing in background');
+            waitUntil(triggerStaleRefresh(redis, req));
+
+            let snapshot: AggregatedStory[] = [];
+            try {
+                snapshot = await withTimeout(loadRecentArchivedStories(MAX_LIST_LIMIT), ARCHIVE_FALLBACK_TIMEOUT_MS, 'Archive snapshot');
+            } catch (e) {
+                console.error('Archive snapshot read failed:', e);
+            }
+            const stories = sortByImportance(snapshot);
+
+            res.setHeader('Cache-Control', stories.length > 0 ? FALLBACK_LIST_CACHE_CONTROL : NO_STORE);
+            return res.status(200).json({
+                success: true,
+                data: projectStories(stories, view, limit),
+                fromCache: false,
+                fromArchive: stories.length > 0,
+                stale: true,
+                refreshing: true,
+            });
+        }
+
+        // No Redis configured (local dev without Upstash): nothing could hold a background
+        // rebuild, so build synchronously as before.
+        console.log('No Redis — fetching fresh news synchronously');
         let allNews: RSSNewsItem[] = [];
         try {
             allNews = await fetchAllNews();
         } catch (e) {
             throw new Error(`fetchAllNews failed: ${e instanceof Error ? e.message : String(e)}`);
         }
-
-        console.log(`RSS fetched: ${allNews.length} items`);
 
         let aggregated: AggregatedStory[] = [];
         try {
@@ -228,35 +273,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             throw new Error(`aggregateNewsBuildTopics failed: ${e instanceof Error ? e.message : String(e)}`);
         }
 
-        console.log(`Aggregated: ${aggregated.length} stories`);
-
         // Fallback: if aggregation produced nothing but we have articles, show them individually
         if (aggregated.length === 0 && allNews.length > 0) {
-            console.log('Aggregation returned 0, using individual article fallback');
             aggregated = await buildFallbackStories(allNews, limit);
         }
 
-        if (aggregated.length > 0 && redis) {
-            try {
-                await Promise.all([
-                    redis.set(CACHE_KEY, aggregated, { ex: CACHE_TTL }),
-                    redis.set(CACHE_KEY_TS, Date.now(), { ex: CACHE_TTL }),
-                ]);
-            } catch (e) {
-                console.error('Redis write failed (returning data anyway):', e);
-            }
-        }
-
-        // Don't let Vercel CDN cache empty responses
-        if (aggregated.length === 0) {
-            res.setHeader('Cache-Control', 'no-store');
-        } else {
-            res.setHeader('Cache-Control', `public, s-maxage=${EDGE_CACHE_S_MAXAGE}, stale-while-revalidate=${EDGE_CACHE_STALE_WHILE_REVALIDATE}`);
-        }
-
+        res.setHeader('Cache-Control', aggregated.length === 0 ? NO_STORE : LIST_CACHE_CONTROL);
         return res.status(200).json({
             success: true,
-            data: aggregated.slice(0, limit),
+            data: projectStories(aggregated, view, limit),
             fromCache: false,
             fetchedAt: new Date().toISOString(),
         });
