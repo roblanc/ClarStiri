@@ -13,12 +13,11 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/favicon.png" />
 
-  <!-- Preload critical custom font (stable path, used in header logo) -->
-  <link rel="preload" href="/fonts/hoolister.otf" as="font" type="font/otf" crossorigin />
-  <!-- Fraunces + Inter (editorial magazine layout at /editorial) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600;1,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <!-- Preload critical custom font (stable path, used in header logo).
+       Self-hosted IBM Plex Sans / Playfair Display preloads are injected at
+       build time by the preloadFonts plugin in vite.config.ts (hashed names).
+       Fraunces / Inter / JetBrains Mono load from pages/IndexEditorial.tsx. -->
+  <link rel="preload" href="/fonts/hoolister.woff2" as="font" type="font/woff2" crossorigin />
   <!-- Preload hero illustration (LCP element on mobile) -->
   <link rel="preload" href="/hero-illustration-headphones.webp" as="image" type="image/webp" fetchpriority="high" />
   <!-- Preconnect for image CDN — no crossorigin (plain img tags don't use CORS) -->

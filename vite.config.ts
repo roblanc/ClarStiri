@@ -1,6 +1,43 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+
+/**
+ * Self-hosted fonts from @fontsource get hashed file names at build time, so
+ * they can't be preloaded from index.html by hand. Without a preload the
+ * browser only discovers them once React has rendered text (after all JS has
+ * run), which delays them by ~2s on mobile and makes the swap visible.
+ * Only the latin subsets of the two families used above the fold everywhere
+ * (body text + serif headings) are preloaded; latin-ext / italic still load
+ * on demand through their unicode-range'd @font-face rules.
+ */
+const FONT_PRELOADS = [
+  /\/ibm-plex-sans-latin-wght-normal-[\w-]+\.woff2$/,
+  /\/playfair-display-latin-wght-normal-[\w-]+\.woff2$/,
+];
+
+function preloadFonts(): Plugin {
+  return {
+    name: "thesite:preload-fonts",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(_html, ctx) {
+        if (!ctx.bundle) return;
+        const files = Object.keys(ctx.bundle);
+        return FONT_PRELOADS.map((pattern) => {
+          const file = files.find((f) => pattern.test(`/${f}`));
+          if (!file) throw new Error(`preloadFonts: no emitted font matches ${pattern}`);
+          return {
+            tag: "link",
+            attrs: { rel: "preload", href: `/${file}`, as: "font", type: "font/woff2", crossorigin: "" },
+            injectTo: "head" as const,
+          };
+        });
+      },
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -8,7 +45,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
-  plugins: [react()],
+  plugins: [react(), preloadFonts()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
