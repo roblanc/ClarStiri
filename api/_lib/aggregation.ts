@@ -72,6 +72,11 @@ export interface AggregatedStory {
     contentBias?: BiasAnalysis;
     blindspot?: 'left' | 'right' | 'none';
     mainCategory: string;
+    /**
+     * When the story started: the earliest article of its second outlet, i.e. when it became a
+     * multi-source story. Stable across refreshes (see storyMerge). Drives "acum X ore" and the
+     * age used for ranking.
+     */
     publishedAt: string;
     timeAgo: string;
     /**
@@ -226,6 +231,26 @@ export function storyScore(sourcesCount: number, publishedAt: string, now = Date
     return Math.pow(sourcesCount, 1.5) * Math.exp(-(Number.isNaN(hours) ? 0 : hours) / 18);
 }
 
+/**
+ * When a story started: the earliest article of its second outlet, i.e. the moment it became a
+ * multi-source story. Using the very first article would let one early precursor piece age the
+ * whole story; using the latest (as before) reset the age whenever an article joined.
+ */
+export function storyStartedAt(sources: RSSNewsItem[]): string {
+    const firstByOutlet = new Map<string, { t: number; pubDate: string }>();
+    for (const s of sources) {
+        const t = Date.parse(s.pubDate);
+        if (Number.isNaN(t)) continue;
+        const key = s.source?.id ?? s.link;
+        const prev = firstByOutlet.get(key);
+        if (!prev || t < prev.t) firstByOutlet.set(key, { t, pubDate: s.pubDate });
+    }
+    const firsts = [...firstByOutlet.values()].sort((a, b) => a.t - b.t);
+    if (firsts.length >= 2) return firsts[1].pubDate;
+    if (firsts.length === 1) return firsts[0].pubDate;
+    return pickPrimarySource(sources).pubDate;
+}
+
 /** A story's headline is rewritten only once it has at least doubled (and grown by 3+ sources). */
 export function headlineOutgrown(basis: TitleBasis, sourcesCount: number): boolean {
     return sourcesCount >= 2 * basis.sourcesCount && sourcesCount - basis.sourcesCount >= 3;
@@ -250,7 +275,7 @@ export function planHeadlines(groups: RSSNewsItem[][], previous: AggregatedStory
     const matches = matchStories(groups.map(sources => ({ sources })), previous);
     const llmAvailable = llmHeadlinesAvailable();
     const order = groups
-        .map((sources, i) => ({ i, score: storyScore(sources.length, pickPrimarySource(sources).pubDate, now) }))
+        .map((sources, i) => ({ i, score: storyScore(sources.length, storyStartedAt(sources), now) }))
         .sort((a, b) => b.score - a.score || a.i - b.i);
 
     const plans: HeadlinePlan[] = new Array(groups.length);
@@ -328,6 +353,7 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
 
         const promise = async () => {
             const primary = pickPrimarySource(sources);
+            const startedAt = storyStartedAt(sources);
             // OG image fetching deferred to /api/story (lazy, per-story, cached).
             // Using only images already embedded in RSS feeds keeps aggregation fast.
             const resolvedImage = sources.find(s => s.imageUrl)?.imageUrl;
@@ -382,8 +408,8 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
                 contentBias,
                 blindspot,
                 mainCategory: primary.category || 'Actualitate',
-                publishedAt: primary.pubDate,
-                timeAgo: getTimeAgo(primary.pubDate),
+                publishedAt: startedAt,
+                timeAgo: getTimeAgo(startedAt),
                 titleBasis,
             };
         };

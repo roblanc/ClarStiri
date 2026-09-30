@@ -1,4 +1,4 @@
-import { AggregatedStory, calculateBiasDistribution, calculateBlindspot } from './aggregation.js';
+import { AggregatedStory, calculateBiasDistribution, calculateBlindspot, getTimeAgo } from './aggregation.js';
 import { linkSet, matchStories } from './storyMatch.js';
 
 /**
@@ -14,7 +14,8 @@ import { linkSet, matchStories } from './storyMatch.js';
  *   (see ./storyMatch.ts).
  * - Only old sources published close to the fresh cluster's time window are re-added, and
  *   only for outlets the fresh cluster does not already have: one article per outlet.
- * - The matched story keeps its original id, so /stire/<id> links stay stable.
+ * - The matched story keeps its original id, so /stire/<id> links stay stable, and the
+ *   earlier of the two start times, so its age does not reset when new articles join.
  */
 
 const REATTACH_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -22,6 +23,14 @@ const REATTACH_WINDOW_MS = 24 * 60 * 60 * 1000;
 function timeOf(pubDate: string): number {
     const t = Date.parse(pubDate);
     return Number.isNaN(t) ? NaN : t;
+}
+
+function earlier(a: string | undefined, b: string): string {
+    const ta = a ? timeOf(a) : NaN;
+    const tb = timeOf(b);
+    if (Number.isNaN(ta)) return b;
+    if (Number.isNaN(tb)) return a!;
+    return ta < tb ? a! : b;
 }
 
 function mergeSources(fresh: AggregatedStory, existing: AggregatedStory): AggregatedStory {
@@ -43,9 +52,12 @@ function mergeSources(fresh: AggregatedStory, existing: AggregatedStory): Aggreg
 
     const sources = dropped.length ? [...fresh.sources, ...dropped] : fresh.sources;
     const bias = dropped.length ? calculateBiasDistribution(sources) : fresh.bias;
+    const publishedAt = earlier(existing.publishedAt, fresh.publishedAt);
     return {
         ...fresh,
         id: existing.id,
+        publishedAt,
+        timeAgo: publishedAt === fresh.publishedAt ? fresh.timeAgo : getTimeAgo(publishedAt),
         sources,
         sourcesCount: sources.length,
         bias,

@@ -18,7 +18,7 @@ vi.mock('./llm.js', () => ({
     },
 }));
 
-import { aggregateNewsBuildTopics, headlineOutgrown, planHeadlines, type AggregatedStory } from './aggregation';
+import { aggregateNewsBuildTopics, headlineOutgrown, planHeadlines, storyStartedAt, type AggregatedStory } from './aggregation';
 import type { RSSNewsItem } from './shared';
 
 const HOUR = 3_600_000;
@@ -68,6 +68,23 @@ beforeEach(() => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new Error('no network in tests'))));
 });
 afterEach(() => vi.unstubAllGlobals());
+
+describe('storyStartedAt', () => {
+    it('is when the second outlet reported the story, not the first or the latest article', () => {
+        const sources = [
+            article('digi24', 'a', 1),
+            article('hotnews', 'b', 5),
+            article('digi24', 'c', 9), // an early precursor from an outlet already counted
+            article('g4media', 'd', 3),
+        ];
+        expect(storyStartedAt(sources)).toBe(sources[1].pubDate);
+    });
+
+    it('does not move when later articles join', () => {
+        const base = [article('digi24', 'a', 6), article('hotnews', 'b', 5)];
+        expect(storyStartedAt([...base, article('rfi', 'c', 0.1)])).toBe(storyStartedAt(base));
+    });
+});
 
 describe('headlineOutgrown', () => {
     it('asks for a new headline only after the story at least doubled and grew by 3+', () => {
