@@ -1,4 +1,22 @@
 import { Component, ErrorInfo, ReactNode } from "react";
+import { isChunkLoadError, reportError } from "@/lib/errorReporting";
+
+// After a deploy, an open tab may request route chunks that no longer exist.
+// Reload once to pick up the new build instead of showing the error screen.
+const CHUNK_RELOAD_KEY = "thesite:chunk-reload-at";
+const CHUNK_RELOAD_COOLDOWN_MS = 60_000;
+
+function reloadOnceForStaleChunk(): boolean {
+  try {
+    const last = Number(sessionStorage.getItem(CHUNK_RELOAD_KEY) || 0);
+    if (Date.now() - last < CHUNK_RELOAD_COOLDOWN_MS) return false;
+    sessionStorage.setItem(CHUNK_RELOAD_KEY, String(Date.now()));
+  } catch {
+    return false;
+  }
+  window.location.reload();
+  return true;
+}
 
 interface AppErrorBoundaryProps {
   children: ReactNode;
@@ -19,6 +37,9 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error("Uncaught app error:", error, errorInfo);
+    const staleChunk = isChunkLoadError(error);
+    reportError(error, { fatal: !staleChunk, source: staleChunk ? "chunk-load" : "react-boundary" });
+    if (staleChunk) reloadOnceForStaleChunk();
   }
 
   private handleReload = () => {
