@@ -5,6 +5,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script>
+    // Apply the saved / system colour scheme before first paint (same logic as
+    // src/contexts/ThemeContext.tsx) so dark-mode visitors don't get a white flash.
+    (function () {
+      try {
+        var theme = localStorage.getItem("thesite-theme") || "system";
+        if (theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <script>
     // Homepage fast path. Without this the feed is a 4-step waterfall:
     // HTML -> entry JS -> lazy Index route chunk -> /api/news -> first image.
     // On "/" only, start the route chunk and the feed request right away, in
@@ -55,7 +67,7 @@
   <link rel="dns-prefetch" href="https://static.digi24.ro" />
 
   <!-- Theme color for mobile browsers -->
-  <meta name="theme-color" content="#F0B55B" />
+  <meta name="theme-color" content="#3BD432" />
 
   <!-- Geo Meta Tags for Romanian News Localization (canonical is set per page via Helmet / api/story-page) -->
   <!-- data-rh="true" lets react-helmet-async replace the defaults below instead of duplicating them. -->
@@ -80,24 +92,19 @@
   <meta name="twitter:title" content="thesite.ro | Știri din toate perspectivele" data-rh="true" />
   <meta name="twitter:description"
     content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." data-rh="true" />
-  <!-- Critical CSS - Inline for faster FCP -->
+  <!-- Critical CSS - Inline for faster FCP. Values mirror src/index.css
+       (:root / .dark) and the real <Header>, so nothing changes colour or
+       jumps when the app stylesheet and React take over. -->
   <style>
-    /* Critical CSS for above-the-fold content */
     :root {
-      --background: 0 0% 98%;
-      --foreground: 0 0% 13%;
-      --primary: 38 87% 65%;
-      --primary-foreground: 0 0% 0%;
-      --card: 0 0% 100%;
-      --border: 0 0% 90%;
-      --muted-foreground: 0 0% 46%;
+      --background: 0 0% 100%;
+      --foreground: 0 0% 10%;
+      --muted-foreground: 0 0% 40%;
     }
 
     .dark {
-      --background: 220 20% 10%;
-      --foreground: 0 0% 95%;
-      --card: 220 20% 13%;
-      --border: 220 15% 20%;
+      --background: 0 0% 7%;
+      --foreground: 42 33% 94%;
       --muted-foreground: 0 0% 60%;
     }
 
@@ -114,53 +121,56 @@
     }
 
     body {
-      background: hsl(var(--background));
+      background-color: hsl(var(--background));
+      background-image: radial-gradient(circle, rgba(0, 0, 0, 0.10) 1px, transparent 1px);
+      background-size: 24px 24px;
       color: hsl(var(--foreground));
       min-height: 100vh;
     }
 
-    /* Loading state styles */
-    #root:empty::before {
-      content: '';
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 40px;
-      height: 40px;
-      border: 3px solid hsl(var(--border));
-      border-top-color: hsl(var(--primary));
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    .dark body {
+      background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
     }
 
-    @keyframes spin {
-      to {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
-    }
-
-    /* Header skeleton */
+    /* Placeholder for the sticky green <Header> (h-14 + nav row on mobile, h-16 from md) */
     .header-skeleton {
-      height: 64px;
-      background: hsl(var(--card));
-      border-bottom: 1px solid hsl(var(--border));
+      height: 92px;
+      background: #3BD432;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    .category-skeleton {
-      height: 44px;
-      background: hsl(var(--primary));
+    @media (min-width: 768px) {
+      .header-skeleton {
+        height: 65px;
+      }
     }
   </style>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1MYVRJ60EY"></script>
+  <!-- Google tag (gtag.js). gtag() and the config command are queued in
+       dataLayer right away (so the page_view and any early gtag() calls are
+       kept); the ~180 KB library itself loads once the page has finished
+       loading, instead of competing with the app's JS and the feed. -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'G-1MYVRJ60EY');
+
+    (function () {
+      function load() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-1MYVRJ60EY';
+        document.head.appendChild(s);
+      }
+      function schedule() {
+        if ('requestIdleCallback' in window) requestIdleCallback(load, { timeout: 2000 });
+        else setTimeout(load, 0);
+      }
+      if (document.readyState === 'complete') schedule();
+      else window.addEventListener('load', schedule, { once: true });
+    })();
   </script>
 </head>
 
@@ -168,7 +178,6 @@
   <!-- Initial loading skeleton (replaced by React) -->
   <div id="root">
     <div class="header-skeleton"></div>
-    <div class="category-skeleton"></div>
   </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
