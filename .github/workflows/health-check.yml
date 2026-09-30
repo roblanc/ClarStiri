@@ -58,7 +58,7 @@ jobs:
             exit 1
           elif [ "$code" != "200" ]; then
             # No secret, or the repo secret differs from Vercel's STATUS_SECRET (401/503):
-            # fall back to the cache age /api/news reports (edge-cached for ~1-3 min).
+            # fall back to the cache age /api/news reports (edge-cached for up to ~5-20 min).
             echo "::warning::/api/status not usable (HTTP $code); using /api/news cacheAgeSeconds. Set repo secret STATUS_SECRET (or CRON_SECRET) to match Vercel."
             [ -f status.json ] && head -c 500 status.json && echo
             age=$(jq -r '.cacheAgeSeconds // empty' news.json)
