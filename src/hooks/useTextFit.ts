@@ -1,4 +1,4 @@
-import { useState, useEffect, RefObject } from "react";
+import { useState, useLayoutEffect, RefObject } from "react";
 import { shrinkwrapFontSize } from "@/utils/textMeasure";
 
 interface TextFitOptions {
@@ -9,11 +9,23 @@ interface TextFitOptions {
   maxLines: number;
 }
 
+/** Width available to the text: the element's content box (padding excluded). */
+function contentWidth(el: HTMLElement): number {
+  const style = getComputedStyle(el);
+  return el.clientWidth - parseFloat(style.paddingLeft || "0") - parseFloat(style.paddingRight || "0");
+}
+
 /**
  * Returns the optimal font size (px) for `text` to fill `containerRef`
  * without exceeding `maxLines`. Recalculates on container resize.
  *
- * Returns null on first render — use a CSS fallback until resolved.
+ * Measures in a layout effect, i.e. before the browser paints, so the fitted
+ * size is what gets painted first (no visible jump from the CSS fallback).
+ * That relies on `fontFamily` resolving to fonts that are already available
+ * (system fonts): canvas measurement doesn't wait for web fonts to load.
+ *
+ * Returns null until measured (and while the container is display:none) —
+ * use a CSS fallback for that case.
  */
 export function useTextFit(
   containerRef: RefObject<HTMLElement | null>,
@@ -23,39 +35,21 @@ export function useTextFit(
   const [fontSize, setFontSize] = useState<number | null>(null);
   const { fontFamily, fontWeight = "bold", minSize, maxSize, maxLines } = options;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
     const measure = (width: number) => {
-      const size = shrinkwrapFontSize(
-        text,
-        width,
-        fontFamily,
-        fontWeight,
-        minSize,
-        maxSize,
-        maxLines
-      );
-      setFontSize(size);
+      if (width <= 0) return;
+      setFontSize(shrinkwrapFontSize(text, width, fontFamily, fontWeight, minSize, maxSize, maxLines));
     };
 
-    const run = (width: number) => {
-      if (document.fonts?.ready) {
-        document.fonts.ready.then(() => measure(width));
-      } else {
-        measure(width);
-      }
-    };
+    measure(contentWidth(el));
 
     const ro = new ResizeObserver((entries) => {
-      const width = entries[0]?.contentRect.width;
-      if (width > 0) run(width);
+      measure(entries[0]?.contentRect.width ?? 0);
     });
-
     ro.observe(el);
-    const initialWidth = el.getBoundingClientRect().width;
-    if (initialWidth > 0) run(initialWidth);
 
     return () => ro.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps

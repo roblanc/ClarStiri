@@ -21,7 +21,9 @@ export default {
       fontFamily: {
         sans: ["IBM Plex Sans Variable", "IBM Plex Sans", "system-ui", "sans-serif"],
         serif: ["Playfair Display Variable", "Playfair Display", "Georgia", "serif"],
-        title: ["VICE Grotesk", "Helvetica", "Arial", "sans-serif"],
+        // "VICE Grotesk" used to lead this stack but is never loaded (no @font-face);
+        // NewsCard measures poster titles with this exact stack (POSTER_FONT_CONFIG).
+        title: ["Helvetica", "Arial", "sans-serif"],
         anthropic: ["Newsreader Variable", "Newsreader", "Georgia", "serif"],
         minimalist: ["Hanken Grotesk", "Helvetica Neue", "Arial", "sans-serif"],
         helvetica: ["Helvetica", "Arial", "sans-serif"],

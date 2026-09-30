@@ -5,7 +5,7 @@
  *   prepare() measures word widths via canvas once (~19ms / 500 texts)
  *   layout() is pure arithmetic (~0.09ms / batch)
  *
- * Note: use named fonts (e.g. "VICE Grotesk"), not "system-ui" —
+ * Note: use named fonts (e.g. "Helvetica, Arial"), not "system-ui" —
  * canvas resolves system-ui to different optical variants than DOM on macOS.
  */
 

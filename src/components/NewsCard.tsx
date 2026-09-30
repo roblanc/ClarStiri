@@ -12,7 +12,9 @@ import { useTextFit } from "@/hooks/useTextFit";
 import { POSTER_CARD_ARTICLE_CLASS, POSTER_CARD_OUTER_CLASS } from "@/lib/feedLayout";
 
 const POSTER_FONT_CONFIG = {
-  fontFamily: "\"VICE Grotesk\", Helvetica, Arial, sans-serif",
+  // Must match `font-title` in tailwind.config.ts. System fonts only, so the
+  // canvas measurement in useTextFit can run before first paint.
+  fontFamily: "Helvetica, Arial, sans-serif",
   fontWeight: 700,
   minSize: 17,
   maxSize: 30,
