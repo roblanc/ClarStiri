@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
 import { buildHtmlSlides } from './generate_carousel.mjs';
 import { buildHtmlSlides as buildHtmlSlidesV2 } from './social_v2.mjs';
+import { buildHtmlSlides as buildHtmlSlidesPoster } from './social_poster.mjs';
 import { nextDesign } from './design_rotation.mjs';
 import { filterUnposted, recordPostedLinks } from './post_dedupe.mjs';
 
@@ -107,7 +108,8 @@ async function run() {
   const outDir = path.join(__dirname, '..', 'social_export', 'latest');
   fs.mkdirSync(outDir, { recursive: true });
 
-  const build = nextDesign('carousel') === 'v2' ? buildHtmlSlidesV2 : buildHtmlSlides;
+  const builders = { poster: buildHtmlSlidesPoster, v2: buildHtmlSlidesV2, current: buildHtmlSlides };
+  const build = builders[nextDesign('carousel')] || buildHtmlSlides;
   const { slide1, slide2, slide3 } = build(story);
 
   console.log('📷 Launching Playwright browser...');

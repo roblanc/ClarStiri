@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
 import { execSync } from 'child_process';
 import { buildReelHtml as buildReelHtmlV2 } from './social_v2.mjs';
+import { buildReelHtml as buildReelHtmlPoster } from './social_poster.mjs';
 import { nextDesign } from './design_rotation.mjs';
 import { filterUnposted, recordPostedLinks } from './post_dedupe.mjs';
 
@@ -1023,7 +1024,8 @@ export function buildReelHtml(story) {
 }
 
 async function renderReelVideo(story, outputPath) {
-  const html = nextDesign('reel') === 'v2' ? buildReelHtmlV2(story) : buildReelHtml(story);
+  const builders = { poster: buildReelHtmlPoster, v2: buildReelHtmlV2, current: buildReelHtml };
+  const html = (builders[nextDesign('reel')] || buildReelHtml)(story);
   const tempDir = path.join(__dirname, '..', 'social_export', 'temp_frames');
   fs.mkdirSync(tempDir, { recursive: true });
 

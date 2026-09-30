@@ -12,7 +12,7 @@ const FONTS_HREF =
 
 const COLORS = { left: '#3D7BFF', center: '#9A9A94', right: '#FF4A3D', amber: '#F0B55B', ink: '#0B0B0F' };
 
-const BIAS_LABELS = {
+export const BIAS_LABELS = {
   left: 'Stânga',
   'center-left': 'Centru-stânga',
   center: 'Centru',
@@ -21,12 +21,12 @@ const BIAS_LABELS = {
 };
 
 const CAMP_OF = { left: 'left', 'center-left': 'left', center: 'center', 'center-right': 'right', right: 'right' };
-const CAMP_NAME = { left: 'stânga', center: 'centru', right: 'dreapta' };
+export const CAMP_NAME = { left: 'stânga', center: 'centru', right: 'dreapta' };
 
 const TIME_FMT = new Intl.DateTimeFormat('ro-RO', { timeZone: 'Europe/Bucharest', hour: '2-digit', minute: '2-digit' });
 const DATE_FMT = new Intl.DateTimeFormat('ro-RO', { timeZone: 'Europe/Bucharest', day: '2-digit', month: '2-digit' });
 
-function esc(str = '') {
+export function esc(str = '') {
   return String(str)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -36,7 +36,7 @@ function esc(str = '') {
 }
 
 /** Same rounding as the captions, so image and caption always agree. */
-function biasPercents(story) {
+export function biasPercents(story) {
   return {
     left: Math.round(story.bias?.left || 0),
     center: Math.round(story.bias?.center || 0),
@@ -48,7 +48,7 @@ function sourceBias(item) {
   return item?.source?.bias || item?.bias || 'center';
 }
 
-function campOf(item) {
+export function campOf(item) {
   return CAMP_OF[sourceBias(item)] || 'center';
 }
 
@@ -62,7 +62,7 @@ function parseTime(pubDate) {
  * server's IP, so the <img> walks this list on error instead of relying on a single URL.
  * Videos and small thumbnails (e.g. -150x150) are skipped.
  */
-function pickImages(story) {
+export function pickImages(story) {
   const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
   const isThumb = url => /-(\d{2,3})x(\d{2,3})\.(jpe?g|png|webp)/i.test(url || '');
   const seen = new Set();
@@ -91,7 +91,7 @@ function similarity(a, b) {
  * the article closest to the story's own title (clusters can also hold earlier, related
  * articles), then the earliest one; the same title is never shown twice.
  */
-function pickHeadlines(story) {
+export function pickHeadlines(story) {
   const storyTokens = titleTokens(story.title);
   const ranked = [...(story.sources || [])]
     .filter(s => s.title)
@@ -112,7 +112,7 @@ function pickHeadlines(story) {
 }
 
 /** Earliest article per outlet, from the outlets' RSS timestamps. */
-function buildTimeline(story) {
+export function buildTimeline(story) {
   const now = Date.now();
   const firstByOutlet = new Map();
   for (const s of story.sources || []) {
@@ -134,12 +134,12 @@ function buildTimeline(story) {
   };
 }
 
-function storyDate(story) {
+export function storyDate(story) {
   const t = parseTime(story.publishedAt);
   return Number.isNaN(t) ? '' : DATE_FMT.format(t);
 }
 
-function headlineSize(title, base) {
+export function headlineSize(title, base) {
   const n = (title || '').length;
   if (n <= 45) return base;
   if (n <= 70) return Math.round(base * 0.84);
