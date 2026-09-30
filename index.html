@@ -37,14 +37,6 @@
       // src/services/newsApiService.ts (the homepage's useAggregatedNews("card")),
       // otherwise the browser downloads the feed twice.
       preload("preload", "/api/news?view=card&limit=100", "fetch");
-      // Hero illustration (above the fold on "/"; other pages only show the
-      // small header rendition, so they no longer download it).
-      var hero = document.createElement("link");
-      hero.rel = "preload";
-      hero.as = "image";
-      hero.href = "/hero-illustration-headphones.webp";
-      hero.setAttribute("fetchpriority", "high");
-      head.appendChild(hero);
       // Filled in at build time by the preloadHomeRoute plugin (vite.config.ts).
       var chunks = /*HOME_ROUTE_CHUNKS*/[];
       for (var i = 0; i < chunks.length; i++) preload("modulepreload", chunks[i]);
@@ -59,9 +51,12 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-  <!-- Preload critical custom font (stable path, used in header logo).
-       Self-hosted IBM Plex Sans / Playfair Display preloads are injected at
-       build time by the preloadFonts plugin in vite.config.ts (hashed names).
+  <!-- Preload critical custom font (stable path, used in header logo, 9.6 KB).
+       IBM Plex Sans / Playfair Display are deliberately NOT preloaded, and
+       neither is the hero illustration: measured on a throttled mobile
+       profile they competed with the CSS/JS and pushed first paint back by
+       ~400-600 ms without improving LCP (they swap in with font-display:swap
+       and cause no measurable shift).
        Fraunces / Inter / JetBrains Mono load from pages/IndexEditorial.tsx. -->
   <link rel="preload" href="/fonts/hoolister.woff2" as="font" type="font/woff2" crossorigin />
   <!-- Preconnect for image CDN — no crossorigin (plain img tags don't use CORS) -->
