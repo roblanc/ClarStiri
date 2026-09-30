@@ -505,6 +505,8 @@ const Index = () => {
         {/* Flat Feed - Added gap for better separation on mobile */}
         {convertedStories.length > 0 && (
           <>
+            {/* Screen-reader heading so the h3 story titles don't skip a level after the hero h1. */}
+            <h2 className="sr-only">Ultimele știri</h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:gap-12 px-0 md:px-8 lg:px-12 xl:px-16">
               {convertedStories.slice(0, visible).map((news, index) => (
                 <NewsCard key={news.id} variant="poster" news={news} priority={index === 0} />

@@ -43,6 +43,31 @@ const ROUTE_META: Record<string, { title: string; description: string; noindex?:
   "/studio-instagram": { title: "Studio Instagram | thesite.ro", description: DEFAULT_DESCRIPTION, noindex: true },
 };
 
+/** Homepage-only WebSite + Organization graph (brand name, logo and social profiles for search). */
+const SITE_JSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE}/#website`,
+      url: SITE,
+      name: "thesite.ro",
+      description: DEFAULT_DESCRIPTION,
+      inLanguage: "ro-RO",
+      publisher: { "@id": `${SITE}/#organization` },
+    },
+    {
+      "@type": "NewsMediaOrganization",
+      "@id": `${SITE}/#organization`,
+      name: "thesite.ro",
+      url: SITE,
+      logo: { "@type": "ImageObject", url: `${SITE}/logo.png`, width: 640, height: 640 },
+      email: "contact@thesite.ro",
+      sameAs: ["https://www.instagram.com/thesite.ro/", "https://www.tiktok.com/@thesite.ro"],
+    },
+  ],
+});
+
 /**
  * Baseline per-route <title>, description and canonical, rendered above the routes so any page
  * that sets its own <Helmet> (story, category, source, voice pages, homepage) overrides it.
@@ -68,6 +93,7 @@ export function RouteMeta() {
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       {meta?.noindex && <meta name="robots" content="noindex, nofollow" />}
+      {path === "/" && <script type="application/ld+json">{SITE_JSON_LD}</script>}
     </Helmet>
   );
 }
