@@ -1,0 +1,82 @@
+name: Site Health Check
+
+# Hourly uptime/freshness probe. When this scheduled workflow fails GitHub emails
+# the repo owner (Settings > Notifications > Actions: "Send notifications for
+# failed workflows only"), which is the whole alerting channel — no new services.
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SITE: https://thesite.ro
+      # refresh-news.yml runs every 15 min; 1h without a refresh means it is broken.
+      MAX_CACHE_AGE_SECONDS: '3600'
+      MIN_STORIES: '5'
+    steps:
+      - name: Homepage responds
+        run: |
+          set -euo pipefail
+          curl -sS -f --max-time 30 --retry 2 --retry-delay 15 -o /dev/null \
+            -w 'homepage HTTP %{http_code} in %{time_total}s\n' "$SITE/"
+
+      - name: /api/news returns stories
+        run: |
+          set -euo pipefail
+          curl -sS --fail-with-body --max-time 60 --retry 2 --retry-delay 15 \
+            -o news.json "$SITE/api/news?limit=50" || { head -c 2000 news.json 2>/dev/null; exit 1; }
+          jq '{success, stories: (.data | length), fromCache, stale, cacheAgeSeconds}' news.json
+          count=$(jq '.data | length' news.json)
+          if [ "$(jq -r '.success' news.json)" != "true" ] || [ "$count" -lt "$MIN_STORIES" ]; then
+            echo "::error::/api/news returned $count stories (expected >= $MIN_STORIES)"
+            exit 1
+          fi
+
+      - name: News cache is fresh (/api/status)
+        env:
+          STATUS_TOKEN: ${{ secrets.STATUS_SECRET || secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          code=000
+          if [ -n "${STATUS_TOKEN:-}" ]; then
+            code=$(curl -sS --max-time 30 --retry 2 --retry-delay 15 -o status.json -w '%{http_code}' \
+              -H "Authorization: Bearer ${STATUS_TOKEN}" "$SITE/api/status" || true)
+            code=${code:-000}
+          fi
+
+          if [ -n "${STATUS_TOKEN:-}" ] && { [ "$code" = "000" ] || { [ "${code#5}" != "$code" ] && [ "$code" != "503" ]; }; }; then
+            echo "::error::/api/status is down (HTTP $code)"
+            [ -f status.json ] && head -c 500 status.json && echo
+            exit 1
+          elif [ "$code" != "200" ]; then
+            # No secret, or the repo secret differs from Vercel's STATUS_SECRET (401/503):
+            # fall back to the cache age /api/news reports (edge-cached for ~1-3 min).
+            echo "::warning::/api/status not usable (HTTP $code); using /api/news cacheAgeSeconds. Set repo secret STATUS_SECRET (or CRON_SECRET) to match Vercel."
+            [ -f status.json ] && head -c 500 status.json && echo
+            age=$(jq -r '.cacheAgeSeconds // empty' news.json)
+          else
+            jq '.redis' status.json
+            if [ "$(jq -r '.redis.status' status.json)" != "ok" ] || [ "$(jq -r '.redis.hasCache' status.json)" != "true" ]; then
+              echo "::error::Redis unhealthy or news cache missing"
+              exit 1
+            fi
+            age=$(jq -r '.redis.cacheAgeSeconds // empty' status.json)
+          fi
+
+          if [ -z "$age" ]; then
+            echo "::error::Could not determine news cache age"
+            exit 1
+          fi
+          echo "news cache age: ${age}s (max ${MAX_CACHE_AGE_SECONDS}s)"
+          if [ "$age" -gt "$MAX_CACHE_AGE_SECONDS" ]; then
+            echo "::error::News cache is stale: last refresh ${age}s ago — check the 'Refresh News Cache' workflow and Vercel logs"
+            exit 1
+          fi
