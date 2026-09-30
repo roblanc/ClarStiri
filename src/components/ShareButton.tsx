@@ -96,6 +96,7 @@ export function ShareButton({
                 size={size}
                 className={className}
                 onClick={handleNativeShare}
+                aria-label={showLabel ? undefined : 'Distribuie'}
             >
                 <Share2 className="w-4 h-4" />
                 {showLabel && <span className="ml-2">Distribuie</span>}
@@ -107,7 +108,7 @@ export function ShareButton({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant={variant} size={size} className={className}>
+                <Button variant={variant} size={size} className={className} aria-label={showLabel ? undefined : 'Distribuie'}>
                     <Share2 className="w-4 h-4" />
                     {showLabel && <span className="ml-2">Distribuie</span>}
                 </Button>

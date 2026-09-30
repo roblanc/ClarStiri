@@ -104,10 +104,10 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-14 md:h-16 gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 shrink-0 group">
+          <Link to="/" className="flex items-center gap-3 shrink-0 group" aria-label="thesite.ro — pagina principală">
             <img
               src="/hero-illustration-headphones.webp"
-              alt="thesite.ro Logo"
+              alt=""
               width={480}
               height={482}
               className="h-10 md:h-12 w-auto object-contain pointer-events-none"
@@ -121,14 +121,14 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-x-8 justify-center flex-1">
+          <nav aria-label="Navigare principală" className="hidden md:flex items-center gap-x-8 justify-center flex-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
                 className={cn(
                   "text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:opacity-60",
-                  location.pathname === link.to ? "text-black border-b-2 border-black" : "text-black/60"
+                  location.pathname === link.to ? "text-black border-b-2 border-black" : "text-black/70"
                 )}
               >
                 {link.label}
@@ -149,13 +149,14 @@ export function Header() {
                   <Input
                     ref={searchInputRef}
                     type="search"
+                    aria-label="Caută știri"
                     placeholder="CAUTĂ..."
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     className="w-32 md:w-64 h-8 text-[10px] uppercase tracking-widest bg-black/5 border-black/10 text-black placeholder:text-black/40 focus-visible:ring-1 focus-visible:ring-black/20 pl-8 pr-3 rounded-full"
                     autoFocus
                   />
-                  <Search className="absolute left-2.5 w-3.5 h-3.5 text-black/40" />
+                  <Search className="absolute left-2.5 w-3.5 h-3.5 text-black/40" aria-hidden="true" />
                 </div>
                 <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-black/10 text-black" onClick={handleSearchClose} type="button" aria-label="Închide căutarea">
                   <X className="w-4 h-4" />
@@ -174,7 +175,7 @@ export function Header() {
         </div>
 
         {/* Mobile Navigation - Visible only on mobile, no hamburger */}
-        <nav className="md:hidden flex items-center gap-x-6 overflow-x-auto pb-3 scrollbar-hide -mx-1 px-1">
+        <nav aria-label="Navigare principală" className="md:hidden flex items-center gap-x-6 overflow-x-auto pb-3 scrollbar-hide -mx-1 px-1">
           {navLinks.map((link) => (
             <Link
               key={link.to}
@@ -183,7 +184,7 @@ export function Header() {
                 "text-[10px] font-black uppercase tracking-[0.2em] whitespace-nowrap transition-colors py-1 px-2 rounded-md",
                 location.pathname === link.to
                   ? "bg-black text-brand-green"
-                  : "text-black/60 hover:text-black bg-black/5"
+                  : "text-black/75 hover:text-black bg-black/5"
               )}
             >
               {link.label}

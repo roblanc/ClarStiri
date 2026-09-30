@@ -18,7 +18,7 @@ const NotFound = () => {
         <meta name="robots" content="noindex, follow" />
       </Helmet>
       <Header />
-      <div className="flex-1 flex items-center justify-center py-20 px-4">
+      <main className="flex-1 flex items-center justify-center py-20 px-4">
         <div className="text-center">
           <h1 className="mb-4 text-6xl font-bold font-serif text-foreground">404</h1>
           <p className="mb-8 text-xl text-muted-foreground">Oops! Pagina nu a fost găsită.</p>
@@ -26,7 +26,7 @@ const NotFound = () => {
             Înapoi la Știri
           </a>
         </div>
-      </div>
+      </main>
       <Footer />
     </div>
   );

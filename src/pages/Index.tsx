@@ -218,7 +218,7 @@ const Index = () => {
               <div className="md:hidden float-right w-40 min-h-[160px] -mt-6 -mr-4 ml-4 mb-2 pointer-events-none select-none">
                 <img
                   src="/hero-illustration-headphones.webp"
-                  alt="thesite.ro Ascultător"
+                  alt=""
                   width={480}
                   height={482}
                   loading="eager"
@@ -237,7 +237,7 @@ const Index = () => {
                 <div className="hidden md:flex shrink-0 w-40 h-52 lg:w-48 lg:h-64 items-center justify-center transform transition-transform duration-500 hover:-translate-y-2 pointer-events-none select-none">
                   <img
                     src="/hero-illustration-headphones.webp"
-                    alt="thesite.ro Ascultător"
+                    alt=""
                     width={480}
                     height={482}
                     className="w-full h-full object-contain dark:invert pointer-events-none"
