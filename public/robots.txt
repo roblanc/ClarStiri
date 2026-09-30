@@ -1,36 +1,50 @@
+# A crawler obeys only the most specific group that names it, so every group repeats the
+# Disallow lines (the internal /studio tools must stay out of search results).
+
 User-agent: Googlebot
 Allow: /
+Disallow: /studio
 
 User-agent: Bingbot
 Allow: /
+Disallow: /studio
 
 User-agent: Twitterbot
 Allow: /
+Disallow: /studio
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /studio
 
 # AI Crawlers - Allow for AI Search, Perplexity and LLM Answer Engines
 User-agent: Google-Extended
 Allow: /
+Disallow: /studio
 
 User-agent: GPTBot
 Allow: /
+Disallow: /studio
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /studio
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /studio
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /studio
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /studio
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /studio
 
 User-agent: *
 Allow: /
