@@ -363,7 +363,7 @@ const StoryDetail = () => {
   ];
   const summaryPoints = [
     copiedOutlets > 0
-      ? `${totalSources} publicații, ${independentReports} relatări independente: ${copiedOutlets === 1 ? 'o preluare de agenție contează' : `${copiedOutlets} preluări de agenție contează`} o singură dată în bară.`
+      ? `${totalSources} publicații, ${independentReports} relatări independente: articolele care reiau același text de agenție (marcate „preluare”) contează o singură dată în bară.`
       : `Subiectul este acoperit de ${totalSources} ${totalSources === 1 ? 'publicație' : 'publicații'} distincte.`,
     `Ponderea dominantă este ${dominantBias.label.toLowerCase()} (${dominantBias.value}%), calculată din scorul editorial al fiecărei publicații.`,
     blindspotMeta?.description,
