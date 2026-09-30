@@ -16,6 +16,8 @@ import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { Helmet } from "react-helmet-async";
 
 const BATCH = 20;
+// The feed shares the 100-story card list with search/story pages; the homepage shows the top 40.
+const HOMEPAGE_MAX_STORIES = 40;
 
 type DemoStory = NewsItem & { sources: { name: string; url: string; bias: string }[] };
 
@@ -108,7 +110,7 @@ const normalizeSearchText = (text: string) =>
     .trim();
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching, isLoadingFresh } = useAggregatedNews(40);
+  const { data: stories, isLoading, error, refetch, isFetching, isLoadingFresh } = useAggregatedNews("card");
   const [visible, setVisible] = useState(BATCH);
   const { query } = useSearchStore();
   const normalizedQuery = normalizeSearchText(query || "");
@@ -117,7 +119,7 @@ const Index = () => {
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
-    const realStories = stories || [];
+    const realStories = (stories || []).slice(0, HOMEPAGE_MAX_STORIES);
     let filtered = realStories.filter((story) => story.sourcesCount > 1);
 
     if (!filtered.length && realStories.length > 0) {

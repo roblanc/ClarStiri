@@ -9,7 +9,7 @@ import { Helmet } from "react-helmet-async";
 
 const CategoryPage = () => {
     const { slug } = useParams<{ slug: string }>();
-    const { data: allStories, isLoading, error } = useAggregatedNews(100);
+    const { data: allStories, isLoading, error } = useAggregatedNews("full");
 
     // Get category info
     const category = slug ? getCategoryBySlug(slug) : undefined;

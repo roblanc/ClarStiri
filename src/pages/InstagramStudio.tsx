@@ -13,7 +13,7 @@ import { getThumbnailUrl } from "@/utils/imageOptimizer";
 type SlideType = 1 | 2 | 3 | 4 | 5;
 
 export default function InstagramStudio() {
-  const { data: stories, isLoading, refetch, isFetching } = useAggregatedNews(60);
+  const { data: stories, isLoading, refetch, isFetching } = useAggregatedNews("full");
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
   const [activeSlide, setActiveSlide] = useState<SlideType>(1);
   const [copiedId, setCopiedId] = useState<string | null>(null);

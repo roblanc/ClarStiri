@@ -67,7 +67,7 @@ export default function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const urlQuery = searchParams.get("q") || "";
   const { query, setQuery, clearQuery } = useSearchStore();
-  const { data: stories = [], isLoading } = useAggregatedNews(100);
+  const { data: stories = [], isLoading } = useAggregatedNews("card");
 
   // URL → store: la navigare directă sau link shared
   useEffect(() => {

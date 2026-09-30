@@ -3,17 +3,25 @@ import { useParams, Link, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { BiasBar } from "@/components/BiasBar";
-import { useAggregatedNews } from "@/hooks/useNews";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  newsListQueryKey,
+  normalizeFullStory,
+  readCachedCards,
+  useAggregatedNews,
+  type NewsCardStory,
+} from "@/hooks/useNews";
+import { fetchStoryById } from "@/services/newsApiService";
 import type { AggregatedStory } from "@/types/news";
-import { normalizeStorySlug, toStorySlug } from "@/utils/storyRoute";
+import { isStoryCard } from "../../shared/storyCard";
+import { findStoryBySlug, normalizeStorySlug } from "@/utils/storyRoute";
 import { ArrowLeft, ArrowRight, Clock, ExternalLink, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ShareButton } from "@/components/ShareButton";
-import { useMemo, useState, useEffect } from "react";
-import { decodeHtmlEntities } from "../../shared/htmlEntities";
+import { useMemo, useState } from "react";
 import { PLACEHOLDER_IMAGE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -132,65 +140,20 @@ const toValidDate = (value: unknown): Date | null => {
   return null;
 };
 
-const normalizeCachedStoryDate = (story: AggregatedStory): AggregatedStory => {
-  const publishedAt = toValidDate(story.publishedAt) ?? new Date();
-  return {
-    ...story,
-    title: decodeHtmlEntities(story.title),
-    description: decodeHtmlEntities(story.description || ""),
-    mainCategory: decodeHtmlEntities(story.mainCategory || ""),
-    publishedAt,
-    sources: story.sources.map((source) => ({
-      ...source,
-      title: decodeHtmlEntities(source.title),
-      description: decodeHtmlEntities(source.description || ""),
-      category: decodeHtmlEntities(source.category || "") || undefined,
-    })),
-    image: story.image || story.sources.find((source) => source.imageUrl)?.imageUrl,
-  };
+type StoryLike = AggregatedStory | NewsCardStory;
+type OutletEntry = StoryLike["sources"][number];
+
+const fetchFullStory = async (storyId: string, signal?: AbortSignal): Promise<AggregatedStory | null> => {
+  const story = await fetchStoryById(storyId, signal);
+  return story ? normalizeFullStory(story) : null;
 };
 
-const getCachedStories = (): AggregatedStory[] => {
-  const cacheKeys = [
-    "last_news_v2_100",
-    "last_news_v2_60",
-    "last_news_v2_120",
-    "thesite_aggregated_cache_v4_ultra",
-  ];
-
-  const allStories: AggregatedStory[] = [];
-
-  for (const key of cacheKeys) {
-    const raw = localStorage.getItem(key);
-    if (!raw) continue;
-
-    try {
-      const parsed = JSON.parse(raw);
-      const candidates = Array.isArray(parsed?.data)
-        ? parsed.data
-        : Array.isArray(parsed?.stories)
-          ? parsed.stories
-          : [];
-
-      for (const story of candidates) {
-        if (story?.id) {
-          allStories.push(normalizeCachedStoryDate(story as AggregatedStory));
-        }
-      }
-    } catch {
-      // Ignore malformed cache entries and continue with others
-    }
-  }
-
-  const dedup = new Map<string, AggregatedStory>();
-  allStories.forEach((story) => {
-    if (!dedup.has(story.id)) {
-      dedup.set(story.id, story);
-    }
-  });
-
-  return Array.from(dedup.values());
-};
+const STORY_QUERY_OPTIONS = {
+  staleTime: 5 * 60 * 1000,
+  gcTime: 30 * 60 * 1000,
+  refetchOnWindowFocus: false,
+  retry: 1,
+} as const;
 
 // Componenta logo sursă cu fallback la inițiale
 function SourceLogo({ source }: { source: { id: string; name: string; bias: string; url?: string; logo?: string } }) {
@@ -239,63 +202,62 @@ function SourceLogo({ source }: { source: { id: string; name: string; bias: stri
 const StoryDetail = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
-  const { data: stories, isLoading } = useAggregatedNews(100);
   const [activeFilter, setActiveFilter] = useState<'all' | 'left' | 'center' | 'right'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [archivedStory, setArchivedStory] = useState<AggregatedStory | null>(null);
-  const [archiveLoading, setArchiveLoading] = useState(false);
-  const cachedStories = useMemo(() => getCachedStories(), []);
   const slugFromUrl = normalizeStorySlug(searchParams.get("s") || "");
-  const storiesPool = useMemo(() => {
-    const map = new Map<string, AggregatedStory>();
-    [...(stories || []), ...cachedStories].forEach((story) => {
-      if (!map.has(story.id)) {
-        map.set(story.id, story);
-      }
-    });
-    return Array.from(map.values());
-  }, [stories, cachedStories]);
+  const queryClient = useQueryClient();
 
-  // Găsește povestea după ID; fallback după slug stabil din titlu
-  const currentStory = useMemo(() => {
-    if (id) {
-      const byId = storiesPool.find((story) => story.id === id);
-      if (byId) return byId;
-    }
+  // 1. Seed from lists this tab already has (homepage/search/category) or this browser saved,
+  //    so a click from the feed renders instantly without refetching the whole list.
+  const seedPool = useMemo<StoryLike[]>(() => {
+    const full = queryClient.getQueryData<AggregatedStory[]>(newsListQueryKey("full")) ?? [];
+    const cards = queryClient.getQueryData<NewsCardStory[]>(newsListQueryKey("card")) ?? readCachedCards() ?? [];
+    return [...full, ...cards];
+  }, [queryClient, id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const seed = useMemo(() => (id ? seedPool.find((story) => story.id === id) : undefined), [seedPool, id]);
+  const seedIsFull = !!seed && !isStoryCard(seed);
 
-    if (slugFromUrl) {
-      const bySlug = storiesPool.find((story) => toStorySlug(story.title) === slugFromUrl);
-      if (bySlug) return bySlug;
+  // 2. The article list comes from /api/news?id= (small, CDN-cached). On a direct visit this is
+  //    the first and only request; after a click from the feed it fills in the articles.
+  const detailQuery = useQuery({
+    queryKey: ["story", id],
+    queryFn: () => fetchFullStory(id!),
+    enabled: !!id && !seedIsFull,
+    ...STORY_QUERY_OPTIONS,
+  });
 
-      const slugPrefix = slugFromUrl.split("-").slice(0, 6).join("-");
-      if (slugPrefix) {
-        const bySlugPrefix = storiesPool.find((story) => toStorySlug(story.title).startsWith(slugPrefix));
-        if (bySlugPrefix) return bySlugPrefix;
-      }
-    }
+  // 3. Unknown id (e.g. an old link): fall back to matching the title slug against the feed.
+  const needSlugLookup = !!slugFromUrl && !seed && (detailQuery.data === null || detailQuery.isError);
+  const feed = useAggregatedNews("card", { enabled: needSlugLookup });
+  const slugMatch = useMemo(
+    () => (needSlugLookup ? findStoryBySlug([...seedPool, ...(feed.data ?? [])], slugFromUrl) : undefined),
+    [needSlugLookup, seedPool, feed.data, slugFromUrl]
+  );
+  const slugMatchIsCard = !!slugMatch && isStoryCard(slugMatch);
+  const slugDetailQuery = useQuery({
+    queryKey: ["story", slugMatch?.id],
+    queryFn: () => fetchFullStory(slugMatch!.id),
+    enabled: slugMatchIsCard,
+    ...STORY_QUERY_OPTIONS,
+  });
 
-    return undefined;
-  }, [id, slugFromUrl, storiesPool]);
-
-  const resolvedStory = currentStory ?? archivedStory ?? undefined;
-
-  // Fallback: dacă povestea nu e în pool-ul principal, caută în arhiva Redis
-  useEffect(() => {
-    if (isLoading || currentStory || !id || archivedStory || archiveLoading) return;
-    setArchiveLoading(true);
-    fetch(`/api/news?id=${encodeURIComponent(id)}`)
-      .then(r => r.ok ? r.json() : null)
-      .then(json => {
-        if (json?.success && json?.data) {
-          setArchivedStory(normalizeCachedStoryDate(json.data as AggregatedStory));
-        }
-      })
-      .catch(() => {/* silently fail */})
-      .finally(() => setArchiveLoading(false));
-  }, [isLoading, currentStory, id, archivedStory, archiveLoading]);
+  const fullStory: AggregatedStory | undefined =
+    (seedIsFull ? (seed as AggregatedStory) : undefined) ??
+    detailQuery.data ??
+    (slugMatch && !slugMatchIsCard ? (slugMatch as AggregatedStory) : undefined) ??
+    slugDetailQuery.data ??
+    undefined;
+  const resolvedStory: StoryLike | undefined = fullStory ?? seed ?? slugMatch;
+  const articlesLoading = !fullStory && (detailQuery.isFetching || slugDetailQuery.isFetching);
+  const articlesFailed = !fullStory && !articlesLoading && !!resolvedStory;
+  const isLoading = !resolvedStory && (detailQuery.isFetching || (needSlugLookup && feed.isFetching) || slugDetailQuery.isFetching);
+  const retryArticles = () => {
+    if (slugMatchIsCard) slugDetailQuery.refetch();
+    else detailQuery.refetch();
+  };
 
   // Grupează sursele după bias
-  const groupedSources = resolvedStory?.sources.reduce((acc, source) => {
+  const groupedSources = (resolvedStory?.sources as OutletEntry[] | undefined)?.reduce((acc, source) => {
     const bias = source.source.bias;
     if (bias === 'left' || bias === 'center-left') {
       acc.left.push(source);
@@ -305,10 +267,11 @@ const StoryDetail = () => {
       acc.center.push(source);
     }
     return acc;
-  }, { left: [] as NonNullable<typeof resolvedStory>['sources'], center: [] as NonNullable<typeof resolvedStory>['sources'], right: [] as NonNullable<typeof resolvedStory>['sources'] });
+  }, { left: [] as OutletEntry[], center: [] as OutletEntry[], right: [] as OutletEntry[] });
 
   // Filtrează articolele
-  const filteredArticles = resolvedStory?.sources.filter(source => {
+  // Articles (title, link, text) exist only on the full story; cards carry just the outlets.
+  const filteredArticles = fullStory?.sources.filter(source => {
     const bias = source.source.bias;
     const matchesFilter = activeFilter === 'all' ||
       (activeFilter === 'left' && (bias === 'left' || bias === 'center-left')) ||
@@ -322,7 +285,7 @@ const StoryDetail = () => {
     return matchesFilter && matchesSearch;
   }) || [];
 
-  if (isLoading || archiveLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header />
@@ -664,7 +627,28 @@ const StoryDetail = () => {
                   </Card>
                 ))}
 
-                {filteredArticles.length === 0 && (
+                {articlesLoading && (
+                  <Card className="surface-ghost rounded-[28px] shadow-none">
+                    <CardContent className="flex items-center justify-center gap-3 p-10 text-muted-foreground">
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <span>Se încarcă articolele...</span>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {articlesFailed && (
+                  <Card className="surface-ghost rounded-[28px] shadow-none">
+                    <CardContent className="p-10 text-center">
+                      <p className="text-lg font-medium text-foreground">Nu am putut încărca articolele.</p>
+                      <p className="mt-2 text-sm text-muted-foreground">Verifică conexiunea și încearcă din nou.</p>
+                      <Button onClick={retryArticles} variant="outline" className="mt-4 rounded-full">
+                        Reîncearcă
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {fullStory && filteredArticles.length === 0 && (
                   <Card className="surface-ghost rounded-[28px] shadow-none">
                     <CardContent className="p-10 text-center">
                       <p className="text-lg font-medium text-foreground">Nu există articole care să corespundă filtrelor selectate.</p>
@@ -695,8 +679,8 @@ const StoryDetail = () => {
                           </div>
 
                           <div className="flex flex-wrap gap-2">
-                            {cluster.sources.slice(0, 8).map((source) => (
-                              <SourceLogo key={source.id} source={source.source} />
+                            {cluster.sources.slice(0, 8).map((source, index) => (
+                              <SourceLogo key={`${source.source.id}-${index}`} source={source.source} />
                             ))}
                             {cluster.sources.length > 8 && (
                               <div className={cn("inline-flex h-10 w-10 items-center justify-center rounded-full border text-xs font-semibold text-muted-foreground", cluster.ringClass)}>

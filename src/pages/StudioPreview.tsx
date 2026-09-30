@@ -272,7 +272,7 @@ function PosterSet({ stories }: { stories: StudioStory[] }) {
 }
 
 const StudioPreview = () => {
-  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews(60);
+  const { data: stories, isLoading, error, refetch, isFetching } = useAggregatedNews("full");
   const [visible, setVisible] = useState(BATCH);
   const { query, clearQuery } = useSearchStore();
 

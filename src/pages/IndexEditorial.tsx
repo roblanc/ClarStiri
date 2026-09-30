@@ -537,7 +537,7 @@ function LoadingSpread() {
 // Page
 // ────────────────────────────────────────────────────────────────────────────
 const IndexEditorial = () => {
-  const { data: stories, isLoading } = useAggregatedNews(40);
+  const { data: stories, isLoading } = useAggregatedNews("full");
 
   const spreads = useMemo(() => (stories || []).slice(0, MAX_SPREADS), [stories]);
 
