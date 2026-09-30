@@ -4,6 +4,32 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    // Homepage fast path. Without this the feed is a 4-step waterfall:
+    // HTML -> entry JS -> lazy Index route chunk -> /api/news -> first image.
+    // On "/" only, start the route chunk and the feed request right away, in
+    // parallel with the entry bundle. (Kept before any stylesheet so it runs
+    // immediately instead of waiting for CSS.)
+    (function () {
+      if (location.pathname !== "/") return;
+      var head = document.head;
+      function preload(rel, href, as) {
+        var link = document.createElement("link");
+        link.rel = rel;
+        link.href = href;
+        if (as) link.as = as;
+        link.crossOrigin = "anonymous";
+        head.appendChild(link);
+      }
+      // Must be byte-identical to the URL requested by useAggregatedNews(40) in
+      // src/pages/Index.tsx -> fetchAggregatedNewsFromAPI (services/newsApiService.ts),
+      // otherwise the browser downloads the feed twice.
+      preload("preload", "/api/news?limit=40", "fetch");
+      // Filled in at build time by the preloadHomeRoute plugin (vite.config.ts).
+      var chunks = /*HOME_ROUTE_CHUNKS*/[];
+      for (var i = 0; i < chunks.length; i++) preload("modulepreload", chunks[i]);
+    })();
+  </script>
   <title>thesite.ro | Știri din toate perspectivele</title>
   <meta name="description"
     content="thesite.ro - Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite și înțelege bias-ul mediatic." data-rh="true" />
