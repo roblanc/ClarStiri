@@ -15,7 +15,8 @@
     "post:reel": "node scripts/auto_post_reel.mjs",
     "post:replace": "node scripts/delete_last_post_and_repost.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p tsconfig.api.json --noEmit"
   },
   "dependencies": {
     "@chenglou/pretext": "^0.0.2",

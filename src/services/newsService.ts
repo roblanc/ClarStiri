@@ -458,7 +458,7 @@ function findSimilarStories(news: RSSNewsItem[], threshold = 0.35, maxTimeDiffMs
     const itemData = news.map(item => {
         const normalized = normalizeTitle(item.title);
         const words = normalized.split(/\s+/).filter(w => w.length > 2 && !stopwords.has(w));
-        const bigrams = [];
+        const bigrams: string[] = [];
         for (let i = 0; i < words.length - 1; i++) {
             bigrams.push(`${words[i]}_${words[i + 1]}`);
         }

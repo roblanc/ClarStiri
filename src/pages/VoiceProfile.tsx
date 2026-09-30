@@ -75,7 +75,7 @@ const VoiceProfile = () => {
             "description": figure.bias.description,
             "image": figure.image?.startsWith('http') ? figure.image : `https://www.thesite.ro${figure.image}`,
             "url": `https://www.thesite.ro/voci/${figure.slug}`,
-            "sameAs": figure.socialMedia ? Object.values(figure.socialMedia).filter(Boolean) : [],
+            "sameAs": figure.socialLinks ? Object.values(figure.socialLinks).filter(Boolean) : [],
         }
     };
 

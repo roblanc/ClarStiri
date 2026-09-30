@@ -41,7 +41,7 @@ async function callGroq(prompt: string): Promise<string | null> {
             return null;
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
         const text: string | undefined = data.choices?.[0]?.message?.content;
         return text?.trim() ?? null;
     } catch (error) {
@@ -72,7 +72,7 @@ async function callGemini(prompt: string): Promise<string | null> {
             return null;
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
         const text: string | undefined = data.candidates?.[0]?.content?.parts?.[0]?.text;
         return text?.trim() ?? null;
     } catch (error) {
@@ -113,7 +113,7 @@ export async function getEmbeddingsBatch(texts: string[]): Promise<number[][] | 
             return null;
         }
 
-        const data = await response.json();
+        const data = (await response.json()) as { data?: Array<{ index: number; embedding: number[] }> };
         const sorted = (data.data as Array<{ index: number; embedding: number[] }>)
             ?.sort((a, b) => a.index - b.index);
         return sorted?.map(e => e.embedding) ?? null;

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { NewsCard } from "@/components/NewsCard";
+import { NewsCard, type NewsItem } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,9 @@ import { Helmet } from "react-helmet-async";
 
 const BATCH = 20;
 
-const DEMO_STORIES = [
+type DemoStory = NewsItem & { sources: { name: string; url: string; bias: string }[] };
+
+const DEMO_STORIES: DemoStory[] = [
   {
     id: "demo-home-1",
     title: "Guvernul pregătește un nou pachet pentru transportul public din marile orașe",

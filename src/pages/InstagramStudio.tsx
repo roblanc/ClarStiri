@@ -30,17 +30,17 @@ export default function InstagramStudio() {
   const blindspot = featuredStory?.blindspot;
 
   const leftSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
-    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    const b = (s.source?.bias || '').toLowerCase();
     return b.includes('left');
   }), [featuredStory]);
 
   const centerSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
-    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    const b = (s.source?.bias || '').toLowerCase();
     return b === 'center' || b === '' || (!b.includes('left') && !b.includes('right'));
   }), [featuredStory]);
 
   const rightSources = useMemo(() => (featuredStory?.sources || []).filter(s => {
-    const b = (s.source?.bias || s.bias || '').toLowerCase();
+    const b = (s.source?.bias || '').toLowerCase();
     return b.includes('right');
   }), [featuredStory]);
 
@@ -459,7 +459,7 @@ export default function InstagramStudio() {
                         <div className="space-y-1">
                           {leftSources.slice(0, 4).map((s, idx) => (
                             <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
-                              • {s.source?.name || s.name || "G4Media"}
+                              • {s.source?.name || "G4Media"}
                             </div>
                           ))}
                           {leftSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
@@ -472,7 +472,7 @@ export default function InstagramStudio() {
                         <div className="space-y-1">
                           {centerSources.slice(0, 4).map((s, idx) => (
                             <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
-                              • {s.source?.name || s.name || "HotNews"}
+                              • {s.source?.name || "HotNews"}
                             </div>
                           ))}
                           {centerSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
@@ -485,7 +485,7 @@ export default function InstagramStudio() {
                         <div className="space-y-1">
                           {rightSources.slice(0, 4).map((s, idx) => (
                             <div key={idx} className="text-[11px] text-neutral-300 font-medium truncate">
-                              • {s.source?.name || s.name || "Antena 3"}
+                              • {s.source?.name || "Antena 3"}
                             </div>
                           ))}
                           {rightSources.length === 0 && <span className="text-[10px] text-neutral-500 italic">Fără acoperire</span>}
