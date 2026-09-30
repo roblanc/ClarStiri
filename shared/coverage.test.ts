@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
     BIAS_SHARE_FULL_AT,
-    BIAS_WEIGHT_MAP,
     biasShares,
     buildCoverageContext,
     computeBlindspot,
@@ -71,12 +70,6 @@ describe('biasShares', () => {
     it('interpolates inside the centre-left/right band', () => {
         expect(biasShares(-25).left).toBeCloseTo(0.4);
         expect(biasShares(35).right).toBeCloseTo(0.6);
-    });
-
-    it('keeps the legacy category table leak-free', () => {
-        expect(BIAS_WEIGHT_MAP.center).toEqual({ left: 0, center: 100, right: 0 });
-        expect(BIAS_WEIGHT_MAP.right.left).toBe(0);
-        expect(BIAS_WEIGHT_MAP.left.right).toBe(0);
     });
 });
 
@@ -248,6 +241,13 @@ describe('coverageView', () => {
         expect(view.independent).toBe(2);
         expect(view.syndicated).toEqual([false, true, false]);
         expect(view.outletsBySide).toEqual({ left: 1, center: 1, right: 1 });
+    });
+
+    it('trusts the bar of a listing card, which has no text to detect copies in', () => {
+        const view = coverageView({ sources: [{ source: { id: 'hotnews' } }, { source: { id: 'antena3' } }], bias: { left: 20, center: 50, right: 30 } });
+        expect(view.bias).toEqual({ left: 20, center: 50, right: 30 });
+        expect(view.independent).toBe(2);
+        expect(view.outletsBySide).toEqual({ left: 1, center: 0, right: 1 });
     });
 
     it('recomputes for stories cached before the fields existed', () => {

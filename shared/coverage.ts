@@ -38,18 +38,6 @@ export const CATEGORY_REPRESENTATIVE_SCORE: Record<SourceBias, number> = {
 };
 
 /**
- * @deprecated Per-category percentages, kept only for the legacy browser-side clusterer in
- * src/services/newsService.ts. Derived from `biasShares` at the representative scores, so a
- * centrist outlet no longer leaks 8% to each side.
- */
-export const BIAS_WEIGHT_MAP: Record<SourceBias, BiasSplit> = Object.fromEntries(
-    (Object.keys(CATEGORY_REPRESENTATIVE_SCORE) as SourceBias[]).map((bias) => {
-        const s = biasShares(CATEGORY_REPRESENTATIVE_SCORE[bias]);
-        return [bias, { left: Math.round(s.left * 100), center: Math.round(s.center * 100), right: Math.round(s.right * 100) }];
-    }),
-) as Record<SourceBias, BiasSplit>;
-
-/**
  * Side used for counting outlets, filters and blindspots: the category grouping
  * (left + center-left → left, center-right + right → right), i.e. score ≤ -20 or ≥ 20.
  */

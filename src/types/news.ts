@@ -1,6 +1,5 @@
 import type { SourceProfile } from '@/data/sourceProfiles';
 import { NEWS_SOURCES_BASE } from '../../shared/newsSources';
-import { BIAS_WEIGHT_MAP as SHARED_BIAS_WEIGHT_MAP } from '../../shared/coverage';
 
 export interface NewsSource {
   id: string;
@@ -53,6 +52,3 @@ export interface AggregatedStory {
 
 export const NEWS_SOURCES: NewsSource[] = NEWS_SOURCES_BASE.map((source) => ({ ...source }));
 
-/** @deprecated Only for the legacy browser-side clusterer; the server uses shared/coverage.ts. */
-export const BIAS_WEIGHT_MAP: Record<NewsSource['bias'], { left: number; center: number; right: number }> =
-  SHARED_BIAS_WEIGHT_MAP;
