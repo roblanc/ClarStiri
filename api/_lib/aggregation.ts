@@ -8,14 +8,9 @@ import {
     storyRankScore,
     type Blindspot,
     type CoverageContext,
-    type CoverageItem,
 } from '../../shared/coverage.js';
 
 export { storyRankScore };
-
-// RSSNewsItem comes from a zod schema, whose inferred fields are all optional under this
-// project's non-strict TS settings; parsed items always carry title and source.
-const asCoverageItems = (items: RSSNewsItem[]) => items as unknown as CoverageItem[];
 import { createStoryId } from './storyId.js';
 import { clusterArticles, DEFAULT_CLUSTER_THRESHOLD } from './clustering.js';
 import { fallbackHeadline, generateHeadline, getEmbeddingsBatch, llmHeadlinesAvailable } from './llm.js';
@@ -131,23 +126,23 @@ export const STATIC_COVERAGE_CONTEXT: CoverageContext = staticCoverageContext(NE
 
 /** Context for one refresh, from every article it fetched (see buildCoverageContext). */
 export function coverageContextFor(fetched: RSSNewsItem[]): CoverageContext {
-    return buildCoverageContext(asCoverageItems(fetched), NEWS_SOURCES);
+    return buildCoverageContext(fetched, NEWS_SOURCES);
 }
 
 export function calculateBlindspot(sources: RSSNewsItem[], context: CoverageContext = STATIC_COVERAGE_CONTEXT): Blindspot {
-    return computeBlindspot(summarizeCoverage(asCoverageItems(sources)), context);
+    return computeBlindspot(summarizeCoverage(sources), context);
 }
 
 /** Left/centre/right percentages of a story's independent reports (see shared/coverage.ts). */
 export function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; center: number; right: number } {
     if (sources.length === 0) return { left: 0, center: 100, right: 0 };
-    return summarizeCoverage(asCoverageItems(sources)).bias;
+    return summarizeCoverage(sources).bias;
 }
 
 /** Recomputes every coverage field of a story from its sources: copy flags, bar, blindspot, count. */
 export function applyCoverage(story: AggregatedStory, context: CoverageContext = STATIC_COVERAGE_CONTEXT): AggregatedStory {
-    const sources = markSyndicated(asCoverageItems(story.sources)) as unknown as RSSNewsItem[];
-    const summary = summarizeCoverage(asCoverageItems(sources));
+    const sources = markSyndicated(story.sources);
+    const summary = summarizeCoverage(sources);
     return {
         ...story,
         sources,
