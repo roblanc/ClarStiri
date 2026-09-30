@@ -178,11 +178,12 @@ export async function loadRecentArchivedStories(limit: number, maxAgeDays = 7): 
     const sql = getSql();
     if (!sql || limit <= 0) return [];
 
+    const cutoff = new Date(Date.now() - maxAgeDays * 24 * 60 * 60 * 1000);
     const stories = await sql<StoryRow[]>`
         select id, title, description, image, main_category, blindspot, published_at, first_seen_at
         from thesite.stories
-        where coalesce(last_seen_at, first_seen_at) > now() - make_interval(days => ${maxAgeDays})
-          and coalesce(published_at, first_seen_at) > now() - make_interval(days => ${maxAgeDays})
+        where coalesce(last_seen_at, first_seen_at) > ${cutoff}
+          and coalesce(published_at, first_seen_at) > ${cutoff}
         order by coalesce(last_seen_at, first_seen_at) desc
         limit ${limit}`;
     if (stories.length === 0) return [];
