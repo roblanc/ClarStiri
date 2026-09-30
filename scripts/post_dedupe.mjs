@@ -63,8 +63,11 @@ export function recordPostedLinks(story) {
   }
 }
 
-/** Returns the reason a story would repeat an earlier post, or null if it is new. */
-export function repeatReason(story, history) {
+/**
+ * Returns the reason a story would repeat an earlier post, or null if it is new.
+ * `postedLinks` defaults to social_export/posted_links.json ({ [storyId]: { links } }).
+ */
+export function repeatReason(story, history, postedLinks = readLinks()) {
   const ids = new Set(history.map(h => h.id));
   if (ids.has(story.id)) return 'același id';
 
@@ -78,7 +81,7 @@ export function repeatReason(story, history) {
 
   const links = new Set((story.sources || []).map(s => s.link).filter(Boolean));
   if (links.size) {
-    for (const [id, entry] of Object.entries(readLinks())) {
+    for (const [id, entry] of Object.entries(postedLinks)) {
       if (!ids.has(id)) continue; // chosen but never actually posted
       const posted = entry.links || [];
       const shared = posted.filter(l => links.has(l)).length;
@@ -91,10 +94,27 @@ export function repeatReason(story, history) {
 }
 
 /** Stories not yet posted, logging why each skipped one counts as a repeat. */
-export function filterUnposted(stories, history) {
+export function filterUnposted(stories, history, postedLinks = readLinks()) {
   return stories.filter(s => {
-    const reason = repeatReason(s, history);
+    const reason = repeatReason(s, history, postedLinks);
     if (reason) console.log(`   ↷ sar peste „${(s.title || '').slice(0, 50)}”: ${reason}`);
     return !reason;
   });
+}
+
+/** Editorial priority for social posts: blindspot stories first (+10), then source count. */
+export function socialScore(story) {
+  const blindspot = story.blindspot && story.blindspot !== 'none' ? 10 : 0;
+  return blindspot + (story.sourcesCount || story.sources?.length || 0);
+}
+
+/**
+ * The story to post next: the highest-priority one that does not repeat an earlier post
+ * (ties keep the API's order). `story` is null when everything was already posted; callers
+ * must then skip the post rather than repeat one.
+ */
+export function pickStoryToPost(stories, history, postedLinks = readLinks()) {
+  const unposted = filterUnposted(stories, history, postedLinks);
+  const story = [...unposted].sort((a, b) => socialScore(b) - socialScore(a))[0] ?? null;
+  return { story, unposted };
 }

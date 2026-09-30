@@ -7,7 +7,7 @@ import { buildHtmlSlides } from './generate_carousel.mjs';
 import { buildHtmlSlides as buildHtmlSlidesV2 } from './social_v2.mjs';
 import { buildHtmlSlides as buildHtmlSlidesPoster } from './social_poster.mjs';
 import { nextDesign } from './design_rotation.mjs';
-import { filterUnposted, recordPostedLinks } from './post_dedupe.mjs';
+import { pickStoryToPost, recordPostedLinks } from './post_dedupe.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -71,8 +71,9 @@ async function run() {
 
   const history = getPostedHistory();
 
-  // Filtrăm știrile deja postate, inclusiv același eveniment sub alt id sau alt titlu
-  const unposted = filterUnposted(stories, history);
+  // Filtrăm știrile deja postate (inclusiv același eveniment sub alt id sau alt titlu)
+  // și alegem după relevanță editorială: blindspot, apoi numărul de surse.
+  const { story, unposted } = pickStoryToPost(stories, history);
 
   console.log(`📊 Găsite ${stories.length} știri, dintre care ${unposted.length} nepostate.`);
 
@@ -81,23 +82,11 @@ async function run() {
   // 2. Știri cu cele mai multe surse și acoperire diversă
   // 3. Dacă toate au fost postate, nu postăm nimic (fără repetări)
   // Fără știri noi nu postăm nimic: nu repetăm o știre deja publicată.
-  if (unposted.length === 0) {
+  if (!story) {
     console.error('❌ Nicio știre nouă de postat, toate au fost deja publicate. Sar peste această postare.');
     process.exitCode = 1;
     return;
   }
-  const candidatePool = unposted;
-
-  // Sortăm candidații după relevanță editorială pentru social media
-  candidatePool.sort((a, b) => {
-    const aBlindspot = (a.blindspot && a.blindspot !== 'none') ? 10 : 0;
-    const bBlindspot = (b.blindspot && b.blindspot !== 'none') ? 10 : 0;
-    const aSources = (a.sourcesCount || a.sources?.length || 0);
-    const bSources = (b.sourcesCount || b.sources?.length || 0);
-    return (bBlindspot + bSources) - (aBlindspot + aSources);
-  });
-
-  const story = candidatePool[0];
   console.log('📌 Selected Story:', story.title);
   console.log(`   Surse: ${story.sourcesCount || story.sources?.length} | Blindspot: ${story.blindspot || 'none'}`);
 
