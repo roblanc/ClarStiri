@@ -31,6 +31,24 @@ function toTimestamp(value: string | undefined): string | null {
     return Number.isNaN(t) ? null : new Date(t).toISOString();
 }
 
+/**
+ * Most recent archived stories for /sitemap-stories.xml. Only stories covered by at least two
+ * outlets: single-source clusters are thin pages we'd rather not ask crawlers to index.
+ * Returns [] without a database.
+ */
+export async function listArchivedStoriesForSitemap(limit: number): Promise<{ id: string; lastmod: Date }[]> {
+    const sql = getSql();
+    if (!sql) return [];
+
+    const rows = await sql<{ id: string; lastmod: Date }[]>`
+        select s.id, coalesce(s.last_seen_at, s.published_at, s.first_seen_at) as lastmod
+        from thesite.stories s
+        where exists (select 1 from thesite.story_sources ss where ss.story_id = s.id offset 1)
+        order by coalesce(s.published_at, s.first_seen_at) desc
+        limit ${limit}`;
+    return rows;
+}
+
 export async function archiveStories(stories: AggregatedStory[]): Promise<{ stories: number; sources: number } | null> {
     const sql = getSql();
     if (!sql || stories.length === 0) return null;
@@ -163,22 +181,4 @@ export async function loadArchivedStory(id: string): Promise<AggregatedStory | n
         publishedAt,
         timeAgo: getTimeAgo(publishedAt),
     };
-}
-
-/**
- * Most recent archived stories for /sitemap-stories.xml. Only stories covered by at least two
- * outlets: single-source clusters are thin pages we'd rather not ask crawlers to index.
- * Returns [] without a database.
- */
-export async function listArchivedStoriesForSitemap(limit: number): Promise<{ id: string; lastmod: Date }[]> {
-    const sql = getSql();
-    if (!sql) return [];
-
-    const rows = await sql<{ id: string; lastmod: Date }[]>`
-        select s.id, coalesce(s.last_seen_at, s.published_at, s.first_seen_at) as lastmod
-        from thesite.stories s
-        where exists (select 1 from thesite.story_sources ss where ss.story_id = s.id offset 1)
-        order by coalesce(s.published_at, s.first_seen_at) desc
-        limit ${limit}`;
-    return rows;
 }
