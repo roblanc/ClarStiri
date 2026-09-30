@@ -12,15 +12,13 @@
  *   center-right: +20 → +54
  *   right:        ≥ +55
  *
- * NOTĂ PENTRU CODEX / CONTINUARE:
- * ---------------------------------
- * TODO: Integrează profilurile în UI - componenta SourceProfileCard.tsx (de creat)
- * TODO: Când se adaugă o sursă nouă în api/shared.ts, adaugă și profilul corespunzător
- *       aici folosind template-ul NEW_SOURCE_TEMPLATE de la sfârșitul fișierului.
- * TODO: Actualizează scorurile numerice din api/shared.ts pentru a reflecta biasScore-ul
- *       din profiluri (în prezent shared.ts folosește doar categorii, nu scoruri numerice).
- *TODO: Creează o pagină /surse sau un modal care să afișeze profilul detaliat al fiecărei surse.
+ * SCORUL NUMERIC ȘI ÎNCREDEREA NU MAI STAU AICI: sunt în shared/newsSources.ts (`biasScore`,
+ * `biasConfidence`), sursa unică folosită și de server pentru bara de acoperire. Profilurile de
+ * mai jos păstrează raționamentul; `SOURCE_PROFILES` le completează cu scorul din shared.
+ * Când se adaugă o sursă nouă în shared/newsSources.ts, adaugă aici textul profilului
+ * folosind template-ul NEW_SOURCE_TEMPLATE de la sfârșitul fișierului.
  */
+import { NEWS_SOURCE_DEFINITIONS, scoreToBiasCategory as sharedScoreToBiasCategory } from '../../shared/newsSources';
 
 export interface SourceProfile {
   id: string;
@@ -71,11 +69,14 @@ export interface SourceProfile {
   references?: Array<{ label: string; url: string }>;
 }
 
+/** Profile text as written in this file; score and confidence come from shared/newsSources.ts. */
+type SourceProfileText = Omit<SourceProfile, 'biasScore' | 'confidence'>;
+
 // ============================================================
-//  PROFILURI COMPLETE PENTRU TOATE SURSELE DIN api/shared.ts
+//  PROFILURI COMPLETE PENTRU TOATE SURSELE DIN shared/newsSources.ts
 // ============================================================
 
-export const SOURCE_PROFILES: Record<string, SourceProfile> = {
+const PROFILE_TEXTS: Record<string, SourceProfileText> = {
 
   // ===================== CENTRU / AGENȚII =====================
 
@@ -102,9 +103,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Sursă primară citată de alte publicații',
     ],
     strengths: ['Factualitate ridicată', 'Acoperire comprehensivă', 'Credibilitate instituțională'],
-    biasScore: 5,
     factualityRationale: 'Agenție cu standarde jurnalistice ridicate și verificare riguroasă a faptelor.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -120,9 +119,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Agenție privată fără afiliații politice evidente. Modelul de business bazat pe abonamente B2B reduce dependența de publicitate politică. Conținutul este în general factual și echilibrat.',
     strengths: ['Viteza știrilor', 'Acoperire economică', 'Format factual'],
-    biasScore: 0,
     factualityRationale: 'Agenție cu standarde profesionale ridicate.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -138,9 +135,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Publicație pur economică fără bias politic evident. Acoperirea focusată pe economia de piață implică o ușoară tendință pro-piață liberă, dar fără partizanism politic.',
     strengths: ['Specialitate financiară', 'Tradiție îndelungată', 'Date de piață'],
-    biasScore: 5,
     factualityRationale: 'Factualitate ridicată în domeniul financiar.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -157,9 +152,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Biziday funcționează ca un curator editorial, nu ca o redacție tradițională. Modelul de abonamente asigură independența față de presiunile publicității politice. Selecția poate reflecta o ușoară tendință pro-business, dar fără partizanism.',
     strengths: ['Independență editorială', 'Model sustenabil prin abonamente', 'Curatorie de calitate'],
-    biasScore: 0,
     factualityRationale: 'Factualitate bună prin curatoria surselor diverse.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -187,9 +180,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Echilibru în acoperirea politicii',
     ],
     strengths: ['Profesionalism', 'Resurse de producție', 'Credibilitate publică'],
-    biasScore: -10,
     factualityRationale: 'Standarde jurnalistice profesioniste. Factualitate ridicată.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -218,9 +209,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Acoperire extinsă de protocol a evenimentelor oficiale',
       'Spațiu redus pentru investigații',
     ],
-    biasScore: 5,
     factualityRationale: 'Factualitate relativ bună, constrânsă uneori de influența politică.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -246,9 +235,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Cel mai ascultat radio privat din România',
     ],
     strengths: ['Audiență mare', 'Jurnaliști profesioniști', 'Proprietar internațional fără influență politică locală'],
-    biasScore: 20,
     factualityRationale: 'Factualitate relativ ridicată pentru conținutul de știri. Nu sunt cazuri notorii de fake news. Segmentele de opinie conțin interpretări subiective — normal pentru formatul talk-show.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'Europa FM – Site oficial / Grila de programe', url: 'https://www.europafm.ro/live/' },
@@ -296,9 +283,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Acoperire cuprinzătoare a politicii interne și externe, inclusiv live-uri extinse',
       'Percepție relativ mai bună de echilibru comparativ cu alte posturi de știri românești',
     ],
-    biasScore: -25,
     factualityRationale: 'Factualitate ridicată: acoperire live extinsă, utilizează agenții de presă și corespondenți, nu este cunoscut pentru dezinformare sistematică. Evaluări independente (MBFC, Reuters Institute) îl menționează ca brand relativ de încredere.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'Wikipedia – Digi24', url: 'https://en.wikipedia.org/wiki/Digi24' },
@@ -326,9 +311,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'HotNews beneficiază de independența față de politica românească prin proprietarul elvețian Ringier. Reputație de seriozitate și factualitate. Tendința centru-stânga se manifestă mai ales prin alegerea subiectelor (anti-corupție, pro-UE, critici ale populismului) decât prin bias explicit în știri.',
     strengths: ['Experiență îndelungată', 'Jurnaliști de calitate', 'Acoperire comprehensivă'],
-    biasScore: -25,
     factualityRationale: 'Factualitate bună. Standarde profesioniste.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -359,9 +342,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Calitate investigativă ridicată și capacitate de a produce documentare complexe',
       'Transparență financiară, cu rapoarte anuale detaliate puse la dispoziția publicului',
     ],
-    biasScore: -35,
     factualityRationale: 'Factualitate foarte ridicată, bazată pe documentare riguroasă: utilizarea surselor primare (documente, baze de date, interviuri), verificarea afirmațiilor și prezentarea dovezilor în materiale video și texte. Recorder publică periodic rapoarte către cititori despre activitatea sa.',
-    confidence: 'high',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'Recorder – Raport anual „Opt ani de Recorder" (finanțare, structură)', url: 'https://recorder.ro/opt-ani-de-recorder-raport-in-fata-cititorilor/' },
@@ -386,9 +367,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Tabloid serios. Amestec de știri de interes general, subiecte sociale și anchete. Ton accesibil publicului larg.',
     biasRationale:
       'Libertatea combină formatul tabloid cu jurnalism serios. Proprietarul elvețian asigură independența față de politica locală. Tendința centru-stânga se manifestă prin subiectele sociale abordate (drepturi, egalitate, anti-discriminare) mai degrabă decât prin partizanism explicit.',
-    biasScore: -20,
     factualityRationale: 'Factualitate mixtă — solidă pentru știri serioase, variabilă pentru conținut tabloid.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -409,8 +388,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     controversies: [
       'Controverse istorice privind conexiunile politice ale proprietarilor',
     ],
-    biasScore: -20,
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -424,8 +401,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Amestec de știri internaționale traduse și conținut local. Ton analitic.',
     biasRationale:
       'Brand-ul Newsweek internațional are o orientare centru-stânga/liberală. Ediția românească urmărește această tendință, cu acoperire pro-europeană și focus pe societate civilă.',
-    biasScore: -25,
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -437,8 +412,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Publicație de investigație și analiză media, politică, societate.',
     biasRationale:
       'Publicație independentă cu orientare centru-stânga prin valorile promovate (transparență, anti-corupție, pro-UE). Fără conexiuni politice directe cunoscute.',
-    biasScore: -25,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -451,8 +424,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Site de știri independent cu acoperire politică și socială. Focus pe jurnalism de calitate.',
     biasRationale:
       'Publicație independentă relativ nouă, fără conexiuni politice directe documentate. Tendință centru-stânga prin alegerea subiectelor și cadrul analitic.',
-    biasScore: -20,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -468,8 +439,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Transparență privind proprietatea publicațiilor',
       'Sursă valoroasă pentru analiza media',
     ],
-    biasScore: -25,
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -497,9 +466,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Dependență de finanțare externă și datorii mari la nivel global',
     ],
     strengths: ['Acces la public tânăr', 'Subiecte și perspective marginalizate', 'Investigații sociale neconvenționale'],
-    biasScore: -35,
     factualityRationale: 'Factualitate medie: Vice combină reportaje solide și materiale de investigație cu texte subiective, narative sau foarte personale, ceea ce duce la o factualitate inegală între materiale. Redacția românească a produs și materiale bine documentate despre teme sociale sensibile.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'Vice România – „Ce a însemnat Vice România pentru noi" (bilanț)', url: 'https://www.vice.com/ro/article/ce-a-insemnat-vice-romania-pentru-noi/' },
@@ -527,9 +494,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Format de revistă, nu flux de știri la zi',
     ],
     strengths: ['Calitate editorială ridicată', 'Analize profunde', 'Conținut cultural valoros'],
-    biasScore: -40,
     factualityRationale: 'Factualitate bună pentru conținut analitic și cultural.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'Scena9 – Pagina „Despre noi"', url: 'https://www.scena9.ro/despre' },
@@ -575,9 +540,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Achiziția din 2025 de Titluri Quality — întrebări despre independența editorială viitoare',
     ],
     strengths: ['Calitate investigativă', 'Standarde ridicate de verificare', 'Audiență mare în mediul online'],
-    biasScore: -65,
     factualityRationale: 'Factualitate ridicată în ciuda bias-ului editorial puternic.',
-    confidence: 'high',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'G4Media – Pagina „Despre noi"', url: 'https://www.g4media.ro/despre-noi' },
@@ -617,9 +580,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Poziții controversate privind evenimentele din Ucraina (perspective critice față de NATO)',
     ],
     strengths: ['Profunzime analitică', 'Originalitate în peisajul media românesc', 'Independență față de trusturi media'],
-    biasScore: -80,
     factualityRationale: 'Factualitate variabilă — accent pe opinie și teorie, mai puțin pe raportare neutră de știri. Nu este un „fake news site", dar nu poate fi tratat ca sursă neutră de factualitate. Conținutul este preponderent de analiză și eseu.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
     references: [
       { label: 'CriticAtac – Pagina „Despre noi"', url: 'https://www.criticatac.ro/despre-noi/' },
@@ -644,8 +605,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Portal de agregare de știri și publicație proprie. Conținut variat: politică, economie, entertainment.',
     biasRationale:
       'Ziare.com funcționează parțial ca agregator, parțial ca publicație proprie. Tendința centru-dreapta se reflectă în alegerea și framing-ul știrilor politice. Proprietatea și conexiunile politice nu sunt complet transparente.',
-    biasScore: 25,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -656,8 +615,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Site de știri cu acoperire politică și generală.',
     biasRationale:
       'Gândul are o tendință centru-dreapta în acoperirea politică. Proprietatea nu este complet transparentă. Unele articole au un ton sensationalist.',
-    biasScore: 25,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -668,8 +625,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Publicație economică cu acoperire business și politică economică.',
     biasRationale:
       'Capital.ro are o orientare pro-business și pro-piață liberă specifică publicațiilor economice. Tendința centru-dreapta este naturală pentru acest profil. Factualitate mixtă — amestec de jurnalism economic serios și conținut de opinie.',
-    biasScore: 25,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -681,9 +636,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Profit.ro este o publicație economică independentă cu standarde ridicate. Tendința centru-dreapta derivă din perspectiva pro-piață specifică jurnalismului economic serios. Nu există partizanism politic evident.',
     strengths: ['Specialitate economică', 'Factualitate ridicată', 'Informații financiare de calitate'],
-    biasScore: 20,
     factualityRationale: 'Factualitate ridicată în domeniul economic.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -696,9 +649,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Ziarul Financiar este orientat centru-dreapta prin natura sa de publicație economică: pro-piață liberă, pro-business, critic al intervenționismului statal excesiv. Calitate ridicată a jurnalismului.',
     strengths: ['Standard înalt în jurnalism economic', 'Analize financiare profunde', 'Credibilitate în mediul de afaceri'],
-    biasScore: 25,
     factualityRationale: 'Factualitate ridicată în domeniul economic.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -712,9 +663,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Ziar național cu acoperire politică generală. Tendință centru-dreapta, critică la adresa stângii și a corupției.',
     biasRationale:
       'România Liberă are o orientare centru-dreapta istorică. Factualitatea a variat semnificativ în funcție de perioadă și proprietar. Unele perioade au arătat tendințe editoriale mai marcate politic.',
-    biasScore: 30,
     factualityRationale: 'Factualitate mixtă, variabilă în timp.',
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -733,9 +682,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Știrile de pe Antena 1, mai moderate decât Antena 3, dar parte din același grup media cu orientare general centru-dreapta/populistă.',
     biasRationale:
       'Deși Antena 1 (Observator) este mai moderată decât Antena 3, rămâne parte a grupului Intact cu toate implicațiile acestuia. Conexiunile cu fostul fondator Dan Voiculescu și orientarea generală pro-populistă a grupului influențează editorial chiar și știrile de actualitate.',
-    biasScore: 35,
     factualityRationale: 'Factualitate mixtă. Mai bună decât Antena 3, dar cu influențe politice.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -746,8 +693,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Publicație de fact-checking și verificare a declarațiilor politice.',
     biasRationale:
       'Defapt.ro se prezintă ca publicație de fact-checking independentă. Orientarea ușor centru-dreapta poate fi subtilă prin alegerea subiectelor verificate.',
-    biasScore: 20,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -758,8 +703,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Publicație de business și știri economice.',
     biasRationale:
       'Publicație economic-orientată cu tendință centru-dreapta specifică jurnalismului de business. Pro-piață liberă, pro-investiții.',
-    biasScore: 20,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -797,9 +740,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Narativ pro-Georgescu/AUR în 2024',
       'Anti-UE și anti-NATO constant',
     ],
-    biasScore: 80,
     factualityRationale: 'Factualitate scăzută. Multiple instanțe documentate de dezinformare.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -825,9 +766,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Promovare agresivă a candidaturii Georgescu (2024)',
       'Sancțiuni CNA multiple',
     ],
-    biasScore: 85,
     factualityRationale: 'Factualitate scăzută. Dezinformare frecventă.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -845,9 +784,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Site de știri cu orientare dreapta. Comentarii politice puternic partizane, critici ale stângii, USR și mass-media "mainstream".',
     biasRationale:
       'DCNews are o orientare clar de dreapta reflectată în alegerea subiectelor, framing-ul articolelor și comentariile explicite ale fondatorului. Factualitatea este afectată de tendința spre senzationalism și narativele partizane.',
-    biasScore: 65,
     factualityRationale: 'Factualitate scăzută spre mixtă. Bias editorial puternic.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -858,8 +795,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Site de știri cu orientare dreapta-naționalistă.',
     biasRationale:
       'Flux24 acoperă știri cu framing naționalist și conservator. Tendința de dreapta este vizibilă în alegerea subiectelor și tonul editorial.',
-    biasScore: 60,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -875,9 +810,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Conținut anti-LGBTQ',
       'Narativele anti-vaccinare',
     ],
-    biasScore: 85,
     factualityRationale: 'Factualitate scăzută. Dezinformare frecventă.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -908,9 +841,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Finanțare opacă prin rețeaua internațională',
       'Conținut anti-vaccinare documentat',
     ],
-    biasScore: 90,
     factualityRationale: 'Factualitate scăzută. Dezinformare sistematică documentată internațional.',
-    confidence: 'high',
     lastAnalysed: '2026-02-26',
   },
 
@@ -928,8 +859,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Publicație de satiră — "factualitatea" trebuie interpretată altfel. Satira lovește în toate direcțiile, dar critica stării democrației și a corupției are o nuanță ușor centru-stânga în contextul românesc.',
     strengths: ['Calitate literară', 'Independență editorială', 'Tradiție îndelungată'],
-    biasScore: 0,
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -944,8 +873,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Satiră politică clasică. Critică transpartinică a politicienilor și a clasei dirigente.',
     biasRationale:
       'Similar cu Cațavencii — satiră care lovește transpartisan. Calitate literară ridicată. Bias politic minim.',
-    biasScore: 0,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -958,9 +885,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Tabloid de entertainment și celebrities. Conținut de divertisment, vedete, scandal.',
     biasRationale:
       'Tabloid cu focus pe entertainment. Bias politic minimal — conținutul este preponderent apolitical. Factualitate mixtă specifică tabloide.',
-    biasScore: 0,
     factualityRationale: 'Factualitate mixtă — tabloid entertainment.',
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -971,8 +896,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Site de știri generale. Conținut mixt.',
     biasRationale:
       'Publicație generalistă fără orientare politică clară documentată. Tendință ușor centristă.',
-    biasScore: 5,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -984,9 +907,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     biasRationale:
       'Factual.ro încearcă să funcționeze transpartisan. Tendința ușor centristă reflectă că verificarea faptelor ca practică are o ușoară orientare pro-adevăr/anti-dezinformare, ceea ce în peisajul românesc este uneori perceput ca anti-dreapta extremă (deoarece dezinformarea vine preponderent din această zonă).',
     strengths: ['Verificarea informațiilor', 'Metodologie transparentă', 'Independență'],
-    biasScore: 0,
     factualityRationale: 'Factualitate foarte ridicată prin definiție.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-26',
   },
 
@@ -998,8 +919,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Ziar național de știri generale. Acoperire politică și socială.',
     biasRationale:
       'Jurnalul are o orientare generală centristă cu ușoară tendință conservatoare în anumite perioade. Proprietatea și conexiunile politice nu sunt complet transparente.',
-    biasScore: 10,
-    confidence: 'low',
     lastAnalysed: '2026-02-26',
   },
 
@@ -1034,9 +953,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Critică selectivă a politicienilor din tabăra pro-europeană',
     ],
     strengths: ['Acoperire în timp real', 'Dezbateri politice'],
-    biasScore: 60,
     factualityRationale: 'Factualitate mixtă — afectată de bias editorial în talk-show-uri, mai bună în știrile de actualitate.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
   },
 
@@ -1069,9 +986,7 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
       'Posibilă reorientare editorială în curs (2025)',
     ],
     strengths: ['Acoperire 24/7', 'Istoric de echilibru editorial relativ', 'Dezbateri politice'],
-    biasScore: 30,
     factualityRationale: 'Factualitate mixtă — solidă în știrile de actualitate, variabilă în talk-show-uri.',
-    confidence: 'medium',
     lastAnalysed: '2026-02-27',
   },
 
@@ -1081,8 +996,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Publicație independentă activă în online, fondată de Ioan Ovidiu.',
     editorialLine: 'Site de știri cu focus pe politică, investigații și actualitate internă. Ton adesea anti-corupție și critic la adresa marilor partide.',
     biasRationale: 'Aktual24 are o orientare anti-corupție și critică la adresa sistemului politic tradițional (în special PSD/PNL). Tendința este ușor centru-dreapta / reformistă.',
-    biasScore: 20,
-    confidence: 'low',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1092,8 +1005,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Site de știri online generalist, cu focus pe actualitate și click de tip agregator.',
     editorialLine: 'Știri generale, tabloid și actualitate rapidă. Focus pe trafic și audiență social media.',
     biasRationale: 'Conținut generalist / agregator fără o linie editorială politică asumată. Factualitatea poate varia în funcție de preluări.',
-    biasScore: 0,
-    confidence: 'low',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1105,8 +1016,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Fondat în 1991 de Ion Rațiu cu orientare asumată de dreapta / țărănistă. După moartea sa a trecut prin mai multe patronate. În prezent este controlat de jurnalistul Cornel Nistorescu.',
     editorialLine: 'Publicație zilnică online de știri, analize și editoriale. Ton puternic dictat de opiniile lui Cornel Nistorescu.',
     biasRationale: 'Sub conducerea actuală, ziarul a adoptat o linie editorială frecvent critică la adresa decidenților pro-europeni, DNA, USR și pro-abordări suveraniste sau naționaliste. Are o tendință clară spre dreapta-suveranistă.',
-    biasScore: 40,
-    confidence: 'medium',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1116,8 +1025,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Site online de știri, comentarii și sinteze, deseori cu un ton senzaționalist.',
     editorialLine: 'Abordare agresivă de tip tabloid politic, limbaj colorat și orientare puternic marcată anti-sistem.',
     biasRationale: 'Site-ul prezintă un jurnalism militant, partizan, cu un limbaj deseori injurios și neprofesionist. Tendința este populistă-dreapta.',
-    biasScore: 45,
-    confidence: 'low',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1128,8 +1035,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Canal TV lansat de televiziunea Consiliului Local Voluntari, primărie condusă de Florentin Pandele (soțul Gabrielei Firea, lider PSD).',
     editorialLine: 'Canal de știri, divertisment și talk-show-uri politice. Găzduiește emisiuni ale unor realizatori controversați.',
     biasRationale: 'Finanțarea publică din Voluntari subordonată lui Florentin Pandele implică legături directe cu PSD, dar și cu zona de conservatorism asumată de grupul condus de familia Pandele/Firea.',
-    biasScore: 60,
-    confidence: 'medium',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1140,8 +1045,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Publicație independentă în limba engleză dedicată știrilor din România pentru expații și cititorii străini.',
     editorialLine: 'Ziar de știri online în limba engleză (politică, economie, societate). Stil și rapoarte bazate adesea pe agregarea agențiilor.',
     biasRationale: 'Acoperirea are un ton neutru, instituțional, specific publicațiilor destinate străinilor. Nu manifestă parti-pris politic vizibil.',
-    biasScore: 0,
-    confidence: 'medium',
     lastAnalysed: '2026-03-19',
   },
 
@@ -1152,23 +1055,21 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     ownershipHistory: 'Cea mai citită publicație exclusiv în limba engleză din România, fondată de Corina Chirileasa și Volker Moser.',
     editorialLine: 'Platformă de știri business, politică și lifestyle în engleză. Calitate editorială ridicată.',
     biasRationale: 'Fiind dedicată mediului corporate expat și antreprenorilor străini, abordează piața cu un ton economic pro-occidental, centrist, foarte echilibrat politic.',
-    biasScore: 0,
-    confidence: 'high',
     lastAnalysed: '2026-03-19',
   },
-  economedia: { id: 'economedia', currentOwner: 'Independent (G4Media network affiliate)', editorialLine: 'Știri și analize economice, business și politică macroeconomică.', biasRationale: 'Abordare centristă, pro-business și pro-reformă europeană. Jurnalism factual axat pe economie, cu standarde editoriale înalte.', biasScore: 0, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Jurnalism solid axat pe date și fapte.' },
-  cursdeguvernare: { id: 'cursdeguvernare', currentOwner: 'Curs De Guvernare SRL', editorialLine: 'Analize aprofundate de politici publice, macroeconomie și strategie națională.', biasRationale: 'Publicație centristă specializată, care echilibrează analizele stânga-dreapta printr-o raportare riguroasă și orientată tehnic spre politici publice europene.', biasScore: 0, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Specializată în analize ample și documentate.' },
-  edupedu: { id: 'edupedu', currentOwner: 'Independent', editorialLine: 'Publicație strict dedicată politicilor educaționale, învățământului și cercetării.', biasRationale: 'Factualitate foarte mare. Tonul este pro-reformă, pro-transparență în educație, având o ușoară tendință progresist-europeană, însă fără bias politic frontal.', biasScore: -10, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Singura sursă de referință independentă pentru sistemul educațional RO.' },
-  rfi: { id: 'rfi', currentOwner: 'France Médias Monde', parentCompany: 'Guvernul Francez', editorialLine: 'Jurnalism radio low-bias, axat pe evenimente franțuzești, internaționale și românești majore.', biasRationale: 'Parte a rețelei Radio France Internationale. Menține o obiectivitate inaltă, promovând democrația, drepturile omului și valorile europene (centru).', biasScore: 0, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Standarde riguroase impuse de grupul public francez.' },
-  alephnews: { id: 'alephnews', founders: ['Adrian Sârbu'], currentOwner: 'Aleph Media (Adrian Sârbu)', editorialLine: 'Canal TV de știri cu un format neconvențional "social television".', biasRationale: 'Linie editorială asumată drept smart-news. Poate manifesta uneori tușe personale legate de opiniile fondatorului Adrian Sârbu pe zona de business și economie, rămânând totuși global centristă.', biasScore: 5, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Focus pe visual și sinteză, ocazional infotainment.' },
-  fanatik: { id: 'fanatik', currentOwner: 'Horia Ivanovici', editorialLine: 'Site hibrid de sport, cancan, lifestyle și știri politice/sociale generaliste.', biasRationale: 'Format tabloid cu titluri clickbait. Linia pe politică tinde uneori spre centru-dreapta senzaționalist. Se bazează masiv pe rating și emoție.', biasScore: 15, confidence: 'low', lastAnalysed: '2026-03-21', factualityRationale: 'Publicație de tip tabloid; factualitatea variază masiv între segmente.' },
-  cancan: { id: 'cancan', currentOwner: 'Titluri Quality (Radu Budeanu)', editorialLine: 'Tabloid extrem orientat spre showbiz, scandaluri, mondenități și politic-tabloid.', biasRationale: 'Orientare puternic comercială și de senzație. Când atinge subiecte politice, tinde spre narațiuni populiste de dreapta sau favorizează figuri controversate.', biasScore: 35, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Factualitate scăzută pe teme serioase, prioritatea fiind clickurile.' },
-  psnews: { id: 'psnews', currentOwner: 'Independent/Privat', editorialLine: 'Știri politice românești scurte, breaking news-uri rapide.', biasRationale: 'A avut istoric perioade în care a fost criticată pentru afilieri netransparente cu zona de dreapta/centru-dreapta a politicii românești (în special PNL).', biasScore: 25, confidence: 'low', lastAnalysed: '2026-03-21', factualityRationale: 'Mix de știri factuale de agenție și conținut partizan.' },
-  zdg: { id: 'zdg', currentOwner: 'Asociația Ziarul de Gardă', editorialLine: 'Publicație de investigații din Republica Moldova, axată pe tăierea corupției și oligarhiei.', biasRationale: 'Campioane ale jurnalismului anti-corupție și pro-european de la Chișinău. Acuratețe și impact enorm în deconspirarea fenomenelor ilegale.', biasScore: -25, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Jurnalism de investigație la cele mai înalte standarde internaționale (premiat constant).' },
-  riseproject: { id: 'riseproject', founders: ['Paul Radu', 'Mihai Munteanu'], currentOwner: 'Asociația RISE Project', editorialLine: 'Dedicat exclusiv jurnalismului de investigație pe format cross-border (în parteneriat cu OCCRP).', biasRationale: 'Nu are filiații politice. Urmărește crima organizată și corupția la nivel înalt. Valorile anti-corupție și pro-transparență îi oferă un profil progresist (centru-stânga ușor).', biasScore: -15, confidence: 'high', lastAnalysed: '2026-03-21', factualityRationale: 'Sursă primară absolută pentru investigații documentate minuțios din registre oficiale.' },
-  buletindebucuresti: { id: 'buletindebucuresti', currentOwner: 'Asociația Funky Citizens', editorialLine: 'Publicație bazată pe jurnalism comunitar, investigații și administrație locală în București + Ilfov.', biasRationale: 'Susținută de Funky Citizens, promovează anticorupția, transparența administrativă și libertățile civice (valori specifice centrului și centrului-stânga).', biasScore: -25, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Nivel ridicat de dovedire a faptelor prin hotărâri CGMB și documente de achiziții publice.' },
-  ziaruldeiasi: { id: 'ziaruldeiasi', currentOwner: 'Privat', editorialLine: 'Cel mai important ziar local/regional din nord-estul țării.', biasRationale: 'Ziar quality regional, abordează nuanțat teme politice, cu ușoară tradiție academic/culturală datorată specificului universitar al Iașului.', biasScore: 0, confidence: 'medium', lastAnalysed: '2026-03-21', factualityRationale: 'Echilibrat și bine documentat.' },
-  kanald: { id: 'kanald', currentOwner: 'Dogan Media International', parentCompany: 'Dogan Holding (Turcia)', editorialLine: 'Televiziune generalistă (divertisment majoritar), plus un jurnal de știri cu audiență masivă la nivel național.', biasRationale: 'Canal de TV cu acționariat turc care preferă să stea departe de conflictele politice majore. Oferă știri neutre pe partea politică, preferând subiecte sociale, accidente și drame.', biasScore: 5, confidence: 'low', lastAnalysed: '2026-03-21', factualityRationale: 'Tabloidizare/emoționalizare în segmentul social, factual pe evenimente majore.' },
+  economedia: { id: 'economedia', currentOwner: 'Independent (G4Media network affiliate)', editorialLine: 'Știri și analize economice, business și politică macroeconomică.', biasRationale: 'Abordare centristă, pro-business și pro-reformă europeană. Jurnalism factual axat pe economie, cu standarde editoriale înalte.', lastAnalysed: '2026-03-21', factualityRationale: 'Jurnalism solid axat pe date și fapte.' },
+  cursdeguvernare: { id: 'cursdeguvernare', currentOwner: 'Curs De Guvernare SRL', editorialLine: 'Analize aprofundate de politici publice, macroeconomie și strategie națională.', biasRationale: 'Publicație centristă specializată, care echilibrează analizele stânga-dreapta printr-o raportare riguroasă și orientată tehnic spre politici publice europene.', lastAnalysed: '2026-03-21', factualityRationale: 'Specializată în analize ample și documentate.' },
+  edupedu: { id: 'edupedu', currentOwner: 'Independent', editorialLine: 'Publicație strict dedicată politicilor educaționale, învățământului și cercetării.', biasRationale: 'Factualitate foarte mare. Tonul este pro-reformă, pro-transparență în educație, având o ușoară tendință progresist-europeană, însă fără bias politic frontal.', lastAnalysed: '2026-03-21', factualityRationale: 'Singura sursă de referință independentă pentru sistemul educațional RO.' },
+  rfi: { id: 'rfi', currentOwner: 'France Médias Monde', parentCompany: 'Guvernul Francez', editorialLine: 'Jurnalism radio low-bias, axat pe evenimente franțuzești, internaționale și românești majore.', biasRationale: 'Parte a rețelei Radio France Internationale. Menține o obiectivitate inaltă, promovând democrația, drepturile omului și valorile europene (centru).', lastAnalysed: '2026-03-21', factualityRationale: 'Standarde riguroase impuse de grupul public francez.' },
+  alephnews: { id: 'alephnews', founders: ['Adrian Sârbu'], currentOwner: 'Aleph Media (Adrian Sârbu)', editorialLine: 'Canal TV de știri cu un format neconvențional "social television".', biasRationale: 'Linie editorială asumată drept smart-news. Poate manifesta uneori tușe personale legate de opiniile fondatorului Adrian Sârbu pe zona de business și economie, rămânând totuși global centristă.', lastAnalysed: '2026-03-21', factualityRationale: 'Focus pe visual și sinteză, ocazional infotainment.' },
+  fanatik: { id: 'fanatik', currentOwner: 'Horia Ivanovici', editorialLine: 'Site hibrid de sport, cancan, lifestyle și știri politice/sociale generaliste.', biasRationale: 'Format tabloid cu titluri clickbait. Linia pe politică tinde uneori spre centru-dreapta senzaționalist. Se bazează masiv pe rating și emoție.', lastAnalysed: '2026-03-21', factualityRationale: 'Publicație de tip tabloid; factualitatea variază masiv între segmente.' },
+  cancan: { id: 'cancan', currentOwner: 'Titluri Quality (Radu Budeanu)', editorialLine: 'Tabloid extrem orientat spre showbiz, scandaluri, mondenități și politic-tabloid.', biasRationale: 'Orientare puternic comercială și de senzație. Când atinge subiecte politice, tinde spre narațiuni populiste de dreapta sau favorizează figuri controversate.', lastAnalysed: '2026-03-21', factualityRationale: 'Factualitate scăzută pe teme serioase, prioritatea fiind clickurile.' },
+  psnews: { id: 'psnews', currentOwner: 'Independent/Privat', editorialLine: 'Știri politice românești scurte, breaking news-uri rapide.', biasRationale: 'A avut istoric perioade în care a fost criticată pentru afilieri netransparente cu zona de dreapta/centru-dreapta a politicii românești (în special PNL).', lastAnalysed: '2026-03-21', factualityRationale: 'Mix de știri factuale de agenție și conținut partizan.' },
+  zdg: { id: 'zdg', currentOwner: 'Asociația Ziarul de Gardă', editorialLine: 'Publicație de investigații din Republica Moldova, axată pe tăierea corupției și oligarhiei.', biasRationale: 'Campioane ale jurnalismului anti-corupție și pro-european de la Chișinău. Acuratețe și impact enorm în deconspirarea fenomenelor ilegale.', lastAnalysed: '2026-03-21', factualityRationale: 'Jurnalism de investigație la cele mai înalte standarde internaționale (premiat constant).' },
+  riseproject: { id: 'riseproject', founders: ['Paul Radu', 'Mihai Munteanu'], currentOwner: 'Asociația RISE Project', editorialLine: 'Dedicat exclusiv jurnalismului de investigație pe format cross-border (în parteneriat cu OCCRP).', biasRationale: 'Nu are filiații politice. Urmărește crima organizată și corupția la nivel înalt. Valorile anti-corupție și pro-transparență îi oferă un profil progresist (centru-stânga ușor).', lastAnalysed: '2026-03-21', factualityRationale: 'Sursă primară absolută pentru investigații documentate minuțios din registre oficiale.' },
+  buletindebucuresti: { id: 'buletindebucuresti', currentOwner: 'Asociația Funky Citizens', editorialLine: 'Publicație bazată pe jurnalism comunitar, investigații și administrație locală în București + Ilfov.', biasRationale: 'Susținută de Funky Citizens, promovează anticorupția, transparența administrativă și libertățile civice (valori specifice centrului și centrului-stânga).', lastAnalysed: '2026-03-21', factualityRationale: 'Nivel ridicat de dovedire a faptelor prin hotărâri CGMB și documente de achiziții publice.' },
+  ziaruldeiasi: { id: 'ziaruldeiasi', currentOwner: 'Privat', editorialLine: 'Cel mai important ziar local/regional din nord-estul țării.', biasRationale: 'Ziar quality regional, abordează nuanțat teme politice, cu ușoară tradiție academic/culturală datorată specificului universitar al Iașului.', lastAnalysed: '2026-03-21', factualityRationale: 'Echilibrat și bine documentat.' },
+  kanald: { id: 'kanald', currentOwner: 'Dogan Media International', parentCompany: 'Dogan Holding (Turcia)', editorialLine: 'Televiziune generalistă (divertisment majoritar), plus un jurnal de știri cu audiență masivă la nivel național.', biasRationale: 'Canal de TV cu acționariat turc care preferă să stea departe de conflictele politice majore. Oferă știri neutre pe partea politică, preferând subiecte sociale, accidente și drame.', lastAnalysed: '2026-03-21', factualityRationale: 'Tabloidizare/emoționalizare în segmentul social, factual pe evenimente majore.' },
   
   // --- Adăugate 2026-03 ---
   pressone: {
@@ -1178,8 +1079,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Don Lothrop',
     editorialLine: 'Jurnalism independent de lung format („slow journalism”), axat pe reportaje de profunzime și analize de impact social.',
     biasRationale: 'Promovează valorile democratice, statul de drept și protecția mediului. Are o linie editorială progresistă și critică față de sistemul politic tradițional, integrându-se în spectrul centru-stânga prin focusul pe drepturi civile și reformă.',
-    biasScore: -30,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Jurnalism documentat masiv, premiat pentru acuratețe.'
   },
@@ -1189,8 +1088,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     parentCompany: 'Radio Free Europe / Radio Liberty',
     editorialLine: 'Serviciu public internațional cu focus pe democrație, drepturile omului și monitorizarea puterii politice.',
     biasRationale: 'Finanțat de Congresul SUA, promovează valorile atlantiste și pro-occidentale. Critică ferm autoritarismul și corupția. În contextul românesc, este percepută ca fiind de centru-stânga reformistă datorită focusului pe transparență și instituții.',
-    biasScore: -25,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Standarde internaționale riguroase de verificare.'
   },
@@ -1200,8 +1097,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Dan Cărbunaru',
     editorialLine: 'Publicație specializată în afaceri europene, diplomație și politici comunitare.',
     biasRationale: 'Axată pe integrare europeană și cooperare internațională. Tonul este instituțional și factual, fără o coloratură politică internă dominantă, încadrându-se în centru.',
-    biasScore: 0,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Focus pe documente oficiale și declarații diplomatice.'
   },
@@ -1211,8 +1106,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Societatea de Științe Juridice',
     editorialLine: 'Portal juridic specializat, oferind noutăți legislative și analize de drept.',
     biasRationale: 'Sursă tehnică și profesională. Se limitează la interpretări juridice și știri legislative fărtă a lua poziții partizane, fiind o sursă de referință centristă prin obiectivitate tehnică.',
-    biasScore: 0,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Bazat pe texte de lege și practică judiciară.'
   },
@@ -1222,8 +1115,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Independent (Asociația Dela0)',
     editorialLine: 'Investigații sociale și reportaje despre categoriile vulnerabile și reformele instituționale.',
     biasRationale: 'Pune mare accent pe dreptate socială și critica modului în care statul gestionează problemele cetățenilor. Se poziționează în zona centru-stânga prin valorile progresiste și activismul civic prin jurnalism.',
-    biasScore: -40,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Investigații cu documentare primară solidă.'
   },
@@ -1233,8 +1124,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Asociația Context',
     editorialLine: 'Unitate de investigații transfrontaliere, parte din rețeaua OCCRP.',
     biasRationale: 'Podus de jurnaliști de investigație cu experiență, focusat pe crimă organizată și corupție la nivel înalt. Urmează linia jurnalismului anticorupție, specifică centrului-stânga reformist.',
-    biasScore: -20,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Standarde OCCRP de verificare și fact-checking.'
   },
@@ -1244,8 +1133,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'News.ro (Orlando Nicoară)',
     editorialLine: 'Agenție de presă cu flux de știri generalist (politic, economic, social).',
     biasRationale: 'Funcționează ca agenție de furnizare de conținut B2B. Menține un ton factual și echilibrat pentru a satisface o clientelă diversă, fiind o sursă de centru.',
-    biasScore: -5,
-    confidence: 'high',
     lastAnalysed: '2026-03-22',
     factualityRationale: 'Sursă primară de știri de agenție.'
   },
@@ -1256,8 +1143,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Fundația Romanian Business Leaders / Proiect editorial independent',
     editorialLine: 'Jurnalism explicativ, grafice de date, analize macroeconomice, sociale și de mediu.',
     biasRationale: 'Orientare centristă axată pe date concrete, statistici Eurostat/INS și opinii ale experților independenți. Menține un limbaj echilibrat și factologie de înaltă precizie.',
-    biasScore: 0,
-    confidence: 'high',
     lastAnalysed: '2026-08-22',
     factualityRationale: 'Jurnalism bazat pe date și verificare riguroasă.'
   },
@@ -1268,8 +1153,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Statul Român (Serviciu Public de Radio)',
     editorialLine: 'Post public național de știri cu transmisie 24/24 și rețea de corespondenți în toată țara.',
     biasRationale: 'Fiind serviciu public finanțat de la buget, respectă normele deontologice de echilibru și pluralism, având o linie editorială strict factuală de centru.',
-    biasScore: 2,
-    confidence: 'high',
     lastAnalysed: '2026-08-22',
     factualityRationale: 'Serviciu public național de radiodifuziune.'
   },
@@ -1280,8 +1163,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Asociația Ziariștilor Independenți din România',
     editorialLine: 'Rețea de presă independentă ce reunește ziare locale și investigații din toate județele.',
     biasRationale: 'Accent pe transparență instituțională, anticorupție și drepturile cetățenilor. Deși investigațiile vizează decidenții locali din toate partidele, tonul general este pro-reformist și centrist.',
-    biasScore: -8,
-    confidence: 'high',
     lastAnalysed: '2026-08-22',
     factualityRationale: 'Investigații documentate și premiate.'
   },
@@ -1292,8 +1173,6 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Asociația Info Sud-Est',
     editorialLine: 'Jurnalism de investigație axat pe regiunea Dobrogea, patrimoniu istoric și administrație locală.',
     biasRationale: 'Publicație independentă membră a rețelelor de investigații din România. Ton critic la adresa abuzurilor de putere, cu o orientare moderat de centru-stânga spre societate civilă.',
-    biasScore: -15,
-    confidence: 'high',
     lastAnalysed: '2026-08-22',
     factualityRationale: 'Jurnalism premiat Superscrieri.'
   },
@@ -1304,12 +1183,21 @@ export const SOURCE_PROFILES: Record<string, SourceProfile> = {
     currentOwner: 'Proiect independent de fact-checking',
     editorialLine: 'Newsletter și publicație de fact-checking specializată pe demontarea dezinformării și fake news.',
     biasRationale: 'Proiect strict dedicat verificării factualității declarațiilor publice și a campaniilor de manipulare. Clasificat drept centru pur cu facticitate maximă.',
-    biasScore: 0,
-    confidence: 'high',
     lastAnalysed: '2026-08-22',
     factualityRationale: 'Fact-checking certificat și metodologie riguroasă.'
   },
 };
+
+/**
+ * Profiles with their score and confidence filled in from shared/newsSources.ts, the single
+ * source of truth for ratings (the server computes coverage bars from the same numbers).
+ */
+export const SOURCE_PROFILES: Record<string, SourceProfile> = Object.fromEntries(
+  NEWS_SOURCE_DEFINITIONS.flatMap((source) => {
+    const text = PROFILE_TEXTS[source.id];
+    return text ? [[source.id, { ...text, biasScore: source.biasScore, confidence: source.biasConfidence }]] : [];
+  }),
+);
 
 // ============================================================
 //  UTILITARE
@@ -1320,16 +1208,8 @@ export function getSourceProfile(sourceId: string): SourceProfile | undefined {
   return SOURCE_PROFILES[sourceId];
 }
 
-/** Convertește un scor numeric în categorie de bias. */
-export function scoreToBiasCategory(
-  score: number,
-): 'left' | 'center-left' | 'center' | 'center-right' | 'right' {
-  if (score <= -55) return 'left';
-  if (score <= -20) return 'center-left';
-  if (score <= 19) return 'center';
-  if (score <= 54) return 'center-right';
-  return 'right';
-}
+/** Convertește un scor numeric în categorie de bias (pragurile din shared/newsSources.ts). */
+export const scoreToBiasCategory = sharedScoreToBiasCategory;
 
 /** Etichetă în română pentru nivelul de încredere al analizei. */
 export function getConfidenceLabel(confidence: 'high' | 'medium' | 'low'): string {
@@ -1349,8 +1229,9 @@ export function getMissingProfileIds(sourceIds: string[]): string[] {
 
 // ============================================================
 //  TEMPLATE PENTRU SURSE NOI
-//  Când adaugi o sursă nouă în api/shared.ts, completează
-//  acest template și adaug-o în SOURCE_PROFILES de mai sus.
+//  Când adaugi o sursă nouă în shared/newsSources.ts (cu biasScore și
+//  biasConfidence acolo), completează acest template fără cele două
+//  câmpuri și adaug-o în PROFILE_TEXTS de mai sus.
 // ============================================================
 
 /**

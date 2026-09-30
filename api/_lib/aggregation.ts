@@ -1,4 +1,21 @@
-import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP, shouldFilterNews } from './shared.js';
+import { RSSNewsItem, NEWS_SOURCES, shouldFilterNews } from './shared.js';
+import {
+    buildCoverageContext,
+    computeBlindspot,
+    markSyndicated,
+    staticCoverageContext,
+    summarizeCoverage,
+    storyRankScore,
+    type Blindspot,
+    type CoverageContext,
+    type CoverageItem,
+} from '../../shared/coverage.js';
+
+export { storyRankScore };
+
+// RSSNewsItem comes from a zod schema, whose inferred fields are all optional under this
+// project's non-strict TS settings; parsed items always carry title and source.
+const asCoverageItems = (items: RSSNewsItem[]) => items as unknown as CoverageItem[];
 import { createStoryId } from './storyId.js';
 import { clusterArticles, DEFAULT_CLUSTER_THRESHOLD } from './clustering.js';
 import { fallbackHeadline, generateHeadline, getEmbeddingsBatch, llmHeadlinesAvailable } from './llm.js';
@@ -68,9 +85,10 @@ export interface AggregatedStory {
     image?: string;
     sources: RSSNewsItem[];
     sourcesCount: number;
+    /** Reports after collapsing wire copies (see shared/coverage.ts); used for ranking. */
+    independentCount?: number;
     bias: { left: number; center: number; right: number };
-    contentBias?: BiasAnalysis;
-    blindspot?: 'left' | 'right' | 'none';
+    blindspot?: Blindspot;
     mainCategory: string;
     /**
      * When the story started: the earliest article of its second outlet, i.e. when it became a
@@ -108,44 +126,36 @@ export function getTimeAgo(pubDate: string): string {
     return published.toLocaleDateString('ro-RO', { day: 'numeric', month: 'short' });
 }
 
-export function calculateBlindspot(bias: { left: number; center: number; right: number }, sourcesCount: number): 'left' | 'right' | 'none' {
-    // Only flag blindspots for stories with a decent amount of coverage (at least 3 sources)
-    if (sourcesCount < 3) return 'none';
+/** Context from the configured outlets only, for callers without data about the current refresh. */
+export const STATIC_COVERAGE_CONTEXT: CoverageContext = staticCoverageContext(NEWS_SOURCES);
 
-    // If Left is missing or very low while other sides are present
-    if (bias.left < 8 && (bias.right > 25)) return 'left';
-    
-    // If Right is missing or very low while other sides are present
-    if (bias.right < 8 && (bias.left > 25)) return 'right';
-
-    return 'none';
+/** Context for one refresh, from every article it fetched (see buildCoverageContext). */
+export function coverageContextFor(fetched: RSSNewsItem[]): CoverageContext {
+    return buildCoverageContext(asCoverageItems(fetched), NEWS_SOURCES);
 }
 
+export function calculateBlindspot(sources: RSSNewsItem[], context: CoverageContext = STATIC_COVERAGE_CONTEXT): Blindspot {
+    return computeBlindspot(summarizeCoverage(asCoverageItems(sources)), context);
+}
+
+/** Left/centre/right percentages of a story's independent reports (see shared/coverage.ts). */
 export function calculateBiasDistribution(sources: RSSNewsItem[]): { left: number; center: number; right: number } {
-    if (sources.length === 0) return { left: 33, center: 34, right: 33 };
+    if (sources.length === 0) return { left: 0, center: 100, right: 0 };
+    return summarizeCoverage(asCoverageItems(sources)).bias;
+}
 
-    let totalLeft = 0, totalCenter = 0, totalRight = 0;
-
-    sources.forEach(item => {
-        const weights = item.source.customWeights || BIAS_WEIGHT_MAP[item.source.bias] || BIAS_WEIGHT_MAP['center'];
-        totalLeft += weights.left;
-        totalCenter += weights.center;
-        totalRight += weights.right;
-    });
-
-    const total = totalLeft + totalCenter + totalRight;
-    const rawLeft = (totalLeft / total) * 100;
-    const rawCenter = (totalCenter / total) * 100;
-    const rawRight = (totalRight / total) * 100;
-
-    const left = Math.floor(rawLeft);
-    let center = Math.floor(rawCenter);
-    const right = Math.floor(rawRight);
-
-    const remainder = 100 - (left + center + right);
-    center += remainder;
-
-    return { left, center, right };
+/** Recomputes every coverage field of a story from its sources: copy flags, bar, blindspot, count. */
+export function applyCoverage(story: AggregatedStory, context: CoverageContext = STATIC_COVERAGE_CONTEXT): AggregatedStory {
+    const sources = markSyndicated(asCoverageItems(story.sources)) as unknown as RSSNewsItem[];
+    const summary = summarizeCoverage(asCoverageItems(sources));
+    return {
+        ...story,
+        sources,
+        sourcesCount: sources.length,
+        independentCount: summary.independent,
+        bias: summary.bias,
+        blindspot: computeBlindspot(summary, context),
+    };
 }
 
 function normalizeTitle(title: string): string {
@@ -329,6 +339,8 @@ function triggerWaybackArchive(url: string) {
  *   of them keeps its headline unless it grew a lot (see planHeadlines). Optional.
  */
 export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3, previous: AggregatedStory[] = []): Promise<AggregatedStory[]> {
+    // `news` is everything this refresh fetched, so it also tells us which feeds answered.
+    const coverageContext = coverageContextFor(news);
     const recent = filterRecentNews(news);
     
     // Declanșăm arhivarea pentru toate știrile noi găsite în acest run
@@ -361,57 +373,19 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
             // Previous headline, a new LLM headline, or the best-source fallback (see planHeadlines).
             const { title: aggregatedTitle, titleBasis } = await resolveHeadline(sources, plan);
 
-            let contentBias: BiasAnalysis | undefined;
-            const sourcesWithBias = sources.filter(s => s.biasAnalysis);
-
-            if (sourcesWithBias.length > 0) {
-                const allEntities = new Map<string, number>();
-                let totalKeywordScore = 0;
-                let totalConfidence = 0;
-                const allIndicators: string[] = [];
-
-                sourcesWithBias.forEach(source => {
-                    if (source.biasAnalysis) {
-                        source.biasAnalysis.detectedEntities.forEach(e => {
-                            allEntities.set(e.entity, (allEntities.get(e.entity) || 0) + e.count);
-                        });
-                        totalKeywordScore += source.biasAnalysis.keywordScore;
-                        totalConfidence += source.biasAnalysis.confidence;
-                        allIndicators.push(...source.biasAnalysis.indicators);
-                    }
-                });
-
-                const avgKeywordScore = totalKeywordScore / sourcesWithBias.length;
-                const avgConfidence = totalConfidence / sourcesWithBias.length;
-
-                contentBias = {
-                    detectedEntities: Array.from(allEntities.entries()).map(([entity, count]) => ({ entity, count })),
-                    keywordScore: avgKeywordScore,
-                    entityScore: 0,
-                    overallBias: avgKeywordScore,
-                    confidence: avgConfidence,
-                    indicators: Array.from(new Set(allIndicators)).slice(0, 5)
-                };
-            }
-
-            const bias = calculateBiasDistribution(sources);
-            const blindspot = calculateBlindspot(bias, sources.length);
-
-            return {
+            return applyCoverage({
                 id: storyId,
                 title: aggregatedTitle,
                 description: primary.description,
                 image: resolvedImage,
                 sources,
                 sourcesCount: sources.length,
-                bias,
-                contentBias,
-                blindspot,
+                bias: { left: 0, center: 100, right: 0 },
                 mainCategory: primary.category || 'Actualitate',
                 publishedAt: startedAt,
                 timeAgo: getTimeAgo(startedAt),
                 titleBasis,
-            };
+            }, coverageContext);
         };
 
         aggregatedStoryTasks.push(promise);
@@ -429,10 +403,10 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     ]);
     const aggregatedStories = [...llmStories, ...noLlmStories];
 
-    // Sort: coverage-first cu freshness decay (storyScore)
-    // O știre cu mai multe surse rămâne sus ~18h înainte ca una mai proaspătă să o depășească
+    // Sort: coverage-first cu freshness decay (storyRankScore).
+    // O știre cu mai multe relatări independente rămâne sus ~18h înainte ca una mai proaspătă să o depășească
     const now = Date.now();
-    aggregatedStories.sort((a, b) => storyScore(b.sourcesCount, b.publishedAt, now) - storyScore(a.sourcesCount, a.publishedAt, now));
+    aggregatedStories.sort((a, b) => storyRankScore(b, now) - storyRankScore(a, now));
 
     return aggregatedStories;
 }

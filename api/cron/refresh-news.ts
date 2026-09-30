@@ -5,7 +5,7 @@ import {
     NEWS_SOURCES,
     fetchRSSFeed
 } from '../_lib/shared.js';
-import { aggregateNewsBuildTopics, AggregatedStory, getTimeAgo } from '../_lib/aggregation.js';
+import { aggregateNewsBuildTopics, AggregatedStory, applyCoverage, coverageContextFor, getTimeAgo } from '../_lib/aggregation.js';
 import { mergeWithExisting } from '../_lib/storyMerge.js';
 import { archiveStories } from '../_lib/storyArchive.js';
 import { sortByImportance } from '../_lib/newsResponse.js';
@@ -132,9 +132,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         console.log(`[CRON] Carrying forward ${carryForwardStories.length} stories not seen in current RSS`);
 
-        // 6. Combină și sortează după importanță (sourcesCount + freshness)
-        const allStories = sortByImportance([...mergedFreshStories, ...carryForwardStories])
-            .slice(0, MAX_STORIES);
+        // 5. Recalculează bara, preluările și blindspot-urile pentru toate poveștile (inclusiv cele
+        //    reportate din rulări anterioare), cu datele acestei rulări: ce feed-uri au răspuns și
+        //    cât a publicat fiecare parte. Un feed căzut nu mai poate crea un blindspot fals.
+        const coverageContext = coverageContextFor(allNews);
+        const rescored = [...mergedFreshStories, ...carryForwardStories].map(s => applyCoverage(s, coverageContext));
+
+        // 6. Combină și sortează după importanță (relatări independente + freshness)
+        const allStories = sortByImportance(rescored).slice(0, MAX_STORIES);
+        const blindspotCount = allStories.filter(s => s.blindspot === 'left' || s.blindspot === 'right').length;
 
         const multiSourceCount = allStories.filter(s => s.sourcesCount >= 2).length;
         console.log(`[CRON] Final: ${allStories.length} stories (${multiSourceCount} cu ≥2 surse)`);
@@ -176,6 +182,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                 carryForwardStories: carryForwardStories.length,
                 totalStored: allStories.length,
                 multiSourceStories: multiSourceCount,
+                blindspots: blindspotCount,
+                feedHealth: coverageContext.feedHealth,
                 durationMs: duration,
                 timestamp: new Date().toISOString()
             }
