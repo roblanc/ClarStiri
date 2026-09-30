@@ -64,6 +64,7 @@ export function RouteMeta() {
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={url} />
+      <meta property="og:image" content={`${SITE}/og-image.png`} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       {meta?.noindex && <meta name="robots" content="noindex, nofollow" />}

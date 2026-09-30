@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>thesite.ro | Știri din toate perspectivele</title>
   <meta name="description"
-    content="thesite.ro - Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite și înțelege bias-ul mediatic." />
+    content="thesite.ro - Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite și înțelege bias-ul mediatic." data-rh="true" />
   <meta name="author" content="thesite.ro" />
   <meta name="keywords" content="știri, news, România, agregator, bias, perspectivă, actualitate, media" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
@@ -33,6 +33,7 @@
   <meta name="theme-color" content="#F0B55B" />
 
   <!-- Geo Meta Tags for Romanian News Localization (canonical is set per page via Helmet / api/story-page) -->
+  <!-- data-rh="true" lets react-helmet-async replace the defaults below instead of duplicating them. -->
   <link rel="alternate" type="application/rss+xml" title="thesite.ro RSS Feed" href="https://thesite.ro/rss.xml" />
   <meta name="geo.region" content="RO" />
   <meta name="geo.placename" content="Romania" />
@@ -40,20 +41,20 @@
   <meta name="ICBM" content="45.9432, 24.9668" />
 
   <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="thesite.ro | Știri din toate perspectivele" />
+  <meta property="og:title" content="thesite.ro | Știri din toate perspectivele" data-rh="true" />
   <meta property="og:description"
-    content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." />
+    content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." data-rh="true" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://thesite.ro/og-image.png" />
+  <meta property="og:image" content="https://thesite.ro/og-image.png" data-rh="true" />
   <meta property="og:site_name" content="thesite.ro" />
   <meta property="og:locale" content="ro_RO" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:site" content="@thesitero" />
-  <meta name="twitter:title" content="thesite.ro | Știri din toate perspectivele" />
+  <meta name="twitter:title" content="thesite.ro | Știri din toate perspectivele" data-rh="true" />
   <meta name="twitter:description"
-    content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." />
+    content="Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite." data-rh="true" />
   <!-- Critical CSS - Inline for faster FCP -->
   <style>
     /* Critical CSS for above-the-fold content */
