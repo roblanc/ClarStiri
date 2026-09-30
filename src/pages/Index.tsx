@@ -1,105 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { NewsCard, type NewsItem } from "@/components/NewsCard";
+import { NewsCard } from "@/components/NewsCard";
 import { useAggregatedNews } from "@/hooks/useNews";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SearchX } from "lucide-react";
+import { Newspaper, SearchX } from "lucide-react";
 import { useSearchStore } from "@/hooks/useSearchStore";
 import type { PublicFigure } from "@/data/publicFigures";
 import { VoiceAvatar } from "@/components/VoiceAvatar";
 import { FeedSkeleton } from "@/components/Skeleton";
 import { FEED_GRID_CLASS } from "@/lib/feedLayout";
-import { PLACEHOLDER_IMAGE } from "@/lib/constants";
+import { PLACEHOLDER_IMAGE_WEBP } from "@/lib/constants";
 import { Helmet } from "react-helmet-async";
 
 const BATCH = 20;
 // The feed shares the 100-story card list with search/story pages; the homepage shows the top 40.
 const HOMEPAGE_MAX_STORIES = 40;
-
-type DemoStory = NewsItem & { sources: { name: string; url: string; bias: string }[] };
-
-const DEMO_STORIES: DemoStory[] = [
-  {
-    id: "demo-home-1",
-    title: "Guvernul pregătește un nou pachet pentru transportul public din marile orașe",
-    image: "https://picsum.photos/seed/home-demo-transport/1200/1500",
-    bias: { left: 22, center: 56, right: 22 },
-    blindspot: "none" as const,
-    category: "Actualitate",
-    location: "România",
-    sourcesCount: 9,
-    timeAgo: "Acum 12 min",
-    description: "Un feed demo ca să vezi imediat cum arată cardurile poster pe landing page.",
-    sources: [],
-  },
-  {
-    id: "demo-home-2",
-    title: "Un nou raport despre energia verde schimbă discursul public înainte de votul din Parlament",
-    image: "https://picsum.photos/seed/home-demo-energia/1200/1500",
-    bias: { left: 41, center: 37, right: 22 },
-    blindspot: "left" as const,
-    category: "Economie",
-    location: "București",
-    sourcesCount: 7,
-    timeAgo: "Acum 18 min",
-    description: "Aceeași structură, dar cu o compoziție mai apropiată de un screenshot social.",
-    sources: [],
-  },
-  {
-    id: "demo-home-3",
-    title: "Ce spun sursele din presă despre măsurile de siguranță de la litoral",
-    image: "https://picsum.photos/seed/home-demo-litoral/1200/1500",
-    bias: { left: 15, center: 68, right: 17 },
-    blindspot: "right" as const,
-    category: "Societate",
-    location: "Constanța",
-    sourcesCount: 11,
-    timeAgo: "Acum 23 min",
-    description: "Titlu mare, imagine mare, bară de bias clară la bază.",
-    sources: [],
-  },
-  {
-    id: "demo-home-4",
-    title: "Negocierile din coaliție rămân tensionate după discuțiile despre bugetul de anul viitor",
-    image: "https://picsum.photos/seed/home-demo-politica/1200/1500",
-    bias: { left: 19, center: 49, right: 32 },
-    blindspot: "none" as const,
-    category: "Politică",
-    location: "România",
-    sourcesCount: 13,
-    timeAgo: "Acum 31 min",
-    description: "Un card puțin mai sobru, bun să vezi dacă layout-ul stă bine pe subiecte serioase.",
-    sources: [],
-  },
-  {
-    id: "demo-home-5",
-    title: "Ploi puternice și avertizări meteo în mai multe județe din sudul țării",
-    image: "https://picsum.photos/seed/home-demo-meteo/1200/1500",
-    bias: { left: 28, center: 44, right: 28 },
-    blindspot: "none" as const,
-    category: "Mediu",
-    location: "Sudul României",
-    sourcesCount: 6,
-    timeAgo: "Acum 39 min",
-    description: "Un exemplu neutru, cu contrast bun și imagine simplă.",
-    sources: [],
-  },
-  {
-    id: "demo-home-6",
-    title: "O schimbare majoră în tehnologie ridică întrebări despre reguli și verificarea informației",
-    image: "https://picsum.photos/seed/home-demo-tech/1200/1500",
-    bias: { left: 24, center: 52, right: 24 },
-    blindspot: "none" as const,
-    category: "Tehnologie",
-    location: "Online",
-    sourcesCount: 8,
-    timeAgo: "Acum 47 min",
-    description: "Același mesaj, dar în forma de poster pe care o căutăm.",
-    sources: [],
-  },
-];
 
 const normalizeSearchText = (text: string) =>
   text
@@ -109,16 +26,15 @@ const normalizeSearchText = (text: string) =>
     .trim();
 
 const Index = () => {
-  const { data: stories, isLoading, error, refetch, isFetching, isLoadingFresh } = useAggregatedNews("card");
+  const { data: stories, isLoading, refetch, isFetching, isLoadingFresh } = useAggregatedNews("card");
   const [visible, setVisible] = useState(BATCH);
   const { query } = useSearchStore();
   const normalizedQuery = normalizeSearchText(query || "");
   const hasSearchQuery = normalizedQuery.length > 0;
   const hasFetchedStories = (stories?.length ?? 0) > 0;
-  // Demo stories are only a fallback for when the feed failed / came back
-  // empty — never while it is still loading (they used to render under the
-  // skeleton, download picsum images and then jump when the real feed landed).
-  const useDemoContent = !isLoading && !hasFetchedStories;
+  // Nothing to show: no local copy and the request failed (an empty list is
+  // reported as an error by the data layer too).
+  const showFeedError = !isLoading && !hasFetchedStories;
 
   // Convertește datele agregate în formatul necesar pentru componente
   const convertedStories = useMemo(() => {
@@ -127,22 +43,6 @@ const Index = () => {
 
     if (!filtered.length && realStories.length > 0) {
       filtered = realStories;
-    }
-
-    if (!filtered.length) {
-      if (!useDemoContent) return [];
-
-      const demoFiltered = hasSearchQuery
-        ? DEMO_STORIES.filter((story) => {
-            const titleMatch = normalizeSearchText(story.title).includes(normalizedQuery);
-            const descMatch = normalizeSearchText(story.description || "").includes(normalizedQuery);
-            const sourceMatch = story.sources.some((src) => normalizeSearchText(src.name).includes(normalizedQuery));
-
-            return titleMatch || descMatch || sourceMatch;
-          })
-        : DEMO_STORIES;
-
-      return demoFiltered;
     }
 
     if (hasSearchQuery) {
@@ -159,7 +59,7 @@ const Index = () => {
     return filtered.map(story => ({
       id: story.id,
       title: story.title,
-      image: story.image || PLACEHOLDER_IMAGE,
+      image: story.image || PLACEHOLDER_IMAGE_WEBP,
       bias: story.bias,
       blindspot: story.blindspot,
       category: story.mainCategory || "General",
@@ -173,7 +73,7 @@ const Index = () => {
         bias: s.source.bias,
       })),
     })) || [];
-  }, [stories, hasSearchQuery, normalizedQuery, useDemoContent]);
+  }, [stories, hasSearchQuery, normalizedQuery]);
 
   // The public-figures dataset (~88 KB) is only needed to match a search
   // query, so it is fetched the first time someone actually searches.
@@ -406,27 +306,26 @@ const Index = () => {
         {/* Loading state: same grid as the feed, so nothing moves when it lands */}
         {isLoading && <FeedSkeleton />}
 
-        {useDemoContent && (
-          <div className="mb-8 rounded-[2rem] border border-border bg-card p-5 md:p-6">
-            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-muted-foreground">
-                  demo content active
-                </p>
-                <p className="mt-1 text-sm text-foreground">
-                  Nu am date RSS acum, așa că pagina afișează exemple locale ca să poți evalua cardurile poster.
-                </p>
-                {error?.message && (
-                  <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
-                    {error.message}
-                  </p>
-                )}
-              </div>
-              <Button onClick={() => refetch()} variant="outline" className="rounded-full border-border px-6">
-                Reîncearcă datele
-              </Button>
-            </div>
-          </div>
+        {/* Feed unavailable: same footprint as a skeleton row, retry in place */}
+        {showFeedError && (
+          <section
+            role="alert"
+            className="flex flex-col items-center justify-center border border-border bg-card px-6 py-16 text-center md:mx-8 lg:mx-12 xl:mx-16"
+          >
+            <Newspaper className="mb-4 h-12 w-12 text-muted-foreground" aria-hidden="true" />
+            <h2 className="mb-2 font-serif text-2xl text-foreground">Știrile nu s-au încărcat</h2>
+            <p className="mb-8 max-w-md text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+              Nu am putut aduce ediția de azi. Verifică conexiunea sau încearcă din nou în câteva momente.
+            </p>
+            <Button
+              onClick={() => refetch()}
+              disabled={isFetching}
+              variant="outline"
+              className="rounded-none border-border px-10 py-5 font-serif text-xs uppercase tracking-widest"
+            >
+              {isFetching ? "Se reîncearcă…" : "Reîncearcă"}
+            </Button>
+          </section>
         )}
 
         {/* Voice Search Results */}

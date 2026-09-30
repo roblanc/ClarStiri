@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Newspaper } from 'lucide-react';
 import { getImageProxyUrl } from '@/utils/imageOptimizer';
+import { PLACEHOLDER_IMAGE_WEBP } from '@/lib/constants';
 
 function hashCode(str: string): number {
   let hash = 0;
@@ -70,7 +71,7 @@ export function NewsImage({
   if (failed) {
     return (
       <img
-        src="/default-news.webp"
+        src={PLACEHOLDER_IMAGE_WEBP}
         alt={alt || 'Ilustrație știre'}
         className={className}
         style={style}
