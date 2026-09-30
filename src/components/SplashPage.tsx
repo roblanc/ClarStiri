@@ -35,7 +35,7 @@ export function SplashPage({ onContinue, isDataReady }: SplashPageProps) {
         <div className="fixed inset-0 z-50 bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center">
             <div className="max-w-2xl mx-auto px-6 text-center">
                 <div className="mb-8">
-                    <img src="/ethics-logo.png" alt="ClarȘtiri" className="w-36 h-36 sm:w-24 sm:h-24 mx-auto mb-4" />
+                    <img src="/ethics-logo.png" alt="thesite.ro" className="w-36 h-36 sm:w-24 sm:h-24 mx-auto mb-4" />
                     <h1 className="text-4xl font-bold text-foreground">Clar<span className="text-primary">Știri</span></h1>
                 </div>
                 <p className="text-xl text-muted-foreground mb-8">Citești. Compari. Decizi.</p>

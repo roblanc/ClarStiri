@@ -155,7 +155,7 @@ const getCachedStories = (): AggregatedStory[] => {
     "last_news_v2_100",
     "last_news_v2_60",
     "last_news_v2_120",
-    "clarstiri_aggregated_cache_v4_ultra",
+    "thesite_aggregated_cache_v4_ultra",
   ];
 
   const allStories: AggregatedStory[] = [];

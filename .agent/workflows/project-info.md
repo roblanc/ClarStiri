@@ -1,12 +1,12 @@
 ---
-description: ClarStiri project information and configuration
+description: thesite.ro project information and configuration
 ---
 
 # Project Information
 
 ## Site URLs
 - **Production URL**: https://thesite.ro
-- **Vercel Project**: ClarStiri
+- **Vercel Project**: thesite.ro
 
 ## Tech Stack
 - Frontend: React + TypeScript + Vite

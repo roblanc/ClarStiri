@@ -11,8 +11,8 @@ const CORS_PROXIES = [
 ];
 
 // Cache keys pentru localStorage
-const CACHE_KEY = 'clarstiri_news_cache';
-const AGGREGATED_CACHE_KEY = 'clarstiri_aggregated_cache_v4_ultra';
+const CACHE_KEY = 'thesite_news_cache';
+const AGGREGATED_CACHE_KEY = 'thesite_aggregated_cache_v4_ultra';
 const CACHE_DURATION = 10 * 60 * 1000; // 10 minute — fallback-ul local trebuie să rămână cât mai proaspăt
 
 // Timeout pentru fetch (în milisecunde)

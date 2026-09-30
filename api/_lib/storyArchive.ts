@@ -3,22 +3,22 @@ import { NEWS_SOURCES, RSSNewsItem, NewsSource } from './shared.js';
 import { AggregatedStory, calculateBiasDistribution, calculateBlindspot, getTimeAgo } from './aggregation.js';
 
 /**
- * Permanent story archive in Postgres (schema `clarstiri`), so /stire/<id> links never expire.
+ * Permanent story archive in Postgres (schema `thesite`), so /stire/<id> links never expire.
  *
  * Redis stays the primary, fast store; this is a write-behind copy plus a read fallback.
- * Every call is optional: without CLARSTIRI_DATABASE_URL, or on any DB error, callers just
+ * Every call is optional: without THESITE_DATABASE_URL, or on any DB error, callers just
  * get nothing back and carry on.
  *
  * Only slim fields are stored (source id, not the embedded NewsSource / biasAnalysis).
  * A source row is inserted once and never overwritten, so its first_seen_at records when
- * ClarStiri first attached that article to the story.
+ * thesite.ro first attached that article to the story.
  */
 
 type Sql = ReturnType<typeof postgres>;
 let sqlClient: Sql | null = null;
 
 function getSql(): Sql | null {
-    const url = process.env.CLARSTIRI_DATABASE_URL;
+    const url = process.env.THESITE_DATABASE_URL;
     if (!url) return null;
     // Supabase transaction pooler: no prepared statements, one connection per function instance.
     sqlClient ??= postgres(url, { prepare: false, max: 1, idle_timeout: 20, connect_timeout: 10 });
@@ -66,22 +66,22 @@ export async function archiveStories(stories: AggregatedStory[]): Promise<{ stor
 
     await sql.begin(async tx => {
         await tx`
-            insert into clarstiri.stories ${tx(storyRows)}
+            insert into thesite.stories ${tx(storyRows)}
             on conflict (id) do update set
                 title = excluded.title,
                 description = excluded.description,
-                image = coalesce(excluded.image, clarstiri.stories.image),
+                image = coalesce(excluded.image, thesite.stories.image),
                 main_category = excluded.main_category,
                 bias_left = excluded.bias_left,
                 bias_center = excluded.bias_center,
                 bias_right = excluded.bias_right,
                 blindspot = excluded.blindspot,
-                published_at = coalesce(clarstiri.stories.published_at, excluded.published_at),
+                published_at = coalesce(thesite.stories.published_at, excluded.published_at),
                 last_seen_at = now()`;
         // Chunked to stay well under Postgres' 65k bind-parameter limit.
         for (let i = 0; i < sourceRows.length; i += 1000) {
             await tx`
-                insert into clarstiri.story_sources ${tx(sourceRows.slice(i, i + 1000))}
+                insert into thesite.story_sources ${tx(sourceRows.slice(i, i + 1000))}
                 on conflict (story_id, link) do nothing`;
         }
     });
@@ -130,12 +130,12 @@ export async function loadArchivedStory(id: string): Promise<AggregatedStory | n
 
     const [story] = await sql<StoryRow[]>`
         select id, title, description, image, main_category, blindspot, published_at, first_seen_at
-        from clarstiri.stories where id = ${id}`;
+        from thesite.stories where id = ${id}`;
     if (!story) return null;
 
     const rows = await sql<SourceRow[]>`
         select link, source_id, title, description, image_url, pub_date, first_seen_at
-        from clarstiri.story_sources where story_id = ${id}
+        from thesite.story_sources where story_id = ${id}
         order by pub_date desc nulls last`;
 
     const sources: RSSNewsItem[] = rows.map((r, i) => ({

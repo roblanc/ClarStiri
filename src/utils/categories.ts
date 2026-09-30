@@ -1,5 +1,5 @@
 /**
- * Category System for ClarStiri
+ * Category System for thesite.ro
  * 
  * Maps and normalizes categories from different RSS sources
  * Uses keyword matching when explicit category is missing

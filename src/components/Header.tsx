@@ -107,7 +107,7 @@ export function Header() {
           <Link to="/" className="flex items-center gap-3 shrink-0 group">
             <img
               src="/hero-illustration-headphones.webp"
-              alt="ClarStiri Logo"
+              alt="thesite.ro Logo"
               width={480}
               height={482}
               className="h-10 md:h-12 w-auto object-contain pointer-events-none"

@@ -35,7 +35,7 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
         <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4">
           <div className="w-full max-w-xl border border-border bg-card p-8 text-center space-y-5">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-              ClarStiri
+              thesite.ro
             </p>
             <h1 className="font-serif text-3xl">A apărut o eroare neașteptată</h1>
             <p className="text-muted-foreground">

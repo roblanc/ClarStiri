@@ -55,7 +55,7 @@ def process_image_with_gemini(image_path, is_profile=False, profile_name=None):
         if is_profile:
             name = profile_name or "această persoană publică"
             prompt = f"""
-            Ești un jurnalist la ClarStiri. Analizează imaginea (postare Instagram de la {name}).
+            Ești un jurnalist la thesite.ro. Analizează imaginea (postare Instagram de la {name}).
             Extrage declarația principală din imagine. Trebuie să fie scurtă (max 20 cuvinte), percutantă și în stilul persoanei.
             Returnează JSON valid:
             {{
@@ -68,7 +68,7 @@ def process_image_with_gemini(image_path, is_profile=False, profile_name=None):
             """
         else:
             prompt = """
-            Ești un jurnalist la ClarStiri. 
+            Ești un jurnalist la thesite.ro. 
             Analizează imaginea atașată (care este o postare de Instagram cu text). 
             Extrage textul din imagine și transformă-l într-o știre scurtă, clară și obiectivă în limba română.
             Returnează rezultatul strict în format JSON:

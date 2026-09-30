@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-screenshot_news.py — Capture news cards from ClarStiri as 1080x1350 Instagram portraits.
+screenshot_news.py — Capture news cards from thesite.ro as 1080x1350 Instagram portraits.
 
 Usage:
     python screenshot_news.py [optional-story-url-or-id] [--base-url=http://localhost:8080]
@@ -174,7 +174,7 @@ async def capture(target_url: str = None, base_url: str = "http://localhost:8080
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Capture ClarStiri cards for Instagram.")
+    parser = argparse.ArgumentParser(description="Capture thesite.ro cards for Instagram.")
     parser.add_argument("url", nargs="?", help="URL of the story or the homepage")
     parser.add_argument("--base-url", default="http://localhost:8080", help="Root URL (default: http://localhost:8080)")
     parser.add_argument("--limit", type=int, default=6, help="Max cards to capture (default: 6)")

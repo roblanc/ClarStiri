@@ -1,4 +1,4 @@
-# ClarStiri / thesite.ro
+# thesite.ro
 
 Agregator de știri din surse multiple. Vezi aceleași evenimente din perspective diferite și înțelege bias-ul mediatic.
 

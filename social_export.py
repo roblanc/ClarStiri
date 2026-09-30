@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-social_export.py — Generează conținut Instagram + TikTok din articolele ClarStiri.
+social_export.py — Generează conținut Instagram + TikTok din articolele thesite.ro.
 
 Workflow:
     # Top 5 știri de azi de pe site-ul live
@@ -442,7 +442,7 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
     # Fișier agregat cu toate captionurile
     all_captions_path = out_root / "captions_all.txt"
     all_captions_path.write_text(
-        f"ClarStiri Social Export — {date_str}\n\n" + "\n".join(all_captions),
+        f"thesite.ro Social Export — {date_str}\n\n" + "\n".join(all_captions),
         encoding="utf-8",
     )
     print(f"\n{'─'*60}")
@@ -455,7 +455,7 @@ async def run(stories: List[Dict], base_url: str, groq_key: Optional[str], date_
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Generează imagini Instagram + TikTok și caption-uri din ClarStiri.",
+        description="Generează imagini Instagram + TikTok și caption-uri din thesite.ro.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--top", type=int, default=50,

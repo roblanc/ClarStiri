@@ -182,7 +182,7 @@ export function buildReelHtml(story) {
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>ClarStiri Perfectly Centered Reel</title>
+<title>thesite.ro Perfectly Centered Reel</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">

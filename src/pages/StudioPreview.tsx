@@ -43,7 +43,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-1",
     title: "Guvernul pregătește un nou pachet pentru transportul public din marile orașe",
-    image: "https://picsum.photos/seed/clarstiri-demo-transport/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-transport/1200/1500",
     bias: { left: 22, center: 56, right: 22 },
     blindspot: "none",
     category: "Actualitate",
@@ -56,7 +56,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-2",
     title: "Un nou raport despre energia verde schimbă discursul public înainte de votul din Parlament",
-    image: "https://picsum.photos/seed/clarstiri-demo-energia/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-energia/1200/1500",
     bias: { left: 41, center: 37, right: 22 },
     blindspot: "left",
     category: "Economie",
@@ -69,7 +69,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-3",
     title: "Ce spun sursele din presă despre măsurile de siguranță de la litoral",
-    image: "https://picsum.photos/seed/clarstiri-demo-litoral/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-litoral/1200/1500",
     bias: { left: 15, center: 68, right: 17 },
     blindspot: "right",
     category: "Societate",
@@ -82,7 +82,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-4",
     title: "Negocierile din coaliție rămân tensionate după discuțiile despre bugetul de anul viitor",
-    image: "https://picsum.photos/seed/clarstiri-demo-politica/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-politica/1200/1500",
     bias: { left: 19, center: 49, right: 32 },
     blindspot: "none",
     category: "Politică",
@@ -95,7 +95,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-5",
     title: "Ploi puternice și avertizări meteo în mai multe județe din sudul țării",
-    image: "https://picsum.photos/seed/clarstiri-demo-meteo/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-meteo/1200/1500",
     bias: { left: 28, center: 44, right: 28 },
     blindspot: "none",
     category: "Mediu",
@@ -108,7 +108,7 @@ const DEMO_STORIES: StudioStory[] = [
   {
     id: "demo-6",
     title: "O schimbare majoră în tehnologie ridică întrebări despre reguli și verificarea informației",
-    image: "https://picsum.photos/seed/clarstiri-demo-tech/1200/1500",
+    image: "https://picsum.photos/seed/thesite-demo-tech/1200/1500",
     bias: { left: 24, center: 52, right: 24 },
     blindspot: "none",
     category: "Tehnologie",

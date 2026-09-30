@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Wrapper pentru postarea automata ClarStiri pe Instagram (rulat din cron)
+# Wrapper pentru postarea automata thesite.ro pe Instagram (rulat din cron)
 # Flux: genereaza continut proaspat -> posteaza via Playwright
 set -uo pipefail
 
 POST_TYPE="${1:-carousel}"
-PROJECT_DIR="/home/brewuser/projects/ClarStiri"
-LOCK_FILE="/tmp/clarstiri_post.lock"
+PROJECT_DIR="/home/brewuser/projects/thesite"
+LOCK_FILE="/tmp/thesite_post.lock"
 LOG_DIR="$PROJECT_DIR/social_export/logs"
 
 mkdir -p "$LOG_DIR"

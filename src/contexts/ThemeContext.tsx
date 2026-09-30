@@ -11,7 +11,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'clarstiri-theme';
+const STORAGE_KEY = 'thesite-theme';
 
 function getSystemTheme(): 'light' | 'dark' {
     if (typeof window !== 'undefined') {
