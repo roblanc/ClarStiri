@@ -101,9 +101,17 @@ export function buildHtmlSlides(story) {
   const right = Math.round(story.bias?.right || 0);
   const totalSources = story.sourcesCount || story.sources?.length || 0;
   const blindspot = story.blindspot;
+  // Candidate photos, tried in order on error: some outlets (antena3.ro) block the posting
+  // server's IP. Videos and small thumbnails are skipped.
   const isVideo = url => /\.(mp4|webm|m3u8|mov)(\?|$)/i.test(url || '');
-  const image = [story.image, ...(story.sources || []).map(s => s.imageUrl)]
-    .find(url => url && /^https?:\/\//.test(url) && !isVideo(url)) || 'https://thesite.ro/hero-illustration-headphones.webp';
+  const isThumb = url => /-(\d{2,3})x(\d{2,3})\.(jpe?g|png|webp)/i.test(url || '');
+  const seenImages = new Set();
+  const images = [story.image, ...(story.sources || []).map(s => s.imageUrl)]
+    .filter(url => url && /^https?:\/\//.test(url) && !isVideo(url) && !isThumb(url))
+    .filter(url => !seenImages.has(url) && seenImages.add(url))
+    .slice(0, 10);
+  const image = images[0] || 'https://thesite.ro/hero-illustration-headphones.webp';
+  const imageNext = JSON.stringify(images.slice(1)).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 
   let dominantBadgeLabel = 'Preluat de Centru';
   if (blindspot === 'left') dominantBadgeLabel = 'Punct Orbit Stânga';
@@ -303,7 +311,7 @@ export function buildHtmlSlides(story) {
   <body>
     <div class="card-container">
       <div class="hero-section">
-        <img src="${image}" class="hero-bg-img" alt="">
+        <img src="${image}" data-next="${imageNext}" class="hero-bg-img" alt="" onerror="var n=JSON.parse(this.dataset.next||'[]');if(n.length){this.dataset.next=JSON.stringify(n.slice(1));this.src=n[0];}else{this.onerror=null;this.src='https://thesite.ro/hero-illustration-headphones.webp';}">
         <div class="hero-gradient"></div>
 
         <div class="top-badges-row">
