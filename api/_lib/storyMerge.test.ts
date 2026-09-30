@@ -10,6 +10,13 @@ import { mergeWithExisting } from './storyMerge';
 const BASE = Date.parse('2026-09-30T08:00:00Z');
 const HOUR = 60 * 60 * 1000;
 
+// Each distinct link gets its own outlet: merges keep one article per outlet.
+const outletByLink = new Map<string, number>();
+function outletFor(link: string) {
+    if (!outletByLink.has(link)) outletByLink.set(link, outletByLink.size % NEWS_SOURCES.length);
+    return NEWS_SOURCES[outletByLink.get(link)!];
+}
+
 function item(link: string, hoursFromBase = 0): RSSNewsItem {
     return {
         id: link,
@@ -17,7 +24,7 @@ function item(link: string, hoursFromBase = 0): RSSNewsItem {
         description: '',
         link: `https://example.ro/${link}`,
         pubDate: new Date(BASE + hoursFromBase * HOUR).toISOString(),
-        source: NEWS_SOURCES[0],
+        source: outletFor(link),
     };
 }
 
@@ -123,14 +130,5 @@ describe('mergeWithExisting', () => {
         expect(mergeWithExisting([], [])).toEqual({ merged: [], unmatched: [] });
         const old = story('story-old', ['a']);
         expect(mergeWithExisting([], [old]).unmatched.map(s => s.id)).toEqual(['story-old']);
-    });
-
-    it('keeps the earlier start time so the story does not look newer after a merge', () => {
-        const old = story('story-old', [article('digi24', 1), article('hotnews', 1)], { publishedAt: new Date(T0).toISOString() });
-        const fresh = story('story-new', [article('digi24', 1), article('hotnews', 1), article('rfi', 1, 5)], {
-            publishedAt: new Date(T0 + 2 * HOUR).toISOString(),
-        });
-        const { merged } = mergeWithExisting([fresh], [old]);
-        expect(merged[0].publishedAt).toBe(new Date(T0).toISOString());
     });
 });

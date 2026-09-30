@@ -115,7 +115,7 @@ export function evaluateClusters(groups: RSSNewsItem[][], fixture: FixtureItem[]
 }
 
 /** Which cluster (index) each fixture id landed in, for "must group" / "must not group" assertions. */
-export function clusterIndex(groups: RSSNewsItem[][]): Map<string, number> {
+export function clusterIndex(groups: { id: string }[][]): Map<string, number> {
     const index = new Map<string, number>();
     groups.forEach((group, i) => group.forEach(item => index.set(item.id, i)));
     return index;

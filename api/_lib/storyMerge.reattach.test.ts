@@ -82,4 +82,13 @@ describe('mergeWithExisting', () => {
         const { merged } = mergeWithExisting([fresh], [old]);
         expect(merged[0].sources.map(s => s.source.id).sort()).toEqual(['digi24', 'hotnews']);
     });
+
+    it('keeps the earlier start time so the story does not look newer after a merge', () => {
+        const old = story('story-old', [article('digi24', 1), article('hotnews', 1)], { publishedAt: new Date(T0).toISOString() });
+        const fresh = story('story-new', [article('digi24', 1), article('hotnews', 1), article('rfi', 1, 5)], {
+            publishedAt: new Date(T0 + 2 * HOUR).toISOString(),
+        });
+        const { merged } = mergeWithExisting([fresh], [old]);
+        expect(merged[0].publishedAt).toBe(new Date(T0).toISOString());
+    });
 });
