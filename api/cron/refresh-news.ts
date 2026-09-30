@@ -113,8 +113,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const existingStories: AggregatedStory[] = existingRaw ?? [];
         console.log(`[CRON] Loaded ${existingStories.length} existing stories from cache`);
 
-        // 3. Agregă știrile proaspete
-        const freshStories = (await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD));
+        // 3. Agregă știrile proaspete (a story that continues a cached one keeps its headline
+        //    unless it grew a lot, so the LLM is only asked for new or outgrown stories)
+        const freshStories = await aggregateNewsBuildTopics(allNews, MIN_SOURCES_THRESHOLD, existingStories);
         console.log(`[CRON] Aggregated ${freshStories.length} fresh stories`);
 
         // 4. Merge with cached stories (strict overlap, one-to-one, stable ids — see _lib/storyMerge.ts)

@@ -124,14 +124,31 @@ export async function getEmbeddingsBatch(texts: string[]): Promise<number[][] | 
     }
 }
 
-export async function generateAggregatedTitle(articles: RSSNewsItem[]): Promise<string> {
-    const sortedByFactuality = [...articles].sort((a, b) =>
-        getFactualityScore(b.source.factuality) - getFactualityScore(a.source.factuality)
-    );
-    const fallbackTitle = sortedByFactuality[0]?.title || 'Știre Fără Titlu';
+/** Whether an LLM provider is configured at all (without one, headlines are always the fallback). */
+export function llmHeadlinesAvailable(): boolean {
+    return Boolean(GROQ_API_KEY || GEMINI_API_KEY);
+}
 
-    if (articles.length === 0) return fallbackTitle;
-    if (!GROQ_API_KEY && !GEMINI_API_KEY) return fallbackTitle;
+/**
+ * Headline used when no LLM title is available: the title of the most factual outlet
+ * (earliest article on ties, so it does not change as newer articles join).
+ */
+export function fallbackHeadline(articles: RSSNewsItem[]): string {
+    const ranked = [...articles].sort((a, b) =>
+        getFactualityScore(b.source.factuality) - getFactualityScore(a.source.factuality) ||
+        (Date.parse(a.pubDate) || 0) - (Date.parse(b.pubDate) || 0) ||
+        (a.link < b.link ? -1 : a.link > b.link ? 1 : 0)
+    );
+    return ranked[0]?.title || 'Știre Fără Titlu';
+}
+
+/** Neutral LLM headline; `generated` is false when the fallback headline was returned instead. */
+export async function generateHeadline(articles: RSSNewsItem[]): Promise<{ title: string; generated: boolean }> {
+    const fallbackTitle = fallbackHeadline(articles);
+    const fallback = { title: fallbackTitle, generated: false };
+
+    if (articles.length === 0) return fallback;
+    if (!GROQ_API_KEY && !GEMINI_API_KEY) return fallback;
 
     const titlesList = articles.map(a => `- ${a.title}`).join('\n');
     const prompt = `Ești un editor de știri neutru, strict și imparțial pentru o agenție de presă globală (stil Reuters/Ground News).
@@ -161,10 +178,14 @@ ${titlesList}`;
         text = await callGemini(prompt);
     }
 
-    if (!text) return fallbackTitle;
+    if (!text) return fallback;
 
     text = text.replace(/^["']|["']$/g, ''); // strip surrounding quotes
-    if (text.length > 200 || text.length === 0) return fallbackTitle;
+    if (text.length > 200 || text.length === 0) return fallback;
 
-    return text;
+    return { title: text, generated: true };
+}
+
+export async function generateAggregatedTitle(articles: RSSNewsItem[]): Promise<string> {
+    return (await generateHeadline(articles)).title;
 }

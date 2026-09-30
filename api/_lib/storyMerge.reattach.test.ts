@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 vi.mock('./llm.js', () => ({
     getEmbeddingsBatch: async () => null,
     generateHeadline: async () => ({ title: 'LLM', generated: true }),
+    llmHeadlinesAvailable: () => false,
     fallbackHeadline: (a: { title: string }[]) => a[0]?.title ?? '',
 }));
 

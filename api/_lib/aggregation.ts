@@ -1,7 +1,8 @@
 import { RSSNewsItem, BiasAnalysis, BIAS_WEIGHT_MAP, shouldFilterNews } from './shared.js';
 import { createStoryId } from './storyId.js';
 import { clusterArticles, DEFAULT_CLUSTER_THRESHOLD } from './clustering.js';
-import { generateAggregatedTitle, getEmbeddingsBatch } from './llm.js';
+import { fallbackHeadline, generateHeadline, getEmbeddingsBatch, llmHeadlinesAvailable } from './llm.js';
+import { matchStories } from './storyMatch.js';
 
 const ogImageCache = new Map<string, { image: string; expires: number }>();
 const OG_CACHE_TTL = 30 * 60 * 1000; // 30 min cache
@@ -73,6 +74,16 @@ export interface AggregatedStory {
     mainCategory: string;
     publishedAt: string;
     timeAgo: string;
+    /**
+     * How the current title was produced: for how many sources, and whether an LLM wrote it.
+     * Lets later refreshes keep the title instead of regenerating it every run.
+     */
+    titleBasis?: TitleBasis;
+}
+
+export interface TitleBasis {
+    sourcesCount: number;
+    generated: boolean;
 }
 
 export function getTimeAgo(pubDate: string): string {
@@ -203,7 +214,77 @@ async function runInBatches<T>(tasks: Array<() => Promise<T>>, batchSize: number
 // Max stories that receive an LLM-generated title per request.
 // llama-3.1-8b-instant e ~0.3-0.5s/call → 30 stories în batch 10 = 3 runde ≈ 1.5s.
 // Embeddings adaugă ~1.5s → total ~3s, bine sub limita Vercel de 10s.
+// Stories that keep their previous headline do not count (see planHeadlines).
 const MAX_LLM_STORIES = 30;
+
+/**
+ * Ranking used for the feed: coverage first, with a freshness decay.
+ * score = sourcesCount^1.5 × e^(-hoursOld / 18)
+ */
+export function storyScore(sourcesCount: number, publishedAt: string, now = Date.now()): number {
+    const hours = (now - new Date(publishedAt).getTime()) / 3_600_000;
+    return Math.pow(sourcesCount, 1.5) * Math.exp(-(Number.isNaN(hours) ? 0 : hours) / 18);
+}
+
+/** A story's headline is rewritten only once it has at least doubled (and grown by 3+ sources). */
+export function headlineOutgrown(basis: TitleBasis, sourcesCount: number): boolean {
+    return sourcesCount >= 2 * basis.sourcesCount && sourcesCount - basis.sourcesCount >= 3;
+}
+
+interface HeadlinePlan {
+    /** Title (and basis) of the matching story from the previous refresh, if any. */
+    previous?: { title: string; titleBasis: TitleBasis };
+    /** Keep the previous title as is. */
+    keep: boolean;
+    /** Ask the LLM for a (new) headline. */
+    useLlm: boolean;
+}
+
+/**
+ * Decides per story whether to keep the previous refresh's headline, ask the LLM, or use the
+ * fallback. Headlines stay put while a story grows modestly, so the title users (and social
+ * posts) saw does not churn every 15 minutes, and LLM calls go only to new or outgrown stories,
+ * most important first.
+ */
+export function planHeadlines(groups: RSSNewsItem[][], previous: AggregatedStory[], now = Date.now()): HeadlinePlan[] {
+    const matches = matchStories(groups.map(sources => ({ sources })), previous);
+    const llmAvailable = llmHeadlinesAvailable();
+    const order = groups
+        .map((sources, i) => ({ i, score: storyScore(sources.length, pickPrimarySource(sources).pubDate, now) }))
+        .sort((a, b) => b.score - a.score || a.i - b.i);
+
+    const plans: HeadlinePlan[] = new Array(groups.length);
+    let budget = MAX_LLM_STORIES;
+    for (const { i } of order) {
+        const sourcesCount = groups[i].length;
+        const match = matches.get(i);
+        const prev = match === undefined ? undefined : previous[match];
+        if (prev?.title) {
+            // Stories cached before titleBasis existed: assume their title fit their size then.
+            const titleBasis = prev.titleBasis ?? { sourcesCount: prev.sourcesCount, generated: true };
+            const wantsNew = headlineOutgrown(titleBasis, sourcesCount) || (!titleBasis.generated && llmAvailable);
+            const useLlm = wantsNew && budget > 0;
+            if (useLlm) budget--;
+            plans[i] = { previous: { title: prev.title, titleBasis }, keep: !useLlm, useLlm };
+        } else {
+            const useLlm = budget > 0;
+            if (useLlm) budget--;
+            plans[i] = { keep: false, useLlm };
+        }
+    }
+    return plans;
+}
+
+async function resolveHeadline(sources: RSSNewsItem[], plan: HeadlinePlan): Promise<{ title: string; titleBasis: TitleBasis }> {
+    if (plan.keep && plan.previous) return plan.previous;
+    if (plan.useLlm) {
+        const { title, generated } = await generateHeadline(sources);
+        // A failed regeneration must not replace a good headline with the fallback one.
+        if (!generated && plan.previous) return plan.previous;
+        return { title, titleBasis: { sourcesCount: sources.length, generated } };
+    }
+    return { title: fallbackHeadline(sources), titleBasis: { sourcesCount: sources.length, generated: false } };
+}
 
 /**
  * Trimite un semnal către Wayback Machine pentru a arhiva URL-ul.
@@ -218,23 +299,32 @@ function triggerWaybackArchive(url: string) {
     }
 }
 
-export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3): Promise<AggregatedStory[]> {
+/**
+ * @param previous stories from the previous refresh (the cache). A fresh story that continues one
+ *   of them keeps its headline unless it grew a lot (see planHeadlines). Optional.
+ */
+export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesParam: number = 3, previous: AggregatedStory[] = []): Promise<AggregatedStory[]> {
     const recent = filterRecentNews(news);
     
     // Declanșăm arhivarea pentru toate știrile noi găsite în acest run
     recent.forEach(item => triggerWaybackArchive(item.link));
 
-    const storyGroups = await findSimilarStories(recent);
+    const storyGroups = (await findSimilarStories(recent)).filter(sources => sources.length >= minSourcesParam);
+    const headlinePlans = planHeadlines(storyGroups, previous);
 
     const aggregatedStoryTasks: Array<() => Promise<AggregatedStory>> = [];
+    const usesLlm: boolean[] = [];
     const idCounts = new Map<string, number>();
-    let taskIndex = 0;
 
-    storyGroups.forEach((sources) => {
-        if (sources.length < minSourcesParam) return;
+    storyGroups.forEach((sources, groupIndex) => {
+        const plan = headlinePlans[groupIndex];
 
-        const useLlm = taskIndex < MAX_LLM_STORIES;
-        taskIndex++;
+        // Ids are assigned here, synchronously and in the clusterer's deterministic order, so a
+        // rare base-id collision always gives the same story the "-2" suffix.
+        const baseId = createStoryId(sources);
+        const count = (idCounts.get(baseId) || 0) + 1;
+        idCounts.set(baseId, count);
+        const storyId = count === 1 ? baseId : `${baseId}-${count}`;
 
         const promise = async () => {
             const primary = pickPrimarySource(sources);
@@ -242,13 +332,8 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
             // Using only images already embedded in RSS feeds keeps aggregation fast.
             const resolvedImage = sources.find(s => s.imageUrl)?.imageUrl;
 
-            // Generate Title via LLM only for top stories; rest use best-source fallback.
-            const aggregatedTitle = useLlm
-                ? await generateAggregatedTitle(sources)
-                : (sources.sort((a, b) => {
-                      const order = { high: 2, mixed: 1, low: 0 } as Record<string, number>;
-                      return (order[b.source.factuality] ?? 0) - (order[a.source.factuality] ?? 0);
-                  })[0]?.title ?? primary.title);
+            // Previous headline, a new LLM headline, or the best-source fallback (see planHeadlines).
+            const { title: aggregatedTitle, titleBasis } = await resolveHeadline(sources, plan);
 
             let contentBias: BiasAnalysis | undefined;
             const sourcesWithBias = sources.filter(s => s.biasAnalysis);
@@ -283,11 +368,6 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
                 };
             }
 
-            const baseId = createStoryId(sources);
-            const count = (idCounts.get(baseId) || 0) + 1;
-            idCounts.set(baseId, count);
-            const storyId = count === 1 ? baseId : `${baseId}-${count}`;
-
             const bias = calculateBiasDistribution(sources);
             const blindspot = calculateBlindspot(bias, sources.length);
 
@@ -304,16 +384,18 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
                 mainCategory: primary.category || 'Actualitate',
                 publishedAt: primary.pubDate,
                 timeAgo: getTimeAgo(primary.pubDate),
+                titleBasis,
             };
         };
 
         aggregatedStoryTasks.push(promise);
+        usesLlm.push(plan.useLlm);
     });
 
-    // LLM tasks (first MAX_LLM_STORIES) run in batches of 8 to respect RPM limits.
-    // No-LLM tasks (beyond cap) run in parallel since they are instant (no API calls).
-    const llmTasks = aggregatedStoryTasks.slice(0, MAX_LLM_STORIES);
-    const noLlmTasks = aggregatedStoryTasks.slice(MAX_LLM_STORIES);
+    // LLM tasks (at most MAX_LLM_STORIES) run in batches of 10 to respect RPM limits.
+    // No-LLM tasks run in parallel since they are instant (no API calls).
+    const llmTasks = aggregatedStoryTasks.filter((_, i) => usesLlm[i]);
+    const noLlmTasks = aggregatedStoryTasks.filter((_, i) => !usesLlm[i]);
 
     const [llmStories, noLlmStories] = await Promise.all([
         runInBatches(llmTasks, 10),
@@ -321,17 +403,10 @@ export async function aggregateNewsBuildTopics(news: RSSNewsItem[], minSourcesPa
     ]);
     const aggregatedStories = [...llmStories, ...noLlmStories];
 
-    // Sort: coverage-first cu freshness decay
-    // score = sourcesCount × e^(-hoursOld / 18)
+    // Sort: coverage-first cu freshness decay (storyScore)
     // O știre cu mai multe surse rămâne sus ~18h înainte ca una mai proaspătă să o depășească
     const now = Date.now();
-    aggregatedStories.sort((a, b) => {
-        const hoursA = (now - new Date(a.publishedAt).getTime()) / 3_600_000;
-        const hoursB = (now - new Date(b.publishedAt).getTime()) / 3_600_000;
-        const scoreA = Math.pow(a.sourcesCount, 1.5) * Math.exp(-hoursA / 18);
-        const scoreB = Math.pow(b.sourcesCount, 1.5) * Math.exp(-hoursB / 18);
-        return scoreB - scoreA;
-    });
+    aggregatedStories.sort((a, b) => storyScore(b.sourcesCount, b.publishedAt, now) - storyScore(a.sourcesCount, a.publishedAt, now));
 
     return aggregatedStories;
 }
