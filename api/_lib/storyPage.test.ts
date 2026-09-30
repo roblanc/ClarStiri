@@ -52,7 +52,7 @@ describe('api/story-page', () => {
         delete process.env.UPSTASH_REDIS_REST_URL;
         const realFetch = globalThis.fetch;
         // Only intercept the index.html fetch; satori loads its wasm through fetch(data:...).
-        vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL, init?: RequestInit) =>
+        vi.stubGlobal('fetch', vi.fn(async (input: string | URL | Request, init?: RequestInit) =>
             String(input).startsWith('http') ? new Response(INDEX_HTML, { status: 200 }) : realFetch(input, init)));
     });
     afterEach(() => vi.unstubAllGlobals());
