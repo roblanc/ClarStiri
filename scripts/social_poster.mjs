@@ -108,14 +108,18 @@ export function buildReelHtml(story) {
     ? `<span style="color:${NUM[blind]}">Unghi mort · presa de ${CAMP_NAME[blind]}: ${b[blind]}%</span>`
     : `<span style="color:${C.right}">thesite.ro · ${total} surse · ${esc(date)}</span>`;
 
+  // Instagram shows reels centre-cropped to 4:5 in the feed and profile grid, i.e. only
+  // y=285..1635 of the 1920px frame. Keep the photo and all text inside that band, and the
+  // text above the 440px caption overlay of the full-screen player (y <= 1480).
   const cover = `
-    <div class="abs" style="display:flex;flex-direction:column">
-      ${duotone(images, b, 'height:860px;flex:none')}
-      <div style="${side};padding-top:40px;padding-bottom:${SAFE.bottom}px;flex:1;display:flex;flex-direction:column">
-        <div class="mono" style="font-size:24px">${kicker}</div>
-        <div class="cas clamp" style="-webkit-line-clamp:4;font-size:${titleSize(title, 76)}px;line-height:1.04;margin-top:16px">${esc(title)}</div>
-        <div style="font-style:italic;font-size:32px;margin-top:12px;opacity:.85">cum a relatat fiecare tabără</div>
-        <div style="margin-top:auto">${biasBlock(b, { num: 112, bar: 40, label: 20 })}</div>
+    <div class="abs">
+      <div class="mono" style="position:absolute;top:${SAFE.top}px;left:${SAFE.left}px;right:${SAFE.right}px;display:flex;justify-content:space-between;font-size:22px;opacity:.85"><span>thesite.ro</span><span>${esc(date)}</span></div>
+      ${duotone(images, b, 'position:absolute;top:285px;left:0;right:0;height:600px')}
+      <div style="position:absolute;top:915px;bottom:${SAFE.bottom}px;left:${SAFE.left}px;right:${SAFE.right}px;display:flex;flex-direction:column">
+        <div class="mono" style="font-size:22px">${kicker}</div>
+        <div class="cas clamp" style="-webkit-line-clamp:3;font-size:${titleSize(title, 66)}px;line-height:1.04;margin-top:12px">${esc(title)}</div>
+        <div style="font-style:italic;font-size:28px;margin-top:8px;opacity:.85">cum a relatat fiecare tabără</div>
+        <div style="margin-top:auto">${biasBlock(b, { num: 100, bar: 34, label: 18, gap: 14 })}</div>
       </div>
     </div>`;
 
