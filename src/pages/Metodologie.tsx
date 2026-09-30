@@ -10,6 +10,22 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NEWS_SOURCES } from "@/types/news";
 import { FACTUALITY_RULE_UPDATED, FACTUALITY_RULE_VERSION, getFactuality } from "@/data/sourceFactuality";
+import {
+    BIAS_SHARE_DEAD_ZONE,
+    BIAS_SHARE_FULL_AT,
+    BLINDSPOT_MAX_CHANCE,
+    BLINDSPOT_MIN_FEED_HEALTH,
+    BLINDSPOT_MIN_OTHER_SIDE,
+    BLINDSPOT_MIN_REPORTS,
+    biasShares,
+} from "../../shared/coverage";
+
+const pct = (value: number) => `${Math.round(value * 100)}%`;
+const SHARE_EXAMPLES = [-25, 35, 60].map((score) => {
+    const s = biasShares(score);
+    const side = score < 0 ? `${pct(s.left)} stânga` : `${pct(s.right)} dreapta`;
+    return `${score > 0 ? "+" : "−"}${Math.abs(score)} → ${side}${s.center > 0 ? `, ${pct(s.center)} centru` : ""}`;
+});
 
 const factualityOf = (sourceId: string) => getFactuality(sourceId).rating;
 
@@ -418,7 +434,11 @@ export default function Metodologie() {
                                     <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
                                         Clasificările sunt bazate pe analiza editorială a publicațiilor — titluri,
                                         selecția subiectelor, tonul general — nu pe declarațiile lor oficiale despre
-                                        neutralitate.
+                                        neutralitate. Fiecare publicație are un scor între −100 (stânga) și +100
+                                        (dreapta), cu raționamentul și gradul de încredere pe pagina ei din catalog.
+                                        Categoria derivă din scor: stânga ≤ −55, centru-stânga −54…−20, centru
+                                        −19…+19, centru-dreapta +20…+54, dreapta ≥ +55. Publicațiile fără profil
+                                        documentat au provizoriu scorul tipic al categoriei lor și încredere scăzută.
                                     </p>
                                 </div>
                             </div>
@@ -428,7 +448,7 @@ export default function Metodologie() {
                             <SectionHeader
                                 eyebrow="Bara de bias"
                                 title="Cum citești distribuția surselor"
-                                description="Pentru fiecare știre agregată afișăm o bară care arată ce pondere a acoperirii vine din stânga, centru și dreapta."
+                                description="Pentru fiecare știre agregată afișăm o bară care arată ce pondere a relatărilor independente vine din stânga, centru și dreapta."
                             />
 
                             <div className="surface-panel rounded-[2rem] p-6">
@@ -445,8 +465,8 @@ export default function Metodologie() {
                                 </div>
 
                                 <p className="mt-4 text-sm text-muted-foreground">
-                                    Exemplu: aceeași poveste e preluată de 30% surse de stânga, 45% de centru și 25%
-                                    de dreapta.
+                                    Exemplu: 30% din relatări vin din zona de stânga, 45% de la centru și 25% din
+                                    dreapta.
                                 </p>
 
                                 <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -479,6 +499,32 @@ export default function Metodologie() {
                                     </div>
                                 </div>
                             </div>
+
+                            <div className="surface-panel space-y-3 rounded-[1.75rem] p-6 text-sm leading-relaxed text-muted-foreground">
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                                    Cum calculăm bara
+                                </p>
+                                <p>
+                                    Fiecare relatare este împărțită după scorul publicației. Între −{BIAS_SHARE_DEAD_ZONE} și
+                                    +{BIAS_SHARE_DEAD_ZONE} contează integral la centru, așa că o știre acoperită doar de surse
+                                    de centru apare 100% centru. Peste acest prag, partea spre stânga sau dreapta crește liniar
+                                    și devine integrală de la ±{BIAS_SHARE_FULL_AT}, pragul categoriilor stânga și dreapta.
+                                    Exemple: {SHARE_EXAMPLES.join("; ")}.
+                                </p>
+                                <p>
+                                    <strong className="text-foreground">Preluările contează o singură dată.</strong> Când mai
+                                    multe publicații dau același text de agenție (Agerpres, News.ro, Mediafax) — titlu aproape
+                                    identic, același paragraf de început (fără citate) sau agenția menționată explicit ca sursă —
+                                    le numărăm ca o singură relatare, cu scorul agenției sau, dacă agenția nu e cunoscută, al
+                                    publicației care a publicat prima. Publicațiile rămân în listă, marcate „preluare”. Aceeași
+                                    regulă se aplică la ordinea știrilor pe prima pagină.
+                                </p>
+                                <p>
+                                    Pe pagina unei știri, filtrele și numărătorile grupează publicațiile după categorie (stânga
+                                    include centru-stânga, dreapta include centru-dreapta), fiecare publicație o singură dată.
+                                    De aceea o sursă de centru-stânga apare la „Stânga”, dar în bară contează doar parțial.
+                                </p>
+                            </div>
                         </section>
 
                         <section id="blindspot" className="space-y-6 border-b border-border/60 pb-12">
@@ -495,9 +541,9 @@ export default function Metodologie() {
                                         Ignorat de stânga
                                     </p>
                                     <p className="mt-3 text-sm leading-relaxed text-blue-900/80 dark:text-blue-100/80">
-                                        Subiectul este acoperit masiv de surse de dreapta, dar aproape lipsește din
-                                        zona progresistă. Cititorii care urmăresc doar presa de stânga riscă să nu-l
-                                        vadă deloc.
+                                        Subiectul este acoperit de surse de dreapta, dar nicio publicație de stânga
+                                        sau centru-stânga nu l-a publicat. Cititorii care urmăresc doar presa de stânga
+                                        riscă să nu-l vadă deloc.
                                     </p>
                                 </div>
 
@@ -507,8 +553,8 @@ export default function Metodologie() {
                                         Ignorat de dreapta
                                     </p>
                                     <p className="mt-3 text-sm leading-relaxed text-red-900/80 dark:text-red-100/80">
-                                        Subiectul domină în publicațiile de stânga, dar dispare aproape complet din
-                                        agenda surselor conservatoare sau suveraniste.
+                                        Subiectul este acoperit de surse de stânga, dar nicio publicație de dreapta sau
+                                        centru-dreapta nu l-a publicat.
                                     </p>
                                 </div>
                             </div>
@@ -518,9 +564,29 @@ export default function Metodologie() {
                                     Algoritmul nostru
                                 </p>
                                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                                    Semnalăm automat cazurile în care o știre are cel puțin <strong className="text-foreground">3 surse</strong>, iar una dintre
-                                    tabere are o prezență de <strong className="text-foreground">sub 8%</strong>, în timp ce cealaltă domină clar acoperirea.
+                                    Semnalăm o știre ca ignorată de o zonă doar dacă sunt îndeplinite toate condițiile:
                                 </p>
+                                <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground">
+                                    <li>
+                                        are cel puțin <strong className="text-foreground">{BLINDSPOT_MIN_REPORTS} relatări independente</strong> (preluările aceluiași text contează o dată);
+                                    </li>
+                                    <li>
+                                        <strong className="text-foreground">nicio publicație</strong> din acea zonă nu a publicat-o, nici măcar ca preluare;
+                                    </li>
+                                    <li>
+                                        cel puțin <strong className="text-foreground">{BLINDSPOT_MIN_OTHER_SIDE} relatări independente</strong> vin din zona opusă;
+                                    </li>
+                                    <li>
+                                        absența nu se explică prin simplă întâmplare: dacă zona a publicat o pondere p din
+                                        articolele colectate la acea actualizare, șansa ca niciuna dintre cele n relatări să fie a
+                                        ei, (1 − p)<sup>n</sup>, trebuie să fie de cel mult {pct(BLINDSPOT_MAX_CHANCE)}. O zonă care
+                                        publică mai puțin are astfel nevoie de mai multă acoperire în rest ca tăcerea ei să conteze;
+                                    </li>
+                                    <li>
+                                        cel puțin {pct(BLINDSPOT_MIN_FEED_HEALTH)} din feed-urile publicațiilor din acea zonă au
+                                        răspuns la actualizare, ca un site căzut să nu fie citit drept alegere editorială.
+                                    </li>
+                                </ul>
                             </div>
                         </section>
 

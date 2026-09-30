@@ -14,6 +14,8 @@ import {
 import { fetchStoryById } from "@/services/newsApiService";
 import type { AggregatedStory } from "@/types/news";
 import { isStoryCard } from "../../shared/storyCard";
+import { coverageView, scoreOfSource } from "../../shared/coverage";
+import { scoreToBiasCategory } from "../../shared/newsSources";
 import { findStoryBySlug, normalizeStorySlug } from "@/utils/storyRoute";
 import { ArrowLeft, ArrowRight, Clock, ExternalLink, Loader2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -84,11 +86,14 @@ const getDominantBiasMeta = (bias: { left: number; center: number; right: number
   };
 };
 
-const getBlindspotMeta = (blindspot?: AggregatedStory["blindspot"]) => {
+/** Current category of an outlet (cached payloads may carry an older `bias`). */
+const currentBias = (source: { id: string }) => scoreToBiasCategory(scoreOfSource(source));
+
+const getBlindspotMeta = (blindspot: AggregatedStory["blindspot"], otherSideOutlets: number) => {
   if (blindspot === 'left') {
     return {
       label: 'Punct orb de stânga',
-      description: 'Subiectul pare acoperit mai mult de surse din afara zonei de stânga.',
+      description: `Nicio publicație de stânga sau centru-stânga nu a preluat subiectul, deși ${otherSideOutlets} publicații din zona de dreapta l-au acoperit.`,
       className: 'bg-blue-100 text-blue-700 border-blue-200',
     };
   }
@@ -96,7 +101,7 @@ const getBlindspotMeta = (blindspot?: AggregatedStory["blindspot"]) => {
   if (blindspot === 'right') {
     return {
       label: 'Punct orb de dreapta',
-      description: 'Subiectul pare acoperit mai mult de surse din afara zonei de dreapta.',
+      description: `Nicio publicație de dreapta sau centru-dreapta nu a preluat subiectul, deși ${otherSideOutlets} publicații din zona de stânga l-au acoperit.`,
       className: 'bg-red-100 text-red-700 border-red-200',
     };
   }
@@ -173,7 +178,7 @@ function SourceLogo({ source }: { source: { id: string; name: string; bias: stri
     return (
       <Link
         to={`/surse/${source.id}`}
-        className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${getBiasColor(source.bias)} hover:scale-105 transition-transform`}
+        className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 ${getBiasColor(currentBias(source))} hover:scale-105 transition-transform`}
         title={`Vezi profilul sursei ${source.name}`}
         aria-label={`Vezi profilul sursei ${source.name}`}
       >
@@ -256,34 +261,36 @@ const StoryDetail = () => {
     else detailQuery.refetch();
   };
 
-  // Grupează sursele după bias
-  const groupedSources = (resolvedStory?.sources as OutletEntry[] | undefined)?.reduce((acc, source) => {
-    const bias = source.source.bias;
-    if (bias === 'left' || bias === 'center-left') {
-      acc.left.push(source);
-    } else if (bias === 'right' || bias === 'center-right') {
-      acc.right.push(source);
-    } else {
-      acc.center.push(source);
+  // Bara, preluările și gruparea pe zone vin din aceeași analiză (shared/coverage.ts),
+  // deci cifrele de pe pagină au aceleași definiții ca bara.
+  const coverage = useMemo(() => (resolvedStory ? coverageView(resolvedStory) : null), [resolvedStory]);
+
+  // Grupează publicațiile după zonă (stânga = stânga + centru-stânga etc.), fiecare o singură dată
+  const groupedSources = ((resolvedStory?.sources ?? []) as OutletEntry[]).reduce((acc, source, index) => {
+    if (!acc.seen.has(source.source.id)) {
+      acc.seen.add(source.source.id);
+      acc[coverage?.sides[index] ?? 'center'].push(source);
     }
     return acc;
-  }, { left: [] as OutletEntry[], center: [] as OutletEntry[], right: [] as OutletEntry[] });
+  }, { seen: new Set<string>(), left: [] as OutletEntry[], center: [] as OutletEntry[], right: [] as OutletEntry[] });
 
   // Filtrează articolele
   // Articles (title, link, text) exist only on the full story; cards carry just the outlets.
-  const filteredArticles = fullStory?.sources.filter(source => {
-    const bias = source.source.bias;
-    const matchesFilter = activeFilter === 'all' ||
-      (activeFilter === 'left' && (bias === 'left' || bias === 'center-left')) ||
-      (activeFilter === 'center' && bias === 'center') ||
-      (activeFilter === 'right' && (bias === 'right' || bias === 'center-right'));
+  // When there is a full story it is also resolvedStory, so coverage indexes line up.
+  const articles = (fullStory?.sources ?? []).map((source, index) => ({
+    ...source,
+    side: coverage?.sides[index] ?? 'center',
+    syndicated: coverage?.syndicated[index] ?? false,
+  }));
+  const filteredArticles = articles.filter(source => {
+    const matchesFilter = activeFilter === 'all' || source.side === activeFilter;
 
     const matchesSearch = searchQuery === '' ||
       source.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       source.source.name.toLowerCase().includes(searchQuery.toLowerCase());
 
     return matchesFilter && matchesSearch;
-  }) || [];
+  });
 
   if (isLoading) {
     return (
@@ -309,15 +316,18 @@ const StoryDetail = () => {
     );
   }
 
-  // Calculează statistici
-  const totalSources = resolvedStory.sourcesCount;
-  const leftCount = groupedSources?.left.length || 0;
-  const centerCount = groupedSources?.center.length || 0;
-  const rightCount = groupedSources?.right.length || 0;
+  // Calculează statistici (publicații distincte; bara = relatări independente)
+  const storyBias = coverage?.bias ?? resolvedStory.bias;
+  const totalSources = coverage?.outlets ?? resolvedStory.sourcesCount;
+  const independentReports = coverage?.independent ?? totalSources;
+  const copiedOutlets = Math.max(0, totalSources - independentReports);
+  const leftCount = groupedSources.left.length;
+  const centerCount = groupedSources.center.length;
+  const rightCount = groupedSources.right.length;
 
   const storyPublishedAt = toValidDate(resolvedStory.publishedAt) ?? new Date();
-  const dominantBias = getDominantBiasMeta(resolvedStory.bias);
-  const blindspotMeta = getBlindspotMeta(resolvedStory.blindspot);
+  const dominantBias = getDominantBiasMeta(storyBias);
+  const blindspotMeta = getBlindspotMeta(resolvedStory.blindspot, resolvedStory.blindspot === 'left' ? rightCount : leftCount);
   const storySummary = resolvedStory.description?.trim() || "Compară mai jos cum este tratat același subiect de publicații din zone editoriale diferite.";
   const articleFilterCounts = {
     all: totalSources,
@@ -332,7 +342,7 @@ const StoryDetail = () => {
       count: leftCount,
       textClass: 'text-blue-700',
       ringClass: 'border-blue-200 bg-blue-50',
-      sources: groupedSources?.left || [],
+      sources: groupedSources.left,
     },
     {
       key: 'center',
@@ -340,7 +350,7 @@ const StoryDetail = () => {
       count: centerCount,
       textClass: 'text-slate-700',
       ringClass: 'border-slate-200 bg-slate-50',
-      sources: groupedSources?.center || [],
+      sources: groupedSources.center,
     },
     {
       key: 'right',
@@ -348,12 +358,14 @@ const StoryDetail = () => {
       count: rightCount,
       textClass: 'text-red-700',
       ringClass: 'border-red-200 bg-red-50',
-      sources: groupedSources?.right || [],
+      sources: groupedSources.right,
     },
   ];
   const summaryPoints = [
-    `Subiectul este acoperit de ${totalSources} ${totalSources === 1 ? 'sursă' : 'surse'} distincte.`,
-    `Ponderea dominantă este ${dominantBias.label.toLowerCase()} (${dominantBias.value}%).`,
+    copiedOutlets > 0
+      ? `${totalSources} publicații, ${independentReports} relatări independente: articolele care reiau același text de agenție (marcate „preluare”) contează o singură dată în bară.`
+      : `Subiectul este acoperit de ${totalSources} ${totalSources === 1 ? 'publicație' : 'publicații'} distincte.`,
+    `Ponderea dominantă este ${dominantBias.label.toLowerCase()} (${dominantBias.value}%), calculată din scorul editorial al fiecărei publicații.`,
     blindspotMeta?.description,
   ].filter(Boolean) as string[];
 
@@ -425,7 +437,9 @@ const StoryDetail = () => {
                 <div className="surface-subtle rounded-[24px] p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Surse</p>
                   <p className="mt-2 text-3xl font-semibold text-foreground">{totalSources}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">publicații distincte în comparație</p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {copiedOutlets > 0 ? `publicații, ${independentReports} relatări independente` : 'publicații distincte în comparație'}
+                  </p>
                 </div>
                 <div className="surface-subtle rounded-[24px] p-4">
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Bias dominant</p>
@@ -448,9 +462,9 @@ const StoryDetail = () => {
                     </div>
 
                     <BiasBar
-                      left={resolvedStory.bias.left}
-                      center={resolvedStory.bias.center}
-                      right={resolvedStory.bias.right}
+                      left={storyBias.left}
+                      center={storyBias.center}
+                      right={storyBias.right}
                       variant="labeled"
                       size="xl"
                     />
@@ -579,9 +593,17 @@ const StoryDetail = () => {
                             >
                               {article.source.name}
                             </Link>
-                            <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${getBiasBadgeStyle(article.source.bias)}`}>
-                              {getBiasLabel(article.source.bias)}
+                            <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${getBiasBadgeStyle(currentBias(article.source))}`}>
+                              {getBiasLabel(currentBias(article.source))}
                             </span>
+                            {article.syndicated && (
+                              <span
+                                className="rounded-full border border-border/60 bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+                                title="Text preluat de la o agenție de presă sau din altă publicație. Contează o singură dată în bara de distribuție."
+                              >
+                                preluare
+                              </span>
+                            )}
                             <span className="text-xs text-muted-foreground">{formatArticleTimestamp(article.pubDate)}</span>
                           </div>
 
@@ -679,7 +701,7 @@ const StoryDetail = () => {
                             <span className={cn("text-xs font-bold uppercase tracking-[0.16em]", cluster.textClass)}>
                               {cluster.label}
                             </span>
-                            <span className="text-xs text-muted-foreground">{cluster.count} surse</span>
+                            <span className="text-xs text-muted-foreground">{cluster.count} {cluster.count === 1 ? 'publicație' : 'publicații'}</span>
                           </div>
 
                           <div className="flex flex-wrap gap-2">
@@ -705,6 +727,10 @@ const StoryDetail = () => {
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">Despre analiza bias</p>
                     <p className="text-sm leading-relaxed text-muted-foreground">
                       thesite.ro compară orientarea editorială a surselor care au acoperit aceeași poveste. Scorurile spun ceva despre contextul sursei, nu reprezintă un verdict absolut despre articol.
+                    </p>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      Zonele de mai sus grupează publicațiile după categorie (stânga include centru-stânga). Bara împarte fiecare relatare independentă după scorul publicației, așa că o sursă de centru-stânga contează parțial la centru.{' '}
+                      <Link to="/metodologie#bara-bias" className="font-medium text-foreground underline-offset-4 hover:underline">Metodologia</Link>
                     </p>
                   </div>
                 </CardContent>

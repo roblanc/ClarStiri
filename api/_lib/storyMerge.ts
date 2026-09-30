@@ -61,7 +61,7 @@ function mergeSources(fresh: AggregatedStory, existing: AggregatedStory): Aggreg
         sources,
         sourcesCount: sources.length,
         bias,
-        blindspot: dropped.length ? calculateBlindspot(bias, sources.length) : fresh.blindspot,
+        blindspot: dropped.length ? calculateBlindspot(sources) : fresh.blindspot,
     };
 }
 

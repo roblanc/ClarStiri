@@ -1,4 +1,5 @@
 import { toStoryCard, type StoryCardInput } from '../../shared/storyCard.js';
+import { storyRankScore } from '../../shared/coverage.js';
 
 /**
  * Pure helpers for shaping /api/news responses (query parsing, projection, CDN headers).
@@ -52,13 +53,9 @@ export function storyCacheControl(story: { publishedAt?: string }, servedFrom: '
 }
 
 /**
- * Feed order: sourcesCount^1.5 × e^(-hours/18) — more coverage and fresher stories first.
- * Shared by the cron (after merging) and the Postgres fallback in /api/news.
+ * Feed order: storyRankScore (independent reports^1.5 × e^(-hours/18)) — broader coverage and
+ * fresher stories first. Shared by the cron (after merging) and the Postgres fallback in /api/news.
  */
-export function sortByImportance<T extends { sourcesCount: number; publishedAt: string }>(stories: T[], now = Date.now()): T[] {
-    const score = (s: T) => {
-        const hours = (now - new Date(s.publishedAt).getTime()) / 3_600_000;
-        return Math.pow(s.sourcesCount, 1.5) * Math.exp(-hours / 18);
-    };
-    return [...stories].sort((a, b) => score(b) - score(a));
+export function sortByImportance<T extends { sourcesCount: number; independentCount?: number; publishedAt: string }>(stories: T[], now = Date.now()): T[] {
+    return [...stories].sort((a, b) => storyRankScore(b, now) - storyRankScore(a, now));
 }

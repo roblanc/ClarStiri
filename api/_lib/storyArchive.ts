@@ -1,6 +1,6 @@
 import postgres from 'postgres';
 import { NEWS_SOURCES, RSSNewsItem, NewsSource } from './shared.js';
-import { AggregatedStory, calculateBiasDistribution, calculateBlindspot, getTimeAgo } from './aggregation.js';
+import { AggregatedStory, applyCoverage, getTimeAgo } from './aggregation.js';
 
 /**
  * Permanent story archive in Postgres (schema `thesite`), so /stire/<id> links never expire.
@@ -153,20 +153,24 @@ function toStory(story: StoryRow, rows: SourceRow[]): AggregatedStory {
         source: resolveSource(r.source_id),
     }));
 
-    const bias = calculateBiasDistribution(sources);
     const publishedAt = (story.published_at ?? story.first_seen_at).toISOString();
-    return {
+    const scored = applyCoverage({
         id: story.id,
         title: story.title,
         description: story.description,
         image: story.image ?? undefined,
         sources,
         sourcesCount: sources.length,
-        bias,
-        blindspot: calculateBlindspot(bias, sources.length),
+        bias: { left: 0, center: 100, right: 0 },
         mainCategory: story.main_category ?? 'Actualitate',
         publishedAt,
         timeAgo: getTimeAgo(publishedAt),
+    });
+    // Feed health at the time is not stored, so a blindspot is shown only when the value saved
+    // by that refresh (which did know it) and today's rules agree.
+    return {
+        ...scored,
+        blindspot: scored.blindspot !== 'none' && scored.blindspot === story.blindspot ? scored.blindspot : 'none',
     };
 }
 

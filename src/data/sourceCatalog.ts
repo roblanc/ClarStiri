@@ -1,5 +1,5 @@
 import type { NewsSource } from '@/types/news';
-import { getSourceProfile, scoreToBiasCategory, type SourceProfile } from '@/data/sourceProfiles';
+import { getSourceProfile } from '@/data/sourceProfiles';
 import { NEWS_SOURCES_BASE } from '../../shared/newsSources';
 import { getFactuality } from '@/data/sourceFactuality';
 
@@ -12,7 +12,7 @@ function enrichSource(source: SourceCatalogEntry): NewsSource {
 
   return {
     ...source,
-    bias: profile ? scoreToBiasCategory(profile.biasScore) : source.bias,
+    bias: source.bias, // derived from the shared biasScore (shared/newsSources.ts)
     // Evidence-based rating (src/data/sourceFactuality.ts), never guessed from profile text.
     factuality: getFactuality(source.id).rating,
     profile,

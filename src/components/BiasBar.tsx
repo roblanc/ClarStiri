@@ -14,7 +14,7 @@ interface BiasBarProps {
 }
 
 const BIAS_TOOLTIP = (left: number, center: number, right: number) =>
-  `Distribuția surselor care au acoperit această știre: ${left}% presă de stânga (S), ${center}% presă de centru (C), ${right}% presă de dreapta (D). Clasificarea se bazează pe orientarea editorială a publicației, nu pe conținutul articolului.`;
+  `Ponderea relatărilor despre această știre: ${left}% stânga (S), ${center}% centru (C), ${right}% dreapta (D). Fiecare relatare contează după scorul editorial al publicației, iar preluările aceluiași text de agenție contează o singură dată. Clasificarea se bazează pe orientarea publicației, nu pe conținutul articolului.`;
 
 export function BiasBar({
   left,

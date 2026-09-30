@@ -13,7 +13,7 @@ export const IMAGE_SIZES = {
     featured: { width: 800, height: 600 },    // FeaturedStory - prioritate mare
     thumbnail: { width: 400, height: 300 },   // NewsListItem, liste, poster desktop
     cardThumb: { width: 260, height: 194 },   // Mobile card thumbnails (124px * 2x retina)
-    small: { width: 200, height: 150 },       // BlindspotCard, DailyBriefing
+    small: { width: 200, height: 150 },       // DailyBriefing
     favicon: { width: 32, height: 32 },       // Source favicons
 } as const;
 

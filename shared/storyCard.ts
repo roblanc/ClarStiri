@@ -18,6 +18,7 @@ export const STORY_CARD_FIELDS = [
     'description',
     'image',
     'sourcesCount',
+    'independentCount',
     'bias',
     'blindspot',
     'mainCategory',
@@ -40,6 +41,8 @@ export interface StoryCard<TDate = string> {
     description: string;
     image?: string;
     sourcesCount: number;
+    /** Reports after collapsing wire copies (see shared/coverage.ts). */
+    independentCount?: number;
     bias: { left: number; center: number; right: number };
     blindspot?: 'left' | 'right' | 'none';
     mainCategory: string;
@@ -57,6 +60,7 @@ export interface StoryCardInput {
     image?: string;
     sources: Array<{ imageUrl?: string; source?: Partial<StoryCardSource> }>;
     sourcesCount: number;
+    independentCount?: number;
     bias: { left: number; center: number; right: number };
     blindspot?: 'left' | 'right' | 'none';
     mainCategory?: string;

@@ -1,9 +1,5 @@
-import type { BiasAnalysis } from '@/utils/biasDetection';
 import type { SourceProfile } from '@/data/sourceProfiles';
-import {
-  BIAS_WEIGHT_MAP as SHARED_BIAS_WEIGHT_MAP,
-  NEWS_SOURCES_BASE,
-} from '../../shared/newsSources';
+import { NEWS_SOURCES_BASE } from '../../shared/newsSources';
 
 export interface NewsSource {
   id: string;
@@ -12,6 +8,9 @@ export interface NewsSource {
   rssUrl: string;
   logo?: string;
   bias: 'left' | 'center-left' | 'center' | 'center-right' | 'right';
+  /** -100 (far left) … +100 (far right); `bias` is derived from it. See shared/newsSources.ts. */
+  biasScore?: number;
+  biasConfidence?: 'high' | 'medium' | 'low';
   factuality: 'high' | 'mixed' | 'low' | 'insufficient';
   category: 'mainstream' | 'independent' | 'tabloid' | 'public';
   profile?: SourceProfile;
@@ -27,7 +26,8 @@ export interface RSSNewsItem {
   source: NewsSource;
   category?: string;
   author?: string;
-  biasAnalysis?: BiasAnalysis;
+  /** Set by the server: this item republishes agency/wire copy counted under another report. */
+  syndicated?: boolean;
 }
 
 export interface AggregatedStory {
@@ -37,13 +37,14 @@ export interface AggregatedStory {
   image?: string;
   sources: RSSNewsItem[];
   sourcesCount: number;
+  /** Reports after collapsing wire copies; missing on stories cached before it existed. */
+  independentCount?: number;
   bias: {
     left: number;
     center: number;
     right: number;
   };
   blindspot?: 'left' | 'right' | 'none';
-  contentBias?: BiasAnalysis;
   mainCategory: string;
   publishedAt: Date;
   timeAgo: string;
@@ -51,5 +52,3 @@ export interface AggregatedStory {
 
 export const NEWS_SOURCES: NewsSource[] = NEWS_SOURCES_BASE.map((source) => ({ ...source }));
 
-export const BIAS_WEIGHT_MAP: Record<NewsSource['bias'], { left: number; center: number; right: number }> =
-  SHARED_BIAS_WEIGHT_MAP;
