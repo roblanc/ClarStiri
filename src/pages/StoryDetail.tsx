@@ -469,7 +469,7 @@ const StoryDetail = () => {
                       size="xl"
                     />
 
-                    <div className="grid gap-3 md:grid-cols-3">
+                    <div className={`grid gap-3 ${summaryPoints.length >= 3 ? 'md:grid-cols-3' : summaryPoints.length === 2 ? 'md:grid-cols-2' : ''}`}>
                       {summaryPoints.map((point) => (
                         <div key={point} className="surface-subtle rounded-2xl p-4 text-sm leading-relaxed text-muted-foreground">
                           {point}
